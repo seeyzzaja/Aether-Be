@@ -1,8 +1,8 @@
-import type { Request, Response, NextFunction } from "express";
-import { successResponse } from "#utils/response";
+import type { NextFunction, Request, Response } from "express";
 import { BadRequestError } from "#shared/errors/app-error";
-import { authService } from "../sevice/auth.service.js";
+import { successResponse } from "#utils/response";
 import { loginSchema, registerSchema } from "../auth.schema.js";
+import { authService } from "../sevice/auth.service.js";
 
 export class AuthController {
   async register(req: Request, res: Response, next: NextFunction) {
@@ -50,7 +50,7 @@ export class AuthController {
           refreshToken: result.refreshToken,
         },
         null,
-        200
+        200,
       );
     } catch (error) {
       next(error);
@@ -85,13 +85,7 @@ export class AuthController {
   async getSessions(req: Request, res: Response, next: NextFunction) {
     try {
       const sessions = await authService.getSessions(req.user!.userId);
-      return successResponse(
-        res,
-        "Daftar sesi aktif berhasil diambil",
-        sessions,
-        null,
-        200
-      );
+      return successResponse(res, "Daftar sesi aktif berhasil diambil", sessions, null, 200);
     } catch (error) {
       next(error);
     }
@@ -100,9 +94,7 @@ export class AuthController {
   async revokeSession(req: Request, res: Response, next: NextFunction) {
     try {
       const sessionIdParam = req.params.sessionId;
-      const sessionId = Array.isArray(sessionIdParam)
-        ? sessionIdParam[0]
-        : sessionIdParam;
+      const sessionId = Array.isArray(sessionIdParam) ? sessionIdParam[0] : sessionIdParam;
       if (!sessionId) {
         throw new BadRequestError("Session ID wajib disertakan");
       }

@@ -19,11 +19,7 @@ export class AuthRepository {
     });
   }
 
-  async createUser(data: {
-    email: string;
-    username: string;
-    passwordHash: string;
-  }) {
+  async createUser(data: { email: string; username: string; passwordHash: string }) {
     return prisma.user.create({
       data: {
         email: data.email,
@@ -104,7 +100,11 @@ export class AuthRepository {
     });
   }
 
-  async updateSessionRefreshToken(sessionId: string, newRefreshTokenHash: string, newExpiresAt: Date) {
+  async updateSessionRefreshToken(
+    sessionId: string,
+    newRefreshTokenHash: string,
+    newExpiresAt: Date,
+  ) {
     return prisma.session.update({
       where: { id: sessionId },
       data: {
