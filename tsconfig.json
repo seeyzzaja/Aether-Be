@@ -10,7 +10,7 @@
     "module": "ESNext",
     "target": "ES2022",
     "moduleResolution": "bundler",
-     "jsx": "react-jsx",
+    "jsx": "react-jsx",
     "jsxImportSource": "react",
     "paths": {
       "#*": ["./src/*"]

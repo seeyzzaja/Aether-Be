@@ -1,22 +1,16 @@
-import type { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { config } from "#config/env";
-import { UnauthorizedError } from "#shared/errors/app-error";
 import { authRepository } from "#modules/auth/auth.repository";
+import { UnauthorizedError } from "#shared/errors/app-error";
 import type { JwtUserPayload } from "../types/express.js";
 
-export const requireAuth = async (
-  req: Request,
-  _res: Response,
-  next: NextFunction
-) => {
+export const requireAuth = async (req: Request, _res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
     const cookieToken = (req.cookies as Record<string, string> | undefined)?.accessToken;
     const token =
-      authHeader && authHeader.startsWith("Bearer ")
-        ? authHeader.split(" ")[1]
-        : cookieToken;
+      authHeader && authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : cookieToken;
 
     if (!token) {
       throw new UnauthorizedError("Akses ditolak. Token autentikasi tidak ditemukan");

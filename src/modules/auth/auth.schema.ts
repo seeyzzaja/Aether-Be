@@ -7,10 +7,7 @@ export const registerSchema = z.object({
     .min(3, "Username minimal 3 karakter")
     .max(32, "Username maksimal 32 karakter")
     .regex(/^[a-zA-Z0-9_]+$/, "Username hanya boleh berupa huruf, angka, dan underscore"),
-  password: z
-    .string()
-    .min(8, "Password minimal 8 karakter")
-    .max(100, "Password terlalu panjang"),
+  password: z.string().min(8, "Password minimal 8 karakter").max(100, "Password terlalu panjang"),
 });
 
 export const loginSchema = z.object({

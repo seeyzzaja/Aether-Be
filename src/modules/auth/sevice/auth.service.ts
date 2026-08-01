@@ -1,12 +1,8 @@
-import bcrypt from "bcrypt";
 import crypto from "node:crypto";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config } from "#config/env";
-import {
-  ConflictError,
-  NotFoundError,
-  UnauthorizedError,
-} from "#shared/errors/app-error";
+import { ConflictError, NotFoundError, UnauthorizedError } from "#shared/errors/app-error";
 import { authRepository } from "../auth.repository.js";
 import type { LoginDto, RegisterDto } from "../auth.schema.js";
 
@@ -33,9 +29,7 @@ export class AuthService {
       throw new ConflictError("Email sudah terdaftar");
     }
 
-    const existingUsername = await authRepository.findUserByUsername(
-      dto.username
-    );
+    const existingUsername = await authRepository.findUserByUsername(dto.username);
     if (existingUsername) {
       throw new ConflictError("Username sudah digunakan");
     }
@@ -57,7 +51,7 @@ export class AuthService {
 
   async login(
     dto: LoginDto,
-    meta: { deviceInfo?: string | undefined; ipAddress?: string | undefined }
+    meta: { deviceInfo?: string | undefined; ipAddress?: string | undefined },
   ) {
     const isEmail = dto.emailOrUsername.includes("@");
     const user = isEmail
