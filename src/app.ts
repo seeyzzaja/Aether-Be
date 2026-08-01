@@ -60,7 +60,12 @@ app.get("/", (req: Request, res: Response) => {
     200,
   );
 });
-
+app.get("/health", (_req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Aether API is healthy",
+  });
+});
 // API v1 routes
 app.use("/api/v1/auth", authRouter);
 

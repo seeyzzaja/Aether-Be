@@ -79,7 +79,7 @@ authRouter.post("/login", authController.login);
  *   post:
  *     summary: Refresh Access Token
  *     tags: [Auth]
- *     description: Mengambil refresh token dari cookie HttpOnly `refreshToken` atau body JSON `refreshToken`.
+ *     description: Mengambil refresh token dari cookie HttpOnly atau body JSON jika cookie tidak tersedia.
  *     parameters:
  *       - in: cookie
  *         name: refreshToken
@@ -96,7 +96,7 @@ authRouter.post("/login", authController.login);
  *             properties:
  *               refreshToken:
  *                 type: string
- *                 description: Refresh token mentah, dipakai jika cookie tidak tersedia
+ *                 description: Refresh token mentah untuk fallback jika cookie tidak tersedia
  *     responses:
  *       200:
  *         description: Access token baru berhasil diterbitkan
@@ -115,7 +115,7 @@ authRouter.post("/refresh", authController.refresh);
  *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
- *     description: Bisa dipanggil dengan header `Authorization: Bearer <accessToken>` atau cookie HttpOnly `accessToken`.
+ *     description: Bisa dipanggil dengan header Authorization Bearer atau cookie HttpOnly accessToken.
  *     responses:
  *       200:
  *         description: Logout berhasil
@@ -134,7 +134,7 @@ authRouter.post("/logout", requireAuth, authController.logout);
  *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
- *     description: Bisa dipanggil dengan header `Authorization: Bearer <accessToken>` atau cookie HttpOnly `accessToken`.
+ *     description: Bisa dipanggil dengan header Authorization Bearer atau cookie HttpOnly accessToken.
  *     responses:
  *       200:
  *         description: Berhasil mengambil daftar sesi aktif
@@ -153,7 +153,7 @@ authRouter.get("/sessions", requireAuth, authController.getSessions);
  *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
- *     description: Bisa dipanggil dengan header `Authorization: Bearer <accessToken>` atau cookie HttpOnly `accessToken`.
+ *     description: Bisa dipanggil dengan header Authorization Bearer atau cookie HttpOnly accessToken.
  *     parameters:
  *       - in: path
  *         name: sessionId
