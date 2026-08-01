@@ -3,40 +3,86 @@ import express, {
   type Request,
   type Response,
 } from "express";
+import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "#config/swagger";
+import swaggerUiOptions from "#config/swagger-ui-theme";
 import { successResponse } from "#utils/response";
+import authRouter from "#modules/auth/route/auth.routes";
+import { errorHandlerMiddleware } from "#middlewares/error-handler";
+import { NotFoundError } from "#shared/errors/app-error";
 
 const app = express();
+
+app.use((req: Request, _res: Response, next: NextFunction) => {
+  req.startTime = Date.now();
+  next();
+});
+
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "cdnjs.cloudflare.com",
+          "fonts.googleapis.com",
+        ],
+        imgSrc: ["'self'", "data:", "validator.swagger.io"],
+      },
+    },
   })
 );
 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
+// Swagger Documentation Route
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, swaggerUiOptions)
+);
 
-
+// Root route
 app.get("/", (req: Request, res: Response) => {
   const processTime = Date.now() - (req.startTime ?? Date.now());
   successResponse(
     res,
-    "Selamat datang",
+    "Selamat datang di Aether API Service",
     {
       status: "Server hidup!",
       waktu_proses: `${processTime} ms`,
+      docs: "/api-docs",
     },
     null,
     200
   );
 });
 
+// API v1 routes
+app.use("/api/v1/auth", authRouter);
 
-app.use(express.static("./"));
-
+// 404 Route Not Found
 app.use((req: Request, _res: Response, next: NextFunction) => {
-  next(new Error(`Route ${req.originalUrl} tidak ditemukan`));
+  next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });
 
-export default app
+// Global Error Handler
+app.use(errorHandlerMiddleware);
+
+export default app;

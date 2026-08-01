@@ -17,8 +17,8 @@
 
 import * as runtime from "@prisma/client/runtime/index-browser"
 
-export type * from '../models'
-export type * from './prismaNamespace'
+export type * from '../models.js'
+export type * from './prismaNamespace.js'
 
 export const Decimal = runtime.Decimal
 
@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Session: 'Session',
   User: 'User'
 } as const
 
@@ -70,12 +71,28 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  deviceInfo: 'deviceInfo',
+  ipAddress: 'ipAddress',
+  refreshTokenHash: 'refreshTokenHash',
+  expiresAt: 'expiresAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
-  username: 'username',
   email: 'email',
-  password: 'password',
+  username: 'username',
+  passwordHash: 'passwordHash',
   avatarUrl: 'avatarUrl',
+  isPlatformAdmin: 'isPlatformAdmin',
+  isSuspended: 'isSuspended',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -105,4 +122,3 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
