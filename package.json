@@ -13,8 +13,8 @@
     "prisma.migrate.prod": "prisma migrate deploy",
     "prisma.format": "prisma format",
     "prisma.validate": "prisma validate",
-    "lint": "biome check .",
-    "lint:fix": "biome check --write .",
+    "lint": "biome check src prisma.config.ts biome.json commitlint.config.cjs package.json",
+    "lint:fix": "biome check --write src prisma.config.ts biome.json commitlint.config.cjs package.json",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "prepare": "husky"

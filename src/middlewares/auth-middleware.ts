@@ -1,8 +1,4 @@
-import type {
-  NextFunction,
-  Request,
-  Response,
-} from "express";
+import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 import { config } from "#config/env";
@@ -15,29 +11,17 @@ interface AccessTokenPayload {
   sessionId: string;
 }
 
-export const requireAuth = (
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-) => {
+export const requireAuth = (req: Request, _res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
 
-    if (
-      !authHeader ||
-      !authHeader.startsWith("Bearer ")
-    ) {
-      throw new UnauthorizedError(
-        "Token autentikasi tidak ditemukan",
-      );
+    if (!authHeader?.startsWith("Bearer ")) {
+      throw new UnauthorizedError("Token autentikasi tidak ditemukan");
     }
 
     const token = authHeader.substring(7);
 
-    const payload = jwt.verify(
-      token,
-      config.JWT_ACCESS_SECRET,
-    ) as AccessTokenPayload;
+    const payload = jwt.verify(token, config.JWT_ACCESS_SECRET) as AccessTokenPayload;
 
     req.user = {
       userId: payload.userId,
@@ -49,11 +33,7 @@ export const requireAuth = (
     next();
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
-      next(
-        new UnauthorizedError(
-          "Token tidak valid atau telah kedaluwarsa",
-        ),
-      );
+      next(new UnauthorizedError("Token tidak valid atau telah kedaluwarsa"));
       return;
     }
 
