@@ -6,7 +6,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "#config/swagger";
 import swaggerUiOptions from "#config/swagger-ui-theme";
 import { errorHandlerMiddleware } from "#middlewares/error-handler";
-import authRouter from "#modules/auth/route/auth.routes";
+import authRouter from "#modules/auth/route/auth.route";
 import { NotFoundError } from "#shared/errors/app-error";
 import { successResponse } from "#utils/response";
 
@@ -67,7 +67,7 @@ app.get("/health", (_req, res) => {
   });
 });
 // API v1 routes
-app.use("/api/v1/auth", authRouter);
+app.use("/api/auth", authRouter);
 
 // 404 Route Not Found
 app.use((req: Request, _res: Response, next: NextFunction) => {

@@ -1,109 +1,64 @@
-import type { NextFunction, Request, Response } from "express";
-import { BadRequestError } from "#shared/errors/app-error";
-import { successResponse } from "#utils/response";
-import { loginSchema, registerSchema } from "../auth.schema.js";
-import { authService } from "../sevice/auth.service.js";
+import type {
+  NextFunction,
+  Request,
+  Response,
+} from "express";
+
+import {
+  loginSchema,
+  registerSchema,
+} from "../auth.schema.js";
+import { authService } from "#modules/auth/service/auth.service";
 
 export class AuthController {
-  async register(req: Request, res: Response, next: NextFunction) {
+  async register(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
     try {
-      const validatedData = registerSchema.parse(req.body);
-      const user = await authService.register(validatedData);
-      return successResponse(res, "Registrasi akun berhasil", user, null, 201);
-    } catch (error) {
-      next(error);
-    }
-  }
+      const validatedData =
+        registerSchema.parse(req.body);
 
-  async login(req: Request, res: Response, next: NextFunction) {
-    try {
-      const validatedData = loginSchema.parse(req.body);
-      const userAgent = req.headers["user-agent"];
-      const rawIp = req.ip || (req.headers["x-forwarded-for"] as string | undefined);
+      const user =
+        await authService.register(
+          validatedData,
+        );
 
-      const meta: { deviceInfo?: string; ipAddress?: string } = {};
-      if (userAgent) meta.deviceInfo = userAgent;
-      if (rawIp) meta.ipAddress = rawIp;
-
-      const result = await authService.login(validatedData, meta);
-
-      // Simpan refresh token di HttpOnly Cookie
-      res.cookie("refreshToken", result.refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 hari
+      return res.status(201).json({
+        success: true,
+        message: "Registrasi berhasil",
+        data: user,
       });
-      res.cookie("accessToken", result.accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 15 * 60 * 1000,
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async login(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const validatedData =
+        loginSchema.parse(req.body);
+
+      const result =
+        await authService.login(
+          validatedData,
+        );
+
+      return res.status(200).json({
+        success: true,
+        message: "Login berhasil",
+        data: result,
       });
-
-      return successResponse(
-        res,
-        "Login berhasil",
-        {
-          user: result.user,
-          accessToken: result.accessToken,
-          refreshToken: result.refreshToken,
-        },
-        null,
-        200,
-      );
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async refresh(req: Request, res: Response, next: NextFunction) {
-    try {
-      const refreshToken =
-        (req.cookies as Record<string, string> | undefined)?.refreshToken ||
-        (req.body as Record<string, string> | undefined)?.refreshToken;
-      const result = await authService.refresh(refreshToken || "");
-      return successResponse(res, "Token berhasil diperbarui", result, null, 200);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async logout(req: Request, res: Response, next: NextFunction) {
-    try {
-      if (req.user?.sessionId && req.user?.userId) {
-        await authService.logout(req.user.sessionId, req.user.userId);
-      }
-      res.clearCookie("accessToken");
-      res.clearCookie("refreshToken");
-      return successResponse(res, "Logout berhasil", null, null, 200);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async getSessions(req: Request, res: Response, next: NextFunction) {
-    try {
-      const sessions = await authService.getSessions(req.user!.userId);
-      return successResponse(res, "Daftar sesi aktif berhasil diambil", sessions, null, 200);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async revokeSession(req: Request, res: Response, next: NextFunction) {
-    try {
-      const sessionIdParam = req.params.sessionId;
-      const sessionId = Array.isArray(sessionIdParam) ? sessionIdParam[0] : sessionIdParam;
-      if (!sessionId) {
-        throw new BadRequestError("Session ID wajib disertakan");
-      }
-      await authService.revokeSession(sessionId, req.user!.userId);
-      return successResponse(res, "Sesi berhasil dicabut", null, null, 200);
     } catch (error) {
       next(error);
     }
   }
 }
 
-export const authController = new AuthController();
+export const authController =
+  new AuthController();

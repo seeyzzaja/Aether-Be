@@ -1,15 +1,12 @@
 model User {
-  id              String    @id @default(uuid())
-  email           String    @unique
-  username        String    @unique
-  passwordHash    String    @map("password_hash")
-  avatarUrl       String?   @map("avatar_url")
-  isPlatformAdmin Boolean   @default(false) @map("is_platform_admin")
-  isSuspended     Boolean   @default(false) @map("is_suspended")
-  createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime  @updatedAt @map("updated_at")
+  id           String    @id @default(uuid())
+  email        String    @unique
+  username     String    @unique
+  passwordHash String
 
-  sessions        Session[]
+  sessions     Session[]
 
-  @@map("users")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
 }
