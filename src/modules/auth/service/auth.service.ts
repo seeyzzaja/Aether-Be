@@ -78,6 +78,13 @@ export class AuthService {
       refreshToken,
     };
   }
+  async logout(sessionId: string, userId: string) {
+    const result = await authRepository.revokeSession(sessionId, userId);
+
+    if (result.count === 0) {
+      throw new UnauthorizedError("Sesi tidak ditemukan atau sudah dicabut");
+    }
+  }
 }
 
 export const authService = new AuthService();

@@ -15,6 +15,7 @@ export declare class AuthService {
         accessToken: string;
         refreshToken: string;
     }>;
+    logout(sessionId: string, userId: string): Promise<void>;
 }
 export declare const authService: AuthService;
 //# sourceMappingURL=auth.service.d.ts.map

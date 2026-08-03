@@ -59,6 +59,18 @@ export class AuthRepository {
       },
     });
   }
+  async revokeSession(sessionId: string, userId: string) {
+    return prisma.session.updateMany({
+      where: {
+        id: sessionId,
+        userId,
+        revokedAt: null,
+      },
+      data: {
+        revokedAt: new Date(),
+      },
+    });
+  }
 }
 
 export const authRepository = new AuthRepository();

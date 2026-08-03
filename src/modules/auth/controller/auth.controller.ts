@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-
 import { authService } from "#modules/auth/service/auth.service";
+import { UnauthorizedError } from "#shared/errors/app-error";
+import { successResponse } from "#utils/response";
 import { loginSchema, registerSchema } from "../auth.schema.js";
 
 export class AuthController {
@@ -31,6 +32,24 @@ export class AuthController {
         message: "Login berhasil",
         data: result,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async logout(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user;
+
+      if (!user?.sessionId) {
+        throw new UnauthorizedError("Session ID tidak ditemukan pada token");
+      }
+
+      await authService.logout(user.sessionId, user.userId);
+
+      res.clearCookie("accessToken");
+      res.clearCookie("refreshToken");
+
+      return successResponse(res, "Logout berhasil", null, null, 200);
     } catch (error) {
       next(error);
     }

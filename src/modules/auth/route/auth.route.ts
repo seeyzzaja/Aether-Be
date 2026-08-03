@@ -1,5 +1,5 @@
 import { Router } from "express";
-
+import { requireAuth } from "#middlewares/auth-middleware";
 import { authController } from "#modules/auth/controller/auth.controller";
 
 const authRouter = Router();
@@ -148,4 +148,39 @@ authRouter.post("/register", authController.register);
  */
 authRouter.post("/login", authController.login);
 
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Logout pengguna
+ *     tags: [Auth]
+ *     description: Mencabut sesi pengguna yang sedang aktif dan menghapus token dari cookie.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout berhasil
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Logout berhasil
+ *                 data:
+ *                   nullable: true
+ *                   example: null
+ *                 errors:
+ *                   nullable: true
+ *                   example: null
+ *       401:
+ *         description: Token tidak valid, kedaluwarsa, atau sesi sudah dicabut
+ *       500:
+ *         description: Terjadi kesalahan internal server
+ */
+authRouter.post("/logout", requireAuth, authController.logout);
 export default authRouter;
