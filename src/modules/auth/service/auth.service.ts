@@ -1,10 +1,16 @@
 import { randomUUID } from "node:crypto";
+
 import { ConflictError, UnauthorizedError } from "#shared/errors/app-error";
 import { generateAccessToken, generateRefreshToken } from "#utils/jwt";
 import { hashPassword, verifyPassword } from "#utils/password";
 
-import { authRepository } from "../auth.repository.js";
-import type { LoginInput, RegisterInput } from "../auth.schema.js";
+import { authRepository } from "../repository/auth.repository.js";
+import type { LoginInput, RegisterInput } from "../schema/auth.schema.js";
+
+type SessionMetadata = {
+  deviceInfo: string | null;
+  ipAddress: string | null;
+};
 
 export class AuthService {
   async register(data: RegisterInput) {
@@ -30,7 +36,7 @@ export class AuthService {
     };
   }
 
-  async login(data: LoginInput) {
+  async login(data: LoginInput, metadata: SessionMetadata) {
     const user = await authRepository.findUserByEmail(data.email);
 
     if (!user) {
@@ -66,6 +72,8 @@ export class AuthService {
       userId: user.id,
       refreshTokenHash,
       expiresAt: refreshTokenExpiresAt,
+      deviceInfo: metadata.deviceInfo,
+      ipAddress: metadata.ipAddress,
     });
 
     return {

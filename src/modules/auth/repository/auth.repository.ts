@@ -8,6 +8,7 @@ export class AuthRepository {
       },
     });
   }
+
   async findUserById(id: string) {
     return prisma.user.findUnique({
       where: {
@@ -23,6 +24,7 @@ export class AuthRepository {
       },
     });
   }
+
   async createUser(data: { email: string; username: string; passwordHash: string }) {
     return prisma.user.create({
       data: {
@@ -38,6 +40,8 @@ export class AuthRepository {
     userId: string;
     refreshTokenHash: string;
     expiresAt: Date;
+    deviceInfo: string | null;
+    ipAddress: string | null;
   }) {
     return prisma.session.create({
       data: {
@@ -45,9 +49,32 @@ export class AuthRepository {
         userId: data.userId,
         refreshTokenHash: data.refreshTokenHash,
         expiresAt: data.expiresAt,
+        deviceInfo: data.deviceInfo,
+        ipAddress: data.ipAddress,
       },
     });
   }
+
+  async findActiveSessionsByUserId(userId: string) {
+    return prisma.session.findMany({
+      where: {
+        userId,
+        revokedAt: null,
+      },
+      select: {
+        id: true,
+        deviceInfo: true,
+        ipAddress: true,
+        expiresAt: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
+
   async updateSessionRefreshToken(sessionId: string, refreshTokenHash: string, expiresAt: Date) {
     return prisma.session.update({
       where: {
@@ -59,6 +86,7 @@ export class AuthRepository {
       },
     });
   }
+
   async revokeSession(sessionId: string, userId: string) {
     return prisma.session.updateMany({
       where: {

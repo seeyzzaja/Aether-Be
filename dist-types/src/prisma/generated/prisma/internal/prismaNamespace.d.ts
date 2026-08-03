@@ -1,7 +1,7 @@
 import * as runtime from "@prisma/client/runtime/client";
-import type * as Prisma from "../models";
-import type { PrismaClient } from "./class.js";
-export type * from '../models';
+import type * as Prisma from "../models.js";
+import { type PrismaClient } from "./class.js";
+export type * from '../models.js';
 export type DMMF = typeof runtime.DMMF;
 export type PrismaPromise<T> = runtime.Types.Public.PrismaPromise<T>;
 /**
@@ -448,6 +448,8 @@ export declare const SessionScalarFieldEnum: {
     readonly id: 'id';
     readonly userId: 'userId';
     readonly refreshTokenHash: 'refreshTokenHash';
+    readonly deviceInfo: 'deviceInfo';
+    readonly ipAddress: 'ipAddress';
     readonly expiresAt: 'expiresAt';
     readonly revokedAt: 'revokedAt';
     readonly createdAt: 'createdAt';

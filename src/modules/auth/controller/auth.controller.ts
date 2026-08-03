@@ -1,8 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
+
 import { authService } from "#modules/auth/service/auth.service";
 import { UnauthorizedError } from "#shared/errors/app-error";
 import { successResponse } from "#utils/response";
-import { loginSchema, registerSchema } from "../auth.schema.js";
+
+import { loginSchema, registerSchema } from "../schema/auth.schema.js";
 
 export class AuthController {
   async register(req: Request, res: Response, next: NextFunction) {
@@ -25,7 +27,10 @@ export class AuthController {
     try {
       const validatedData = loginSchema.parse(req.body);
 
-      const result = await authService.login(validatedData);
+      const result = await authService.login(validatedData, {
+        deviceInfo: req.get("user-agent") ?? null,
+        ipAddress: req.ip ?? null,
+      });
 
       return res.status(200).json({
         success: true,
@@ -36,6 +41,7 @@ export class AuthController {
       next(error);
     }
   }
+
   async logout(req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user;
