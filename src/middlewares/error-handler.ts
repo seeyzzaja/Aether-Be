@@ -1,8 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
+
 import { config } from "#config/env";
+import { AppError } from "#shared/errors/app-error";
 import { errorResponse } from "#utils/response";
-import { AppError } from "../shared/errors/app-error.js";
 
 export const errorHandlerMiddleware = (
   err: Error,

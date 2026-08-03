@@ -1,5 +1,12 @@
 import type { Response } from "express";
 
+export type ApiErrorDetails =
+  | Array<{
+      field: string;
+      message: string;
+    }>
+  | { stack?: string };
+
 interface ApiResponse {
   success: boolean;
   message: string;
@@ -10,12 +17,7 @@ interface ApiResponse {
     total: number;
     totalPages?: number;
   };
-  errors?:
-    | Array<{
-        field: string;
-        message: string;
-      }>
-    | { stack?: string };
+  errors?: ApiErrorDetails;
 }
 
 export const successResponse = (
@@ -39,7 +41,7 @@ export const errorResponse = (
   res: Response,
   message: string,
   statusCode: number = 400,
-  errors: Array<{ field: string; message: string }> | { stack?: string } | null = null,
+  errors: ApiErrorDetails | null = null,
 ) => {
   const response: ApiResponse = {
     success: false,

@@ -26,6 +26,13 @@
     }
   },
   "files": {
-    "includes": ["**", "!node_modules", "!dist", "!coverage", "!generated"]
+    "includes": [
+      "src/**/*",
+      "!src/prisma/generated",
+      "prisma.config.ts",
+      "biome.json",
+      "commitlint.config.cjs",
+      "package.json"
+    ]
   }
 }

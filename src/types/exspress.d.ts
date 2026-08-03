@@ -3,7 +3,6 @@ export interface JwtUserPayload {
   email: string;
   username: string;
   sessionId: string;
-  isPlatformAdmin: boolean;
 }
 
 declare global {
