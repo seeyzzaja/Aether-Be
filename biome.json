@@ -28,7 +28,8 @@
   "files": {
     "includes": [
       "src/**/*",
-      "!src/prisma/generated",
+      "!src/prisma/generated/**/*",
+      "!dist-types/**/*",
       "prisma.config.ts",
       "biome.json",
       "commitlint.config.cjs",

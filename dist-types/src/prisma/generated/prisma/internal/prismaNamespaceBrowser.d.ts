@@ -1,6 +1,6 @@
 import * as runtime from "@prisma/client/runtime/index-browser";
-export type * from '../models';
-export type * from './prismaNamespace';
+export type * from '../models.js';
+export type * from './prismaNamespace.js';
 export declare const Decimal: typeof runtime.Decimal;
 export declare const NullTypes: {
     DbNull: (new (secret: never) => typeof runtime.DbNull);
@@ -41,6 +41,8 @@ export declare const SessionScalarFieldEnum: {
     readonly id: 'id';
     readonly userId: 'userId';
     readonly refreshTokenHash: 'refreshTokenHash';
+    readonly deviceInfo: 'deviceInfo';
+    readonly ipAddress: 'ipAddress';
     readonly expiresAt: 'expiresAt';
     readonly revokedAt: 'revokedAt';
     readonly createdAt: 'createdAt';

@@ -1,4 +1,8 @@
-import type { LoginInput, RegisterInput } from "../auth.schema.js";
+import type { LoginInput, RegisterInput } from "../schema/auth.schema.js";
+type SessionMetadata = {
+    deviceInfo: string | null;
+    ipAddress: string | null;
+};
 export declare class AuthService {
     register(data: RegisterInput): Promise<{
         id: string;
@@ -6,7 +10,7 @@ export declare class AuthService {
         username: string;
         createdAt: Date;
     }>;
-    login(data: LoginInput): Promise<{
+    login(data: LoginInput, metadata: SessionMetadata): Promise<{
         user: {
             id: string;
             email: string;
@@ -18,4 +22,5 @@ export declare class AuthService {
     logout(sessionId: string, userId: string): Promise<void>;
 }
 export declare const authService: AuthService;
+export {};
 //# sourceMappingURL=auth.service.d.ts.map

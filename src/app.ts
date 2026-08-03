@@ -7,6 +7,7 @@ import swaggerSpec from "#config/swagger";
 import swaggerUiOptions from "#config/swagger-ui-theme";
 import { errorHandlerMiddleware } from "#middlewares/error-handler";
 import authRouter from "#modules/auth/route/auth.route";
+import deviceRouter from "#modules/device/route/device.route";
 import { NotFoundError } from "#shared/errors/app-error";
 import { successResponse } from "#utils/response";
 
@@ -42,10 +43,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Swagger Documentation Route
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions));
 
-// Root route
 app.get("/", (req: Request, res: Response) => {
   const processTime = Date.now() - (req.startTime ?? Date.now());
   successResponse(
@@ -66,15 +65,13 @@ app.get("/health", (_req, res) => {
     message: "Aether API is healthy",
   });
 });
-// API v1 routes
-app.use("/api/auth", authRouter);
 
-// 404 Route Not Found
+app.use("/api/auth", authRouter);
+app.use("/api/device", deviceRouter);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });
 
-// Global Error Handler
 app.use(errorHandlerMiddleware);
 
 export default app;
