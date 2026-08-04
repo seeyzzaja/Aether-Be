@@ -1,6 +1,6 @@
 import * as runtime from "@prisma/client/runtime/index-browser";
-export type * from '../models.js';
-export type * from './prismaNamespace.js';
+export type * from '../models';
+export type * from './prismaNamespace';
 export declare const Decimal: typeof runtime.Decimal;
 export declare const NullTypes: {
     DbNull: (new (secret: never) => typeof runtime.DbNull);
@@ -26,6 +26,8 @@ export declare const JsonNull: import("@prisma/client-runtime-utils").JsonNullCl
  */
 export declare const AnyNull: import("@prisma/client-runtime-utils").AnyNullClass;
 export declare const ModelName: {
+    readonly Role: 'Role';
+    readonly Server: 'Server';
     readonly Session: 'Session';
     readonly User: 'User';
 };
@@ -37,6 +39,25 @@ export declare const TransactionIsolationLevel: {
     readonly Serializable: 'Serializable';
 };
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
+export declare const RoleScalarFieldEnum: {
+    readonly id: 'id';
+    readonly serverId: 'serverId';
+    readonly name: 'name';
+    readonly color: 'color';
+    readonly permissionsBitmask: 'permissionsBitmask';
+    readonly position: 'position';
+    readonly isDefault: 'isDefault';
+};
+export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum];
+export declare const ServerScalarFieldEnum: {
+    readonly id: 'id';
+    readonly ownerId: 'ownerId';
+    readonly name: 'name';
+    readonly iconUrl: 'iconUrl';
+    readonly createdAt: 'createdAt';
+    readonly updatedAt: 'updatedAt';
+};
+export type ServerScalarFieldEnum = (typeof ServerScalarFieldEnum)[keyof typeof ServerScalarFieldEnum];
 export declare const SessionScalarFieldEnum: {
     readonly id: 'id';
     readonly userId: 'userId';

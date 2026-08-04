@@ -1,0 +1,75 @@
+import type { CreateServerInput, UpdateServerInput } from "#modules/server/schema/server.schema";
+import prisma from "#utils/prisma";
+
+export class ServerRepository {
+  async create(ownerId: string, data: CreateServerInput) {
+    return prisma.$transaction(async (tx) => {
+      const server = await tx.server.create({
+        data: {
+          ownerId,
+          name: data.name,
+          ...(data.iconUrl !== undefined && {
+            iconUrl: data.iconUrl,
+          }),
+        },
+      });
+
+      await tx.role.create({
+        data: {
+          serverId: server.id,
+          name: "@everyone",
+          permissionsBitmask: BigInt(0),
+          position: 0,
+          isDefault: true,
+        },
+      });
+
+      return server;
+    });
+  }
+
+  async findAllByOwnerId(ownerId: string) {
+    return prisma.server.findMany({
+      where: {
+        ownerId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
+
+  async findById(serverId: string) {
+    return prisma.server.findUnique({
+      where: {
+        id: serverId,
+      },
+    });
+  }
+
+  async update(serverId: string, data: UpdateServerInput) {
+    return prisma.server.update({
+      where: {
+        id: serverId,
+      },
+      data: {
+        ...(data.name !== undefined && {
+          name: data.name,
+        }),
+        ...(data.iconUrl !== undefined && {
+          iconUrl: data.iconUrl,
+        }),
+      },
+    });
+  }
+
+  async delete(serverId: string) {
+    return prisma.server.delete({
+      where: {
+        id: serverId,
+      },
+    });
+  }
+}
+
+export const serverRepository = new ServerRepository();

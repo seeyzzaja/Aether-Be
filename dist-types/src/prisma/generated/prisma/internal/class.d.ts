@@ -11,8 +11,8 @@ export interface PrismaClientConstructor {
    * const prisma = new PrismaClient({
    *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
    * })
-   * // Fetch zero or more Sessions
-   * const sessions = await prisma.session.findMany()
+   * // Fetch zero or more Roles
+   * const roles = await prisma.role.findMany()
    * ```
    *
    * Read more in our [docs](https://pris.ly/d/client).
@@ -30,8 +30,8 @@ export interface PrismaClientConstructor {
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Sessions
- * const sessions = await prisma.session.findMany()
+ * // Fetch zero or more Roles
+ * const roles = await prisma.role.findMany()
  * ```
  *
  * Read more in our [docs](https://pris.ly/d/client).
@@ -118,13 +118,35 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         extArgs: ExtArgs;
     }>>;
     /**
- * `prisma.session`: Exposes CRUD operations for the **Session** model.
+ * `prisma.role`: Exposes CRUD operations for the **Role** model.
   * Example usage:
   * ```ts
-  * // Fetch zero or more Sessions
-  * const sessions = await prisma.session.findMany()
+  * // Fetch zero or more Roles
+  * const roles = await prisma.role.findMany()
   * ```
   */
+    get role(): Prisma.RoleDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.server`: Exposes CRUD operations for the **Server** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Servers
+      * const servers = await prisma.server.findMany()
+      * ```
+      */
+    get server(): Prisma.ServerDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.session`: Exposes CRUD operations for the **Session** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Sessions
+      * const sessions = await prisma.session.findMany()
+      * ```
+      */
     get session(): Prisma.SessionDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
