@@ -1,7 +1,7 @@
 import * as runtime from "@prisma/client/runtime/client";
-import type * as Prisma from "../models.js";
-import { type PrismaClient } from "./class.js";
-export type * from '../models.js';
+import type * as Prisma from "../models";
+import { type PrismaClient } from "./class";
+export type * from '../models';
 export type DMMF = typeof runtime.DMMF;
 export type PrismaPromise<T> = runtime.Types.Public.PrismaPromise<T>;
 /**
@@ -245,6 +245,7 @@ export type FieldRef<Model, FieldType> = runtime.FieldRef<Model, FieldType>;
 type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRef<Model, FieldType>;
 export declare const ModelName: {
     readonly Role: 'Role';
+    readonly ServerMember: 'ServerMember';
     readonly Server: 'Server';
     readonly Session: 'Session';
     readonly User: 'User';
@@ -260,7 +261,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "role" | "server" | "session" | "user";
+        modelProps: "role" | "serverMember" | "server" | "session" | "user";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -335,6 +336,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 count: {
                     args: Prisma.RoleCountArgs<ExtArgs>;
                     result: runtime.Types.Utils.Optional<Prisma.RoleCountAggregateOutputType> | number;
+                };
+            };
+        };
+        ServerMember: {
+            payload: Prisma.$ServerMemberPayload<ExtArgs>;
+            fields: Prisma.ServerMemberFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.ServerMemberFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.ServerMemberFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberPayload>;
+                };
+                findFirst: {
+                    args: Prisma.ServerMemberFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.ServerMemberFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberPayload>;
+                };
+                findMany: {
+                    args: Prisma.ServerMemberFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberPayload>[];
+                };
+                create: {
+                    args: Prisma.ServerMemberCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberPayload>;
+                };
+                createMany: {
+                    args: Prisma.ServerMemberCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.ServerMemberCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberPayload>[];
+                };
+                delete: {
+                    args: Prisma.ServerMemberDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberPayload>;
+                };
+                update: {
+                    args: Prisma.ServerMemberUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.ServerMemberDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.ServerMemberUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.ServerMemberUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberPayload>[];
+                };
+                upsert: {
+                    args: Prisma.ServerMemberUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberPayload>;
+                };
+                aggregate: {
+                    args: Prisma.ServerMemberAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateServerMember>;
+                };
+                groupBy: {
+                    args: Prisma.ServerMemberGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ServerMemberGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.ServerMemberCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ServerMemberCountAggregateOutputType> | number;
                 };
             };
         };
@@ -604,6 +679,15 @@ export declare const RoleScalarFieldEnum: {
     readonly isDefault: 'isDefault';
 };
 export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum];
+export declare const ServerMemberScalarFieldEnum: {
+    readonly id: 'id';
+    readonly serverId: 'serverId';
+    readonly userId: 'userId';
+    readonly roleId: 'roleId';
+    readonly createdAt: 'createdAt';
+    readonly updatedAt: 'updatedAt';
+};
+export type ServerMemberScalarFieldEnum = (typeof ServerMemberScalarFieldEnum)[keyof typeof ServerMemberScalarFieldEnum];
 export declare const ServerScalarFieldEnum: {
     readonly id: 'id';
     readonly ownerId: 'ownerId';
@@ -845,6 +929,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter;
 export type GlobalOmitConfig = {
     role?: Prisma.RoleOmit;
+    serverMember?: Prisma.ServerMemberOmit;
     server?: Prisma.ServerOmit;
     session?: Prisma.SessionOmit;
     user?: Prisma.UserOmit;

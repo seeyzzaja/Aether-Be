@@ -16,6 +16,14 @@ export declare class ServerService {
         createdAt: Date;
         updatedAt: Date;
     }[]>;
+    getAll(): Promise<{
+        id: string;
+        ownerId: string;
+        name: string;
+        iconUrl: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>;
     getById(serverId: string): Promise<{
         id: string;
         ownerId: string;

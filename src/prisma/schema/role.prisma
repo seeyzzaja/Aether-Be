@@ -7,6 +7,8 @@ model Role {
   position           Int     @default(0)
   isDefault          Boolean @default(false)
 
+  members ServerMember[]
+
   server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
   @@index([serverId])

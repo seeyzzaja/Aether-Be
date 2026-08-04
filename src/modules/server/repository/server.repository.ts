@@ -38,7 +38,13 @@ export class ServerRepository {
       },
     });
   }
-
+  async findAll() {
+    return prisma.server.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
   async findById(serverId: string) {
     return prisma.server.findUnique({
       where: {

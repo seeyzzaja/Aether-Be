@@ -86,6 +86,60 @@ router.post("/", (req, res, next) => serverController.create(req, res, next));
 
 /**
  * @swagger
+ * /api/servers/all:
+ *   get:
+ *     summary: Mengambil semua server
+ *     tags: [Server]
+ *     description: Mengambil seluruh server yang tersedia di Aether.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Semua server berhasil diambil
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Semua server berhasil diambil
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         format: uuid
+ *                       ownerId:
+ *                         type: string
+ *                         format: uuid
+ *                       name:
+ *                         type: string
+ *                         example: Aether Community
+ *                       iconUrl:
+ *                         type: string
+ *                         format: uri
+ *                         nullable: true
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
+ *       401:
+ *         description: Pengguna belum login atau token tidak valid
+ *       500:
+ *         description: Terjadi kesalahan internal server
+ */
+router.get("/all", (req, res, next) => serverController.getAllServers(req, res, next));
+
+/**
+ * @swagger
  * /api/servers:
  *   get:
  *     summary: Mengambil daftar server milik Owner

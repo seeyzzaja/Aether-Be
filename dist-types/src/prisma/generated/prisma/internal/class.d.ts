@@ -1,5 +1,5 @@
 import * as runtime from "@prisma/client/runtime/client";
-import type * as Prisma from "./prismaNamespace.js";
+import type * as Prisma from "./prismaNamespace";
 export type LogOptions<ClientOptions extends Prisma.PrismaClientOptions> = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never;
 export interface PrismaClientConstructor {
     /**
@@ -126,6 +126,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
   * ```
   */
     get role(): Prisma.RoleDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.serverMember`: Exposes CRUD operations for the **ServerMember** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more ServerMembers
+      * const serverMembers = await prisma.serverMember.findMany()
+      * ```
+      */
+    get serverMember(): Prisma.ServerMemberDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**

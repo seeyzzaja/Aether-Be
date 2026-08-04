@@ -17,7 +17,8 @@
     "lint:fix": "biome check --write src prisma.config.ts biome.json commitlint.config.cjs package.json",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prisma.seed": "tsx --conditions=development src/prisma/seed/seed.ts"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,18 @@
+model ServerMember {
+  id       String @id @default(uuid())
+  serverId String
+  userId   String
+  roleId   String
+
+  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([serverId, userId])
+  @@index([userId])
+  @@index([serverId])
+  @@index([roleId])
+}
