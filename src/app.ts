@@ -8,6 +8,7 @@ import swaggerUiOptions from "#config/swagger-ui-theme";
 import { errorHandlerMiddleware } from "#middlewares/error-handler";
 import authRouter from "#modules/auth/route/auth.route";
 import deviceRouter from "#modules/device/route/device.route";
+import serverRouter from "#modules/server/route/server.routes";
 import { NotFoundError } from "#shared/errors/app-error";
 import { successResponse } from "#utils/response";
 
@@ -68,6 +69,7 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/device", deviceRouter);
+app.use("/api/servers", serverRouter);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });

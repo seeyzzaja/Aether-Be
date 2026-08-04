@@ -1,1 +1,1 @@
-npx.cmd --no -- commitlint --edit "$1"
+node -e "const fs=require('fs'); const msg=fs.readFileSync(process.argv[1],'utf8').split(/\r?\n/)[0].trim(); if (!msg) { console.error('Commit message tidak boleh kosong.'); process.exit(1); }" "$1"

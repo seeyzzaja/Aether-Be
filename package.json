@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch --conditions=development src/index.ts",
     "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && tsc",
-    "start": "node --experimental-specifier-resolution=node dist/src/index.js",
+    "start": "tsx --conditions=development src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prisma.generate": "prisma generate",
     "prisma.migrate": "prisma migrate dev",

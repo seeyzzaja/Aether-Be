@@ -4,7 +4,8 @@ model User {
   username     String @unique
   passwordHash String
 
-  sessions Session[]
+  sessions     Session[]
+  ownedServers Server[]  @relation("ServerOwner")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
