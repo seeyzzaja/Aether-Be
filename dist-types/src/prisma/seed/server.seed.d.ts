@@ -2,7 +2,7 @@ type SeedServerInput = {
     ownerId: string;
     name: string;
 };
-export declare function seedServer({ ownerId, name, }: SeedServerInput): Promise<{
+export declare function seedServer({ ownerId, name }: SeedServerInput): Promise<{
     id: string;
     name: string;
     ownerId: string;

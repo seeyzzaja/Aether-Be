@@ -7,6 +7,7 @@ import swaggerSpec from "#config/swagger";
 import swaggerUiOptions from "#config/swagger-ui-theme";
 import { errorHandlerMiddleware } from "#middlewares/error-handler";
 import authRouter from "#modules/auth/route/auth.route";
+import channelRouter from "#modules/channel/route/channel.routes";
 import deviceRouter from "#modules/device/route/device.route";
 import membershipRouter from "#modules/membership/route/membership.route";
 import serverRouter from "#modules/server/route/server.routes";
@@ -71,7 +72,8 @@ app.get("/health", (_req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/device", deviceRouter);
 app.use("/api/servers", serverRouter);
-app.use("/api/servers", membershipRouter);
+app.use("/api/membership", membershipRouter);
+app.use("/api/channel", channelRouter);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });

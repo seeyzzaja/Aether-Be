@@ -16,7 +16,7 @@ router.use(requireAuth);
 
 /**
  * @swagger
- * /api/servers/{serverId}/join:
+ * /api/membership/{serverId}/join:
  *   post:
  *     summary: Bergabung ke server
  *     tags: [Membership]
@@ -103,7 +103,7 @@ router.post("/:serverId/join", (req, res, next) => membershipController.join(req
 
 /**
  * @swagger
- * /api/servers/{serverId}/leave:
+ * /api/membership/{serverId}/leave:
  *   delete:
  *     summary: Keluar dari server
  *     tags: [Membership]
