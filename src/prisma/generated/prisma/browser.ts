@@ -23,6 +23,11 @@ export * from './enums';
  */
 export type Role = Prisma.RoleModel
 /**
+ * Model ServerMember
+ * 
+ */
+export type ServerMember = Prisma.ServerMemberModel
+/**
  * Model Server
  * 
  */

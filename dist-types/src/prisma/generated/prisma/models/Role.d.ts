@@ -188,6 +188,7 @@ export type RoleWhereInput = {
     permissionsBitmask?: Prisma.BigIntFilter<"Role"> | bigint | number;
     position?: Prisma.IntFilter<"Role"> | number;
     isDefault?: Prisma.BoolFilter<"Role"> | boolean;
+    members?: Prisma.ServerMemberListRelationFilter;
     server?: Prisma.XOR<Prisma.ServerScalarRelationFilter, Prisma.ServerWhereInput>;
 };
 export type RoleOrderByWithRelationInput = {
@@ -198,6 +199,7 @@ export type RoleOrderByWithRelationInput = {
     permissionsBitmask?: Prisma.SortOrder;
     position?: Prisma.SortOrder;
     isDefault?: Prisma.SortOrder;
+    members?: Prisma.ServerMemberOrderByRelationAggregateInput;
     server?: Prisma.ServerOrderByWithRelationInput;
 };
 export type RoleWhereUniqueInput = Prisma.AtLeast<{
@@ -211,6 +213,7 @@ export type RoleWhereUniqueInput = Prisma.AtLeast<{
     permissionsBitmask?: Prisma.BigIntFilter<"Role"> | bigint | number;
     position?: Prisma.IntFilter<"Role"> | number;
     isDefault?: Prisma.BoolFilter<"Role"> | boolean;
+    members?: Prisma.ServerMemberListRelationFilter;
     server?: Prisma.XOR<Prisma.ServerScalarRelationFilter, Prisma.ServerWhereInput>;
 }, "id">;
 export type RoleOrderByWithAggregationInput = {
@@ -246,6 +249,7 @@ export type RoleCreateInput = {
     permissionsBitmask?: bigint | number;
     position?: number;
     isDefault?: boolean;
+    members?: Prisma.ServerMemberCreateNestedManyWithoutRoleInput;
     server: Prisma.ServerCreateNestedOneWithoutRolesInput;
 };
 export type RoleUncheckedCreateInput = {
@@ -256,6 +260,7 @@ export type RoleUncheckedCreateInput = {
     permissionsBitmask?: bigint | number;
     position?: number;
     isDefault?: boolean;
+    members?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutRoleInput;
 };
 export type RoleUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -264,6 +269,7 @@ export type RoleUpdateInput = {
     permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
     isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    members?: Prisma.ServerMemberUpdateManyWithoutRoleNestedInput;
     server?: Prisma.ServerUpdateOneRequiredWithoutRolesNestedInput;
 };
 export type RoleUncheckedUpdateInput = {
@@ -274,6 +280,7 @@ export type RoleUncheckedUpdateInput = {
     permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
     isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    members?: Prisma.ServerMemberUncheckedUpdateManyWithoutRoleNestedInput;
 };
 export type RoleCreateManyInput = {
     id?: string;
@@ -336,6 +343,10 @@ export type RoleSumOrderByAggregateInput = {
     permissionsBitmask?: Prisma.SortOrder;
     position?: Prisma.SortOrder;
 };
+export type RoleScalarRelationFilter = {
+    is?: Prisma.RoleWhereInput;
+    isNot?: Prisma.RoleWhereInput;
+};
 export type RoleListRelationFilter = {
     every?: Prisma.RoleWhereInput;
     some?: Prisma.RoleWhereInput;
@@ -366,6 +377,18 @@ export type IntFieldUpdateOperationsInput = {
 };
 export type BoolFieldUpdateOperationsInput = {
     set?: boolean;
+};
+export type RoleCreateNestedOneWithoutMembersInput = {
+    create?: Prisma.XOR<Prisma.RoleCreateWithoutMembersInput, Prisma.RoleUncheckedCreateWithoutMembersInput>;
+    connectOrCreate?: Prisma.RoleCreateOrConnectWithoutMembersInput;
+    connect?: Prisma.RoleWhereUniqueInput;
+};
+export type RoleUpdateOneRequiredWithoutMembersNestedInput = {
+    create?: Prisma.XOR<Prisma.RoleCreateWithoutMembersInput, Prisma.RoleUncheckedCreateWithoutMembersInput>;
+    connectOrCreate?: Prisma.RoleCreateOrConnectWithoutMembersInput;
+    upsert?: Prisma.RoleUpsertWithoutMembersInput;
+    connect?: Prisma.RoleWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.RoleUpdateToOneWithWhereWithoutMembersInput, Prisma.RoleUpdateWithoutMembersInput>, Prisma.RoleUncheckedUpdateWithoutMembersInput>;
 };
 export type RoleCreateNestedManyWithoutServerInput = {
     create?: Prisma.XOR<Prisma.RoleCreateWithoutServerInput, Prisma.RoleUncheckedCreateWithoutServerInput> | Prisma.RoleCreateWithoutServerInput[] | Prisma.RoleUncheckedCreateWithoutServerInput[];
@@ -405,6 +428,55 @@ export type RoleUncheckedUpdateManyWithoutServerNestedInput = {
     updateMany?: Prisma.RoleUpdateManyWithWhereWithoutServerInput | Prisma.RoleUpdateManyWithWhereWithoutServerInput[];
     deleteMany?: Prisma.RoleScalarWhereInput | Prisma.RoleScalarWhereInput[];
 };
+export type RoleCreateWithoutMembersInput = {
+    id?: string;
+    name: string;
+    color?: string | null;
+    permissionsBitmask?: bigint | number;
+    position?: number;
+    isDefault?: boolean;
+    server: Prisma.ServerCreateNestedOneWithoutRolesInput;
+};
+export type RoleUncheckedCreateWithoutMembersInput = {
+    id?: string;
+    serverId: string;
+    name: string;
+    color?: string | null;
+    permissionsBitmask?: bigint | number;
+    position?: number;
+    isDefault?: boolean;
+};
+export type RoleCreateOrConnectWithoutMembersInput = {
+    where: Prisma.RoleWhereUniqueInput;
+    create: Prisma.XOR<Prisma.RoleCreateWithoutMembersInput, Prisma.RoleUncheckedCreateWithoutMembersInput>;
+};
+export type RoleUpsertWithoutMembersInput = {
+    update: Prisma.XOR<Prisma.RoleUpdateWithoutMembersInput, Prisma.RoleUncheckedUpdateWithoutMembersInput>;
+    create: Prisma.XOR<Prisma.RoleCreateWithoutMembersInput, Prisma.RoleUncheckedCreateWithoutMembersInput>;
+    where?: Prisma.RoleWhereInput;
+};
+export type RoleUpdateToOneWithWhereWithoutMembersInput = {
+    where?: Prisma.RoleWhereInput;
+    data: Prisma.XOR<Prisma.RoleUpdateWithoutMembersInput, Prisma.RoleUncheckedUpdateWithoutMembersInput>;
+};
+export type RoleUpdateWithoutMembersInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    server?: Prisma.ServerUpdateOneRequiredWithoutRolesNestedInput;
+};
+export type RoleUncheckedUpdateWithoutMembersInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    serverId?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+};
 export type RoleCreateWithoutServerInput = {
     id?: string;
     name: string;
@@ -412,6 +484,7 @@ export type RoleCreateWithoutServerInput = {
     permissionsBitmask?: bigint | number;
     position?: number;
     isDefault?: boolean;
+    members?: Prisma.ServerMemberCreateNestedManyWithoutRoleInput;
 };
 export type RoleUncheckedCreateWithoutServerInput = {
     id?: string;
@@ -420,6 +493,7 @@ export type RoleUncheckedCreateWithoutServerInput = {
     permissionsBitmask?: bigint | number;
     position?: number;
     isDefault?: boolean;
+    members?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutRoleInput;
 };
 export type RoleCreateOrConnectWithoutServerInput = {
     where: Prisma.RoleWhereUniqueInput;
@@ -469,6 +543,7 @@ export type RoleUpdateWithoutServerInput = {
     permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
     isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    members?: Prisma.ServerMemberUpdateManyWithoutRoleNestedInput;
 };
 export type RoleUncheckedUpdateWithoutServerInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -477,6 +552,7 @@ export type RoleUncheckedUpdateWithoutServerInput = {
     permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
     isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    members?: Prisma.ServerMemberUncheckedUpdateManyWithoutRoleNestedInput;
 };
 export type RoleUncheckedUpdateManyWithoutServerInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -486,6 +562,30 @@ export type RoleUncheckedUpdateManyWithoutServerInput = {
     position?: Prisma.IntFieldUpdateOperationsInput | number;
     isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 };
+/**
+ * Count Type RoleCountOutputType
+ */
+export type RoleCountOutputType = {
+    members: number;
+};
+export type RoleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    members?: boolean | RoleCountOutputTypeCountMembersArgs;
+};
+/**
+ * RoleCountOutputType without action
+ */
+export type RoleCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoleCountOutputType
+     */
+    select?: Prisma.RoleCountOutputTypeSelect<ExtArgs> | null;
+};
+/**
+ * RoleCountOutputType without action
+ */
+export type RoleCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.ServerMemberWhereInput;
+};
 export type RoleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     serverId?: boolean;
@@ -494,7 +594,9 @@ export type RoleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     permissionsBitmask?: boolean;
     position?: boolean;
     isDefault?: boolean;
+    members?: boolean | Prisma.Role$membersArgs<ExtArgs>;
     server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
+    _count?: boolean | Prisma.RoleCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["role"]>;
 export type RoleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -527,7 +629,9 @@ export type RoleSelectScalar = {
 };
 export type RoleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "serverId" | "name" | "color" | "permissionsBitmask" | "position" | "isDefault", ExtArgs["result"]["role"]>;
 export type RoleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    members?: boolean | Prisma.Role$membersArgs<ExtArgs>;
     server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
+    _count?: boolean | Prisma.RoleCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type RoleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
@@ -538,6 +642,7 @@ export type RoleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $RolePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     name: "Role";
     objects: {
+        members: Prisma.$ServerMemberPayload<ExtArgs>[];
         server: Prisma.$ServerPayload<ExtArgs>;
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -877,6 +982,7 @@ export interface RoleDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
  */
 export interface Prisma__RoleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
+    members<T extends Prisma.Role$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Role$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServerMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     server<T extends Prisma.ServerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServerDefaultArgs<ExtArgs>>): Prisma.Prisma__ServerClient<runtime.Types.Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1292,6 +1398,29 @@ export type RoleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
      * Limit how many Roles to delete.
      */
     limit?: number;
+};
+/**
+ * Role.members
+ */
+export type Role$membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServerMember
+     */
+    select?: Prisma.ServerMemberSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ServerMember
+     */
+    omit?: Prisma.ServerMemberOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ServerMemberInclude<ExtArgs> | null;
+    where?: Prisma.ServerMemberWhereInput;
+    orderBy?: Prisma.ServerMemberOrderByWithRelationInput | Prisma.ServerMemberOrderByWithRelationInput[];
+    cursor?: Prisma.ServerMemberWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.ServerMemberScalarFieldEnum | Prisma.ServerMemberScalarFieldEnum[];
 };
 /**
  * Role without action

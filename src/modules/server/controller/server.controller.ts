@@ -50,7 +50,15 @@ export class ServerController {
       next(error);
     }
   }
+  async getAllServers(_req: Request, res: Response, next: NextFunction) {
+    try {
+      const servers = await serverService.getAll();
 
+      return successResponse(res, "Semua server berhasil diambil", servers);
+    } catch (error) {
+      next(error);
+    }
+  }
   async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const serverId = this.getServerId(req);

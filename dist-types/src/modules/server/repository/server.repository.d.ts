@@ -16,6 +16,14 @@ export declare class ServerRepository {
         createdAt: Date;
         updatedAt: Date;
     }[]>;
+    findAll(): Promise<{
+        id: string;
+        ownerId: string;
+        name: string;
+        iconUrl: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>;
     findById(serverId: string): Promise<{
         id: string;
         ownerId: string;

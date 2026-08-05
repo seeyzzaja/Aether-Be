@@ -11,7 +11,9 @@ export class ServerService {
   async getAllByOwnerId(ownerId: string) {
     return serverRepository.findAllByOwnerId(ownerId);
   }
-
+  async getAll() {
+    return serverRepository.findAll();
+  }
   async getById(serverId: string) {
     const server = await serverRepository.findById(serverId);
 
