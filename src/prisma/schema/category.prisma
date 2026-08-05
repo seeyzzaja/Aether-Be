@@ -7,6 +7,9 @@ model Category {
   server   Server    @relation(fields: [serverId], references: [id], onDelete: Cascade)
   channels Channel[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([serverId])
   @@map("categories")
 }

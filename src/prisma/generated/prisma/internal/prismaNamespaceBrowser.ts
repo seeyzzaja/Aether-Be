@@ -80,7 +80,9 @@ export const CategoryScalarFieldEnum = {
   id: 'id',
   serverId: 'serverId',
   name: 'name',
-  position: 'position'
+  position: 'position',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
