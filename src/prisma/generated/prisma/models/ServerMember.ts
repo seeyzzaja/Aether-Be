@@ -391,10 +391,6 @@ export type ServerMemberUncheckedUpdateManyWithoutRoleNestedInput = {
   deleteMany?: Prisma.ServerMemberScalarWhereInput | Prisma.ServerMemberScalarWhereInput[]
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
 export type ServerMemberCreateNestedManyWithoutServerInput = {
   create?: Prisma.XOR<Prisma.ServerMemberCreateWithoutServerInput, Prisma.ServerMemberUncheckedCreateWithoutServerInput> | Prisma.ServerMemberCreateWithoutServerInput[] | Prisma.ServerMemberUncheckedCreateWithoutServerInput[]
   connectOrCreate?: Prisma.ServerMemberCreateOrConnectWithoutServerInput | Prisma.ServerMemberCreateOrConnectWithoutServerInput[]
