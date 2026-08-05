@@ -149,6 +149,8 @@ export type ServerWhereInput = {
     owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
     roles?: Prisma.RoleListRelationFilter;
     members?: Prisma.ServerMemberListRelationFilter;
+    categories?: Prisma.CategoryListRelationFilter;
+    channels?: Prisma.ChannelListRelationFilter;
 };
 export type ServerOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -160,6 +162,8 @@ export type ServerOrderByWithRelationInput = {
     owner?: Prisma.UserOrderByWithRelationInput;
     roles?: Prisma.RoleOrderByRelationAggregateInput;
     members?: Prisma.ServerMemberOrderByRelationAggregateInput;
+    categories?: Prisma.CategoryOrderByRelationAggregateInput;
+    channels?: Prisma.ChannelOrderByRelationAggregateInput;
 };
 export type ServerWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -174,6 +178,8 @@ export type ServerWhereUniqueInput = Prisma.AtLeast<{
     owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
     roles?: Prisma.RoleListRelationFilter;
     members?: Prisma.ServerMemberListRelationFilter;
+    categories?: Prisma.CategoryListRelationFilter;
+    channels?: Prisma.ChannelListRelationFilter;
 }, "id">;
 export type ServerOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -206,6 +212,8 @@ export type ServerCreateInput = {
     owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
     roles?: Prisma.RoleCreateNestedManyWithoutServerInput;
     members?: Prisma.ServerMemberCreateNestedManyWithoutServerInput;
+    categories?: Prisma.CategoryCreateNestedManyWithoutServerInput;
+    channels?: Prisma.ChannelCreateNestedManyWithoutServerInput;
 };
 export type ServerUncheckedCreateInput = {
     id?: string;
@@ -216,6 +224,8 @@ export type ServerUncheckedCreateInput = {
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutServerInput;
     members?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutServerInput;
+    categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutServerInput;
+    channels?: Prisma.ChannelUncheckedCreateNestedManyWithoutServerInput;
 };
 export type ServerUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -226,6 +236,8 @@ export type ServerUpdateInput = {
     owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
     roles?: Prisma.RoleUpdateManyWithoutServerNestedInput;
     members?: Prisma.ServerMemberUpdateManyWithoutServerNestedInput;
+    categories?: Prisma.CategoryUpdateManyWithoutServerNestedInput;
+    channels?: Prisma.ChannelUpdateManyWithoutServerNestedInput;
 };
 export type ServerUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -236,6 +248,8 @@ export type ServerUncheckedUpdateInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutServerNestedInput;
     members?: Prisma.ServerMemberUncheckedUpdateManyWithoutServerNestedInput;
+    categories?: Prisma.CategoryUncheckedUpdateManyWithoutServerNestedInput;
+    channels?: Prisma.ChannelUncheckedUpdateManyWithoutServerNestedInput;
 };
 export type ServerCreateManyInput = {
     id?: string;
@@ -295,6 +309,30 @@ export type ServerListRelationFilter = {
 };
 export type ServerOrderByRelationAggregateInput = {
     _count?: Prisma.SortOrder;
+};
+export type ServerCreateNestedOneWithoutCategoriesInput = {
+    create?: Prisma.XOR<Prisma.ServerCreateWithoutCategoriesInput, Prisma.ServerUncheckedCreateWithoutCategoriesInput>;
+    connectOrCreate?: Prisma.ServerCreateOrConnectWithoutCategoriesInput;
+    connect?: Prisma.ServerWhereUniqueInput;
+};
+export type ServerUpdateOneRequiredWithoutCategoriesNestedInput = {
+    create?: Prisma.XOR<Prisma.ServerCreateWithoutCategoriesInput, Prisma.ServerUncheckedCreateWithoutCategoriesInput>;
+    connectOrCreate?: Prisma.ServerCreateOrConnectWithoutCategoriesInput;
+    upsert?: Prisma.ServerUpsertWithoutCategoriesInput;
+    connect?: Prisma.ServerWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.ServerUpdateToOneWithWhereWithoutCategoriesInput, Prisma.ServerUpdateWithoutCategoriesInput>, Prisma.ServerUncheckedUpdateWithoutCategoriesInput>;
+};
+export type ServerCreateNestedOneWithoutChannelsInput = {
+    create?: Prisma.XOR<Prisma.ServerCreateWithoutChannelsInput, Prisma.ServerUncheckedCreateWithoutChannelsInput>;
+    connectOrCreate?: Prisma.ServerCreateOrConnectWithoutChannelsInput;
+    connect?: Prisma.ServerWhereUniqueInput;
+};
+export type ServerUpdateOneRequiredWithoutChannelsNestedInput = {
+    create?: Prisma.XOR<Prisma.ServerCreateWithoutChannelsInput, Prisma.ServerUncheckedCreateWithoutChannelsInput>;
+    connectOrCreate?: Prisma.ServerCreateOrConnectWithoutChannelsInput;
+    upsert?: Prisma.ServerUpsertWithoutChannelsInput;
+    connect?: Prisma.ServerWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.ServerUpdateToOneWithWhereWithoutChannelsInput, Prisma.ServerUpdateWithoutChannelsInput>, Prisma.ServerUncheckedUpdateWithoutChannelsInput>;
 };
 export type ServerCreateNestedOneWithoutRolesInput = {
     create?: Prisma.XOR<Prisma.ServerCreateWithoutRolesInput, Prisma.ServerUncheckedCreateWithoutRolesInput>;
@@ -358,6 +396,120 @@ export type ServerUncheckedUpdateManyWithoutOwnerNestedInput = {
     updateMany?: Prisma.ServerUpdateManyWithWhereWithoutOwnerInput | Prisma.ServerUpdateManyWithWhereWithoutOwnerInput[];
     deleteMany?: Prisma.ServerScalarWhereInput | Prisma.ServerScalarWhereInput[];
 };
+export type ServerCreateWithoutCategoriesInput = {
+    id?: string;
+    name: string;
+    iconUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
+    roles?: Prisma.RoleCreateNestedManyWithoutServerInput;
+    members?: Prisma.ServerMemberCreateNestedManyWithoutServerInput;
+    channels?: Prisma.ChannelCreateNestedManyWithoutServerInput;
+};
+export type ServerUncheckedCreateWithoutCategoriesInput = {
+    id?: string;
+    ownerId: string;
+    name: string;
+    iconUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    roles?: Prisma.RoleUncheckedCreateNestedManyWithoutServerInput;
+    members?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutServerInput;
+    channels?: Prisma.ChannelUncheckedCreateNestedManyWithoutServerInput;
+};
+export type ServerCreateOrConnectWithoutCategoriesInput = {
+    where: Prisma.ServerWhereUniqueInput;
+    create: Prisma.XOR<Prisma.ServerCreateWithoutCategoriesInput, Prisma.ServerUncheckedCreateWithoutCategoriesInput>;
+};
+export type ServerUpsertWithoutCategoriesInput = {
+    update: Prisma.XOR<Prisma.ServerUpdateWithoutCategoriesInput, Prisma.ServerUncheckedUpdateWithoutCategoriesInput>;
+    create: Prisma.XOR<Prisma.ServerCreateWithoutCategoriesInput, Prisma.ServerUncheckedCreateWithoutCategoriesInput>;
+    where?: Prisma.ServerWhereInput;
+};
+export type ServerUpdateToOneWithWhereWithoutCategoriesInput = {
+    where?: Prisma.ServerWhereInput;
+    data: Prisma.XOR<Prisma.ServerUpdateWithoutCategoriesInput, Prisma.ServerUncheckedUpdateWithoutCategoriesInput>;
+};
+export type ServerUpdateWithoutCategoriesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
+    roles?: Prisma.RoleUpdateManyWithoutServerNestedInput;
+    members?: Prisma.ServerMemberUpdateManyWithoutServerNestedInput;
+    channels?: Prisma.ChannelUpdateManyWithoutServerNestedInput;
+};
+export type ServerUncheckedUpdateWithoutCategoriesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    ownerId?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    roles?: Prisma.RoleUncheckedUpdateManyWithoutServerNestedInput;
+    members?: Prisma.ServerMemberUncheckedUpdateManyWithoutServerNestedInput;
+    channels?: Prisma.ChannelUncheckedUpdateManyWithoutServerNestedInput;
+};
+export type ServerCreateWithoutChannelsInput = {
+    id?: string;
+    name: string;
+    iconUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
+    roles?: Prisma.RoleCreateNestedManyWithoutServerInput;
+    members?: Prisma.ServerMemberCreateNestedManyWithoutServerInput;
+    categories?: Prisma.CategoryCreateNestedManyWithoutServerInput;
+};
+export type ServerUncheckedCreateWithoutChannelsInput = {
+    id?: string;
+    ownerId: string;
+    name: string;
+    iconUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    roles?: Prisma.RoleUncheckedCreateNestedManyWithoutServerInput;
+    members?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutServerInput;
+    categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutServerInput;
+};
+export type ServerCreateOrConnectWithoutChannelsInput = {
+    where: Prisma.ServerWhereUniqueInput;
+    create: Prisma.XOR<Prisma.ServerCreateWithoutChannelsInput, Prisma.ServerUncheckedCreateWithoutChannelsInput>;
+};
+export type ServerUpsertWithoutChannelsInput = {
+    update: Prisma.XOR<Prisma.ServerUpdateWithoutChannelsInput, Prisma.ServerUncheckedUpdateWithoutChannelsInput>;
+    create: Prisma.XOR<Prisma.ServerCreateWithoutChannelsInput, Prisma.ServerUncheckedCreateWithoutChannelsInput>;
+    where?: Prisma.ServerWhereInput;
+};
+export type ServerUpdateToOneWithWhereWithoutChannelsInput = {
+    where?: Prisma.ServerWhereInput;
+    data: Prisma.XOR<Prisma.ServerUpdateWithoutChannelsInput, Prisma.ServerUncheckedUpdateWithoutChannelsInput>;
+};
+export type ServerUpdateWithoutChannelsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
+    roles?: Prisma.RoleUpdateManyWithoutServerNestedInput;
+    members?: Prisma.ServerMemberUpdateManyWithoutServerNestedInput;
+    categories?: Prisma.CategoryUpdateManyWithoutServerNestedInput;
+};
+export type ServerUncheckedUpdateWithoutChannelsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    ownerId?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    roles?: Prisma.RoleUncheckedUpdateManyWithoutServerNestedInput;
+    members?: Prisma.ServerMemberUncheckedUpdateManyWithoutServerNestedInput;
+    categories?: Prisma.CategoryUncheckedUpdateManyWithoutServerNestedInput;
+};
 export type ServerCreateWithoutRolesInput = {
     id?: string;
     name: string;
@@ -366,6 +518,8 @@ export type ServerCreateWithoutRolesInput = {
     updatedAt?: Date | string;
     owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
     members?: Prisma.ServerMemberCreateNestedManyWithoutServerInput;
+    categories?: Prisma.CategoryCreateNestedManyWithoutServerInput;
+    channels?: Prisma.ChannelCreateNestedManyWithoutServerInput;
 };
 export type ServerUncheckedCreateWithoutRolesInput = {
     id?: string;
@@ -375,6 +529,8 @@ export type ServerUncheckedCreateWithoutRolesInput = {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     members?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutServerInput;
+    categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutServerInput;
+    channels?: Prisma.ChannelUncheckedCreateNestedManyWithoutServerInput;
 };
 export type ServerCreateOrConnectWithoutRolesInput = {
     where: Prisma.ServerWhereUniqueInput;
@@ -397,6 +553,8 @@ export type ServerUpdateWithoutRolesInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
     members?: Prisma.ServerMemberUpdateManyWithoutServerNestedInput;
+    categories?: Prisma.CategoryUpdateManyWithoutServerNestedInput;
+    channels?: Prisma.ChannelUpdateManyWithoutServerNestedInput;
 };
 export type ServerUncheckedUpdateWithoutRolesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -406,6 +564,8 @@ export type ServerUncheckedUpdateWithoutRolesInput = {
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     members?: Prisma.ServerMemberUncheckedUpdateManyWithoutServerNestedInput;
+    categories?: Prisma.CategoryUncheckedUpdateManyWithoutServerNestedInput;
+    channels?: Prisma.ChannelUncheckedUpdateManyWithoutServerNestedInput;
 };
 export type ServerCreateWithoutMembersInput = {
     id?: string;
@@ -415,6 +575,8 @@ export type ServerCreateWithoutMembersInput = {
     updatedAt?: Date | string;
     owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
     roles?: Prisma.RoleCreateNestedManyWithoutServerInput;
+    categories?: Prisma.CategoryCreateNestedManyWithoutServerInput;
+    channels?: Prisma.ChannelCreateNestedManyWithoutServerInput;
 };
 export type ServerUncheckedCreateWithoutMembersInput = {
     id?: string;
@@ -424,6 +586,8 @@ export type ServerUncheckedCreateWithoutMembersInput = {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutServerInput;
+    categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutServerInput;
+    channels?: Prisma.ChannelUncheckedCreateNestedManyWithoutServerInput;
 };
 export type ServerCreateOrConnectWithoutMembersInput = {
     where: Prisma.ServerWhereUniqueInput;
@@ -446,6 +610,8 @@ export type ServerUpdateWithoutMembersInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
     roles?: Prisma.RoleUpdateManyWithoutServerNestedInput;
+    categories?: Prisma.CategoryUpdateManyWithoutServerNestedInput;
+    channels?: Prisma.ChannelUpdateManyWithoutServerNestedInput;
 };
 export type ServerUncheckedUpdateWithoutMembersInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -455,6 +621,8 @@ export type ServerUncheckedUpdateWithoutMembersInput = {
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutServerNestedInput;
+    categories?: Prisma.CategoryUncheckedUpdateManyWithoutServerNestedInput;
+    channels?: Prisma.ChannelUncheckedUpdateManyWithoutServerNestedInput;
 };
 export type ServerCreateWithoutOwnerInput = {
     id?: string;
@@ -464,6 +632,8 @@ export type ServerCreateWithoutOwnerInput = {
     updatedAt?: Date | string;
     roles?: Prisma.RoleCreateNestedManyWithoutServerInput;
     members?: Prisma.ServerMemberCreateNestedManyWithoutServerInput;
+    categories?: Prisma.CategoryCreateNestedManyWithoutServerInput;
+    channels?: Prisma.ChannelCreateNestedManyWithoutServerInput;
 };
 export type ServerUncheckedCreateWithoutOwnerInput = {
     id?: string;
@@ -473,6 +643,8 @@ export type ServerUncheckedCreateWithoutOwnerInput = {
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutServerInput;
     members?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutServerInput;
+    categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutServerInput;
+    channels?: Prisma.ChannelUncheckedCreateNestedManyWithoutServerInput;
 };
 export type ServerCreateOrConnectWithoutOwnerInput = {
     where: Prisma.ServerWhereUniqueInput;
@@ -521,6 +693,8 @@ export type ServerUpdateWithoutOwnerInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUpdateManyWithoutServerNestedInput;
     members?: Prisma.ServerMemberUpdateManyWithoutServerNestedInput;
+    categories?: Prisma.CategoryUpdateManyWithoutServerNestedInput;
+    channels?: Prisma.ChannelUpdateManyWithoutServerNestedInput;
 };
 export type ServerUncheckedUpdateWithoutOwnerInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -530,6 +704,8 @@ export type ServerUncheckedUpdateWithoutOwnerInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutServerNestedInput;
     members?: Prisma.ServerMemberUncheckedUpdateManyWithoutServerNestedInput;
+    categories?: Prisma.CategoryUncheckedUpdateManyWithoutServerNestedInput;
+    channels?: Prisma.ChannelUncheckedUpdateManyWithoutServerNestedInput;
 };
 export type ServerUncheckedUpdateManyWithoutOwnerInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -544,10 +720,14 @@ export type ServerUncheckedUpdateManyWithoutOwnerInput = {
 export type ServerCountOutputType = {
     roles: number;
     members: number;
+    categories: number;
+    channels: number;
 };
 export type ServerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     roles?: boolean | ServerCountOutputTypeCountRolesArgs;
     members?: boolean | ServerCountOutputTypeCountMembersArgs;
+    categories?: boolean | ServerCountOutputTypeCountCategoriesArgs;
+    channels?: boolean | ServerCountOutputTypeCountChannelsArgs;
 };
 /**
  * ServerCountOutputType without action
@@ -570,6 +750,18 @@ export type ServerCountOutputTypeCountRolesArgs<ExtArgs extends runtime.Types.Ex
 export type ServerCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.ServerMemberWhereInput;
 };
+/**
+ * ServerCountOutputType without action
+ */
+export type ServerCountOutputTypeCountCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.CategoryWhereInput;
+};
+/**
+ * ServerCountOutputType without action
+ */
+export type ServerCountOutputTypeCountChannelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.ChannelWhereInput;
+};
 export type ServerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     ownerId?: boolean;
@@ -580,6 +772,8 @@ export type ServerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
     roles?: boolean | Prisma.Server$rolesArgs<ExtArgs>;
     members?: boolean | Prisma.Server$membersArgs<ExtArgs>;
+    categories?: boolean | Prisma.Server$categoriesArgs<ExtArgs>;
+    channels?: boolean | Prisma.Server$channelsArgs<ExtArgs>;
     _count?: boolean | Prisma.ServerCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["server"]>;
 export type ServerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -613,6 +807,8 @@ export type ServerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
     roles?: boolean | Prisma.Server$rolesArgs<ExtArgs>;
     members?: boolean | Prisma.Server$membersArgs<ExtArgs>;
+    categories?: boolean | Prisma.Server$categoriesArgs<ExtArgs>;
+    channels?: boolean | Prisma.Server$channelsArgs<ExtArgs>;
     _count?: boolean | Prisma.ServerCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type ServerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -627,6 +823,8 @@ export type $ServerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
         owner: Prisma.$UserPayload<ExtArgs>;
         roles: Prisma.$RolePayload<ExtArgs>[];
         members: Prisma.$ServerMemberPayload<ExtArgs>[];
+        categories: Prisma.$CategoryPayload<ExtArgs>[];
+        channels: Prisma.$ChannelPayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
@@ -967,6 +1165,8 @@ export interface Prisma__ServerClient<T, Null = never, ExtArgs extends runtime.T
     owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
     roles<T extends Prisma.Server$rolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Server$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     members<T extends Prisma.Server$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Server$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServerMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    categories<T extends Prisma.Server$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Server$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    channels<T extends Prisma.Server$channelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Server$channelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChannelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1426,6 +1626,52 @@ export type Server$membersArgs<ExtArgs extends runtime.Types.Extensions.Internal
     take?: number;
     skip?: number;
     distinct?: Prisma.ServerMemberScalarFieldEnum | Prisma.ServerMemberScalarFieldEnum[];
+};
+/**
+ * Server.categories
+ */
+export type Server$categoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: Prisma.CategorySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: Prisma.CategoryOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.CategoryInclude<ExtArgs> | null;
+    where?: Prisma.CategoryWhereInput;
+    orderBy?: Prisma.CategoryOrderByWithRelationInput | Prisma.CategoryOrderByWithRelationInput[];
+    cursor?: Prisma.CategoryWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.CategoryScalarFieldEnum | Prisma.CategoryScalarFieldEnum[];
+};
+/**
+ * Server.channels
+ */
+export type Server$channelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channel
+     */
+    select?: Prisma.ChannelSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Channel
+     */
+    omit?: Prisma.ChannelOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ChannelInclude<ExtArgs> | null;
+    where?: Prisma.ChannelWhereInput;
+    orderBy?: Prisma.ChannelOrderByWithRelationInput | Prisma.ChannelOrderByWithRelationInput[];
+    cursor?: Prisma.ChannelWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.ChannelScalarFieldEnum | Prisma.ChannelScalarFieldEnum[];
 };
 /**
  * Server without action

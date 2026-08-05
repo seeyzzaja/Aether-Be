@@ -9,7 +9,12 @@
 * 🟢 You can import this file directly.
 */
 
+export const ChannelType = {
+  TEXT: 'TEXT',
+  VOICE: 'VOICE',
+  VIDEO: 'VIDEO',
+  FORUM: 'FORUM',
+  ANNOUNCEMENT: 'ANNOUNCEMENT'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type ChannelType = (typeof ChannelType)[keyof typeof ChannelType]

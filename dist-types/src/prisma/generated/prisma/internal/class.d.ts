@@ -11,8 +11,8 @@ export interface PrismaClientConstructor {
    * const prisma = new PrismaClient({
    *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
    * })
-   * // Fetch zero or more Roles
-   * const roles = await prisma.role.findMany()
+   * // Fetch zero or more Categories
+   * const categories = await prisma.category.findMany()
    * ```
    *
    * Read more in our [docs](https://pris.ly/d/client).
@@ -30,8 +30,8 @@ export interface PrismaClientConstructor {
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Roles
- * const roles = await prisma.role.findMany()
+ * // Fetch zero or more Categories
+ * const categories = await prisma.category.findMany()
  * ```
  *
  * Read more in our [docs](https://pris.ly/d/client).
@@ -118,13 +118,35 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         extArgs: ExtArgs;
     }>>;
     /**
- * `prisma.role`: Exposes CRUD operations for the **Role** model.
+ * `prisma.category`: Exposes CRUD operations for the **Category** model.
   * Example usage:
   * ```ts
-  * // Fetch zero or more Roles
-  * const roles = await prisma.role.findMany()
+  * // Fetch zero or more Categories
+  * const categories = await prisma.category.findMany()
   * ```
   */
+    get category(): Prisma.CategoryDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.channel`: Exposes CRUD operations for the **Channel** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Channels
+      * const channels = await prisma.channel.findMany()
+      * ```
+      */
+    get channel(): Prisma.ChannelDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.role`: Exposes CRUD operations for the **Role** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Roles
+      * const roles = await prisma.role.findMany()
+      * ```
+      */
     get role(): Prisma.RoleDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;

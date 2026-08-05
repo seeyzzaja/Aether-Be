@@ -8,6 +8,8 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Category'
+export type * from './models/Channel'
 export type * from './models/Role'
 export type * from './models/ServerMember'
 export type * from './models/Server'

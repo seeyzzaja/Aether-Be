@@ -26,6 +26,8 @@ export declare const JsonNull: import("@prisma/client-runtime-utils").JsonNullCl
  */
 export declare const AnyNull: import("@prisma/client-runtime-utils").AnyNullClass;
 export declare const ModelName: {
+    readonly Category: 'Category';
+    readonly Channel: 'Channel';
     readonly Role: 'Role';
     readonly ServerMember: 'ServerMember';
     readonly Server: 'Server';
@@ -40,6 +42,23 @@ export declare const TransactionIsolationLevel: {
     readonly Serializable: 'Serializable';
 };
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
+export declare const CategoryScalarFieldEnum: {
+    readonly id: 'id';
+    readonly serverId: 'serverId';
+    readonly name: 'name';
+    readonly position: 'position';
+};
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum];
+export declare const ChannelScalarFieldEnum: {
+    readonly id: 'id';
+    readonly serverId: 'serverId';
+    readonly categoryId: 'categoryId';
+    readonly name: 'name';
+    readonly type: 'type';
+    readonly topic: 'topic';
+    readonly position: 'position';
+};
+export type ChannelScalarFieldEnum = (typeof ChannelScalarFieldEnum)[keyof typeof ChannelScalarFieldEnum];
 export declare const RoleScalarFieldEnum: {
     readonly id: 'id';
     readonly serverId: 'serverId';

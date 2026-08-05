@@ -6,8 +6,10 @@ model Server {
 
   owner User @relation("ServerOwner", fields: [ownerId], references: [id], onDelete: Cascade)
 
-  roles Role[]
-  members ServerMember[]
+  roles      Role[]
+  members    ServerMember[]
+  categories Category[]
+  channels   Channel[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
