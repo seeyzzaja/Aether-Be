@@ -1,0 +1,41 @@
+export declare class MembershipRoleRepository {
+    assign(serverMemberId: string, roleId: string): Promise<{
+        role: {
+            id: string;
+            serverId: string;
+            name: string;
+            color: string | null;
+            permissionsBitmask: bigint;
+            position: number;
+            isDefault: boolean;
+        };
+    } & {
+        id: string;
+        serverMemberId: string;
+        roleId: string;
+        createdAt: Date;
+    }>;
+    remove(serverMemberId: string, roleId: string): Promise<{
+        id: string;
+        serverMemberId: string;
+        roleId: string;
+        createdAt: Date;
+    }>;
+    findMemberRoles(serverMemberId: string): Promise<({
+        role: {
+            id: string;
+            serverId: string;
+            name: string;
+            color: string | null;
+            permissionsBitmask: bigint;
+            position: number;
+            isDefault: boolean;
+        };
+    } & {
+        id: string;
+        serverMemberId: string;
+        roleId: string;
+        createdAt: Date;
+    })[]>;
+}
+//# sourceMappingURL=membership-role.repository.d.ts.map

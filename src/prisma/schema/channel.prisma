@@ -15,8 +15,9 @@ model Channel {
   topic      String?     @db.VarChar(500)
   position   Int         @default(0)
 
-  server   Server    @relation(fields: [serverId], references: [id], onDelete: Cascade)
-  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  server              Server                      @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  category            Category?                   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  permissionOverrides ChannelPermissionOverride[]
 
   @@index([serverId])
   @@index([categoryId])

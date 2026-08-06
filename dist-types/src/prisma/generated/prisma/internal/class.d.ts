@@ -129,6 +129,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         omit: OmitOpts;
     }>;
     /**
+     * `prisma.channelPermissionOverride`: Exposes CRUD operations for the **ChannelPermissionOverride** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more ChannelPermissionOverrides
+      * const channelPermissionOverrides = await prisma.channelPermissionOverride.findMany()
+      * ```
+      */
+    get channelPermissionOverride(): Prisma.ChannelPermissionOverrideDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
      * `prisma.channel`: Exposes CRUD operations for the **Channel** model.
       * Example usage:
       * ```ts
@@ -148,6 +159,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
       * ```
       */
     get role(): Prisma.RoleDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.serverMemberRole`: Exposes CRUD operations for the **ServerMemberRole** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more ServerMemberRoles
+      * const serverMemberRoles = await prisma.serverMemberRole.findMany()
+      * ```
+      */
+    get serverMemberRole(): Prisma.ServerMemberRoleDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**

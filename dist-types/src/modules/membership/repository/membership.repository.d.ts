@@ -16,20 +16,31 @@ export declare class MembershipRepository {
         updatedAt: Date;
     } | null>;
     findMember(serverId: string, userId: string): Promise<({
-        role: {
+        roles: ({
+            role: {
+                id: string;
+                serverId: string;
+                name: string;
+                color: string | null;
+                permissionsBitmask: bigint;
+                position: number;
+                isDefault: boolean;
+            };
+        } & {
             id: string;
-            serverId: string;
-            name: string;
-            color: string | null;
-            permissionsBitmask: bigint;
-            position: number;
-            isDefault: boolean;
+            serverMemberId: string;
+            roleId: string;
+            createdAt: Date;
+        })[];
+        user: {
+            email: string;
+            id: string;
+            username: string;
         };
     } & {
         id: string;
         serverId: string;
         userId: string;
-        roleId: string;
         createdAt: Date;
         updatedAt: Date;
     }) | null>;
@@ -43,16 +54,12 @@ export declare class MembershipRepository {
         isDefault: boolean;
     } | null>;
     createMember(serverId: string, userId: string, roleId: string): Promise<{
+        roleId: string;
+        role: {
+            id: string;
+        };
         createdAt: Date;
         id: string;
-        role: {
-            color: string | null;
-            id: string;
-            isDefault: boolean;
-            name: string;
-            position: number;
-        };
-        roleId: string;
         serverId: string;
         user: {
             email: string;
@@ -65,7 +72,6 @@ export declare class MembershipRepository {
         id: string;
         serverId: string;
         userId: string;
-        roleId: string;
         createdAt: Date;
         updatedAt: Date;
     }>;

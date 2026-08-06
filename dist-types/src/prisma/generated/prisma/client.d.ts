@@ -27,6 +27,11 @@ export { Prisma };
  */
 export type Category = Prisma.CategoryModel;
 /**
+ * Model ChannelPermissionOverride
+ *
+ */
+export type ChannelPermissionOverride = Prisma.ChannelPermissionOverrideModel;
+/**
  * Model Channel
  *
  */
@@ -36,6 +41,11 @@ export type Channel = Prisma.ChannelModel;
  *
  */
 export type Role = Prisma.RoleModel;
+/**
+ * Model ServerMemberRole
+ *
+ */
+export type ServerMemberRole = Prisma.ServerMemberRoleModel;
 /**
  * Model ServerMember
  *

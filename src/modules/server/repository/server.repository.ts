@@ -14,13 +14,27 @@ export class ServerRepository {
         },
       });
 
-      await tx.role.create({
+      const everyoneRole = await tx.role.create({
         data: {
           serverId: server.id,
           name: "@everyone",
           permissionsBitmask: BigInt(0),
           position: 0,
           isDefault: true,
+        },
+      });
+
+      const member = await tx.serverMember.create({
+        data: {
+          serverId: server.id,
+          userId: ownerId,
+        },
+      });
+
+      await tx.serverMemberRole.create({
+        data: {
+          serverMemberId: member.id,
+          roleId: everyoneRole.id,
         },
       });
 

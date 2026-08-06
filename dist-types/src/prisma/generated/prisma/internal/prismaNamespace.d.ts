@@ -245,8 +245,10 @@ export type FieldRef<Model, FieldType> = runtime.FieldRef<Model, FieldType>;
 type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRef<Model, FieldType>;
 export declare const ModelName: {
     readonly Category: 'Category';
+    readonly ChannelPermissionOverride: 'ChannelPermissionOverride';
     readonly Channel: 'Channel';
     readonly Role: 'Role';
+    readonly ServerMemberRole: 'ServerMemberRole';
     readonly ServerMember: 'ServerMember';
     readonly Server: 'Server';
     readonly Session: 'Session';
@@ -263,7 +265,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "category" | "channel" | "role" | "serverMember" | "server" | "session" | "user";
+        modelProps: "category" | "channelPermissionOverride" | "channel" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -338,6 +340,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 count: {
                     args: Prisma.CategoryCountArgs<ExtArgs>;
                     result: runtime.Types.Utils.Optional<Prisma.CategoryCountAggregateOutputType> | number;
+                };
+            };
+        };
+        ChannelPermissionOverride: {
+            payload: Prisma.$ChannelPermissionOverridePayload<ExtArgs>;
+            fields: Prisma.ChannelPermissionOverrideFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.ChannelPermissionOverrideFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPermissionOverridePayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.ChannelPermissionOverrideFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPermissionOverridePayload>;
+                };
+                findFirst: {
+                    args: Prisma.ChannelPermissionOverrideFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPermissionOverridePayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.ChannelPermissionOverrideFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPermissionOverridePayload>;
+                };
+                findMany: {
+                    args: Prisma.ChannelPermissionOverrideFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPermissionOverridePayload>[];
+                };
+                create: {
+                    args: Prisma.ChannelPermissionOverrideCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPermissionOverridePayload>;
+                };
+                createMany: {
+                    args: Prisma.ChannelPermissionOverrideCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.ChannelPermissionOverrideCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPermissionOverridePayload>[];
+                };
+                delete: {
+                    args: Prisma.ChannelPermissionOverrideDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPermissionOverridePayload>;
+                };
+                update: {
+                    args: Prisma.ChannelPermissionOverrideUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPermissionOverridePayload>;
+                };
+                deleteMany: {
+                    args: Prisma.ChannelPermissionOverrideDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.ChannelPermissionOverrideUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.ChannelPermissionOverrideUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPermissionOverridePayload>[];
+                };
+                upsert: {
+                    args: Prisma.ChannelPermissionOverrideUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPermissionOverridePayload>;
+                };
+                aggregate: {
+                    args: Prisma.ChannelPermissionOverrideAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateChannelPermissionOverride>;
+                };
+                groupBy: {
+                    args: Prisma.ChannelPermissionOverrideGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ChannelPermissionOverrideGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.ChannelPermissionOverrideCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ChannelPermissionOverrideCountAggregateOutputType> | number;
                 };
             };
         };
@@ -486,6 +562,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 count: {
                     args: Prisma.RoleCountArgs<ExtArgs>;
                     result: runtime.Types.Utils.Optional<Prisma.RoleCountAggregateOutputType> | number;
+                };
+            };
+        };
+        ServerMemberRole: {
+            payload: Prisma.$ServerMemberRolePayload<ExtArgs>;
+            fields: Prisma.ServerMemberRoleFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.ServerMemberRoleFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberRolePayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.ServerMemberRoleFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberRolePayload>;
+                };
+                findFirst: {
+                    args: Prisma.ServerMemberRoleFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberRolePayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.ServerMemberRoleFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberRolePayload>;
+                };
+                findMany: {
+                    args: Prisma.ServerMemberRoleFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberRolePayload>[];
+                };
+                create: {
+                    args: Prisma.ServerMemberRoleCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberRolePayload>;
+                };
+                createMany: {
+                    args: Prisma.ServerMemberRoleCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.ServerMemberRoleCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberRolePayload>[];
+                };
+                delete: {
+                    args: Prisma.ServerMemberRoleDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberRolePayload>;
+                };
+                update: {
+                    args: Prisma.ServerMemberRoleUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberRolePayload>;
+                };
+                deleteMany: {
+                    args: Prisma.ServerMemberRoleDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.ServerMemberRoleUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.ServerMemberRoleUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberRolePayload>[];
+                };
+                upsert: {
+                    args: Prisma.ServerMemberRoleUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ServerMemberRolePayload>;
+                };
+                aggregate: {
+                    args: Prisma.ServerMemberRoleAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateServerMemberRole>;
+                };
+                groupBy: {
+                    args: Prisma.ServerMemberRoleGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ServerMemberRoleGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.ServerMemberRoleCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ServerMemberRoleCountAggregateOutputType> | number;
                 };
             };
         };
@@ -824,8 +974,20 @@ export declare const CategoryScalarFieldEnum: {
     readonly serverId: 'serverId';
     readonly name: 'name';
     readonly position: 'position';
+    readonly createdAt: 'createdAt';
+    readonly updatedAt: 'updatedAt';
 };
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum];
+export declare const ChannelPermissionOverrideScalarFieldEnum: {
+    readonly id: 'id';
+    readonly channelId: 'channelId';
+    readonly roleId: 'roleId';
+    readonly allowBitmask: 'allowBitmask';
+    readonly denyBitmask: 'denyBitmask';
+    readonly createdAt: 'createdAt';
+    readonly updatedAt: 'updatedAt';
+};
+export type ChannelPermissionOverrideScalarFieldEnum = (typeof ChannelPermissionOverrideScalarFieldEnum)[keyof typeof ChannelPermissionOverrideScalarFieldEnum];
 export declare const ChannelScalarFieldEnum: {
     readonly id: 'id';
     readonly serverId: 'serverId';
@@ -846,11 +1008,17 @@ export declare const RoleScalarFieldEnum: {
     readonly isDefault: 'isDefault';
 };
 export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum];
+export declare const ServerMemberRoleScalarFieldEnum: {
+    readonly id: 'id';
+    readonly serverMemberId: 'serverMemberId';
+    readonly roleId: 'roleId';
+    readonly createdAt: 'createdAt';
+};
+export type ServerMemberRoleScalarFieldEnum = (typeof ServerMemberRoleScalarFieldEnum)[keyof typeof ServerMemberRoleScalarFieldEnum];
 export declare const ServerMemberScalarFieldEnum: {
     readonly id: 'id';
     readonly serverId: 'serverId';
     readonly userId: 'userId';
-    readonly roleId: 'roleId';
     readonly createdAt: 'createdAt';
     readonly updatedAt: 'updatedAt';
 };
@@ -921,13 +1089,13 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>;
 /**
- * Reference to a field of type 'ChannelType'
+ * Reference to a field of type 'DateTime'
  */
-export type EnumChannelTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChannelType'>;
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>;
 /**
- * Reference to a field of type 'ChannelType[]'
+ * Reference to a field of type 'DateTime[]'
  */
-export type ListEnumChannelTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChannelType[]'>;
+export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>;
 /**
  * Reference to a field of type 'BigInt'
  */
@@ -937,17 +1105,17 @@ export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  */
 export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>;
 /**
+ * Reference to a field of type 'ChannelType'
+ */
+export type EnumChannelTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChannelType'>;
+/**
+ * Reference to a field of type 'ChannelType[]'
+ */
+export type ListEnumChannelTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChannelType[]'>;
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>;
-/**
- * Reference to a field of type 'DateTime'
- */
-export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>;
-/**
- * Reference to a field of type 'DateTime[]'
- */
-export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>;
 /**
  * Reference to a field of type 'Float'
  */
@@ -1104,8 +1272,10 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter;
 export type GlobalOmitConfig = {
     category?: Prisma.CategoryOmit;
+    channelPermissionOverride?: Prisma.ChannelPermissionOverrideOmit;
     channel?: Prisma.ChannelOmit;
     role?: Prisma.RoleOmit;
+    serverMemberRole?: Prisma.ServerMemberRoleOmit;
     serverMember?: Prisma.ServerMemberOmit;
     server?: Prisma.ServerOmit;
     session?: Prisma.SessionOmit;

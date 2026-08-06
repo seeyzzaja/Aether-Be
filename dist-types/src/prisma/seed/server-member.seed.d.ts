@@ -6,7 +6,6 @@ type SeedServerMemberInput = {
 export declare function seedServerMember({ serverId, userId, roleId }: SeedServerMemberInput): Promise<{
     createdAt: Date;
     id: string;
-    roleId: string;
     serverId: string;
     userId: string;
 }>;

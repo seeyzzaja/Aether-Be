@@ -16,20 +16,30 @@ export async function seedServerMember({ serverId, userId, roleId }: SeedServerM
         userId,
       },
     },
-    update: {
-      roleId,
-    },
+    update: {},
     create: {
       serverId,
       userId,
-      roleId,
     },
     select: {
       id: true,
       serverId: true,
       userId: true,
-      roleId: true,
       createdAt: true,
+    },
+  });
+
+  await prisma.serverMemberRole.upsert({
+    where: {
+      serverMemberId_roleId: {
+        serverMemberId: member.id,
+        roleId,
+      },
+    },
+    update: {},
+    create: {
+      serverMemberId: member.id,
+      roleId,
     },
   });
 
