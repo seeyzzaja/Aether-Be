@@ -52,8 +52,10 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Category: 'Category',
+  ChannelPermissionOverride: 'ChannelPermissionOverride',
   Channel: 'Channel',
   Role: 'Role',
+  ServerMemberRole: 'ServerMemberRole',
   ServerMember: 'ServerMember',
   Server: 'Server',
   Session: 'Session',
@@ -88,6 +90,19 @@ export const CategoryScalarFieldEnum = {
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
 
 
+export const ChannelPermissionOverrideScalarFieldEnum = {
+  id: 'id',
+  channelId: 'channelId',
+  roleId: 'roleId',
+  allowBitmask: 'allowBitmask',
+  denyBitmask: 'denyBitmask',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChannelPermissionOverrideScalarFieldEnum = (typeof ChannelPermissionOverrideScalarFieldEnum)[keyof typeof ChannelPermissionOverrideScalarFieldEnum]
+
+
 export const ChannelScalarFieldEnum = {
   id: 'id',
   serverId: 'serverId',
@@ -114,11 +129,20 @@ export const RoleScalarFieldEnum = {
 export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
 
 
+export const ServerMemberRoleScalarFieldEnum = {
+  id: 'id',
+  serverMemberId: 'serverMemberId',
+  roleId: 'roleId',
+  createdAt: 'createdAt'
+} as const
+
+export type ServerMemberRoleScalarFieldEnum = (typeof ServerMemberRoleScalarFieldEnum)[keyof typeof ServerMemberRoleScalarFieldEnum]
+
+
 export const ServerMemberScalarFieldEnum = {
   id: 'id',
   serverId: 'serverId',
   userId: 'userId',
-  roleId: 'roleId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

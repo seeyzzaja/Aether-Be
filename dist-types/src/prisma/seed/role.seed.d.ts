@@ -1,9 +1,21 @@
 export declare function seedRole(serverId: string): Promise<{
-    id: string;
-    isDefault: boolean;
-    name: string;
-    permissionsBitmask: bigint;
-    position: number;
-    serverId: string;
+    defaultRole: {
+        id: string;
+        serverId: string;
+        name: string;
+        color: string | null;
+        permissionsBitmask: bigint;
+        position: number;
+        isDefault: boolean;
+    };
+    ownerRole: {
+        id: string;
+        serverId: string;
+        name: string;
+        color: string | null;
+        permissionsBitmask: bigint;
+        position: number;
+        isDefault: boolean;
+    };
 }>;
 //# sourceMappingURL=role.seed.d.ts.map

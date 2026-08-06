@@ -39,19 +39,19 @@ async function main() {
   await seedServerMember({
     serverId: server1.id,
     userId: owner1.id,
-    roleId: role1.id,
+    roleId: role1.ownerRole.id,
   });
 
   await seedServerMember({
     serverId: server2.id,
     userId: owner2.id,
-    roleId: role2.id,
+    roleId: role2.ownerRole.id,
   });
 
   await seedServerMember({
     serverId: server3.id,
     userId: owner1.id,
-    roleId: role3.id,
+    roleId: role3.ownerRole.id,
   });
 
   console.log("\nSemua Seeder berhasil dijalankan");

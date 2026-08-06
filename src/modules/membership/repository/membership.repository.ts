@@ -25,7 +25,18 @@ export class MembershipRepository {
         },
       },
       include: {
-        role: true,
+        roles: {
+          include: {
+            role: true,
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            email: true,
+            username: true,
+          },
+        },
       },
     });
   }
@@ -40,27 +51,16 @@ export class MembershipRepository {
   }
 
   async createMember(serverId: string, userId: string, roleId: string) {
-    return prisma.serverMember.create({
+    const member = await prisma.serverMember.create({
       data: {
         serverId,
         userId,
-        roleId,
       },
       select: {
         id: true,
         serverId: true,
         userId: true,
-        roleId: true,
         createdAt: true,
-        role: {
-          select: {
-            id: true,
-            name: true,
-            color: true,
-            position: true,
-            isDefault: true,
-          },
-        },
         user: {
           select: {
             id: true,
@@ -70,6 +70,21 @@ export class MembershipRepository {
         },
       },
     });
+
+    await prisma.serverMemberRole.create({
+      data: {
+        serverMemberId: member.id,
+        roleId,
+      },
+    });
+
+    return {
+      ...member,
+      roleId,
+      role: {
+        id: roleId,
+      },
+    };
   }
 
   async deleteMember(serverId: string, userId: string) {

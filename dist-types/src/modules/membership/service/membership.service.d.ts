@@ -1,15 +1,11 @@
 export declare class MembershipService {
     join(serverId: string, userId: string): Promise<{
+        roleId: string;
+        role: {
+            id: string;
+        };
         createdAt: Date;
         id: string;
-        role: {
-            color: string | null;
-            id: string;
-            isDefault: boolean;
-            name: string;
-            position: number;
-        };
-        roleId: string;
         serverId: string;
         user: {
             email: string;

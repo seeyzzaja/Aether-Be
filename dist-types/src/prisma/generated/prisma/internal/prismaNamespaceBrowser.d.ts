@@ -27,8 +27,10 @@ export declare const JsonNull: import("@prisma/client-runtime-utils").JsonNullCl
 export declare const AnyNull: import("@prisma/client-runtime-utils").AnyNullClass;
 export declare const ModelName: {
     readonly Category: 'Category';
+    readonly ChannelPermissionOverride: 'ChannelPermissionOverride';
     readonly Channel: 'Channel';
     readonly Role: 'Role';
+    readonly ServerMemberRole: 'ServerMemberRole';
     readonly ServerMember: 'ServerMember';
     readonly Server: 'Server';
     readonly Session: 'Session';
@@ -47,8 +49,20 @@ export declare const CategoryScalarFieldEnum: {
     readonly serverId: 'serverId';
     readonly name: 'name';
     readonly position: 'position';
+    readonly createdAt: 'createdAt';
+    readonly updatedAt: 'updatedAt';
 };
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum];
+export declare const ChannelPermissionOverrideScalarFieldEnum: {
+    readonly id: 'id';
+    readonly channelId: 'channelId';
+    readonly roleId: 'roleId';
+    readonly allowBitmask: 'allowBitmask';
+    readonly denyBitmask: 'denyBitmask';
+    readonly createdAt: 'createdAt';
+    readonly updatedAt: 'updatedAt';
+};
+export type ChannelPermissionOverrideScalarFieldEnum = (typeof ChannelPermissionOverrideScalarFieldEnum)[keyof typeof ChannelPermissionOverrideScalarFieldEnum];
 export declare const ChannelScalarFieldEnum: {
     readonly id: 'id';
     readonly serverId: 'serverId';
@@ -69,11 +83,17 @@ export declare const RoleScalarFieldEnum: {
     readonly isDefault: 'isDefault';
 };
 export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum];
+export declare const ServerMemberRoleScalarFieldEnum: {
+    readonly id: 'id';
+    readonly serverMemberId: 'serverMemberId';
+    readonly roleId: 'roleId';
+    readonly createdAt: 'createdAt';
+};
+export type ServerMemberRoleScalarFieldEnum = (typeof ServerMemberRoleScalarFieldEnum)[keyof typeof ServerMemberRoleScalarFieldEnum];
 export declare const ServerMemberScalarFieldEnum: {
     readonly id: 'id';
     readonly serverId: 'serverId';
     readonly userId: 'userId';
-    readonly roleId: 'roleId';
     readonly createdAt: 'createdAt';
     readonly updatedAt: 'updatedAt';
 };

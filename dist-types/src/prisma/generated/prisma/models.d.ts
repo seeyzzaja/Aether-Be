@@ -1,6 +1,8 @@
 export type * from './models/Category';
+export type * from './models/ChannelPermissionOverride';
 export type * from './models/Channel';
 export type * from './models/Role';
+export type * from './models/ServerMemberRole';
 export type * from './models/ServerMember';
 export type * from './models/Server';
 export type * from './models/Session';

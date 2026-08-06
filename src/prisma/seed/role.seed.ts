@@ -8,14 +8,6 @@ export async function seedRole(serverId: string) {
       serverId,
       isDefault: true,
     },
-    select: {
-      id: true,
-      serverId: true,
-      name: true,
-      permissionsBitmask: true,
-      position: true,
-      isDefault: true,
-    },
   });
 
   const defaultRole =
@@ -28,17 +20,32 @@ export async function seedRole(serverId: string) {
         position: 0,
         isDefault: true,
       },
-      select: {
-        id: true,
-        serverId: true,
-        name: true,
-        permissionsBitmask: true,
-        position: true,
-        isDefault: true,
+    }));
+
+  const existingAdminRole = await prisma.role.findFirst({
+    where: {
+      serverId,
+      name: "Owner",
+    },
+  });
+
+  const ownerRole =
+    existingAdminRole ??
+    (await prisma.role.create({
+      data: {
+        serverId,
+        name: "Owner",
+        permissionsBitmask: BigInt(8192),
+        position: 100,
+        isDefault: false,
       },
     }));
 
   console.log("✅ Role @everyone berhasil dibuat");
+  console.log("✅ Role Owner berhasil dibuat");
 
-  return defaultRole;
+  return {
+    defaultRole,
+    ownerRole,
+  };
 }

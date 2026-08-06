@@ -7,9 +7,10 @@ model Role {
   position           Int     @default(0)
   isDefault          Boolean @default(false)
 
-  members ServerMember[]
+  members ServerMemberRole[]
 
-  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  server                     Server                      @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  channelPermissionOverrides ChannelPermissionOverride[]
 
   @@index([serverId])
 }

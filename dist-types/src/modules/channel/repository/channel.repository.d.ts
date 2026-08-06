@@ -13,12 +13,13 @@ export declare class ChannelRepository {
         serverId: string;
         name: string;
         position: number;
+        createdAt: Date;
+        updatedAt: Date;
     } | null>;
     findMember(serverId: string, userId: string): Promise<{
         id: string;
         serverId: string;
         userId: string;
-        roleId: string;
         createdAt: Date;
         updatedAt: Date;
     } | null>;
