@@ -5,6 +5,7 @@ export declare const config: {
     HOST: string;
     BASE_URL: string;
     DATABASE_URL: string;
+    WS_PORT: number;
     JWT_ACCESS_SECRET: string;
     JWT_REFRESH_SECRET: string;
     JWT_ACCESS_EXPIRES_IN: string;

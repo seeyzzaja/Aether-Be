@@ -1,0 +1,1 @@
+{"version":3,"file":"access-token.service.d.ts","sourceRoot":"","sources":["../../../../src/shared/auth/access-token.service.ts"],"names":[],"mappings":"AAMA,MAAM,WAAW,kBAAkB;IACjC,MAAM,EAAE,MAAM,CAAC;IACf,KAAK,EAAE,MAAM,CAAC;IACd,QAAQ,EAAE,MAAM,CAAC;IACjB,SAAS,EAAE,MAAM,CAAC;CACnB;AAED,wBAAsB,iBAAiB,CAAC,KAAK,EAAE,MAAM,GAAG,OAAO,CAAC,kBAAkB,CAAC,CAsClF"}
