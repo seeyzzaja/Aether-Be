@@ -1,0 +1,82 @@
+import type WebSocket from "ws";
+import { ZodError } from "zod";
+import { WebSocketEvent } from "#websocket/constants/events.js";
+import { handlePing, handleSubscribe, handleUnsubscribe } from "#websocket/handlers/index.js";
+import type { WebSocketMessage } from "#websocket/types/message.js";
+import type { AuthenticatedSocket } from "#websocket/types/socket.js";
+
+import { validateSubscribe, validateUnsubscribe } from "#websocket/validators/index.js";
+
+export function handleMessage(socket: WebSocket, rawMessage: string): void {
+  let message: WebSocketMessage;
+
+  try {
+    message = JSON.parse(rawMessage);
+  } catch {
+    socket.send(
+      JSON.stringify({
+        event: "error",
+        data: {
+          message: "Invalid JSON",
+        },
+      }),
+    );
+
+    return;
+  }
+
+  try {
+    switch (message.event) {
+      case WebSocketEvent.PING:
+        handlePing(socket, message);
+        break;
+
+      case WebSocketEvent.SUBSCRIBE: {
+        const data = validateSubscribe(message.data);
+
+        handleSubscribe(socket as AuthenticatedSocket, {
+          event: message.event,
+          data,
+        });
+        break;
+      }
+
+      case WebSocketEvent.UNSUBSCRIBE: {
+        const data = validateUnsubscribe(message.data);
+
+        handleUnsubscribe(socket as AuthenticatedSocket, {
+          event: message.event,
+          data,
+        });
+        break;
+      }
+
+      default:
+        socket.send(
+          JSON.stringify({
+            event: WebSocketEvent.ERROR,
+            data: {
+              message: `Unknown event: ${message.event}`,
+            },
+          }),
+        );
+        break;
+    }
+  } catch (error) {
+    if (error instanceof ZodError) {
+      socket.send(
+        JSON.stringify({
+          event: WebSocketEvent.ERROR,
+          data: {
+            message: "Invalid payload",
+            errors: error.flatten(),
+          },
+        }),
+      );
+
+      return;
+    }
+
+    throw error;
+  }
+}
