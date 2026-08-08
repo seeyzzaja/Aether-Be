@@ -10,6 +10,12 @@ export const WebSocketEvent = {
   UNSUBSCRIBE: "unsubscribe",
   UNSUBSCRIBED: "unsubscribed",
 
+  MESSAGE_CREATED: "message.created",
+  MESSAGE_UPDATED: "message.updated",
+  MESSAGE_DELETED: "message.deleted",
+
+  MESSAGE_MENTION: "message.mention",
+
   ERROR: "error",
 } as const;
 

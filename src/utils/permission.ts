@@ -1,6 +1,10 @@
 import { Permission, type PermissionValue } from "#shared/permissions/permissions";
 
 export function hasPermission(permissions: bigint, permission: PermissionValue): boolean {
+  if ((permissions & Permission.ADMINISTRATOR) === Permission.ADMINISTRATOR) {
+    return true;
+  }
+
   return (permissions & permission) === permission;
 }
 

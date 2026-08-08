@@ -54,6 +54,7 @@ export const ModelName = {
   Category: 'Category',
   ChannelPermissionOverride: 'ChannelPermissionOverride',
   Channel: 'Channel',
+  Message: 'Message',
   Role: 'Role',
   ServerMemberRole: 'ServerMemberRole',
   ServerMember: 'ServerMember',
@@ -114,6 +115,23 @@ export const ChannelScalarFieldEnum = {
 } as const
 
 export type ChannelScalarFieldEnum = (typeof ChannelScalarFieldEnum)[keyof typeof ChannelScalarFieldEnum]
+
+
+export const MessageScalarFieldEnum = {
+  id: 'id',
+  channelId: 'channelId',
+  authorId: 'authorId',
+  replyToId: 'replyToId',
+  threadRootId: 'threadRootId',
+  content: 'content',
+  isPinned: 'isPinned',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
 export const RoleScalarFieldEnum = {
