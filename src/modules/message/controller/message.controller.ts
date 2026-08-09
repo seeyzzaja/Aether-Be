@@ -79,6 +79,31 @@ export class MessageController {
       next(error);
     }
   }
+  async pin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = this.getUserId(req);
+      const messageId = this.getMessageId(req);
+
+      const message = await messageService.pin(messageId, userId);
+
+      return successResponse(res, "Pesan berhasil disematkan", message);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async unpin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = this.getUserId(req);
+      const messageId = this.getMessageId(req);
+
+      const message = await messageService.unpin(messageId, userId);
+
+      return successResponse(res, "Pesan berhasil dilepas dari sematan", message);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const messageController = new MessageController();

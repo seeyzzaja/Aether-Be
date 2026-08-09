@@ -120,6 +120,72 @@ router.patch("/:messageId", (req, res, next) => messageController.update(req, re
 
 /**
  * @swagger
+ * /api/message/{messageId}/pin:
+ *   post:
+ *     summary: Menyematkan pesan
+ *     tags: [Message]
+ *     description: Menyematkan sebuah pesan. Hanya pengguna yang memiliki permission MANAGE_MESSAGES yang dapat menyematkan pesan.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: messageId
+ *         in: path
+ *         required: true
+ *         description: UUID pesan
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Pesan berhasil disematkan
+ *       400:
+ *         description: Message ID tidak valid
+ *       401:
+ *         description: Pengguna belum login atau token tidak valid
+ *       403:
+ *         description: Pengguna tidak memiliki permission MANAGE_MESSAGES
+ *       404:
+ *         description: Pesan atau server tidak ditemukan
+ *       500:
+ *         description: Terjadi kesalahan internal server
+ */
+router.post("/:messageId/pin", (req, res, next) => messageController.pin(req, res, next));
+
+/**
+ * @swagger
+ * /api/message/{messageId}/pin:
+ *   delete:
+ *     summary: Melepas sematan pesan
+ *     tags: [Message]
+ *     description: Melepas sematan sebuah pesan. Hanya pengguna yang memiliki permission MANAGE_MESSAGES yang dapat melepas sematan pesan.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: messageId
+ *         in: path
+ *         required: true
+ *         description: UUID pesan
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Pesan berhasil dilepas dari sematan
+ *       400:
+ *         description: Message ID tidak valid
+ *       401:
+ *         description: Pengguna belum login atau token tidak valid
+ *       403:
+ *         description: Pengguna tidak memiliki permission MANAGE_MESSAGES
+ *       404:
+ *         description: Pesan atau server tidak ditemukan
+ *       500:
+ *         description: Terjadi kesalahan internal server
+ */
+router.delete("/:messageId/pin", (req, res, next) => messageController.unpin(req, res, next));
+
+/**
+ * @swagger
  * /api/message/{messageId}:
  *   delete:
  *     summary: Menghapus pesan
@@ -149,6 +215,5 @@ router.patch("/:messageId", (req, res, next) => messageController.update(req, re
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.delete("/:messageId", (req, res, next) => messageController.delete(req, res, next));
 
 export default router;

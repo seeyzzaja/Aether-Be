@@ -18,6 +18,16 @@ export type ChannelPermissionOverride = Prisma.ChannelPermissionOverrideModel;
  */
 export type Channel = Prisma.ChannelModel;
 /**
+ * Model Message
+ *
+ */
+export type Message = Prisma.MessageModel;
+/**
+ * Model Reaction
+ *
+ */
+export type Reaction = Prisma.ReactionModel;
+/**
  * Model Role
  *
  */

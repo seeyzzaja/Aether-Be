@@ -6,6 +6,7 @@ export {
   broadcastMessageDeleted,
   broadcastMessageUpdated,
 } from "#websocket/broadcast/message.broadcast";
+export * from "./reaction.broadcast.js";
 
 type MessageMentionPayload = {
   messageId: string;

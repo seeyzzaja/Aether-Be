@@ -116,6 +116,7 @@ export class MessageRepository {
         channelId: true,
         authorId: true,
         content: true,
+        isPinned: true,
         isDeleted: true,
         channel: {
           select: {
