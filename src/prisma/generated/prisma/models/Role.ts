@@ -444,10 +444,6 @@ export type RoleUpdateOneRequiredWithoutChannelPermissionOverridesNestedInput = 
   update?: Prisma.XOR<Prisma.XOR<Prisma.RoleUpdateToOneWithWhereWithoutChannelPermissionOverridesInput, Prisma.RoleUpdateWithoutChannelPermissionOverridesInput>, Prisma.RoleUncheckedUpdateWithoutChannelPermissionOverridesInput>
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type RoleCreateNestedOneWithoutMembersInput = {
   create?: Prisma.XOR<Prisma.RoleCreateWithoutMembersInput, Prisma.RoleUncheckedCreateWithoutMembersInput>
   connectOrCreate?: Prisma.RoleCreateOrConnectWithoutMembersInput

@@ -18,6 +18,7 @@ model Channel {
   server              Server                      @relation(fields: [serverId], references: [id], onDelete: Cascade)
   category            Category?                   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   permissionOverrides ChannelPermissionOverride[]
+  messages            Message[]
 
   @@index([serverId])
   @@index([categoryId])
