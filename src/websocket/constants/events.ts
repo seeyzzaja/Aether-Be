@@ -16,6 +16,9 @@ export const WebSocketEvent = {
 
   MESSAGE_MENTION: "message.mention",
 
+  REACTION_ADDED: "reaction.added",
+  REACTION_REMOVED: "reaction.removed",
+
   ERROR: "error",
 } as const;
 

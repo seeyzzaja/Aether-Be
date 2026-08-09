@@ -29,6 +29,8 @@ export declare const ModelName: {
     readonly Category: 'Category';
     readonly ChannelPermissionOverride: 'ChannelPermissionOverride';
     readonly Channel: 'Channel';
+    readonly Message: 'Message';
+    readonly Reaction: 'Reaction';
     readonly Role: 'Role';
     readonly ServerMemberRole: 'ServerMemberRole';
     readonly ServerMember: 'ServerMember';
@@ -73,6 +75,28 @@ export declare const ChannelScalarFieldEnum: {
     readonly position: 'position';
 };
 export type ChannelScalarFieldEnum = (typeof ChannelScalarFieldEnum)[keyof typeof ChannelScalarFieldEnum];
+export declare const MessageScalarFieldEnum: {
+    readonly id: 'id';
+    readonly channelId: 'channelId';
+    readonly authorId: 'authorId';
+    readonly replyToId: 'replyToId';
+    readonly threadRootId: 'threadRootId';
+    readonly content: 'content';
+    readonly isPinned: 'isPinned';
+    readonly isDeleted: 'isDeleted';
+    readonly createdAt: 'createdAt';
+    readonly updatedAt: 'updatedAt';
+    readonly deletedAt: 'deletedAt';
+};
+export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum];
+export declare const ReactionScalarFieldEnum: {
+    readonly id: 'id';
+    readonly messageId: 'messageId';
+    readonly userId: 'userId';
+    readonly emoji: 'emoji';
+    readonly createdAt: 'createdAt';
+};
+export type ReactionScalarFieldEnum = (typeof ReactionScalarFieldEnum)[keyof typeof ReactionScalarFieldEnum];
 export declare const RoleScalarFieldEnum: {
     readonly id: 'id';
     readonly serverId: 'serverId';

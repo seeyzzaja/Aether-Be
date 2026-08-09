@@ -151,6 +151,28 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         omit: OmitOpts;
     }>;
     /**
+     * `prisma.message`: Exposes CRUD operations for the **Message** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Messages
+      * const messages = await prisma.message.findMany()
+      * ```
+      */
+    get message(): Prisma.MessageDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.reaction`: Exposes CRUD operations for the **Reaction** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Reactions
+      * const reactions = await prisma.reaction.findMany()
+      * ```
+      */
+    get reaction(): Prisma.ReactionDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
      * `prisma.role`: Exposes CRUD operations for the **Role** model.
       * Example usage:
       * ```ts

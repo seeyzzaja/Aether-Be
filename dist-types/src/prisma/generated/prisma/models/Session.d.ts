@@ -344,9 +344,6 @@ export type SessionListRelationFilter = {
 export type SessionOrderByRelationAggregateInput = {
     _count?: Prisma.SortOrder;
 };
-export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null;
-};
 export type SessionCreateNestedManyWithoutUserInput = {
     create?: Prisma.XOR<Prisma.SessionCreateWithoutUserInput, Prisma.SessionUncheckedCreateWithoutUserInput> | Prisma.SessionCreateWithoutUserInput[] | Prisma.SessionUncheckedCreateWithoutUserInput[];
     connectOrCreate?: Prisma.SessionCreateOrConnectWithoutUserInput | Prisma.SessionCreateOrConnectWithoutUserInput[];

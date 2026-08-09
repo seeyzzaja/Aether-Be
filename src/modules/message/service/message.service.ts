@@ -194,6 +194,57 @@ export class MessageService {
       throw new NotFoundError("Thread root message tidak ditemukan");
     }
   }
+  async pin(messageId: string, userId: string) {
+    const message = await this.getMessage(messageId);
+
+    if (message.isDeleted) {
+      throw new NotFoundError("Pesan tidak ditemukan");
+    }
+
+    const permissions = await this.getActorPermissions(message.channel.serverId, userId);
+
+    if (!hasPermission(permissions, Permission.MANAGE_MESSAGES)) {
+      throw new ForbiddenError("Kamu tidak memiliki permission untuk menyematkan pesan");
+    }
+
+    if (message.isPinned) {
+      return message;
+    }
+
+    const pinnedMessage = await messageRepository.update(messageId, {
+      isPinned: true,
+    });
+
+    broadcastMessageUpdated(pinnedMessage);
+
+    return pinnedMessage;
+  }
+
+  async unpin(messageId: string, userId: string) {
+    const message = await this.getMessage(messageId);
+
+    if (message.isDeleted) {
+      throw new NotFoundError("Pesan tidak ditemukan");
+    }
+
+    const permissions = await this.getActorPermissions(message.channel.serverId, userId);
+
+    if (!hasPermission(permissions, Permission.MANAGE_MESSAGES)) {
+      throw new ForbiddenError("Kamu tidak memiliki permission untuk melepas sematan pesan");
+    }
+
+    if (!message.isPinned) {
+      return message;
+    }
+
+    const unpinnedMessage = await messageRepository.update(messageId, {
+      isPinned: false,
+    });
+
+    broadcastMessageUpdated(unpinnedMessage);
+
+    return unpinnedMessage;
+  }
 }
 
 export const messageService = new MessageService();

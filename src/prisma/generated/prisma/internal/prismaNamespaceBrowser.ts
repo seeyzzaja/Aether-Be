@@ -55,6 +55,7 @@ export const ModelName = {
   ChannelPermissionOverride: 'ChannelPermissionOverride',
   Channel: 'Channel',
   Message: 'Message',
+  Reaction: 'Reaction',
   Role: 'Role',
   ServerMemberRole: 'ServerMemberRole',
   ServerMember: 'ServerMember',
@@ -132,6 +133,17 @@ export const MessageScalarFieldEnum = {
 } as const
 
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
+
+
+export const ReactionScalarFieldEnum = {
+  id: 'id',
+  messageId: 'messageId',
+  userId: 'userId',
+  emoji: 'emoji',
+  createdAt: 'createdAt'
+} as const
+
+export type ReactionScalarFieldEnum = (typeof ReactionScalarFieldEnum)[keyof typeof ReactionScalarFieldEnum]
 
 
 export const RoleScalarFieldEnum = {
