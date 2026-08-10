@@ -1,4 +1,4 @@
-import type { AuthenticatedSocket } from "#websocket/types/socket.js";
+import type { AuthenticatedSocket } from "#websocket/types/socket";
 
 export class ConnectionRegistry {
   private readonly channels = new Map<string, Set<AuthenticatedSocket>>();

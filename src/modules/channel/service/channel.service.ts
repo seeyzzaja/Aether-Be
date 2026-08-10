@@ -1,4 +1,4 @@
-import { ForbiddenError, NotFoundError } from "#shared/errors/app-error.js";
+import { ForbiddenError, NotFoundError } from "#shared/errors/app-error";
 
 import { channelRepository } from "../repository/channel.repository.js";
 import type { CreateChannelInput, UpdateChannelInput } from "../schema/channel.schema.js";

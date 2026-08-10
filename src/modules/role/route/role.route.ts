@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { requireAuth } from "#middlewares/auth-middleware";
-import { RoleController } from "#modules/role/controller/role.controller.js";
+import { RoleController } from "#modules/role/controller/role.controller";
 
 const router = Router({
   mergeParams: true,

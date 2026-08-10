@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { verifyAccessToken } from "#shared/auth/access-token.service.js";
+import { verifyAccessToken } from "#shared/auth/access-token.service";
 import { UnauthorizedError } from "#shared/errors/app-error";
 
 export const requireAuth = async (req: Request, _res: Response, next: NextFunction) => {

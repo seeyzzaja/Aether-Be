@@ -1,5 +1,5 @@
-import { WebSocketEvent } from "#websocket/constants/events.js";
-import { connectionRegistry } from "#websocket/registry/index.js";
+import { WebSocketEvent } from "#websocket/constants/events";
+import { connectionRegistry } from "#websocket/registry/index";
 
 export {
   broadcastMessageCreated,
@@ -7,6 +7,7 @@ export {
   broadcastMessageUpdated,
 } from "#websocket/broadcast/message.broadcast";
 export * from "./reaction.broadcast.js";
+export { broadcastRedisEvent } from "./redis.broadcast.js";
 
 type MessageMentionPayload = {
   messageId: string;

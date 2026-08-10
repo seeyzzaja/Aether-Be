@@ -1,9 +1,10 @@
 import type { CreateServerInput, UpdateServerInput } from "#modules/server/schema/server.schema";
+import type { TransactionClient } from "#prisma/generated/prisma/internal/prismaNamespace";
 import prisma from "#utils/prisma";
 
 export class ServerRepository {
   async create(ownerId: string, data: CreateServerInput) {
-    return prisma.$transaction(async (tx) => {
+    return prisma.$transaction(async (tx: TransactionClient) => {
       const server = await tx.server.create({
         data: {
           ownerId,

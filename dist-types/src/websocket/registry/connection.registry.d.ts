@@ -1,4 +1,4 @@
-import type { AuthenticatedSocket } from "#websocket/types/socket.js";
+import type { AuthenticatedSocket } from "#websocket/types/socket";
 export declare class ConnectionRegistry {
     private readonly channels;
     subscribe(channelId: string, socket: AuthenticatedSocket): void;

@@ -1,8 +1,8 @@
 import type { WebSocketServer } from "ws";
-import { handleMessage } from "#websocket/message-handler.js";
-import { authenticateSocket } from "#websocket/middleware/auth.middleware.js";
-import { connectionRegistry } from "#websocket/registry/index.js";
-import type { AuthenticatedSocket } from "#websocket/types/socket.js";
+import { handleMessage } from "#websocket/message-handler";
+import { authenticateSocket } from "#websocket/middleware/auth.middleware";
+import { connectionRegistry } from "#websocket/registry/index";
+import type { AuthenticatedSocket } from "#websocket/types/socket";
 
 export function registerGateway(wss: WebSocketServer): void {
   wss.on("connection", async (socket, request) => {
