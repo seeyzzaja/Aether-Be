@@ -1,4 +1,4 @@
-import type { CreateMessageInput, UpdateMessageInput } from "#modules/message/schema/message.schema.js";
+import type { CreateMessageInput, UpdateMessageInput } from "#modules/message/schema/message.schema";
 export declare class MessageService {
     private getActorPermissions;
     private ensureSendMessagesPermission;

@@ -1,8 +1,8 @@
-import { RoleRepository } from "#modules/role/repository/role.repository.js";
-import { ForbiddenError, NotFoundError } from "#shared/errors/app-error.js";
-import { Permission } from "#shared/permissions/permissions.js";
-import { canAssignPermissions } from "#utils/permission.js";
-import prisma from "#utils/prisma.js";
+import { RoleRepository } from "#modules/role/repository/role.repository";
+import { ForbiddenError, NotFoundError } from "#shared/errors/app-error";
+import { Permission } from "#shared/permissions/permissions";
+import { canAssignPermissions } from "#utils/permission";
+import prisma from "#utils/prisma";
 
 export class RoleService {
   private roleRepository: RoleRepository;
@@ -49,8 +49,9 @@ export class RoleService {
       throw new ForbiddenError("Kamu bukan member dari server ini");
     }
 
-    return member.roles.reduce<bigint>(
-      (total, memberRole) => total | memberRole.role.permissionsBitmask,
+    return member.roles.reduce(
+      (total: bigint, memberRole: { role: { permissionsBitmask: bigint } }) =>
+        total | memberRole.role.permissionsBitmask,
       0n,
     );
   }

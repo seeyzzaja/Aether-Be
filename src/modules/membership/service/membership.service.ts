@@ -1,4 +1,4 @@
-import { ConflictError, ForbiddenError, NotFoundError } from "#shared/errors/app-error.js";
+import { ConflictError, ForbiddenError, NotFoundError } from "#shared/errors/app-error";
 
 import { membershipRepository } from "../repository/membership.repository.js";
 

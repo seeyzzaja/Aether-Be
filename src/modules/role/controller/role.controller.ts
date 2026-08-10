@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { RoleService } from "#modules/role/service/role.service.js";
-import { BadRequestError, UnauthorizedError } from "#shared/errors/app-error.js";
+import { RoleService } from "#modules/role/service/role.service";
+import { BadRequestError, UnauthorizedError } from "#shared/errors/app-error";
 
 const roleService = new RoleService();
 

@@ -7,7 +7,7 @@ export declare class DeviceRepository {
         ipAddress: string | null;
         updatedAt: Date;
     }[]>;
-    revokeSession(sessionId: string, userId: string): Promise<import("../../../prisma/generated/prisma/internal/prismaNamespace").BatchPayload>;
+    revokeSession(sessionId: string, userId: string): Promise<import("../../../prisma/generated/prisma/internal/prismaNamespace.js").BatchPayload>;
 }
 export declare const deviceRepository: DeviceRepository;
 //# sourceMappingURL=device.repository.d.ts.map

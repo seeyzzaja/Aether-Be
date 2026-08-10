@@ -1,7 +1,7 @@
-import { messageRepository } from "#modules/message/repository/message.repository.js";
-import { reactionRepository } from "#modules/reaction/repository/reaction.repository.js";
-import { Prisma } from "#prisma/generated/prisma/client.js";
-import { ConflictError, ForbiddenError, NotFoundError } from "#shared/errors/app-error.js";
+import { messageRepository } from "#modules/message/repository/message.repository";
+import { reactionRepository } from "#modules/reaction/repository/reaction.repository";
+
+import { ConflictError, ForbiddenError, NotFoundError } from "#shared/errors/app-error";
 import { broadcastReactionAdded, broadcastReactionRemoved } from "#websocket/broadcast";
 export class ReactionService {
   private async getMessage(messageId: string) {
@@ -33,8 +33,14 @@ export class ReactionService {
       broadcastReactionAdded(message.channel.id, reaction);
 
       return reaction;
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+    } catch (error: unknown) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        typeof error.code === "string" &&
+        error.code === "P2002"
+      ) {
         throw new ConflictError("Kamu sudah memberikan reaksi emoji tersebut pada pesan ini");
       }
 

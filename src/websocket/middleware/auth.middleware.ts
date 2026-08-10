@@ -1,7 +1,7 @@
 import type { IncomingMessage } from "node:http";
 
-import { verifyAccessToken } from "#shared/auth/access-token.service.js";
-import type { AuthenticatedSocket } from "#websocket/types/socket.js";
+import { verifyAccessToken } from "#shared/auth/access-token.service";
+import type { AuthenticatedSocket } from "#websocket/types/socket";
 
 export async function authenticateSocket(
   socket: AuthenticatedSocket,

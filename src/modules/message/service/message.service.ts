@@ -1,18 +1,14 @@
-import { messageRepository } from "#modules/message/repository/message.repository.js";
+import { messageRepository } from "#modules/message/repository/message.repository";
 import type {
   CreateMessageInput,
   UpdateMessageInput,
-} from "#modules/message/schema/message.schema.js";
-import { ForbiddenError, NotFoundError } from "#shared/errors/app-error.js";
-import { Permission } from "#shared/permissions/permissions.js";
+} from "#modules/message/schema/message.schema";
+import { ForbiddenError, NotFoundError } from "#shared/errors/app-error";
+import { Permission } from "#shared/permissions/permissions";
+import { publishWebSocketEvent } from "#shared/redis/redis.publisher";
 import { parseMentions } from "#utils/mention.parser";
-import { hasPermission } from "#utils/permission.js";
-import {
-  broadcastMessageCreated,
-  broadcastMessageDeleted,
-  broadcastMessageMention,
-  broadcastMessageUpdated,
-} from "#websocket/broadcast";
+import { hasPermission } from "#utils/permission";
+import { WebSocketEvent } from "#websocket/constants/events";
 
 export class MessageService {
   private async getActorPermissions(serverId: string, userId: string): Promise<bigint> {
@@ -32,8 +28,9 @@ export class MessageService {
       throw new ForbiddenError("Kamu bukan member dari server ini");
     }
 
-    return member.roles.reduce<bigint>(
-      (total, memberRole) => total | memberRole.role.permissionsBitmask,
+    return member.roles.reduce(
+      (total: bigint, memberRole: { role: { permissionsBitmask: bigint } }) =>
+        total | memberRole.role.permissionsBitmask,
       0n,
     );
   }
@@ -79,7 +76,10 @@ export class MessageService {
       threadRootId: input.threadRootId ?? null,
     });
 
-    broadcastMessageCreated(message);
+    await publishWebSocketEvent({
+      event: WebSocketEvent.MESSAGE_CREATED,
+      data: message,
+    });
 
     const mentionedUserIds = parseMentions(input.content);
 
@@ -93,12 +93,15 @@ export class MessageService {
         continue;
       }
 
-      broadcastMessageMention({
-        messageId: message.id,
-        channelId: message.channelId,
-        serverId: channel.serverId,
-        authorId: message.authorId,
-        mentionedUserId,
+      await publishWebSocketEvent({
+        event: WebSocketEvent.MESSAGE_MENTION,
+        data: {
+          messageId: message.id,
+          channelId: message.channelId,
+          serverId: channel.serverId,
+          authorId: message.authorId,
+          mentionedUserId,
+        },
       });
     }
 
@@ -125,7 +128,10 @@ export class MessageService {
       content: input.content,
     });
 
-    broadcastMessageUpdated(updatedMessage);
+    await publishWebSocketEvent({
+      event: WebSocketEvent.MESSAGE_UPDATED,
+      data: updatedMessage,
+    });
 
     return updatedMessage;
   }
@@ -148,7 +154,10 @@ export class MessageService {
 
     const deletedMessage = await messageRepository.softDelete(messageId);
 
-    broadcastMessageDeleted(deletedMessage);
+    await publishWebSocketEvent({
+      event: WebSocketEvent.MESSAGE_DELETED,
+      data: deletedMessage,
+    });
 
     return deletedMessage;
   }
@@ -215,7 +224,10 @@ export class MessageService {
       isPinned: true,
     });
 
-    broadcastMessageUpdated(pinnedMessage);
+    await publishWebSocketEvent({
+      event: WebSocketEvent.MESSAGE_UPDATED,
+      data: pinnedMessage,
+    });
 
     return pinnedMessage;
   }
@@ -241,7 +253,10 @@ export class MessageService {
       isPinned: false,
     });
 
-    broadcastMessageUpdated(unpinnedMessage);
+    await publishWebSocketEvent({
+      event: WebSocketEvent.MESSAGE_UPDATED,
+      data: unpinnedMessage,
+    });
 
     return unpinnedMessage;
   }

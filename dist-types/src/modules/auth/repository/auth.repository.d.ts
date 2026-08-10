@@ -78,7 +78,7 @@ export declare class AuthRepository {
         createdAt: Date;
         updatedAt: Date;
     }>;
-    revokeSession(sessionId: string, userId: string): Promise<import("../../../prisma/generated/prisma/internal/prismaNamespace").BatchPayload>;
+    revokeSession(sessionId: string, userId: string): Promise<import("../../../prisma/generated/prisma/internal/prismaNamespace.js").BatchPayload>;
 }
 export declare const authRepository: AuthRepository;
 //# sourceMappingURL=auth.repository.d.ts.map

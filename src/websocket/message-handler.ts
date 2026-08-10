@@ -1,11 +1,11 @@
 import type WebSocket from "ws";
 import { ZodError } from "zod";
-import { WebSocketEvent } from "#websocket/constants/events.js";
-import { handlePing, handleSubscribe, handleUnsubscribe } from "#websocket/handlers/index.js";
-import type { WebSocketMessage } from "#websocket/types/message.js";
-import type { AuthenticatedSocket } from "#websocket/types/socket.js";
+import { WebSocketEvent } from "#websocket/constants/events";
+import { handlePing, handleSubscribe, handleUnsubscribe } from "#websocket/handlers/index";
+import type { WebSocketMessage } from "#websocket/types/message";
+import type { AuthenticatedSocket } from "#websocket/types/socket";
 
-import { validateSubscribe, validateUnsubscribe } from "#websocket/validators/index.js";
+import { validateSubscribe, validateUnsubscribe } from "#websocket/validators/index";
 
 export function handleMessage(socket: WebSocket, rawMessage: string): void {
   let message: WebSocketMessage;

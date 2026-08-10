@@ -1,6 +1,6 @@
 import type WebSocket from "ws";
-import { WebSocketEvent } from "#websocket/constants/events.js";
-import type { WebSocketMessage } from "#websocket/types/message.js";
+import { WebSocketEvent } from "#websocket/constants/events";
+import type { WebSocketMessage } from "#websocket/types/message";
 
 export function handlePing(socket: WebSocket, _message: WebSocketMessage): void {
   socket.send(

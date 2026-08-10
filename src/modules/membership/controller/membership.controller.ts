@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 
-import { membershipService } from "#modules/membership/service/membership.service.js";
-import { UnauthorizedError } from "#shared/errors/app-error.js";
-import { successResponse } from "#utils/response.js";
+import { membershipService } from "#modules/membership/service/membership.service";
+import { UnauthorizedError } from "#shared/errors/app-error";
+import { successResponse } from "#utils/response";
 
 import { serverParamsSchema } from "../schema/membership.schema.js";
 

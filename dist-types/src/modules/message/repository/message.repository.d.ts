@@ -37,7 +37,7 @@ export declare class MessageRepository {
             serverId: string;
             categoryId: string | null;
             name: string;
-            type: import("../../../prisma/generated/prisma/enums").ChannelType;
+            type: import("../../../prisma/generated/prisma/enums.js").ChannelType;
             topic: string | null;
             position: number;
         };

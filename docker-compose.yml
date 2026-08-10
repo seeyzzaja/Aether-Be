@@ -29,17 +29,37 @@ services:
       context: .
       dockerfile: Dockerfile
 
-    container_name: aether-api
-
     environment:
       NODE_ENV: production
       PORT: "5000"
+      BASE_URL: "http://localhost"
+      DATABASE_URL: "postgresql://postgres:ntxcyber73@host.docker.internal:5432/aether?schema=public"
+      REDIS_URL: "redis://redis:6379"
 
     labels:
       - "traefik.enable=true"
+
+      # REST API
       - "traefik.http.routers.aether-api.rule=Host(`localhost`)"
       - "traefik.http.routers.aether-api.entrypoints=web"
+      - "traefik.http.routers.aether-api.service=aether-api"
       - "traefik.http.services.aether-api.loadbalancer.server.port=5000"
+
+      # WebSocket
+      - "traefik.http.routers.aether-ws.rule=Host(`ws.localhost`)"
+      - "traefik.http.routers.aether-ws.entrypoints=web"
+      - "traefik.http.routers.aether-ws.service=aether-ws"
+      - "traefik.http.services.aether-ws.loadbalancer.server.port=8080"
+
+    networks:
+      - aether-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: aether-redis
+
+    ports:
+      - "6379:6379"
 
     networks:
       - aether-network
