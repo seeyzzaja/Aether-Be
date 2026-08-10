@@ -9,6 +9,7 @@ export const config = {
   DATABASE_URL: process.env.DATABASE_URL || "",
   REDIS_URL: process.env.REDIS_URL || "redis://localhost:6379",
   WS_PORT: Number(process.env.WS_PORT) || 8080,
+  PRESENCE_GRACE_PERIOD_MS: Number(process.env.PRESENCE_GRACE_PERIOD_MS) || 5000,
   JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || "aether_super_secret_access_key_12345",
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || "aether_super_secret_refresh_key_67890",
   JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN || "15m",

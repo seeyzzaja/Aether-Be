@@ -7,6 +7,7 @@ export declare const config: {
     DATABASE_URL: string;
     REDIS_URL: string;
     WS_PORT: number;
+    PRESENCE_GRACE_PERIOD_MS: number;
     JWT_ACCESS_SECRET: string;
     JWT_REFRESH_SECRET: string;
     JWT_ACCESS_EXPIRES_IN: string;
