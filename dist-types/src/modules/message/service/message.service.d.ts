@@ -1,5 +1,6 @@
 import type { CreateMessageInput, UpdateMessageInput } from "#modules/message/schema/message.schema";
 export declare class MessageService {
+    private runInBackground;
     private getActorPermissions;
     private ensureSendMessagesPermission;
     private getMessage;

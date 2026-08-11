@@ -41,10 +41,18 @@ export class MessageController {
     try {
       const userId = this.getUserId(req);
       const channelId = this.getChannelId(req);
+      console.log("[MessageController.create] request received", {
+        userId,
+        channelId,
+      });
 
       const validatedData = createMessageSchema.parse(req.body);
+      console.log("[MessageController.create] payload validated");
 
       const message = await messageService.create(channelId, userId, validatedData);
+      console.log("[MessageController.create] message created", {
+        messageId: message.id,
+      });
 
       return successResponse(res, "Pesan berhasil dikirim", message, null, 201);
     } catch (error) {

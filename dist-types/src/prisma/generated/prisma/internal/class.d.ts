@@ -173,6 +173,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         omit: OmitOpts;
     }>;
     /**
+     * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Notifications
+      * const notifications = await prisma.notification.findMany()
+      * ```
+      */
+    get notification(): Prisma.NotificationDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
      * `prisma.reaction`: Exposes CRUD operations for the **Reaction** model.
       * Example usage:
       * ```ts

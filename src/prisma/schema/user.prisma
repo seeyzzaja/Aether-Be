@@ -4,12 +4,15 @@ model User {
   username     String @unique
   passwordHash String
 
+  emailNotificationEnabled Boolean @default(true)
+
   sessions          Session[]
   ownedServers      Server[]           @relation("ServerOwner")
   serverMemberships ServerMember[]
   messages          Message[]
   reactions         Reaction[]
   readStates        ChannelReadState[]
+  notifications     Notification[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

@@ -43,6 +43,11 @@ export type Channel = Prisma.ChannelModel
  */
 export type Message = Prisma.MessageModel
 /**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
  * Model Reaction
  * 
  */

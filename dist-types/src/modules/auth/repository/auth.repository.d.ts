@@ -4,6 +4,7 @@ export declare class AuthRepository {
         email: string;
         username: string;
         passwordHash: string;
+        emailNotificationEnabled: boolean;
         createdAt: Date;
         updatedAt: Date;
         deletedAt: Date | null;
@@ -13,6 +14,7 @@ export declare class AuthRepository {
         email: string;
         username: string;
         passwordHash: string;
+        emailNotificationEnabled: boolean;
         createdAt: Date;
         updatedAt: Date;
         deletedAt: Date | null;
@@ -37,6 +39,7 @@ export declare class AuthRepository {
         email: string;
         username: string;
         passwordHash: string;
+        emailNotificationEnabled: boolean;
         createdAt: Date;
         updatedAt: Date;
         deletedAt: Date | null;

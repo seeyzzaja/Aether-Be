@@ -14,6 +14,12 @@ export const config = {
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || "aether_super_secret_refresh_key_67890",
   JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN || "15m",
   JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
+
+  EMAIL_HOST: process.env.EMAIL_HOST || "smtp.gmail.com",
+  EMAIL_PORT: Number(process.env.EMAIL_PORT) || 587,
+  EMAIL_USER: process.env.EMAIL_USER || "",
+  EMAIL_PASSWORD: process.env.EMAIL_PASSWORD || "",
+  EMAIL_FROM: process.env.EMAIL_FROM || "",
 };
 
 export default config;

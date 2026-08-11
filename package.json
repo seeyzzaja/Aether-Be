@@ -18,7 +18,8 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "prepare": "husky",
-    "prisma.seed": "tsx --conditions=development src/prisma/seed/seed.ts"
+    "prisma.seed": "tsx --conditions=development src/prisma/seed/seed.ts",
+    "worker:email": "tsx --conditions=development src/shared/queue/email.worker.ts"
   },
   "repository": {
     "type": "git",
@@ -51,12 +52,15 @@
     "@prisma/client": "^7.9.1",
     "argon2": "^0.45.1",
     "bcrypt": "^6.0.0",
+    "bullmq": "^6.0.11",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "helmet": "^8.3.0",
+    "ioredis": "^6.0.0",
     "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^9.0.5",
     "pg": "^8.22.0",
     "pino": "^10.3.1",
     "prisma": "^7.9.1",
@@ -76,6 +80,7 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.1.2",
+    "@types/nodemailer": "^8.0.1",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
     "@types/ws": "^8.18.1",

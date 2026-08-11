@@ -249,6 +249,7 @@ export declare const ModelName: {
     readonly ChannelReadState: 'ChannelReadState';
     readonly Channel: 'Channel';
     readonly Message: 'Message';
+    readonly Notification: 'Notification';
     readonly Reaction: 'Reaction';
     readonly Role: 'Role';
     readonly ServerMemberRole: 'ServerMemberRole';
@@ -268,7 +269,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "category" | "channelPermissionOverride" | "channelReadState" | "channel" | "message" | "reaction" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user";
+        modelProps: "category" | "channelPermissionOverride" | "channelReadState" | "channel" | "message" | "notification" | "reaction" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -639,6 +640,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 count: {
                     args: Prisma.MessageCountArgs<ExtArgs>;
                     result: runtime.Types.Utils.Optional<Prisma.MessageCountAggregateOutputType> | number;
+                };
+            };
+        };
+        Notification: {
+            payload: Prisma.$NotificationPayload<ExtArgs>;
+            fields: Prisma.NotificationFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.NotificationFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>;
+                };
+                findFirst: {
+                    args: Prisma.NotificationFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>;
+                };
+                findMany: {
+                    args: Prisma.NotificationFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[];
+                };
+                create: {
+                    args: Prisma.NotificationCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>;
+                };
+                createMany: {
+                    args: Prisma.NotificationCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.NotificationCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[];
+                };
+                delete: {
+                    args: Prisma.NotificationDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>;
+                };
+                update: {
+                    args: Prisma.NotificationUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.NotificationDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.NotificationUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.NotificationUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[];
+                };
+                upsert: {
+                    args: Prisma.NotificationUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>;
+                };
+                aggregate: {
+                    args: Prisma.NotificationAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateNotification>;
+                };
+                groupBy: {
+                    args: Prisma.NotificationGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.NotificationGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.NotificationCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.NotificationCountAggregateOutputType> | number;
                 };
             };
         };
@@ -1247,6 +1322,15 @@ export declare const MessageScalarFieldEnum: {
     readonly deletedAt: 'deletedAt';
 };
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum];
+export declare const NotificationScalarFieldEnum: {
+    readonly id: 'id';
+    readonly userId: 'userId';
+    readonly type: 'type';
+    readonly payload: 'payload';
+    readonly isRead: 'isRead';
+    readonly createdAt: 'createdAt';
+};
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum];
 export declare const ReactionScalarFieldEnum: {
     readonly id: 'id';
     readonly messageId: 'messageId';
@@ -1306,6 +1390,7 @@ export declare const UserScalarFieldEnum: {
     readonly email: 'email';
     readonly username: 'username';
     readonly passwordHash: 'passwordHash';
+    readonly emailNotificationEnabled: 'emailNotificationEnabled';
     readonly createdAt: 'createdAt';
     readonly updatedAt: 'updatedAt';
     readonly deletedAt: 'deletedAt';
@@ -1316,6 +1401,10 @@ export declare const SortOrder: {
     readonly desc: 'desc';
 };
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
+export declare const JsonNullValueInput: {
+    readonly JsonNull: runtime.JsonNullClass;
+};
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput];
 export declare const QueryMode: {
     readonly default: 'default';
     readonly insensitive: 'insensitive';
@@ -1326,6 +1415,12 @@ export declare const NullsOrder: {
     readonly last: 'last';
 };
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];
+export declare const JsonNullValueFilter: {
+    readonly DbNull: runtime.DbNullClass;
+    readonly JsonNull: runtime.JsonNullClass;
+    readonly AnyNull: runtime.AnyNullClass;
+};
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter];
 /**
  * Field references
  */
@@ -1373,6 +1468,14 @@ export type ListEnumChannelTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>;
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>;
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>;
 /**
  * Reference to a field of type 'Float'
  */
@@ -1533,6 +1636,7 @@ export type GlobalOmitConfig = {
     channelReadState?: Prisma.ChannelReadStateOmit;
     channel?: Prisma.ChannelOmit;
     message?: Prisma.MessageOmit;
+    notification?: Prisma.NotificationOmit;
     reaction?: Prisma.ReactionOmit;
     role?: Prisma.RoleOmit;
     serverMemberRole?: Prisma.ServerMemberRoleOmit;

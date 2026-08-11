@@ -12,6 +12,7 @@ import channelRouter from "#modules/channel/route/channel.routes";
 import deviceRouter from "#modules/device/route/device.route";
 import membershipRouter from "#modules/membership/route/membership.route";
 import messageRouter from "#modules/message/route/message.route";
+import notificationRouter from "#modules/notification/route/notification.route";
 import reactionRouter from "#modules/reaction/route/reaction.route";
 import readReceiptRouter from "#modules/read-receipt/route/read-receipt.route";
 import roleRouter from "#modules/role/route/role.route";
@@ -84,6 +85,7 @@ app.use("/api/role", roleRouter);
 app.use("/api/message", messageRouter);
 app.use("/api/message", reactionRouter);
 app.use("/api/read-receipt", readReceiptRouter);
+app.use("/api/notifications", notificationRouter);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });
