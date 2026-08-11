@@ -3,7 +3,7 @@ type RedisWebSocketEvent = {
     data: {
         channelId?: string;
         userId?: string;
-        status?: string;
+        [key: string]: unknown;
     };
 };
 export declare function broadcastRedisEvent(event: RedisWebSocketEvent): void;

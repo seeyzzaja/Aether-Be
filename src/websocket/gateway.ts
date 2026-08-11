@@ -52,7 +52,16 @@ export function registerGateway(wss: WebSocketServer): void {
       handleMessage(authSocket, data.toString());
     });
 
+    let presenceConnectionReleased = false;
+
     authSocket.on("close", async () => {
+      if (presenceConnectionReleased) {
+        console.log("[PRESENCE] Duplicate close ignored:", userId);
+        return;
+      }
+
+      presenceConnectionReleased = true;
+
       console.log("[PRESENCE] WebSocket close:", userId);
 
       connectionRegistry.removeSocket(authSocket);

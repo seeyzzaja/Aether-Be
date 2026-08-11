@@ -24,6 +24,8 @@ export const WebSocketEvent = {
 
   READ_RECEIPT_UPDATED: "read.receipt.updated",
 
+  NOTIFICATION_CREATED: "notification.created",
+
   ERROR: "error",
 } as const;
 

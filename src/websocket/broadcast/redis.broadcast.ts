@@ -5,27 +5,28 @@ type RedisWebSocketEvent = {
   data: {
     channelId?: string;
     userId?: string;
-    status?: string;
+    [key: string]: unknown;
   };
 };
 
 export function broadcastRedisEvent(event: RedisWebSocketEvent): void {
-  if (event.event === "presence.updated") {
+  const payload = JSON.stringify({
+    event: event.event,
+    data: event.data,
+  });
+
+  // Event yang ditujukan langsung kepada user tertentu
+  if (event.event === "presence.updated" || event.event === "notification.created") {
     const userId = event.data.userId;
 
     if (!userId) {
-      console.warn("Presence event tidak memiliki userId:", event);
+      console.warn(`Redis event ${event.event} tidak memiliki userId:`, event);
       return;
     }
 
     const sockets = connectionRegistry.getUserConnections(userId);
 
-    const payload = JSON.stringify({
-      event: event.event,
-      data: event.data,
-    });
-
-    console.log("===== REDIS PRESENCE BROADCAST =====");
+    console.log("===== REDIS USER BROADCAST =====");
     console.log("event:", event.event);
     console.log("userId:", userId);
     console.log("connections:", sockets.size);
@@ -36,10 +37,11 @@ export function broadcastRedisEvent(event: RedisWebSocketEvent): void {
       }
     }
 
-    console.log("====================================");
+    console.log("================================");
     return;
   }
 
+  // Event yang ditujukan kepada seluruh user di channel
   const channelId = event.data.channelId;
 
   if (!channelId) {
@@ -49,12 +51,7 @@ export function broadcastRedisEvent(event: RedisWebSocketEvent): void {
 
   const sockets = connectionRegistry.getConnections(channelId);
 
-  const payload = JSON.stringify({
-    event: event.event,
-    data: event.data,
-  });
-
-  console.log("===== REDIS BROADCAST =====");
+  console.log("===== REDIS CHANNEL BROADCAST =====");
   console.log("event:", event.event);
   console.log("channelId:", channelId);
   console.log("connections:", sockets.size);
@@ -65,5 +62,5 @@ export function broadcastRedisEvent(event: RedisWebSocketEvent): void {
     }
   }
 
-  console.log("===========================");
+  console.log("===================================");
 }

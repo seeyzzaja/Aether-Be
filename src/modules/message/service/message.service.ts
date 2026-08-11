@@ -3,6 +3,11 @@ import type {
   CreateMessageInput,
   UpdateMessageInput,
 } from "#modules/message/schema/message.schema";
+import {
+  createUserNotification,
+  enqueueEmailNotification,
+} from "#modules/notification/service/notification.service";
+import { getPresenceConnections } from "#modules/presence/repository/presence.repository";
 import { ForbiddenError, NotFoundError } from "#shared/errors/app-error";
 import { Permission } from "#shared/permissions/permissions";
 import { publishWebSocketEvent } from "#shared/redis/redis.publisher";
@@ -11,6 +16,12 @@ import { hasPermission } from "#utils/permission";
 import { WebSocketEvent } from "#websocket/constants/events";
 
 export class MessageService {
+  private runInBackground(task: Promise<unknown>, label: string) {
+    void task.catch((error: unknown) => {
+      console.error(`[MessageService] ${label} failed:`, error);
+    });
+  }
+
   private async getActorPermissions(serverId: string, userId: string): Promise<bigint> {
     const server = await messageRepository.findServerOwner(serverId);
 
@@ -56,6 +67,13 @@ export class MessageService {
   }
 
   async create(channelId: string, userId: string, input: CreateMessageInput) {
+    console.log("[MessageService.create] start", {
+      channelId,
+      userId,
+      hasReplyToId: Boolean(input.replyToId),
+      hasThreadRootId: Boolean(input.threadRootId),
+    });
+
     const channel = await this.getChannel(channelId);
 
     await this.ensureSendMessagesPermission(channel.serverId, userId);
@@ -75,15 +93,29 @@ export class MessageService {
       replyToId: input.replyToId ?? null,
       threadRootId: input.threadRootId ?? null,
     });
-
-    await publishWebSocketEvent({
-      event: WebSocketEvent.MESSAGE_CREATED,
-      data: message,
+    console.log("[MessageService.create] message persisted", {
+      messageId: message.id,
+      channelId: message.channelId,
     });
 
-    const mentionedUserIds = parseMentions(input.content);
+    this.runInBackground(
+      publishWebSocketEvent({
+        event: WebSocketEvent.MESSAGE_CREATED,
+        data: message,
+      }),
+      "publish message.created",
+    );
 
+    const mentionedUserIds = parseMentions(input.content);
+    console.log("[MessageService.create] mentions parsed", {
+      count: mentionedUserIds.length,
+      mentionedUserIds,
+    });
     for (const mentionedUserId of mentionedUserIds) {
+      if (mentionedUserId === userId) {
+        continue;
+      }
+
       const mentionedMember = await messageRepository.findServerMember(
         channel.serverId,
         mentionedUserId,
@@ -93,16 +125,82 @@ export class MessageService {
         continue;
       }
 
-      await publishWebSocketEvent({
-        event: WebSocketEvent.MESSAGE_MENTION,
-        data: {
-          messageId: message.id,
-          channelId: message.channelId,
-          serverId: channel.serverId,
-          authorId: message.authorId,
-          mentionedUserId,
-        },
+      console.log("[MessageService.create] mention matched server member", {
+        mentionedUserId,
+        serverId: channel.serverId,
       });
+      console.log("[MessageService.create] starting mention background task", {
+        mentionedUserId,
+      });
+
+      this.runInBackground(
+        (async () => {
+          console.log("[MessageService.create] mention background START", {
+            mentionedUserId,
+          });
+
+          const notification = await createUserNotification({
+            userId: mentionedUserId,
+            type: "mention",
+            payload: {
+              messageId: message.id,
+              channelId: message.channelId,
+              serverId: channel.serverId,
+              authorId: message.authorId,
+            },
+          });
+          console.log("[MessageService.create] notification created", {
+            mentionedUserId,
+            notificationId: notification.id,
+          });
+
+          await publishWebSocketEvent({
+            event: WebSocketEvent.NOTIFICATION_CREATED,
+            data: {
+              userId: mentionedUserId,
+              notification,
+            },
+          });
+          const connections = await getPresenceConnections(mentionedUserId);
+          console.log("[MessageService.create] presence checked", {
+            mentionedUserId,
+            connections,
+          });
+
+          if (connections === 0) {
+            console.log("[MessageService.create] enqueue email START", {
+              mentionedUserId,
+            });
+            await enqueueEmailNotification({
+              userId: mentionedUserId,
+              subject: "You were mentioned in Aether",
+              text: "You were mentioned in a message on Aether.",
+              html: `
+      <h2>You were mentioned in Aether</h2>
+      <p>You have a new mention in Aether.</p>
+      <p>Open Aether to see the message.</p>
+    `,
+            });
+            console.log("[MessageService.create] enqueue email DONE", {
+              mentionedUserId,
+            });
+          }
+          await publishWebSocketEvent({
+            event: WebSocketEvent.MESSAGE_MENTION,
+            data: {
+              messageId: message.id,
+              channelId: message.channelId,
+              serverId: channel.serverId,
+              authorId: message.authorId,
+              mentionedUserId,
+            },
+          });
+          console.log("[MessageService.create] mention background DONE", {
+            mentionedUserId,
+          });
+        })(),
+        `process mention ${mentionedUserId}`,
+      );
     }
 
     return message;
