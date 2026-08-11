@@ -28,6 +28,7 @@ export declare const AnyNull: import("@prisma/client-runtime-utils").AnyNullClas
 export declare const ModelName: {
     readonly Category: 'Category';
     readonly ChannelPermissionOverride: 'ChannelPermissionOverride';
+    readonly ChannelReadState: 'ChannelReadState';
     readonly Channel: 'Channel';
     readonly Message: 'Message';
     readonly Reaction: 'Reaction';
@@ -65,6 +66,16 @@ export declare const ChannelPermissionOverrideScalarFieldEnum: {
     readonly updatedAt: 'updatedAt';
 };
 export type ChannelPermissionOverrideScalarFieldEnum = (typeof ChannelPermissionOverrideScalarFieldEnum)[keyof typeof ChannelPermissionOverrideScalarFieldEnum];
+export declare const ChannelReadStateScalarFieldEnum: {
+    readonly id: 'id';
+    readonly userId: 'userId';
+    readonly channelId: 'channelId';
+    readonly lastReadMessageId: 'lastReadMessageId';
+    readonly readAt: 'readAt';
+    readonly createdAt: 'createdAt';
+    readonly updatedAt: 'updatedAt';
+};
+export type ChannelReadStateScalarFieldEnum = (typeof ChannelReadStateScalarFieldEnum)[keyof typeof ChannelReadStateScalarFieldEnum];
 export declare const ChannelScalarFieldEnum: {
     readonly id: 'id';
     readonly serverId: 'serverId';

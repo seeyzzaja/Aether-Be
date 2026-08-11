@@ -1,11 +1,21 @@
 import type WebSocket from "ws";
 import { ZodError } from "zod";
 import { WebSocketEvent } from "#websocket/constants/events";
-import { handlePing, handleSubscribe, handleUnsubscribe } from "#websocket/handlers/index";
+import {
+  handlePing,
+  handleSubscribe,
+  handleTypingStart,
+  handleTypingStop,
+  handleUnsubscribe,
+} from "#websocket/handlers/index";
 import type { WebSocketMessage } from "#websocket/types/message";
 import type { AuthenticatedSocket } from "#websocket/types/socket";
 
-import { validateSubscribe, validateUnsubscribe } from "#websocket/validators/index";
+import {
+  validateSubscribe,
+  validateTyping,
+  validateUnsubscribe,
+} from "#websocket/validators/index";
 
 export function handleMessage(socket: WebSocket, rawMessage: string): void {
   let message: WebSocketMessage;
@@ -48,6 +58,19 @@ export function handleMessage(socket: WebSocket, rawMessage: string): void {
           event: message.event,
           data,
         });
+        break;
+      }
+      case WebSocketEvent.TYPING_START: {
+        const data = validateTyping(message.data);
+
+        handleTypingStart(socket as AuthenticatedSocket, data);
+        break;
+      }
+
+      case WebSocketEvent.TYPING_STOP: {
+        const data = validateTyping(message.data);
+
+        handleTypingStop(socket as AuthenticatedSocket, data);
         break;
       }
 

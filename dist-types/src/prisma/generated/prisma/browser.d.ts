@@ -13,6 +13,11 @@ export type Category = Prisma.CategoryModel;
  */
 export type ChannelPermissionOverride = Prisma.ChannelPermissionOverrideModel;
 /**
+ * Model ChannelReadState
+ *
+ */
+export type ChannelReadState = Prisma.ChannelReadStateModel;
+/**
  * Model Channel
  *
  */

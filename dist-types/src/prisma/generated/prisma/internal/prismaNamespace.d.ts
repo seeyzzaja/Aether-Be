@@ -246,6 +246,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export declare const ModelName: {
     readonly Category: 'Category';
     readonly ChannelPermissionOverride: 'ChannelPermissionOverride';
+    readonly ChannelReadState: 'ChannelReadState';
     readonly Channel: 'Channel';
     readonly Message: 'Message';
     readonly Reaction: 'Reaction';
@@ -267,7 +268,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "category" | "channelPermissionOverride" | "channel" | "message" | "reaction" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user";
+        modelProps: "category" | "channelPermissionOverride" | "channelReadState" | "channel" | "message" | "reaction" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -416,6 +417,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 count: {
                     args: Prisma.ChannelPermissionOverrideCountArgs<ExtArgs>;
                     result: runtime.Types.Utils.Optional<Prisma.ChannelPermissionOverrideCountAggregateOutputType> | number;
+                };
+            };
+        };
+        ChannelReadState: {
+            payload: Prisma.$ChannelReadStatePayload<ExtArgs>;
+            fields: Prisma.ChannelReadStateFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.ChannelReadStateFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelReadStatePayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.ChannelReadStateFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelReadStatePayload>;
+                };
+                findFirst: {
+                    args: Prisma.ChannelReadStateFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelReadStatePayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.ChannelReadStateFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelReadStatePayload>;
+                };
+                findMany: {
+                    args: Prisma.ChannelReadStateFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelReadStatePayload>[];
+                };
+                create: {
+                    args: Prisma.ChannelReadStateCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelReadStatePayload>;
+                };
+                createMany: {
+                    args: Prisma.ChannelReadStateCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.ChannelReadStateCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelReadStatePayload>[];
+                };
+                delete: {
+                    args: Prisma.ChannelReadStateDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelReadStatePayload>;
+                };
+                update: {
+                    args: Prisma.ChannelReadStateUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelReadStatePayload>;
+                };
+                deleteMany: {
+                    args: Prisma.ChannelReadStateDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.ChannelReadStateUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.ChannelReadStateUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelReadStatePayload>[];
+                };
+                upsert: {
+                    args: Prisma.ChannelReadStateUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelReadStatePayload>;
+                };
+                aggregate: {
+                    args: Prisma.ChannelReadStateAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateChannelReadState>;
+                };
+                groupBy: {
+                    args: Prisma.ChannelReadStateGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ChannelReadStateGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.ChannelReadStateCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ChannelReadStateCountAggregateOutputType> | number;
                 };
             };
         };
@@ -1138,6 +1213,16 @@ export declare const ChannelPermissionOverrideScalarFieldEnum: {
     readonly updatedAt: 'updatedAt';
 };
 export type ChannelPermissionOverrideScalarFieldEnum = (typeof ChannelPermissionOverrideScalarFieldEnum)[keyof typeof ChannelPermissionOverrideScalarFieldEnum];
+export declare const ChannelReadStateScalarFieldEnum: {
+    readonly id: 'id';
+    readonly userId: 'userId';
+    readonly channelId: 'channelId';
+    readonly lastReadMessageId: 'lastReadMessageId';
+    readonly readAt: 'readAt';
+    readonly createdAt: 'createdAt';
+    readonly updatedAt: 'updatedAt';
+};
+export type ChannelReadStateScalarFieldEnum = (typeof ChannelReadStateScalarFieldEnum)[keyof typeof ChannelReadStateScalarFieldEnum];
 export declare const ChannelScalarFieldEnum: {
     readonly id: 'id';
     readonly serverId: 'serverId';
@@ -1445,6 +1530,7 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
     category?: Prisma.CategoryOmit;
     channelPermissionOverride?: Prisma.ChannelPermissionOverrideOmit;
+    channelReadState?: Prisma.ChannelReadStateOmit;
     channel?: Prisma.ChannelOmit;
     message?: Prisma.MessageOmit;
     reaction?: Prisma.ReactionOmit;

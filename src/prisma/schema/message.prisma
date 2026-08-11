@@ -15,9 +15,10 @@ model Message {
   channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
   author  User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  replyTo   Message?   @relation("MessageReplies", fields: [replyToId], references: [id], onDelete: SetNull)
-  replies   Message[]  @relation("MessageReplies")
-  reactions Reaction[]
+  replyTo    Message?           @relation("MessageReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies    Message[]          @relation("MessageReplies")
+  reactions  Reaction[]
+  readStates ChannelReadState[]
 
   threadRoot     Message?  @relation("MessageThreadRoot", fields: [threadRootId], references: [id], onDelete: SetNull)
   threadMessages Message[] @relation("MessageThreadRoot")

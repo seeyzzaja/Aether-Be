@@ -12,6 +12,9 @@ export declare const WebSocketEvent: {
     readonly MESSAGE_MENTION: "message.mention";
     readonly REACTION_ADDED: "reaction.added";
     readonly REACTION_REMOVED: "reaction.removed";
+    readonly TYPING_START: "typing.start";
+    readonly TYPING_STOP: "typing.stop";
+    readonly READ_RECEIPT_UPDATED: "read.receipt.updated";
     readonly ERROR: "error";
 };
 export type WebSocketEventType = (typeof WebSocketEvent)[keyof typeof WebSocketEvent];

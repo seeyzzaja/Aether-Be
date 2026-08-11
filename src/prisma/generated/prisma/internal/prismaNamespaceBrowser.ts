@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Category: 'Category',
   ChannelPermissionOverride: 'ChannelPermissionOverride',
+  ChannelReadState: 'ChannelReadState',
   Channel: 'Channel',
   Message: 'Message',
   Reaction: 'Reaction',
@@ -103,6 +104,19 @@ export const ChannelPermissionOverrideScalarFieldEnum = {
 } as const
 
 export type ChannelPermissionOverrideScalarFieldEnum = (typeof ChannelPermissionOverrideScalarFieldEnum)[keyof typeof ChannelPermissionOverrideScalarFieldEnum]
+
+
+export const ChannelReadStateScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  channelId: 'channelId',
+  lastReadMessageId: 'lastReadMessageId',
+  readAt: 'readAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChannelReadStateScalarFieldEnum = (typeof ChannelReadStateScalarFieldEnum)[keyof typeof ChannelReadStateScalarFieldEnum]
 
 
 export const ChannelScalarFieldEnum = {

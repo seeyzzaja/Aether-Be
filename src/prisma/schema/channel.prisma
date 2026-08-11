@@ -19,6 +19,7 @@ model Channel {
   category            Category?                   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   permissionOverrides ChannelPermissionOverride[]
   messages            Message[]
+  readStates          ChannelReadState[]
 
   @@index([serverId])
   @@index([categoryId])
