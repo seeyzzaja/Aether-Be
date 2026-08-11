@@ -203,6 +203,7 @@ export type UserWhereInput = {
   serverMemberships?: Prisma.ServerMemberListRelationFilter
   messages?: Prisma.MessageListRelationFilter
   reactions?: Prisma.ReactionListRelationFilter
+  readStates?: Prisma.ChannelReadStateListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -218,6 +219,7 @@ export type UserOrderByWithRelationInput = {
   serverMemberships?: Prisma.ServerMemberOrderByRelationAggregateInput
   messages?: Prisma.MessageOrderByRelationAggregateInput
   reactions?: Prisma.ReactionOrderByRelationAggregateInput
+  readStates?: Prisma.ChannelReadStateOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -236,6 +238,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   serverMemberships?: Prisma.ServerMemberListRelationFilter
   messages?: Prisma.MessageListRelationFilter
   reactions?: Prisma.ReactionListRelationFilter
+  readStates?: Prisma.ChannelReadStateListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -277,6 +280,7 @@ export type UserCreateInput = {
   serverMemberships?: Prisma.ServerMemberCreateNestedManyWithoutUserInput
   messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -292,6 +296,7 @@ export type UserUncheckedCreateInput = {
   serverMemberships?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutUserInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -307,6 +312,7 @@ export type UserUpdateInput = {
   serverMemberships?: Prisma.ServerMemberUpdateManyWithoutUserNestedInput
   messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -322,6 +328,7 @@ export type UserUncheckedUpdateInput = {
   serverMemberships?: Prisma.ServerMemberUncheckedUpdateManyWithoutUserNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -387,6 +394,20 @@ export type UserMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type UserCreateNestedOneWithoutReadStatesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReadStatesInput, Prisma.UserUncheckedCreateWithoutReadStatesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReadStatesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutReadStatesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReadStatesInput, Prisma.UserUncheckedCreateWithoutReadStatesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReadStatesInput
+  upsert?: Prisma.UserUpsertWithoutReadStatesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReadStatesInput, Prisma.UserUpdateWithoutReadStatesInput>, Prisma.UserUncheckedUpdateWithoutReadStatesInput>
 }
 
 export type UserCreateNestedOneWithoutMessagesInput = {
@@ -459,6 +480,82 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
 }
 
+export type UserCreateWithoutReadStatesInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  ownedServers?: Prisma.ServerCreateNestedManyWithoutOwnerInput
+  serverMemberships?: Prisma.ServerMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutReadStatesInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  ownedServers?: Prisma.ServerUncheckedCreateNestedManyWithoutOwnerInput
+  serverMemberships?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutReadStatesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReadStatesInput, Prisma.UserUncheckedCreateWithoutReadStatesInput>
+}
+
+export type UserUpsertWithoutReadStatesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReadStatesInput, Prisma.UserUncheckedUpdateWithoutReadStatesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReadStatesInput, Prisma.UserUncheckedCreateWithoutReadStatesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReadStatesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReadStatesInput, Prisma.UserUncheckedUpdateWithoutReadStatesInput>
+}
+
+export type UserUpdateWithoutReadStatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  ownedServers?: Prisma.ServerUpdateManyWithoutOwnerNestedInput
+  serverMemberships?: Prisma.ServerMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReadStatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  ownedServers?: Prisma.ServerUncheckedUpdateManyWithoutOwnerNestedInput
+  serverMemberships?: Prisma.ServerMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutMessagesInput = {
   id?: string
   email: string
@@ -471,6 +568,7 @@ export type UserCreateWithoutMessagesInput = {
   ownedServers?: Prisma.ServerCreateNestedManyWithoutOwnerInput
   serverMemberships?: Prisma.ServerMemberCreateNestedManyWithoutUserInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMessagesInput = {
@@ -485,6 +583,7 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   ownedServers?: Prisma.ServerUncheckedCreateNestedManyWithoutOwnerInput
   serverMemberships?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutUserInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMessagesInput = {
@@ -515,6 +614,7 @@ export type UserUpdateWithoutMessagesInput = {
   ownedServers?: Prisma.ServerUpdateManyWithoutOwnerNestedInput
   serverMemberships?: Prisma.ServerMemberUpdateManyWithoutUserNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMessagesInput = {
@@ -529,6 +629,7 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   ownedServers?: Prisma.ServerUncheckedUpdateManyWithoutOwnerNestedInput
   serverMemberships?: Prisma.ServerMemberUncheckedUpdateManyWithoutUserNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReactionsInput = {
@@ -543,6 +644,7 @@ export type UserCreateWithoutReactionsInput = {
   ownedServers?: Prisma.ServerCreateNestedManyWithoutOwnerInput
   serverMemberships?: Prisma.ServerMemberCreateNestedManyWithoutUserInput
   messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
+  readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReactionsInput = {
@@ -557,6 +659,7 @@ export type UserUncheckedCreateWithoutReactionsInput = {
   ownedServers?: Prisma.ServerUncheckedCreateNestedManyWithoutOwnerInput
   serverMemberships?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutUserInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
+  readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReactionsInput = {
@@ -587,6 +690,7 @@ export type UserUpdateWithoutReactionsInput = {
   ownedServers?: Prisma.ServerUpdateManyWithoutOwnerNestedInput
   serverMemberships?: Prisma.ServerMemberUpdateManyWithoutUserNestedInput
   messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
+  readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReactionsInput = {
@@ -601,6 +705,7 @@ export type UserUncheckedUpdateWithoutReactionsInput = {
   ownedServers?: Prisma.ServerUncheckedUpdateManyWithoutOwnerNestedInput
   serverMemberships?: Prisma.ServerMemberUncheckedUpdateManyWithoutUserNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
+  readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutServerMembershipsInput = {
@@ -615,6 +720,7 @@ export type UserCreateWithoutServerMembershipsInput = {
   ownedServers?: Prisma.ServerCreateNestedManyWithoutOwnerInput
   messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutServerMembershipsInput = {
@@ -629,6 +735,7 @@ export type UserUncheckedCreateWithoutServerMembershipsInput = {
   ownedServers?: Prisma.ServerUncheckedCreateNestedManyWithoutOwnerInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutServerMembershipsInput = {
@@ -659,6 +766,7 @@ export type UserUpdateWithoutServerMembershipsInput = {
   ownedServers?: Prisma.ServerUpdateManyWithoutOwnerNestedInput
   messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutServerMembershipsInput = {
@@ -673,6 +781,7 @@ export type UserUncheckedUpdateWithoutServerMembershipsInput = {
   ownedServers?: Prisma.ServerUncheckedUpdateManyWithoutOwnerNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOwnedServersInput = {
@@ -687,6 +796,7 @@ export type UserCreateWithoutOwnedServersInput = {
   serverMemberships?: Prisma.ServerMemberCreateNestedManyWithoutUserInput
   messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOwnedServersInput = {
@@ -701,6 +811,7 @@ export type UserUncheckedCreateWithoutOwnedServersInput = {
   serverMemberships?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutUserInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOwnedServersInput = {
@@ -731,6 +842,7 @@ export type UserUpdateWithoutOwnedServersInput = {
   serverMemberships?: Prisma.ServerMemberUpdateManyWithoutUserNestedInput
   messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOwnedServersInput = {
@@ -745,6 +857,7 @@ export type UserUncheckedUpdateWithoutOwnedServersInput = {
   serverMemberships?: Prisma.ServerMemberUncheckedUpdateManyWithoutUserNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -759,6 +872,7 @@ export type UserCreateWithoutSessionsInput = {
   serverMemberships?: Prisma.ServerMemberCreateNestedManyWithoutUserInput
   messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -773,6 +887,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   serverMemberships?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutUserInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -803,6 +918,7 @@ export type UserUpdateWithoutSessionsInput = {
   serverMemberships?: Prisma.ServerMemberUpdateManyWithoutUserNestedInput
   messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -817,6 +933,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   serverMemberships?: Prisma.ServerMemberUncheckedUpdateManyWithoutUserNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -830,6 +947,7 @@ export type UserCountOutputType = {
   serverMemberships: number
   messages: number
   reactions: number
+  readStates: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -838,6 +956,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   serverMemberships?: boolean | UserCountOutputTypeCountServerMembershipsArgs
   messages?: boolean | UserCountOutputTypeCountMessagesArgs
   reactions?: boolean | UserCountOutputTypeCountReactionsArgs
+  readStates?: boolean | UserCountOutputTypeCountReadStatesArgs
 }
 
 /**
@@ -885,6 +1004,13 @@ export type UserCountOutputTypeCountReactionsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.ReactionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReadStatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChannelReadStateWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -899,6 +1025,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   serverMemberships?: boolean | Prisma.User$serverMembershipsArgs<ExtArgs>
   messages?: boolean | Prisma.User$messagesArgs<ExtArgs>
   reactions?: boolean | Prisma.User$reactionsArgs<ExtArgs>
+  readStates?: boolean | Prisma.User$readStatesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -939,6 +1066,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   serverMemberships?: boolean | Prisma.User$serverMembershipsArgs<ExtArgs>
   messages?: boolean | Prisma.User$messagesArgs<ExtArgs>
   reactions?: boolean | Prisma.User$reactionsArgs<ExtArgs>
+  readStates?: boolean | Prisma.User$readStatesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -952,6 +1080,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     serverMemberships: Prisma.$ServerMemberPayload<ExtArgs>[]
     messages: Prisma.$MessagePayload<ExtArgs>[]
     reactions: Prisma.$ReactionPayload<ExtArgs>[]
+    readStates: Prisma.$ChannelReadStatePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1360,6 +1489,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   serverMemberships<T extends Prisma.User$serverMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$serverMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServerMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   messages<T extends Prisma.User$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reactions<T extends Prisma.User$reactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  readStates<T extends Prisma.User$readStatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$readStatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChannelReadStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1906,6 +2036,30 @@ export type User$reactionsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.ReactionScalarFieldEnum | Prisma.ReactionScalarFieldEnum[]
+}
+
+/**
+ * User.readStates
+ */
+export type User$readStatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ChannelReadState
+   */
+  select?: Prisma.ChannelReadStateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ChannelReadState
+   */
+  omit?: Prisma.ChannelReadStateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChannelReadStateInclude<ExtArgs> | null
+  where?: Prisma.ChannelReadStateWhereInput
+  orderBy?: Prisma.ChannelReadStateOrderByWithRelationInput | Prisma.ChannelReadStateOrderByWithRelationInput[]
+  cursor?: Prisma.ChannelReadStateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChannelReadStateScalarFieldEnum | Prisma.ChannelReadStateScalarFieldEnum[]
 }
 
 /**

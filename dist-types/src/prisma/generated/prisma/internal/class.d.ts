@@ -140,6 +140,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         omit: OmitOpts;
     }>;
     /**
+     * `prisma.channelReadState`: Exposes CRUD operations for the **ChannelReadState** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more ChannelReadStates
+      * const channelReadStates = await prisma.channelReadState.findMany()
+      * ```
+      */
+    get channelReadState(): Prisma.ChannelReadStateDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
      * `prisma.channel`: Exposes CRUD operations for the **Channel** model.
       * Example usage:
       * ```ts

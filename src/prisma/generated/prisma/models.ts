@@ -10,6 +10,7 @@
  */
 export type * from './models/Category.js'
 export type * from './models/ChannelPermissionOverride.js'
+export type * from './models/ChannelReadState.js'
 export type * from './models/Channel.js'
 export type * from './models/Message.js'
 export type * from './models/Reaction.js'

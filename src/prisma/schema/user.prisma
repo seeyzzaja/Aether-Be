@@ -5,10 +5,11 @@ model User {
   passwordHash String
 
   sessions          Session[]
-  ownedServers      Server[]       @relation("ServerOwner")
+  ownedServers      Server[]           @relation("ServerOwner")
   serverMemberships ServerMember[]
   messages          Message[]
   reactions         Reaction[]
+  readStates        ChannelReadState[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

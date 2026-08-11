@@ -19,6 +19,11 @@ export const WebSocketEvent = {
   REACTION_ADDED: "reaction.added",
   REACTION_REMOVED: "reaction.removed",
 
+  TYPING_START: "typing.start",
+  TYPING_STOP: "typing.stop",
+
+  READ_RECEIPT_UPDATED: "read.receipt.updated",
+
   ERROR: "error",
 } as const;
 

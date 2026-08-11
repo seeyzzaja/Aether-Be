@@ -13,6 +13,7 @@ import deviceRouter from "#modules/device/route/device.route";
 import membershipRouter from "#modules/membership/route/membership.route";
 import messageRouter from "#modules/message/route/message.route";
 import reactionRouter from "#modules/reaction/route/reaction.route";
+import readReceiptRouter from "#modules/read-receipt/route/read-receipt.route";
 import roleRouter from "#modules/role/route/role.route";
 import serverRouter from "#modules/server/route/server.routes";
 import { NotFoundError } from "#shared/errors/app-error";
@@ -82,6 +83,7 @@ app.use("/api/category", categoryRouter);
 app.use("/api/role", roleRouter);
 app.use("/api/message", messageRouter);
 app.use("/api/message", reactionRouter);
+app.use("/api/read-receipt", readReceiptRouter);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });
