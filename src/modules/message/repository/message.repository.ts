@@ -1,3 +1,4 @@
+import { Prisma } from "#prisma/generated/prisma/client";
 import prisma from "#utils/prisma";
 
 export class MessageRepository {
@@ -201,6 +202,82 @@ export class MessageRepository {
     });
   }
 
+  async search(
+    serverId: string,
+    query: string,
+    options?: {
+      channelId?: string;
+      limit?: number;
+      offset?: number;
+    },
+  ) {
+    const limit = options?.limit ?? 20;
+    const offset = options?.offset ?? 0;
+
+    const channelFilter = options?.channelId
+      ? Prisma.sql`AND m."channelId" = ${options.channelId}`
+      : Prisma.empty;
+
+    return prisma.$queryRaw<
+      Array<{
+        id: string;
+        channelId: string;
+        authorId: string;
+        content: string;
+        createdAt: Date;
+        updatedAt: Date;
+        rank: number;
+      }>
+    >`
+    SELECT
+      m."id",
+      m."channelId",
+      m."authorId",
+      m."content",
+      m."createdAt",
+      m."updatedAt",
+      ts_rank(
+        m."search_vector",
+        websearch_to_tsquery('indonesian', ${query})
+      ) AS "rank"
+    FROM "messages" m
+    INNER JOIN "channels" c
+      ON c."id" = m."channelId"
+    WHERE c."serverId" = ${serverId}
+      AND m."isDeleted" = false
+      AND m."search_vector" @@ websearch_to_tsquery(
+        'indonesian',
+        ${query}
+      )
+      ${channelFilter}
+    ORDER BY "rank" DESC, m."createdAt" DESC
+    LIMIT ${limit}
+    OFFSET ${offset}
+  `;
+  }
+  async countSearch(serverId: string, query: string, channelId?: string) {
+    const channelFilter = channelId ? Prisma.sql`AND m."channelId" = ${channelId}` : Prisma.empty;
+
+    const result = await prisma.$queryRaw<
+      Array<{
+        count: bigint;
+      }>
+    >`
+    SELECT COUNT(*) AS count
+    FROM "messages" m
+    INNER JOIN "channels" c
+      ON c."id" = m."channelId"
+    WHERE c."serverId" = ${serverId}
+      AND m."isDeleted" = false
+      AND m."search_vector" @@ websearch_to_tsquery(
+        'indonesian',
+        ${query}
+      )
+      ${channelFilter}
+  `;
+
+    return Number(result[0]?.count ?? 0n);
+  }
   async findServerMember(serverId: string, userId: string) {
     return prisma.serverMember.findUnique({
       where: {

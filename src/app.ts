@@ -16,6 +16,7 @@ import notificationRouter from "#modules/notification/route/notification.route";
 import reactionRouter from "#modules/reaction/route/reaction.route";
 import readReceiptRouter from "#modules/read-receipt/route/read-receipt.route";
 import roleRouter from "#modules/role/route/role.route";
+import searchRouter from "#modules/search/route/search.route";
 import serverRouter from "#modules/server/route/server.routes";
 import uploadRouter from "#modules/upload/route/upload.route";
 import { NotFoundError } from "#shared/errors/app-error";
@@ -88,6 +89,7 @@ app.use("/api/message", reactionRouter);
 app.use("/api/read-receipt", readReceiptRouter);
 app.use("/api/notifications", notificationRouter);
 app.use("/api/upload", uploadRouter);
+app.use("/api/search", searchRouter);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });
