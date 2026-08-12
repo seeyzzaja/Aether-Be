@@ -3,8 +3,8 @@ import { messageService } from "#modules/message/service/message.service";
 import { BadRequestError, UnauthorizedError } from "#shared/errors/app-error";
 import { successResponse } from "#utils/response";
 import { serializeBigInt } from "#utils/serialize-bigint";
-
 import { createMessageSchema, updateMessageSchema } from "../schema/message.schema.js";
+import { messageSearchQuerySchema } from "../schema/message-search.schema.js";
 
 export class MessageController {
   private getChannelId(req: Request): string {
@@ -108,6 +108,40 @@ export class MessageController {
       const message = await messageService.unpin(messageId, userId);
 
       return successResponse(res, "Pesan berhasil dilepas dari sematan", message);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async search(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = this.getUserId(req);
+
+      const serverId = req.query.serverId;
+
+      if (typeof serverId !== "string" || !serverId) {
+        throw new BadRequestError("Server ID tidak valid");
+      }
+
+      const query = messageSearchQuerySchema.parse(req.query);
+
+      const result = await messageService.search(serverId, userId, {
+        q: query.q,
+        ...(query.channelId !== undefined && {
+          channelId: query.channelId,
+        }),
+        limit: query.limit,
+        offset: query.offset,
+      });
+
+      const page = Math.floor(query.offset / query.limit) + 1;
+      const totalPages = Math.ceil(result.total / query.limit);
+
+      return successResponse(res, "Pencarian pesan berhasil", result.messages, {
+        page,
+        limit: query.limit,
+        total: result.total,
+        totalPages,
+      });
     } catch (error) {
       next(error);
     }

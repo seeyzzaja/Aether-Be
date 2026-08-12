@@ -367,6 +367,53 @@ export class MessageService {
 
     return unpinnedMessage;
   }
-}
+  async search(
+    serverId: string,
+    userId: string,
+    input: {
+      q: string;
+      channelId?: string;
+      limit: number;
+      offset: number;
+    },
+  ) {
+    const permissions = await this.getActorPermissions(serverId, userId);
 
+    if (!hasPermission(permissions, Permission.VIEW_CHANNEL)) {
+      throw new ForbiddenError("Kamu tidak memiliki permission VIEW_CHANNEL");
+    }
+
+    if (input.channelId) {
+      const channel = await messageRepository.findChannelById(input.channelId);
+
+      if (!channel) {
+        throw new NotFoundError("Channel tidak ditemukan");
+      }
+
+      if (channel.serverId !== serverId) {
+        throw new ForbiddenError("Channel bukan bagian dari server ini");
+      }
+    }
+
+    const searchOptions = {
+      ...(input.channelId !== undefined && {
+        channelId: input.channelId,
+      }),
+      limit: input.limit,
+      offset: input.offset,
+    };
+
+    const [messages, total] = await Promise.all([
+      messageRepository.search(serverId, input.q, searchOptions),
+      messageRepository.countSearch(serverId, input.q, input.channelId),
+    ]);
+
+    return {
+      messages,
+      total,
+      offset: input.offset,
+      limit: input.limit,
+    };
+  }
+}
 export const messageService = new MessageService();

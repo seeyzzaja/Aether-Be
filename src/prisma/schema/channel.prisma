@@ -15,6 +15,8 @@ model Channel {
   topic      String?     @db.VarChar(500)
   position   Int         @default(0)
 
+  searchVector Unsupported("tsvector")? @map("search_vector")
+
   server              Server                      @relation(fields: [serverId], references: [id], onDelete: Cascade)
   category            Category?                   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   permissionOverrides ChannelPermissionOverride[]
