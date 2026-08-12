@@ -1,10 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
-
+import { createChannelSchema, updateChannelSchema } from "#modules/channel/schema/channel.schema";
+import { upsertChannelPermissionOverrideSchema } from "#modules/channel/schema/channel-permission-override.schema";
 import { channelService } from "#modules/channel/service/channel.service";
 import { BadRequestError, UnauthorizedError } from "#shared/errors/app-error";
 import { successResponse } from "#utils/response";
-
-import { createChannelSchema, updateChannelSchema } from "../schema/channel.schema.js";
 
 export class ChannelController {
   private getServerId(req: Request): string {
@@ -94,7 +93,65 @@ export class ChannelController {
       next(error);
     }
   }
+  async getPermissionOverrides(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = this.getUserId(req);
+      const serverId = this.getServerId(req);
+      const channelId = this.getChannelId(req);
 
+      const overrides = await channelService.getPermissionOverrides(serverId, channelId, userId);
+
+      return successResponse(res, "Permission override berhasil diambil", overrides);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async upsertPermissionOverride(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = this.getUserId(req);
+      const serverId = this.getServerId(req);
+      const channelId = this.getChannelId(req);
+
+      const { roleId } = req.params;
+
+      if (typeof roleId !== "string" || !roleId) {
+        throw new BadRequestError("Role ID tidak valid");
+      }
+
+      const validatedData = upsertChannelPermissionOverrideSchema.parse(req.body);
+
+      const override = await channelService.upsertPermissionOverride(
+        serverId,
+        channelId,
+        roleId,
+        userId,
+        validatedData,
+      );
+
+      return successResponse(res, "Permission override berhasil disimpan", override);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async deletePermissionOverride(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = this.getUserId(req);
+      const serverId = this.getServerId(req);
+      const channelId = this.getChannelId(req);
+
+      const { roleId } = req.params;
+
+      if (typeof roleId !== "string" || !roleId) {
+        throw new BadRequestError("Role ID tidak valid");
+      }
+
+      await channelService.deletePermissionOverride(serverId, channelId, roleId, userId);
+
+      return successResponse(res, "Permission override berhasil dihapus");
+    } catch (error) {
+      next(error);
+    }
+  }
   async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = this.getUserId(req);

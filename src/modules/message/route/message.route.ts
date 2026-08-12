@@ -280,5 +280,36 @@ router.delete("/:messageId/pin", (req, res, next) => messageController.unpin(req
  *         description: Terjadi kesalahan internal server
  */
 router.delete("/:messageId", (req, res, next) => messageController.delete(req, res, next));
-
+/**
+ * @swagger
+ * /api/message/{messageId}/thread:
+ *   get:
+ *     summary: Mengambil thread dari sebuah pesan
+ *     tags: [Message]
+ *     description: Mengambil root message beserta seluruh pesan yang berada di dalam thread.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: messageId
+ *         in: path
+ *         required: true
+ *         description: UUID root message dari thread
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Thread berhasil diambil
+ *       400:
+ *         description: Message ID tidak valid
+ *       401:
+ *         description: Pengguna belum login atau token tidak valid
+ *       403:
+ *         description: Pengguna tidak memiliki permission untuk mengakses channel
+ *       404:
+ *         description: Root message atau channel tidak ditemukan
+ *       500:
+ *         description: Terjadi kesalahan internal server
+ */
+router.get("/:messageId/thread", (req, res, next) => messageController.getThread(req, res, next));
 export default router;

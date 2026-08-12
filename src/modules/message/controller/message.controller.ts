@@ -146,6 +146,18 @@ export class MessageController {
       next(error);
     }
   }
+  async getThread(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = this.getUserId(req);
+      const threadRootId = this.getMessageId(req);
+
+      const thread = await messageService.getThread(threadRootId, userId);
+
+      return successResponse(res, "Thread berhasil diambil", serializeBigInt(thread));
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const messageController = new MessageController();

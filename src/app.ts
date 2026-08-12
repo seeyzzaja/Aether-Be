@@ -19,6 +19,7 @@ import roleRouter from "#modules/role/route/role.route";
 import searchRouter from "#modules/search/route/search.route";
 import serverRouter from "#modules/server/route/server.routes";
 import uploadRouter from "#modules/upload/route/upload.route";
+import voiceRouter from "#modules/voice/route/voice.route";
 import { NotFoundError } from "#shared/errors/app-error";
 import { successResponse } from "#utils/response";
 
@@ -90,6 +91,7 @@ app.use("/api/read-receipt", readReceiptRouter);
 app.use("/api/notifications", notificationRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/search", searchRouter);
+app.use("/api/channels", voiceRouter);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });

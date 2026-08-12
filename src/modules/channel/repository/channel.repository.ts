@@ -116,6 +116,75 @@ export class ChannelRepository {
       },
     });
   }
+  async findPermissionOverrides(channelId: string) {
+    return prisma.channelPermissionOverride.findMany({
+      where: {
+        channelId,
+      },
+      include: {
+        role: true,
+      },
+      orderBy: {
+        role: {
+          name: "asc",
+        },
+      },
+    });
+  }
+
+  async findPermissionOverride(channelId: string, roleId: string) {
+    return prisma.channelPermissionOverride.findUnique({
+      where: {
+        channelId_roleId: {
+          channelId,
+          roleId,
+        },
+      },
+      include: {
+        role: true,
+      },
+    });
+  }
+
+  async upsertPermissionOverride(
+    channelId: string,
+    roleId: string,
+    allowBitmask: bigint,
+    denyBitmask: bigint,
+  ) {
+    return prisma.channelPermissionOverride.upsert({
+      where: {
+        channelId_roleId: {
+          channelId,
+          roleId,
+        },
+      },
+      create: {
+        channelId,
+        roleId,
+        allowBitmask,
+        denyBitmask,
+      },
+      update: {
+        allowBitmask,
+        denyBitmask,
+      },
+      include: {
+        role: true,
+      },
+    });
+  }
+
+  async deletePermissionOverride(channelId: string, roleId: string) {
+    return prisma.channelPermissionOverride.delete({
+      where: {
+        channelId_roleId: {
+          channelId,
+          roleId,
+        },
+      },
+    });
+  }
 }
 
 export const channelRepository = new ChannelRepository();

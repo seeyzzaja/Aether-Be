@@ -179,6 +179,93 @@ export class MessageRepository {
     });
   }
 
+  async findChannelPermissions(channelId: string, serverId: string, userId: string) {
+    const member = await prisma.serverMember.findUnique({
+      where: {
+        serverId_userId: {
+          serverId,
+          userId,
+        },
+      },
+      select: {
+        roles: {
+          select: {
+            roleId: true,
+            role: {
+              select: {
+                permissionsBitmask: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!member) {
+      return null;
+    }
+
+    const defaultRole = await prisma.role.findFirst({
+      where: {
+        serverId,
+        isDefault: true,
+      },
+      select: {
+        id: true,
+        permissionsBitmask: true,
+      },
+    });
+
+    const roleIds = [
+      ...(defaultRole ? [defaultRole.id] : []),
+      ...member.roles.map((memberRole) => memberRole.roleId),
+    ];
+
+    const overrides = await prisma.channelPermissionOverride.findMany({
+      where: {
+        channelId,
+        roleId: {
+          in: roleIds,
+        },
+      },
+      select: {
+        roleId: true,
+        allowBitmask: true,
+        denyBitmask: true,
+      },
+    });
+
+    let permissions = defaultRole?.permissionsBitmask ?? 0n;
+
+    for (const memberRole of member.roles) {
+      permissions |= memberRole.role.permissionsBitmask;
+    }
+
+    const everyoneOverride = defaultRole
+      ? overrides.find((override) => override.roleId === defaultRole.id)
+      : undefined;
+
+    if (everyoneOverride) {
+      permissions &= ~everyoneOverride.denyBitmask;
+      permissions |= everyoneOverride.allowBitmask;
+    }
+
+    const roleOverrides = overrides.filter((override) => override.roleId !== defaultRole?.id);
+
+    let roleDeny = 0n;
+    let roleAllow = 0n;
+
+    for (const override of roleOverrides) {
+      roleDeny |= override.denyBitmask;
+      roleAllow |= override.allowBitmask;
+    }
+
+    permissions &= ~roleDeny;
+    permissions |= roleAllow;
+
+    return permissions;
+  }
+
   async findServerOwner(serverId: string) {
     return prisma.server.findUnique({
       where: {
@@ -198,6 +285,7 @@ export class MessageRepository {
       select: {
         id: true,
         serverId: true,
+        type: true,
       },
     });
   }
@@ -288,6 +376,20 @@ export class MessageRepository {
       },
       select: {
         userId: true,
+      },
+    });
+  }
+  async findThreadMessages(threadRootId: string) {
+    return prisma.message.findMany({
+      where: {
+        threadRootId,
+        isDeleted: false,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+      include: {
+        attachments: true,
       },
     });
   }

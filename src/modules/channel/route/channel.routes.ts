@@ -458,4 +458,237 @@ router.delete("/:serverId/channel/:channelId", (req, res, next) =>
   channelController.delete(req, res, next),
 );
 
+/**
+ * @swagger
+ * /api/channel/{serverId}/channel/{channelId}/permission-overrides:
+ *   get:
+ *     summary: Mengambil permission override pada channel
+ *     tags: [Channel]
+ *     description: Mengambil seluruh permission override berdasarkan role pada channel. Hanya pengguna dengan MANAGE_CHANNELS atau ADMINISTRATOR yang dapat mengakses endpoint ini.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: serverId
+ *         in: path
+ *         required: true
+ *         description: UUID server
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *       - name: channelId
+ *         in: path
+ *         required: true
+ *         description: UUID channel
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Permission override berhasil diambil
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Permission override berhasil diambil
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       channelId:
+ *                         type: string
+ *                         format: uuid
+ *                       roleId:
+ *                         type: string
+ *                         format: uuid
+ *                       allowBitmask:
+ *                         type: string
+ *                         example: "0"
+ *                       denyBitmask:
+ *                         type: string
+ *                         example: "2"
+ *                       role:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                             format: uuid
+ *                           name:
+ *                             type: string
+ *                             example: "@everyone"
+ *       400:
+ *         description: Server ID atau Channel ID tidak valid
+ *       401:
+ *         description: Pengguna belum login atau token tidak valid
+ *       403:
+ *         description: Pengguna tidak memiliki MANAGE_CHANNELS atau ADMINISTRATOR
+ *       404:
+ *         description: Server atau channel tidak ditemukan
+ *       500:
+ *         description: Terjadi kesalahan internal server
+ */
+router.get("/:serverId/channel/:channelId/permission-overrides", (req, res, next) =>
+  channelController.getPermissionOverrides(req, res, next),
+);
+
+/**
+ * @swagger
+ * /api/channel/{serverId}/channel/{channelId}/permission-overrides/{roleId}:
+ *   put:
+ *     summary: Membuat atau memperbarui permission override channel
+ *     tags: [Channel]
+ *     description: Membuat atau memperbarui permission override untuk role tertentu pada channel. Hanya pengguna dengan MANAGE_CHANNELS atau ADMINISTRATOR yang dapat mengelola permission override.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: serverId
+ *         in: path
+ *         required: true
+ *         description: UUID server
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *       - name: channelId
+ *         in: path
+ *         required: true
+ *         description: UUID channel
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *       - name: roleId
+ *         in: path
+ *         required: true
+ *         description: UUID role
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - allowBitmask
+ *               - denyBitmask
+ *             properties:
+ *               allowBitmask:
+ *                 type: string
+ *                 pattern: '^[0-9]+$'
+ *                 description: Permission bitmask yang diizinkan
+ *                 example: "0"
+ *               denyBitmask:
+ *                 type: string
+ *                 pattern: '^[0-9]+$'
+ *                 description: Permission bitmask yang ditolak
+ *                 example: "2"
+ *     responses:
+ *       200:
+ *         description: Permission override berhasil disimpan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Permission override berhasil disimpan
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     channelId:
+ *                       type: string
+ *                       format: uuid
+ *                     roleId:
+ *                       type: string
+ *                       format: uuid
+ *                     allowBitmask:
+ *                       type: string
+ *                       example: "0"
+ *                     denyBitmask:
+ *                       type: string
+ *                       example: "2"
+ *       400:
+ *         description: Parameter atau request body tidak valid
+ *       401:
+ *         description: Pengguna belum login atau token tidak valid
+ *       403:
+ *         description: Pengguna tidak memiliki MANAGE_CHANNELS atau ADMINISTRATOR
+ *       404:
+ *         description: Server, channel, atau role tidak ditemukan
+ *       500:
+ *         description: Terjadi kesalahan internal server
+ */
+router.put("/:serverId/channel/:channelId/permission-overrides/:roleId", (req, res, next) =>
+  channelController.upsertPermissionOverride(req, res, next),
+);
+
+/**
+ * @swagger
+ * /api/channel/{serverId}/channel/{channelId}/permission-overrides/{roleId}:
+ *   delete:
+ *     summary: Menghapus permission override channel
+ *     tags: [Channel]
+ *     description: Menghapus permission override untuk role tertentu pada channel. Hanya pengguna dengan MANAGE_CHANNELS atau ADMINISTRATOR yang dapat menghapus permission override.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: serverId
+ *         in: path
+ *         required: true
+ *         description: UUID server
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *       - name: channelId
+ *         in: path
+ *         required: true
+ *         description: UUID channel
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *       - name: roleId
+ *         in: path
+ *         required: true
+ *         description: UUID role
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Permission override berhasil dihapus
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Permission override berhasil dihapus
+ *       400:
+ *         description: Server ID, Channel ID, atau Role ID tidak valid
+ *       401:
+ *         description: Pengguna belum login atau token tidak valid
+ *       403:
+ *         description: Pengguna tidak memiliki MANAGE_CHANNELS atau ADMINISTRATOR
+ *       404:
+ *         description: Server, channel, role, atau permission override tidak ditemukan
+ *       500:
+ *         description: Terjadi kesalahan internal server
+ */
+router.delete("/:serverId/channel/:channelId/permission-overrides/:roleId", (req, res, next) =>
+  channelController.deletePermissionOverride(req, res, next),
+);
 export default router;
