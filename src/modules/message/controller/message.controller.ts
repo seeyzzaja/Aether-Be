@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
-
 import { messageService } from "#modules/message/service/message.service";
 import { BadRequestError, UnauthorizedError } from "#shared/errors/app-error";
 import { successResponse } from "#utils/response";
+import { serializeBigInt } from "#utils/serialize-bigint";
 
 import { createMessageSchema, updateMessageSchema } from "../schema/message.schema.js";
 
@@ -54,7 +54,7 @@ export class MessageController {
         messageId: message.id,
       });
 
-      return successResponse(res, "Pesan berhasil dikirim", message, null, 201);
+      return successResponse(res, "Pesan berhasil dikirim", serializeBigInt(message), null, 201);
     } catch (error) {
       next(error);
     }

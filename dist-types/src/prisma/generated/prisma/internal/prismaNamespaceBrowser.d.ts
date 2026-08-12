@@ -30,6 +30,7 @@ export declare const ModelName: {
     readonly ChannelPermissionOverride: 'ChannelPermissionOverride';
     readonly ChannelReadState: 'ChannelReadState';
     readonly Channel: 'Channel';
+    readonly MessageAttachment: 'MessageAttachment';
     readonly Message: 'Message';
     readonly Notification: 'Notification';
     readonly Reaction: 'Reaction';
@@ -87,6 +88,16 @@ export declare const ChannelScalarFieldEnum: {
     readonly position: 'position';
 };
 export type ChannelScalarFieldEnum = (typeof ChannelScalarFieldEnum)[keyof typeof ChannelScalarFieldEnum];
+export declare const MessageAttachmentScalarFieldEnum: {
+    readonly id: 'id';
+    readonly messageId: 'messageId';
+    readonly fileUrl: 'fileUrl';
+    readonly thumbnailUrl: 'thumbnailUrl';
+    readonly fileType: 'fileType';
+    readonly fileSize: 'fileSize';
+    readonly fileName: 'fileName';
+};
+export type MessageAttachmentScalarFieldEnum = (typeof MessageAttachmentScalarFieldEnum)[keyof typeof MessageAttachmentScalarFieldEnum];
 export declare const MessageScalarFieldEnum: {
     readonly id: 'id';
     readonly channelId: 'channelId';

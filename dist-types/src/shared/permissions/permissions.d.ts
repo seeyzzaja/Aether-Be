@@ -13,6 +13,7 @@ export declare const Permission: {
     readonly BAN_MEMBERS: bigint;
     readonly MANAGE_SERVER: bigint;
     readonly ADMINISTRATOR: bigint;
+    readonly ATTACH_FILES: bigint;
 };
 export type PermissionValue = (typeof Permission)[keyof typeof Permission];
 //# sourceMappingURL=permissions.d.ts.map

@@ -55,6 +55,7 @@ export const ModelName = {
   ChannelPermissionOverride: 'ChannelPermissionOverride',
   ChannelReadState: 'ChannelReadState',
   Channel: 'Channel',
+  MessageAttachment: 'MessageAttachment',
   Message: 'Message',
   Notification: 'Notification',
   Reaction: 'Reaction',
@@ -131,6 +132,19 @@ export const ChannelScalarFieldEnum = {
 } as const
 
 export type ChannelScalarFieldEnum = (typeof ChannelScalarFieldEnum)[keyof typeof ChannelScalarFieldEnum]
+
+
+export const MessageAttachmentScalarFieldEnum = {
+  id: 'id',
+  messageId: 'messageId',
+  fileUrl: 'fileUrl',
+  thumbnailUrl: 'thumbnailUrl',
+  fileType: 'fileType',
+  fileSize: 'fileSize',
+  fileName: 'fileName'
+} as const
+
+export type MessageAttachmentScalarFieldEnum = (typeof MessageAttachmentScalarFieldEnum)[keyof typeof MessageAttachmentScalarFieldEnum]
 
 
 export const MessageScalarFieldEnum = {

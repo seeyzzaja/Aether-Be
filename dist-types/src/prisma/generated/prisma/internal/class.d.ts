@@ -162,6 +162,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         omit: OmitOpts;
     }>;
     /**
+     * `prisma.messageAttachment`: Exposes CRUD operations for the **MessageAttachment** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more MessageAttachments
+      * const messageAttachments = await prisma.messageAttachment.findMany()
+      * ```
+      */
+    get messageAttachment(): Prisma.MessageAttachmentDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
      * `prisma.message`: Exposes CRUD operations for the **Message** model.
       * Example usage:
       * ```ts
