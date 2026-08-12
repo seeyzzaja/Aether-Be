@@ -17,6 +17,9 @@ export declare const config: {
     EMAIL_USER: string;
     EMAIL_PASSWORD: string;
     EMAIL_FROM: string;
+    CLOUDINARY_CLOUD_NAME: string;
+    CLOUDINARY_API_KEY: string;
+    CLOUDINARY_API_SECRET: string;
 };
 export default config;
 //# sourceMappingURL=env.d.ts.map

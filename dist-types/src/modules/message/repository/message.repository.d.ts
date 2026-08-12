@@ -5,7 +5,24 @@ export declare class MessageRepository {
         content: string;
         replyToId?: string | null;
         threadRootId?: string | null;
+        attachments?: Array<{
+            fileUrl: string;
+            thumbnailUrl?: string | null;
+            fileType: string;
+            fileSize: number;
+            fileName: string;
+        }>;
     }): Promise<{
+        attachments: {
+            id: string;
+            messageId: string;
+            fileUrl: string;
+            thumbnailUrl: string | null;
+            fileType: string;
+            fileSize: bigint;
+            fileName: string;
+        }[];
+    } & {
         id: string;
         channelId: string;
         authorId: string;

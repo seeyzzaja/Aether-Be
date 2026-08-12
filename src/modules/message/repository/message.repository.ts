@@ -7,6 +7,13 @@ export class MessageRepository {
     content: string;
     replyToId?: string | null;
     threadRootId?: string | null;
+    attachments?: Array<{
+      fileUrl: string;
+      thumbnailUrl?: string | null;
+      fileType: string;
+      fileSize: number;
+      fileName: string;
+    }>;
   }) {
     return prisma.message.create({
       data: {
@@ -15,6 +22,23 @@ export class MessageRepository {
         content: data.content,
         replyToId: data.replyToId ?? null,
         threadRootId: data.threadRootId ?? null,
+
+        ...(data.attachments &&
+          data.attachments.length > 0 && {
+            attachments: {
+              create: data.attachments.map((attachment) => ({
+                fileUrl: attachment.fileUrl,
+                thumbnailUrl: attachment.thumbnailUrl ?? null,
+                fileType: attachment.fileType,
+                fileSize: BigInt(attachment.fileSize),
+                fileName: attachment.fileName,
+              })),
+            },
+          }),
+      },
+
+      include: {
+        attachments: true,
       },
     });
   }
@@ -104,8 +128,12 @@ export class MessageRepository {
         },
         skip: 1,
       }),
+      include: {
+        attachments: true,
+      },
     });
   }
+
   async findServerContext(messageId: string) {
     return prisma.message.findUnique({
       where: {
@@ -160,6 +188,7 @@ export class MessageRepository {
       },
     });
   }
+
   async findChannelById(channelId: string) {
     return prisma.channel.findUnique({
       where: {
@@ -171,6 +200,7 @@ export class MessageRepository {
       },
     });
   }
+
   async findServerMember(serverId: string, userId: string) {
     return prisma.serverMember.findUnique({
       where: {

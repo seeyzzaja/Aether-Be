@@ -5,6 +5,16 @@ export declare class MessageService {
     private ensureSendMessagesPermission;
     private getMessage;
     create(channelId: string, userId: string, input: CreateMessageInput): Promise<{
+        attachments: {
+            id: string;
+            messageId: string;
+            fileUrl: string;
+            thumbnailUrl: string | null;
+            fileType: string;
+            fileSize: bigint;
+            fileName: string;
+        }[];
+    } & {
         id: string;
         channelId: string;
         authorId: string;

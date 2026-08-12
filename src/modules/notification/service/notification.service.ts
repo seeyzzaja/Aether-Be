@@ -65,7 +65,7 @@ export async function enqueueEmailNotification(data: {
     enabled: user?.emailNotificationEnabled,
   });
 
-  if (!user || !user.emailNotificationEnabled) {
+  if (!user?.emailNotificationEnabled) {
     console.log("[EmailNotification] skipped");
     return null;
   }

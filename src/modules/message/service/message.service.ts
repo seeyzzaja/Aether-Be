@@ -92,6 +92,15 @@ export class MessageService {
       content: input.content,
       replyToId: input.replyToId ?? null,
       threadRootId: input.threadRootId ?? null,
+      ...(input.attachments && {
+        attachments: input.attachments.map((attachment) => ({
+          fileUrl: attachment.fileUrl,
+          thumbnailUrl: attachment.thumbnailUrl ?? null,
+          fileType: attachment.fileType,
+          fileSize: attachment.fileSize,
+          fileName: attachment.fileName,
+        })),
+      }),
     });
     console.log("[MessageService.create] message persisted", {
       messageId: message.id,
