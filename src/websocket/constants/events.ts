@@ -26,6 +26,9 @@ export const WebSocketEvent = {
 
   NOTIFICATION_CREATED: "notification.created",
 
+  POLL_CREATED: "poll.created",
+  POLL_VOTE_UPDATED: "poll.vote.updated",
+
   ERROR: "error",
 } as const;
 

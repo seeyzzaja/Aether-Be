@@ -13,6 +13,7 @@ model User {
   reactions         Reaction[]
   readStates        ChannelReadState[]
   notifications     Notification[]
+  pollVotes         PollVote[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

@@ -20,6 +20,7 @@ model Message {
   reactions   Reaction[]
   readStates  ChannelReadState[]
   attachments MessageAttachment[]
+  poll        Poll?
 
   threadRoot     Message?  @relation("MessageThreadRoot", fields: [threadRootId], references: [id], onDelete: SetNull)
   threadMessages Message[] @relation("MessageThreadRoot")

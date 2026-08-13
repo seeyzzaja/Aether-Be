@@ -1,0 +1,48 @@
+model Poll {
+  id                  String    @id @default(uuid())
+  messageId           String    @unique @map("message_id")
+  question            String    @db.VarChar(255)
+  allowMultipleChoice Boolean   @default(false) @map("allow_multiple_choice")
+  expiresAt           DateTime? @map("expires_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  message Message      @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  options PollOption[]
+  votes   PollVote[]
+
+  @@index([expiresAt])
+  @@map("polls")
+}
+
+model PollOption {
+  id        String   @id @default(uuid())
+  pollId    String   @map("poll_id")
+  text      String   @db.VarChar(255)
+  position  Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  poll  Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  votes PollVote[]
+
+  @@unique([pollId, position])
+  @@index([pollId])
+  @@map("poll_options")
+}
+
+model PollVote {
+  id           String   @id @default(uuid())
+  pollOptionId String   @map("poll_option_id")
+  userId       String   @map("user_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  pollOption PollOption @relation(fields: [pollOptionId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  poll       Poll?      @relation(fields: [pollId], references: [id])
+  pollId     String?
+
+  @@unique([pollOptionId, userId])
+  @@index([pollOptionId])
+  @@index([userId])
+  @@map("poll_votes")
+}
