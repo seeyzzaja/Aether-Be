@@ -71,6 +71,29 @@ export class MessageService {
 
     return channelPermissions;
   }
+  private async ensureViewChannelPermission(serverId: string, channelId: string, userId: string) {
+    const serverPermissions = await this.getActorPermissions(serverId, userId);
+
+    if (hasPermission(serverPermissions, Permission.ADMINISTRATOR)) {
+      return serverPermissions;
+    }
+
+    const channelPermissions = await messageRepository.findChannelPermissions(
+      channelId,
+      serverId,
+      userId,
+    );
+
+    if (channelPermissions === null) {
+      throw new ForbiddenError("Kamu bukan member dari server ini");
+    }
+
+    if (!hasPermission(channelPermissions, Permission.VIEW_CHANNEL)) {
+      throw new ForbiddenError("Kamu tidak memiliki permission VIEW_CHANNEL pada channel ini");
+    }
+
+    return channelPermissions;
+  }
 
   private async getMessage(messageId: string) {
     const message = await messageRepository.findServerContext(messageId);
@@ -229,6 +252,50 @@ export class MessageService {
     }
 
     return message;
+  }
+  async forward(messageId: string, userId: string, destinationChannelId: string) {
+    const sourceMessage = await messageRepository.findForwardSource(messageId);
+
+    if (!sourceMessage || sourceMessage.isDeleted) {
+      throw new NotFoundError("Pesan yang ingin diteruskan tidak ditemukan");
+    }
+
+    const sourceChannel = sourceMessage.channel;
+
+    const destinationChannel = await this.getChannel(destinationChannelId);
+
+    await this.ensureViewChannelPermission(sourceChannel.serverId, sourceChannel.id, userId);
+
+    await this.ensureSendMessagesPermission(
+      destinationChannel.serverId,
+      destinationChannel.id,
+      userId,
+    );
+
+    const forwardedMessage = await messageRepository.create({
+      channelId: destinationChannel.id,
+      authorId: userId,
+      content: sourceMessage.content,
+      replyToId: null,
+      threadRootId: null,
+      attachments: sourceMessage.attachments.map((attachment) => ({
+        fileUrl: attachment.fileUrl,
+        thumbnailUrl: attachment.thumbnailUrl,
+        fileType: attachment.fileType,
+        fileSize: Number(attachment.fileSize),
+        fileName: attachment.fileName,
+      })),
+    });
+
+    this.runInBackground(
+      publishWebSocketEvent({
+        event: WebSocketEvent.MESSAGE_CREATED,
+        data: forwardedMessage,
+      }),
+      "publish forwarded message.created",
+    );
+
+    return forwardedMessage;
   }
 
   async update(messageId: string, userId: string, input: UpdateMessageInput) {

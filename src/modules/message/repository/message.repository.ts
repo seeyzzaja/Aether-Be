@@ -393,6 +393,35 @@ export class MessageRepository {
       },
     });
   }
+  async findForwardSource(messageId: string) {
+    return prisma.message.findUnique({
+      where: {
+        id: messageId,
+      },
+      select: {
+        id: true,
+        channelId: true,
+        authorId: true,
+        content: true,
+        isDeleted: true,
+        channel: {
+          select: {
+            id: true,
+            serverId: true,
+          },
+        },
+        attachments: {
+          select: {
+            fileUrl: true,
+            thumbnailUrl: true,
+            fileType: true,
+            fileSize: true,
+            fileName: true,
+          },
+        },
+      },
+    });
+  }
 }
 
 export const messageRepository = new MessageRepository();

@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    command: sh -c "npx prisma migrate deploy && npm run start"
     environment:
       BASE_URL: http://localhost
       DATABASE_URL: postgresql://postgres:ntxcyber73@postgres:5432/aether?schema=public
@@ -67,7 +68,7 @@ services:
       POSTGRES_PASSWORD: ntxcyber73
       POSTGRES_DB: aether
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
@@ -119,6 +120,8 @@ services:
 
 volumes:
   postgres-data:
+    external: true
+    name: project-be_postgres-data
 
 networks:
   aether-network:

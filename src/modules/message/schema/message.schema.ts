@@ -29,6 +29,17 @@ export const updateMessageSchema = z.object({
     .min(1, "Isi pesan wajib diisi")
     .max(4000, "Isi pesan maksimal 4000 karakter"),
 });
+export const forwardMessageSchema = z.object({
+  destinationChannelId: z.string().uuid("Destination channel ID tidak valid"),
+});
+
+export const embedMetadataSchema = z.object({
+  url: z.string().url("URL tidak valid").max(2048),
+});
+
+export type ForwardMessageInput = z.infer<typeof forwardMessageSchema>;
+
+export type EmbedMetadataInput = z.infer<typeof embedMetadataSchema>;
 
 export type CreateMessageInput = z.infer<typeof createMessageSchema>;
 
