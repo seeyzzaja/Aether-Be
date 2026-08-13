@@ -13,6 +13,7 @@ import deviceRouter from "#modules/device/route/device.route";
 import membershipRouter from "#modules/membership/route/membership.route";
 import messageRouter from "#modules/message/route/message.route";
 import notificationRouter from "#modules/notification/route/notification.route";
+import pollRouter from "#modules/pool/route/poll.route";
 import reactionRouter from "#modules/reaction/route/reaction.route";
 import readReceiptRouter from "#modules/read-receipt/route/read-receipt.route";
 import roleRouter from "#modules/role/route/role.route";
@@ -92,6 +93,7 @@ app.use("/api/notifications", notificationRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/channels", voiceRouter);
+app.use("/api", pollRouter);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });

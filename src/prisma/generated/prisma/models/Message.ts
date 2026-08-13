@@ -237,6 +237,7 @@ export type MessageWhereInput = {
   reactions?: Prisma.ReactionListRelationFilter
   readStates?: Prisma.ChannelReadStateListRelationFilter
   attachments?: Prisma.MessageAttachmentListRelationFilter
+  poll?: Prisma.XOR<Prisma.PollNullableScalarRelationFilter, Prisma.PollWhereInput> | null
   threadRoot?: Prisma.XOR<Prisma.MessageNullableScalarRelationFilter, Prisma.MessageWhereInput> | null
   threadMessages?: Prisma.MessageListRelationFilter
 }
@@ -260,6 +261,7 @@ export type MessageOrderByWithRelationInput = {
   reactions?: Prisma.ReactionOrderByRelationAggregateInput
   readStates?: Prisma.ChannelReadStateOrderByRelationAggregateInput
   attachments?: Prisma.MessageAttachmentOrderByRelationAggregateInput
+  poll?: Prisma.PollOrderByWithRelationInput
   threadRoot?: Prisma.MessageOrderByWithRelationInput
   threadMessages?: Prisma.MessageOrderByRelationAggregateInput
 }
@@ -286,6 +288,7 @@ export type MessageWhereUniqueInput = Prisma.AtLeast<{
   reactions?: Prisma.ReactionListRelationFilter
   readStates?: Prisma.ChannelReadStateListRelationFilter
   attachments?: Prisma.MessageAttachmentListRelationFilter
+  poll?: Prisma.XOR<Prisma.PollNullableScalarRelationFilter, Prisma.PollWhereInput> | null
   threadRoot?: Prisma.XOR<Prisma.MessageNullableScalarRelationFilter, Prisma.MessageWhereInput> | null
   threadMessages?: Prisma.MessageListRelationFilter
 }, "id">
@@ -339,6 +342,7 @@ export type MessageCreateInput = {
   reactions?: Prisma.ReactionCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollCreateNestedOneWithoutMessageInput
   threadRoot?: Prisma.MessageCreateNestedOneWithoutThreadMessagesInput
   threadMessages?: Prisma.MessageCreateNestedManyWithoutThreadRootInput
 }
@@ -359,6 +363,7 @@ export type MessageUncheckedCreateInput = {
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollUncheckedCreateNestedOneWithoutMessageInput
   threadMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutThreadRootInput
 }
 
@@ -377,6 +382,7 @@ export type MessageUpdateInput = {
   reactions?: Prisma.ReactionUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUpdateOneWithoutMessageNestedInput
   threadRoot?: Prisma.MessageUpdateOneWithoutThreadMessagesNestedInput
   threadMessages?: Prisma.MessageUpdateManyWithoutThreadRootNestedInput
 }
@@ -397,6 +403,7 @@ export type MessageUncheckedUpdateInput = {
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUncheckedUpdateOneWithoutMessageNestedInput
   threadMessages?: Prisma.MessageUncheckedUpdateManyWithoutThreadRootNestedInput
 }
 
@@ -698,6 +705,20 @@ export type MessageUncheckedUpdateManyWithoutThreadRootNestedInput = {
   deleteMany?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
 }
 
+export type MessageCreateNestedOneWithoutPollInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutPollInput, Prisma.MessageUncheckedCreateWithoutPollInput>
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutPollInput
+  connect?: Prisma.MessageWhereUniqueInput
+}
+
+export type MessageUpdateOneRequiredWithoutPollNestedInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutPollInput, Prisma.MessageUncheckedCreateWithoutPollInput>
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutPollInput
+  upsert?: Prisma.MessageUpsertWithoutPollInput
+  connect?: Prisma.MessageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MessageUpdateToOneWithWhereWithoutPollInput, Prisma.MessageUpdateWithoutPollInput>, Prisma.MessageUncheckedUpdateWithoutPollInput>
+}
+
 export type MessageCreateNestedOneWithoutReactionsInput = {
   create?: Prisma.XOR<Prisma.MessageCreateWithoutReactionsInput, Prisma.MessageUncheckedCreateWithoutReactionsInput>
   connectOrCreate?: Prisma.MessageCreateOrConnectWithoutReactionsInput
@@ -768,6 +789,7 @@ export type MessageCreateWithoutReadStatesInput = {
   replies?: Prisma.MessageCreateNestedManyWithoutReplyToInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollCreateNestedOneWithoutMessageInput
   threadRoot?: Prisma.MessageCreateNestedOneWithoutThreadMessagesInput
   threadMessages?: Prisma.MessageCreateNestedManyWithoutThreadRootInput
 }
@@ -787,6 +809,7 @@ export type MessageUncheckedCreateWithoutReadStatesInput = {
   replies?: Prisma.MessageUncheckedCreateNestedManyWithoutReplyToInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollUncheckedCreateNestedOneWithoutMessageInput
   threadMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutThreadRootInput
 }
 
@@ -820,6 +843,7 @@ export type MessageUpdateWithoutReadStatesInput = {
   replies?: Prisma.MessageUpdateManyWithoutReplyToNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUpdateOneWithoutMessageNestedInput
   threadRoot?: Prisma.MessageUpdateOneWithoutThreadMessagesNestedInput
   threadMessages?: Prisma.MessageUpdateManyWithoutThreadRootNestedInput
 }
@@ -839,6 +863,7 @@ export type MessageUncheckedUpdateWithoutReadStatesInput = {
   replies?: Prisma.MessageUncheckedUpdateManyWithoutReplyToNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUncheckedUpdateOneWithoutMessageNestedInput
   threadMessages?: Prisma.MessageUncheckedUpdateManyWithoutThreadRootNestedInput
 }
 
@@ -856,6 +881,7 @@ export type MessageCreateWithoutChannelInput = {
   reactions?: Prisma.ReactionCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollCreateNestedOneWithoutMessageInput
   threadRoot?: Prisma.MessageCreateNestedOneWithoutThreadMessagesInput
   threadMessages?: Prisma.MessageCreateNestedManyWithoutThreadRootInput
 }
@@ -875,6 +901,7 @@ export type MessageUncheckedCreateWithoutChannelInput = {
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollUncheckedCreateNestedOneWithoutMessageInput
   threadMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutThreadRootInput
 }
 
@@ -935,6 +962,7 @@ export type MessageCreateWithoutAttachmentsInput = {
   replies?: Prisma.MessageCreateNestedManyWithoutReplyToInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollCreateNestedOneWithoutMessageInput
   threadRoot?: Prisma.MessageCreateNestedOneWithoutThreadMessagesInput
   threadMessages?: Prisma.MessageCreateNestedManyWithoutThreadRootInput
 }
@@ -954,6 +982,7 @@ export type MessageUncheckedCreateWithoutAttachmentsInput = {
   replies?: Prisma.MessageUncheckedCreateNestedManyWithoutReplyToInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollUncheckedCreateNestedOneWithoutMessageInput
   threadMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutThreadRootInput
 }
 
@@ -987,6 +1016,7 @@ export type MessageUpdateWithoutAttachmentsInput = {
   replies?: Prisma.MessageUpdateManyWithoutReplyToNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUpdateOneWithoutMessageNestedInput
   threadRoot?: Prisma.MessageUpdateOneWithoutThreadMessagesNestedInput
   threadMessages?: Prisma.MessageUpdateManyWithoutThreadRootNestedInput
 }
@@ -1006,6 +1036,7 @@ export type MessageUncheckedUpdateWithoutAttachmentsInput = {
   replies?: Prisma.MessageUncheckedUpdateManyWithoutReplyToNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUncheckedUpdateOneWithoutMessageNestedInput
   threadMessages?: Prisma.MessageUncheckedUpdateManyWithoutThreadRootNestedInput
 }
 
@@ -1023,6 +1054,7 @@ export type MessageCreateWithoutRepliesInput = {
   reactions?: Prisma.ReactionCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollCreateNestedOneWithoutMessageInput
   threadRoot?: Prisma.MessageCreateNestedOneWithoutThreadMessagesInput
   threadMessages?: Prisma.MessageCreateNestedManyWithoutThreadRootInput
 }
@@ -1042,6 +1074,7 @@ export type MessageUncheckedCreateWithoutRepliesInput = {
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollUncheckedCreateNestedOneWithoutMessageInput
   threadMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutThreadRootInput
 }
 
@@ -1064,6 +1097,7 @@ export type MessageCreateWithoutReplyToInput = {
   reactions?: Prisma.ReactionCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollCreateNestedOneWithoutMessageInput
   threadRoot?: Prisma.MessageCreateNestedOneWithoutThreadMessagesInput
   threadMessages?: Prisma.MessageCreateNestedManyWithoutThreadRootInput
 }
@@ -1083,6 +1117,7 @@ export type MessageUncheckedCreateWithoutReplyToInput = {
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollUncheckedCreateNestedOneWithoutMessageInput
   threadMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutThreadRootInput
 }
 
@@ -1111,6 +1146,7 @@ export type MessageCreateWithoutThreadMessagesInput = {
   reactions?: Prisma.ReactionCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollCreateNestedOneWithoutMessageInput
   threadRoot?: Prisma.MessageCreateNestedOneWithoutThreadMessagesInput
 }
 
@@ -1130,6 +1166,7 @@ export type MessageUncheckedCreateWithoutThreadMessagesInput = {
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollUncheckedCreateNestedOneWithoutMessageInput
 }
 
 export type MessageCreateOrConnectWithoutThreadMessagesInput = {
@@ -1152,6 +1189,7 @@ export type MessageCreateWithoutThreadRootInput = {
   reactions?: Prisma.ReactionCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollCreateNestedOneWithoutMessageInput
   threadMessages?: Prisma.MessageCreateNestedManyWithoutThreadRootInput
 }
 
@@ -1170,6 +1208,7 @@ export type MessageUncheckedCreateWithoutThreadRootInput = {
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollUncheckedCreateNestedOneWithoutMessageInput
   threadMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutThreadRootInput
 }
 
@@ -1208,6 +1247,7 @@ export type MessageUpdateWithoutRepliesInput = {
   reactions?: Prisma.ReactionUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUpdateOneWithoutMessageNestedInput
   threadRoot?: Prisma.MessageUpdateOneWithoutThreadMessagesNestedInput
   threadMessages?: Prisma.MessageUpdateManyWithoutThreadRootNestedInput
 }
@@ -1227,6 +1267,7 @@ export type MessageUncheckedUpdateWithoutRepliesInput = {
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUncheckedUpdateOneWithoutMessageNestedInput
   threadMessages?: Prisma.MessageUncheckedUpdateManyWithoutThreadRootNestedInput
 }
 
@@ -1272,6 +1313,7 @@ export type MessageUpdateWithoutThreadMessagesInput = {
   reactions?: Prisma.ReactionUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUpdateOneWithoutMessageNestedInput
   threadRoot?: Prisma.MessageUpdateOneWithoutThreadMessagesNestedInput
 }
 
@@ -1291,6 +1333,7 @@ export type MessageUncheckedUpdateWithoutThreadMessagesInput = {
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUncheckedUpdateOneWithoutMessageNestedInput
 }
 
 export type MessageUpsertWithWhereUniqueWithoutThreadRootInput = {
@@ -1309,6 +1352,98 @@ export type MessageUpdateManyWithWhereWithoutThreadRootInput = {
   data: Prisma.XOR<Prisma.MessageUpdateManyMutationInput, Prisma.MessageUncheckedUpdateManyWithoutThreadRootInput>
 }
 
+export type MessageCreateWithoutPollInput = {
+  id?: string
+  content: string
+  isPinned?: boolean
+  isDeleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  channel: Prisma.ChannelCreateNestedOneWithoutMessagesInput
+  author: Prisma.UserCreateNestedOneWithoutMessagesInput
+  replyTo?: Prisma.MessageCreateNestedOneWithoutRepliesInput
+  replies?: Prisma.MessageCreateNestedManyWithoutReplyToInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutMessageInput
+  readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutMessageInput
+  attachments?: Prisma.MessageAttachmentCreateNestedManyWithoutMessageInput
+  threadRoot?: Prisma.MessageCreateNestedOneWithoutThreadMessagesInput
+  threadMessages?: Prisma.MessageCreateNestedManyWithoutThreadRootInput
+}
+
+export type MessageUncheckedCreateWithoutPollInput = {
+  id?: string
+  channelId: string
+  authorId: string
+  replyToId?: string | null
+  threadRootId?: string | null
+  content: string
+  isPinned?: boolean
+  isDeleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  replies?: Prisma.MessageUncheckedCreateNestedManyWithoutReplyToInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutMessageInput
+  readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutMessageInput
+  attachments?: Prisma.MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
+  threadMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutThreadRootInput
+}
+
+export type MessageCreateOrConnectWithoutPollInput = {
+  where: Prisma.MessageWhereUniqueInput
+  create: Prisma.XOR<Prisma.MessageCreateWithoutPollInput, Prisma.MessageUncheckedCreateWithoutPollInput>
+}
+
+export type MessageUpsertWithoutPollInput = {
+  update: Prisma.XOR<Prisma.MessageUpdateWithoutPollInput, Prisma.MessageUncheckedUpdateWithoutPollInput>
+  create: Prisma.XOR<Prisma.MessageCreateWithoutPollInput, Prisma.MessageUncheckedCreateWithoutPollInput>
+  where?: Prisma.MessageWhereInput
+}
+
+export type MessageUpdateToOneWithWhereWithoutPollInput = {
+  where?: Prisma.MessageWhereInput
+  data: Prisma.XOR<Prisma.MessageUpdateWithoutPollInput, Prisma.MessageUncheckedUpdateWithoutPollInput>
+}
+
+export type MessageUpdateWithoutPollInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  channel?: Prisma.ChannelUpdateOneRequiredWithoutMessagesNestedInput
+  author?: Prisma.UserUpdateOneRequiredWithoutMessagesNestedInput
+  replyTo?: Prisma.MessageUpdateOneWithoutRepliesNestedInput
+  replies?: Prisma.MessageUpdateManyWithoutReplyToNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutMessageNestedInput
+  readStates?: Prisma.ChannelReadStateUpdateManyWithoutMessageNestedInput
+  attachments?: Prisma.MessageAttachmentUpdateManyWithoutMessageNestedInput
+  threadRoot?: Prisma.MessageUpdateOneWithoutThreadMessagesNestedInput
+  threadMessages?: Prisma.MessageUpdateManyWithoutThreadRootNestedInput
+}
+
+export type MessageUncheckedUpdateWithoutPollInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  channelId?: Prisma.StringFieldUpdateOperationsInput | string
+  authorId?: Prisma.StringFieldUpdateOperationsInput | string
+  replyToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  threadRootId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replies?: Prisma.MessageUncheckedUpdateManyWithoutReplyToNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutMessageNestedInput
+  readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutMessageNestedInput
+  attachments?: Prisma.MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
+  threadMessages?: Prisma.MessageUncheckedUpdateManyWithoutThreadRootNestedInput
+}
+
 export type MessageCreateWithoutReactionsInput = {
   id?: string
   content: string
@@ -1323,6 +1458,7 @@ export type MessageCreateWithoutReactionsInput = {
   replies?: Prisma.MessageCreateNestedManyWithoutReplyToInput
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollCreateNestedOneWithoutMessageInput
   threadRoot?: Prisma.MessageCreateNestedOneWithoutThreadMessagesInput
   threadMessages?: Prisma.MessageCreateNestedManyWithoutThreadRootInput
 }
@@ -1342,6 +1478,7 @@ export type MessageUncheckedCreateWithoutReactionsInput = {
   replies?: Prisma.MessageUncheckedCreateNestedManyWithoutReplyToInput
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollUncheckedCreateNestedOneWithoutMessageInput
   threadMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutThreadRootInput
 }
 
@@ -1375,6 +1512,7 @@ export type MessageUpdateWithoutReactionsInput = {
   replies?: Prisma.MessageUpdateManyWithoutReplyToNestedInput
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUpdateOneWithoutMessageNestedInput
   threadRoot?: Prisma.MessageUpdateOneWithoutThreadMessagesNestedInput
   threadMessages?: Prisma.MessageUpdateManyWithoutThreadRootNestedInput
 }
@@ -1394,6 +1532,7 @@ export type MessageUncheckedUpdateWithoutReactionsInput = {
   replies?: Prisma.MessageUncheckedUpdateManyWithoutReplyToNestedInput
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUncheckedUpdateOneWithoutMessageNestedInput
   threadMessages?: Prisma.MessageUncheckedUpdateManyWithoutThreadRootNestedInput
 }
 
@@ -1411,6 +1550,7 @@ export type MessageCreateWithoutAuthorInput = {
   reactions?: Prisma.ReactionCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollCreateNestedOneWithoutMessageInput
   threadRoot?: Prisma.MessageCreateNestedOneWithoutThreadMessagesInput
   threadMessages?: Prisma.MessageCreateNestedManyWithoutThreadRootInput
 }
@@ -1430,6 +1570,7 @@ export type MessageUncheckedCreateWithoutAuthorInput = {
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutMessageInput
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutMessageInput
   attachments?: Prisma.MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
+  poll?: Prisma.PollUncheckedCreateNestedOneWithoutMessageInput
   threadMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutThreadRootInput
 }
 
@@ -1486,6 +1627,7 @@ export type MessageUpdateWithoutChannelInput = {
   reactions?: Prisma.ReactionUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUpdateOneWithoutMessageNestedInput
   threadRoot?: Prisma.MessageUpdateOneWithoutThreadMessagesNestedInput
   threadMessages?: Prisma.MessageUpdateManyWithoutThreadRootNestedInput
 }
@@ -1505,6 +1647,7 @@ export type MessageUncheckedUpdateWithoutChannelInput = {
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUncheckedUpdateOneWithoutMessageNestedInput
   threadMessages?: Prisma.MessageUncheckedUpdateManyWithoutThreadRootNestedInput
 }
 
@@ -1561,6 +1704,7 @@ export type MessageUpdateWithoutReplyToInput = {
   reactions?: Prisma.ReactionUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUpdateOneWithoutMessageNestedInput
   threadRoot?: Prisma.MessageUpdateOneWithoutThreadMessagesNestedInput
   threadMessages?: Prisma.MessageUpdateManyWithoutThreadRootNestedInput
 }
@@ -1580,6 +1724,7 @@ export type MessageUncheckedUpdateWithoutReplyToInput = {
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUncheckedUpdateOneWithoutMessageNestedInput
   threadMessages?: Prisma.MessageUncheckedUpdateManyWithoutThreadRootNestedInput
 }
 
@@ -1611,6 +1756,7 @@ export type MessageUpdateWithoutThreadRootInput = {
   reactions?: Prisma.ReactionUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUpdateOneWithoutMessageNestedInput
   threadMessages?: Prisma.MessageUpdateManyWithoutThreadRootNestedInput
 }
 
@@ -1629,6 +1775,7 @@ export type MessageUncheckedUpdateWithoutThreadRootInput = {
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUncheckedUpdateOneWithoutMessageNestedInput
   threadMessages?: Prisma.MessageUncheckedUpdateManyWithoutThreadRootNestedInput
 }
 
@@ -1672,6 +1819,7 @@ export type MessageUpdateWithoutAuthorInput = {
   reactions?: Prisma.ReactionUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUpdateOneWithoutMessageNestedInput
   threadRoot?: Prisma.MessageUpdateOneWithoutThreadMessagesNestedInput
   threadMessages?: Prisma.MessageUpdateManyWithoutThreadRootNestedInput
 }
@@ -1691,6 +1839,7 @@ export type MessageUncheckedUpdateWithoutAuthorInput = {
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutMessageNestedInput
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutMessageNestedInput
   attachments?: Prisma.MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
+  poll?: Prisma.PollUncheckedUpdateOneWithoutMessageNestedInput
   threadMessages?: Prisma.MessageUncheckedUpdateManyWithoutThreadRootNestedInput
 }
 
@@ -1793,6 +1942,7 @@ export type MessageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   reactions?: boolean | Prisma.Message$reactionsArgs<ExtArgs>
   readStates?: boolean | Prisma.Message$readStatesArgs<ExtArgs>
   attachments?: boolean | Prisma.Message$attachmentsArgs<ExtArgs>
+  poll?: boolean | Prisma.Message$pollArgs<ExtArgs>
   threadRoot?: boolean | Prisma.Message$threadRootArgs<ExtArgs>
   threadMessages?: boolean | Prisma.Message$threadMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.MessageCountOutputTypeDefaultArgs<ExtArgs>
@@ -1857,6 +2007,7 @@ export type MessageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   reactions?: boolean | Prisma.Message$reactionsArgs<ExtArgs>
   readStates?: boolean | Prisma.Message$readStatesArgs<ExtArgs>
   attachments?: boolean | Prisma.Message$attachmentsArgs<ExtArgs>
+  poll?: boolean | Prisma.Message$pollArgs<ExtArgs>
   threadRoot?: boolean | Prisma.Message$threadRootArgs<ExtArgs>
   threadMessages?: boolean | Prisma.Message$threadMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.MessageCountOutputTypeDefaultArgs<ExtArgs>
@@ -1884,6 +2035,7 @@ export type $MessagePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     reactions: Prisma.$ReactionPayload<ExtArgs>[]
     readStates: Prisma.$ChannelReadStatePayload<ExtArgs>[]
     attachments: Prisma.$MessageAttachmentPayload<ExtArgs>[]
+    poll: Prisma.$PollPayload<ExtArgs> | null
     threadRoot: Prisma.$MessagePayload<ExtArgs> | null
     threadMessages: Prisma.$MessagePayload<ExtArgs>[]
   }
@@ -2300,6 +2452,7 @@ export interface Prisma__MessageClient<T, Null = never, ExtArgs extends runtime.
   reactions<T extends Prisma.Message$reactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$reactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   readStates<T extends Prisma.Message$readStatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$readStatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChannelReadStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attachments<T extends Prisma.Message$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessageAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  poll<T extends Prisma.Message$pollArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$pollArgs<ExtArgs>>): Prisma.Prisma__PollClient<runtime.Types.Result.GetResult<Prisma.$PollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   threadRoot<T extends Prisma.Message$threadRootArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$threadRootArgs<ExtArgs>>): Prisma.Prisma__MessageClient<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   threadMessages<T extends Prisma.Message$threadMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$threadMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2855,6 +3008,25 @@ export type Message$attachmentsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.MessageAttachmentScalarFieldEnum | Prisma.MessageAttachmentScalarFieldEnum[]
+}
+
+/**
+ * Message.poll
+ */
+export type Message$pollArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Poll
+   */
+  select?: Prisma.PollSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Poll
+   */
+  omit?: Prisma.PollOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PollInclude<ExtArgs> | null
+  where?: Prisma.PollWhereInput
 }
 
 /**

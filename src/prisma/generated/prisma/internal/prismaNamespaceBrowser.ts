@@ -58,6 +58,9 @@ export const ModelName = {
   MessageAttachment: 'MessageAttachment',
   Message: 'Message',
   Notification: 'Notification',
+  Poll: 'Poll',
+  PollOption: 'PollOption',
+  PollVote: 'PollVote',
   Reaction: 'Reaction',
   Role: 'Role',
   ServerMemberRole: 'ServerMemberRole',
@@ -174,6 +177,41 @@ export const NotificationScalarFieldEnum = {
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const PollScalarFieldEnum = {
+  id: 'id',
+  messageId: 'messageId',
+  question: 'question',
+  allowMultipleChoice: 'allowMultipleChoice',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PollScalarFieldEnum = (typeof PollScalarFieldEnum)[keyof typeof PollScalarFieldEnum]
+
+
+export const PollOptionScalarFieldEnum = {
+  id: 'id',
+  pollId: 'pollId',
+  text: 'text',
+  position: 'position',
+  createdAt: 'createdAt'
+} as const
+
+export type PollOptionScalarFieldEnum = (typeof PollOptionScalarFieldEnum)[keyof typeof PollOptionScalarFieldEnum]
+
+
+export const PollVoteScalarFieldEnum = {
+  id: 'id',
+  pollOptionId: 'pollOptionId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  pollId: 'pollId'
+} as const
+
+export type PollVoteScalarFieldEnum = (typeof PollVoteScalarFieldEnum)[keyof typeof PollVoteScalarFieldEnum]
 
 
 export const ReactionScalarFieldEnum = {

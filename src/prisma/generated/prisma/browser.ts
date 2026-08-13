@@ -53,6 +53,21 @@ export type Message = Prisma.MessageModel
  */
 export type Notification = Prisma.NotificationModel
 /**
+ * Model Poll
+ * 
+ */
+export type Poll = Prisma.PollModel
+/**
+ * Model PollOption
+ * 
+ */
+export type PollOption = Prisma.PollOptionModel
+/**
+ * Model PollVote
+ * 
+ */
+export type PollVote = Prisma.PollVoteModel
+/**
  * Model Reaction
  * 
  */
