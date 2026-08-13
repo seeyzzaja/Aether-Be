@@ -1,0 +1,128 @@
+**PRODUCT REQUIREMENT DOCUMENT (PRD)**
+**Discord-Like Web Application — Project-Based Learning**
+*Fase 1 — Dokumen tunggal fase ini*
+# 1. Ringkasan & Tujuan Produk
+Dokumen ini merinci kebutuhan produk (product requirements) untuk aplikasi web bergaya Discord, sebagai kelanjutan dari Vision Document, ADR, dan Learning Roadmap yang telah disepakati pada Fase 0. PRD berfokus pada "apa" yang harus dibangun dari sudut pandang pengguna dan bisnis produk (dalam konteks ini: kebutuhan simulasi pengguna Discord-like), sementara detail teknis "bagaimana" dibahas pada SRS dan Architecture Document (Fase 2-3).
+Prioritas kebutuhan pada dokumen ini menggunakan metode MoSCoW (Must have, Should have, Could have, Won't have) agar selaras dengan urutan milestone pada Learning Roadmap — fitur berprioritas Must umumnya dipetakan ke milestone lebih awal.
+# 2. Persona Pengguna
+| **Persona** | **Deskripsi** | **Kebutuhan Utama** |
+| --- | --- | --- |
+| **Server Owner** | **Pengguna yang membuat dan memiliki kendali penuh atas sebuah server (workspace).** | **Mengatur kategori/channel, mengelola role & permission, mengundang & mengelola member, melihat audit log server.** |
+| **Moderator / Custom Role** | **Pengguna dengan role khusus yang diberi sebagian izin administratif oleh Server Owner.** | **Moderasi pesan, mengelola member (kick/ban/mute), akses terbatas sesuai permission yang diberikan.** |
+| **Member Biasa** | **Pengguna umum yang bergabung ke satu atau banyak server untuk berkomunikasi.** | **Mengirim pesan, bergabung voice/video, menerima notifikasi, mencari pesan/file/channel.** |
+| **Platform Admin** | **Administrator tingkat platform (bukan tingkat server), mengelola seluruh sistem.** | **Memantau & memoderasi platform secara global melalui Admin Panel, menangani pelaporan lintas server.** |
+# 3. Problem Statement & Value Proposition
+Pengguna membutuhkan satu ruang komunikasi terpadu yang mendukung teks, suara, dan video dalam komunitas yang terorganisir (server → category → channel), lengkap dengan kendali izin yang granular agar komunitas besar tetap dapat dikelola dengan aman oleh pemiliknya. Proposisi nilai aplikasi ini adalah menghadirkan pengalaman tersebut secara end-to-end, dengan performa realtime yang responsif dan kontrol moderasi yang memadai.
+# 4. Lingkup Produk
+## 4.1 Dalam Lingkup (In-Scope)
+Autentikasi (email & username), manajemen server/category/channel, role & permission granular.
+Messaging kaya fitur (reply, thread, mention, edit, delete, soft delete, pin, forward, reaction, poll, markdown, embed).
+Presence & realtime (online/offline/idle/DND/invisible, typing indicator, read receipt).
+Notifikasi realtime & email, upload file hingga 1GB, pencarian lintas entitas, voice & video call, admin panel.
+## 4.2 Di Luar Lingkup (Out-of-Scope)
+Mengikuti Non-Goals yang telah ditetapkan pada Vision Document:
+Parity fitur 100% dengan Discord (mis. bot marketplace, Nitro/monetisasi, aplikasi desktop/mobile native).
+Monetisasi dan akuisisi pengguna nyata.
+Kepatuhan regulasi formal (sertifikasi SOC 2, audit hukum lintas negara).
+Validasi skalabilitas melalui load-testing produksi sungguhan (tetap bersifat target desain teoritis, sesuai keputusan Vision Document/ADR).
+
+# 5. Kebutuhan Fungsional per Area Fitur
+## 5.1 Autentikasi
+| **ID** | **Kebutuhan Fungsional** | **User Story** | **Prioritas** |
+| --- | --- | --- | --- |
+| **FR-AUTH-01** | **Registrasi akun menggunakan email dan username.** | **Sebagai pengguna baru, saya ingin mendaftar dengan email dan username agar dapat mengakses platform.** | **Must** |
+| **FR-AUTH-02** | **Login menggunakan email atau username beserta password.** | **Sebagai pengguna terdaftar, saya ingin login agar dapat mengakses server dan channel saya.** | **Must** |
+| **FR-AUTH-03** | **Manajemen sesi aktif (device management) dan kemampuan logout dari perangkat tertentu.** | **Sebagai pengguna, saya ingin melihat & mencabut sesi aktif saya agar akun tetap aman.** | **Should** |
+## 5.2 Workspace: Server, Category, Channel
+| **ID** | **Kebutuhan Fungsional** | **User Story** | **Prioritas** |
+| --- | --- | --- | --- |
+| **FR-WS-01** | **Membuat, mengubah, dan menghapus server.** | **Sebagai Server Owner, saya ingin membuat server agar dapat mengumpulkan komunitas saya.** | **Must** |
+| **FR-WS-02** | **Membuat category untuk mengelompokkan channel.** | **Sebagai Server Owner, saya ingin mengelompokkan channel ke dalam category agar server lebih terorganisir.** | **Must** |
+| **FR-WS-03** | **Membuat channel bertipe Text, Voice, Video, Forum, dan Announcement.** | **Sebagai Server Owner, saya ingin membuat berbagai tipe channel sesuai kebutuhan komunikasi komunitas.** | **Must** |
+| **FR-WS-04** | **Mengundang & mengelola member server (join/leave/kick/ban).** | **Sebagai Server Owner/Moderator, saya ingin mengelola siapa saja yang menjadi member server saya.** | **Must** |
+## 5.3 Role & Permission
+| **ID** | **Kebutuhan Fungsional** | **User Story** | **Prioritas** |
+| --- | --- | --- | --- |
+| **FR-PERM-01** | **Membuat role kustom per server dengan kombinasi izin granular.** | **Sebagai Server Owner, saya ingin membuat role kustom agar dapat mendelegasikan wewenang secara terukur.** | **Must** |
+| **FR-PERM-02** | **Override izin pada level channel tertentu terhadap role yang ada.** | **Sebagai Server Owner, saya ingin channel tertentu memiliki aturan izin berbeda dari izin role default.** | **Should** |
+## 5.4 Messaging
+| **ID** | **Kebutuhan Fungsional** | **User Story** | **Prioritas** |
+| --- | --- | --- | --- |
+| **FR-MSG-01** | **Mengirim, mengedit, dan menghapus (soft delete) pesan teks.** | **Sebagai Member, saya ingin mengirim dan mengelola pesan saya sendiri di channel.** | **Must** |
+| **FR-MSG-02** | **Membalas pesan (reply) dan membuat thread diskusi.** | **Sebagai Member, saya ingin membalas pesan tertentu agar percakapan tetap terstruktur.** | **Must** |
+| **FR-MSG-03** | **Mention pengguna atau role tertentu dalam pesan.** | **Sebagai Member, saya ingin menyebut pengguna lain agar mereka mendapat notifikasi langsung.** | **Must** |
+| **FR-MSG-04** | **Pin pesan penting pada channel.** | **Sebagai Moderator, saya ingin menyematkan pesan penting agar mudah ditemukan member lain.** | **Should** |
+| **FR-MSG-05** | **Forward pesan ke channel/server lain (sesuai izin akses tujuan).** | **Sebagai Member, saya ingin meneruskan pesan menarik ke channel lain yang saya ikuti.** | **Could** |
+| **FR-MSG-06** | **Reaksi emoji pada pesan.** | **Sebagai Member, saya ingin memberi reaksi cepat tanpa harus membalas pesan.** | **Must** |
+| **FR-MSG-07** | **Membuat polling sederhana dalam pesan.** | **Sebagai Member, saya ingin membuat polling untuk mengumpulkan pendapat komunitas.** | **Could** |
+| **FR-MSG-08** | **Rendering markdown dan embed link/preview pada pesan.** | **Sebagai Member, saya ingin pesan saya terformat rapi dan tautan menampilkan pratinjau.** | **Should** |
+## 5.5 Presence & Realtime
+| **ID** | **Kebutuhan Fungsional** | **User Story** | **Prioritas** |
+| --- | --- | --- | --- |
+| **FR-PRES-01** | **Status presence: online, offline, idle, do not disturb, invisible.** | **Sebagai Member, saya ingin mengatur status ketersediaan saya bagi pengguna lain.** | **Must** |
+| **FR-PRES-02** | **Indikator sedang mengetik (typing indicator).** | **Sebagai Member, saya ingin tahu ketika lawan bicara sedang mengetik.** | **Should** |
+| **FR-PRES-03** | **Tanda pesan telah dibaca (read receipt).** | **Sebagai Member, saya ingin tahu apakah pesan saya sudah dibaca.** | **Should** |
+## 5.6 Notifikasi
+| **ID** | **Kebutuhan Fungsional** | **User Story** | **Prioritas** |
+| --- | --- | --- | --- |
+| **FR-NOTIF-01** | **Notifikasi realtime untuk mention, reply, dan pesan baru pada channel yang diikuti.** | **Sebagai Member, saya ingin mendapat notifikasi langsung saat disebut atau dibalas.** | **Must** |
+| **FR-NOTIF-02** | **Notifikasi email untuk aktivitas penting saat pengguna offline.** | **Sebagai Member, saya ingin mendapat email ringkasan saat ada aktivitas penting ketika saya offline.** | **Should** |
+## 5.7 Upload & Media
+| **ID** | **Kebutuhan Fungsional** | **User Story** | **Prioritas** |
+| --- | --- | --- | --- |
+| **FR-UP-01** | **Upload image, video, audio, PDF, dan ZIP hingga 1GB per file.** | **Sebagai Member, saya ingin membagikan berbagai jenis file dalam percakapan.** | **Must** |
+| **FR-UP-02** | **Preview/thumbnail otomatis untuk file image dan video.** | **Sebagai Member, saya ingin melihat pratinjau file tanpa harus mengunduhnya.** | **Should** |
+## 5.8 Pencarian
+| **ID** | **Kebutuhan Fungsional** | **User Story** | **Prioritas** |
+| --- | --- | --- | --- |
+| **FR-SRC-01** | **Mencari user, server, channel, message, dan file dari satu antarmuka pencarian.** | **Sebagai Member, saya ingin mencari informasi tertentu tanpa harus menelusuri channel secara manual.** | **Must** |
+## 5.9 Voice & Video
+| **ID** | **Kebutuhan Fungsional** | **User Story** | **Prioritas** |
+| --- | --- | --- | --- |
+| **FR-VV-01** | **Bergabung/keluar voice channel, mute/unmute mikrofon.** | **Sebagai Member, saya ingin bergabung ke voice channel untuk berbicara dengan komunitas saya.** | **Must** |
+| **FR-VV-02** | **Bergabung/keluar video channel, mengaktifkan/menonaktifkan kamera.** | **Sebagai Member, saya ingin melakukan panggilan video dengan komunitas saya.** | **Must** |
+| **FR-VV-03** | **Indikator status "sedang di voice/video channel" yang tersinkron dengan presence.** | **Sebagai Member, saya ingin tahu siapa saja yang sedang aktif di voice/video channel.** | **Should** |
+## 5.10 Admin Panel
+| **ID** | **Kebutuhan Fungsional** | **User Story** | **Prioritas** |
+| --- | --- | --- | --- |
+| **FR-ADM-01** | **Melihat & mengelola daftar user platform (suspend/ban tingkat platform).** | **Sebagai Platform Admin, saya ingin menangani pengguna yang melanggar kebijakan platform.** | **Must** |
+| **FR-ADM-02** | **Melihat audit log lintas server untuk keperluan moderasi platform.** | **Sebagai Platform Admin, saya ingin menelusuri jejak aktivitas untuk investigasi pelaporan.** | **Should** |
+
+# 6. Ringkasan Kebutuhan Non-Fungsional
+Rincian teknis lengkap non-functional requirements dibahas pada SRS (Fase 2) dan Architecture Document (Fase 3). Ringkasan target produk:
+| **Kategori** | **Target Produk** |
+| --- | --- |
+| **Skala Pengguna** | **Desain untuk 10.000 concurrent user & 100.000 member per server (target desain teoritis, tanpa load-test nyata).** |
+| **Platform** | **Responsive Website & Progressive Web App (PWA).** |
+| **Keamanan** | **Rate limiter, audit log, device/session management, CSP, CSRF, enkripsi, anti-spam.** |
+| **Ketersediaan Fitur Realtime** | **Presence, typing indicator, read receipt, dan notifikasi realtime harus terasa instan bagi pengguna akhir.** |
+# 7. Strategi Rilis (Pemetaan ke Milestone)
+Karena sifat proyek adalah pembelajaran bertahap, "rilis" di sini dipetakan langsung ke penyelesaian milestone pada Learning Roadmap, bukan rilis produk komersial bertahap ke pengguna nyata.
+| **Kelompok Fitur PRD** | **Dipetakan ke Milestone** |
+| --- | --- |
+| **Autentikasi, Workspace, Role & Permission dasar** | **M1 - M2** |
+| **Messaging inti, Presence, Notifikasi** | **M3 - M5** |
+| **Upload & Media, Pencarian** | **M6 - M7** |
+| **Voice & Video** | **M8** |
+| **Messaging lanjutan (Forum, Poll, Forward, Embed)** | **M9** |
+| **Keamanan & Admin Panel** | **M10 - M11** |
+| **PWA & Polish** | **M12** |
+# 8. Asumsi & Ketergantungan
+Seluruh keputusan teknis (stack, arsitektur) yang menopang kebutuhan fungsional di dokumen ini mengikuti keputusan yang sudah ditetapkan pada ADR (Fase 0).
+Prioritas MoSCoW pada dokumen ini dapat direvisi pada Development Roadmap/Sprint Breakdown (Fase 8-9) apabila ditemukan kendala teknis yang mengubah urutan kelayakan implementasi.
+
+# Keputusan yang Telah Diambil
+Empat persona utama ditetapkan: Server Owner, Moderator/Custom Role, Member Biasa, dan Platform Admin.
+Prioritas fitur menggunakan metode MoSCoW, dengan mayoritas fitur inti (auth, workspace, messaging dasar, voice/video, search) berstatus Must.
+Forward pesan, poll, dan embed link ditetapkan sebagai prioritas Should/Could, bukan Must, karena bukan kebutuhan komunikasi inti meski tetap dalam lingkup proyek.
+Strategi rilis mengikuti pemetaan langsung ke milestone Learning Roadmap, bukan skema rilis produk komersial.
+# Keputusan yang Masih Perlu Dikonfirmasi
+Apakah pemberian prioritas Should/Could pada FR-MSG-05 (Forward), FR-MSG-07 (Poll), dan FR-PERM-02 (channel-level permission override) sudah sesuai ekspektasi, atau ada yang perlu dinaikkan menjadi Must.
+Apakah Platform Admin adalah role terpisah dari seluruh sistem role per-server, atau merupakan salah satu server tertentu yang diberi hak istimewa — akan memengaruhi desain skema Role & Permission pada SRS/Database Design.
+# Risiko Desain
+Kebutuhan fungsional yang sangat luas (10 area fitur) berisiko membuat SRS dan Architecture Document pada fase berikutnya menjadi sangat besar bila tidak dipecah dengan baik per modul.
+Perbedaan prioritas MoSCoW pada PRD ini dengan urutan milestone Learning Roadmap (mis. FR-MSG-05 Forward berprioritas Could namun berada di milestone M9 yang cukup awal-menengah) perlu diselaraskan ulang saat Development Roadmap.
+# Technical Debt yang Sengaja Diterima
+Detail alur otorisasi Platform Admin vs Server Owner belum dirinci di PRD ini dan sengaja ditunda ke SRS/Database Design agar PRD tetap fokus pada kebutuhan fungsional tingkat produk.
+# Pertanyaan untuk Stakeholder Sebelum Melanjutkan ke Fase Berikutnya
+Apakah PRD ini sudah cukup merepresentasikan seluruh kebutuhan fungsional dan persona sebelum lanjut ke SRS (Fase 2)?

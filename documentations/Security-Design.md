@@ -1,0 +1,117 @@
+**SECURITY DESIGN**
+**Discord-Like Web Application — Project-Based Learning**
+*Fase 6 — Dokumen tunggal fase ini*
+# 1. Pendahuluan
+Dokumen ini merinci implementasi kontrol keamanan yang telah disebutkan secara ringkas pada SRS (Fase 2): rate limiter, audit log, device & session management, CSP, CSRF, enkripsi, dan anti-spam. Setiap kontrol dirinci hingga level kebijakan/ambang batas konkret agar dapat langsung diimplementasikan pada tahap coding.
+# 2. Ringkasan Threat Model
+| **Aset** | **Ancaman Utama** | **Kontrol Mitigasi** |
+| --- | --- | --- |
+| **Akun pengguna (kredensial)** | **Brute-force login, credential stuffing** | **Rate limiter login, password hashing kuat, audit log percobaan gagal** |
+| **Sesi/token** | **Token theft, session hijacking** | **Token berumur pendek, refresh token HttpOnly, device management, revocation** |
+| **Data pesan & channel** | **Akses tidak sah (privilege escalation), XSS via markdown/embed** | **Permission check konsisten di Service layer, CSP, sanitasi markdown** |
+| **Endpoint publik (login/register/search)** | **Abuse, spam, DoS skala kecil** | **Rate limiter per-IP & per-akun, anti-spam heuristik** |
+| **Operasi state-changing (form/cookie based)** | **CSRF** | **SameSite cookie + CSRF token pada flow berbasis cookie** |
+| **Data sensitif saat transit/rest** | **Man-in-the-middle, kebocoran data** | **TLS end-to-end (Traefik), hashing/enkripsi kolom sensitif** |
+
+# 3. Rate Limiter
+Rate limiter diimplementasikan sebagai middleware Express.js yang memeriksa counter di Redis menggunakan algoritma sliding window log per kombinasi kunci (user_id dan/atau IP). Response saat melebihi batas mengembalikan HTTP 429 dengan kode error RATE_LIMITED (format error standar pada API Specification) beserta header Retry-After.
+| **Kategori Endpoint** | **Ambang Batas** | **Kunci Limiter** | **Aksi Saat Melebihi Batas** |
+| --- | --- | --- | --- |
+| **Login** | **5 percobaan / menit** | **IP + email/username** | **429 + lock sementara 15 menit setelah 5x gagal berturut-turut** |
+| **Register** | **3 percobaan / jam** | **IP** | **429; mencegah pembuatan akun massal (bot)** |
+| **Kirim Pesan** | **10 pesan / 10 detik** | **user_id + channel_id** | **429; berlaku juga sebagai lapisan pertama anti-spam** |
+| **Upload (signed URL)** | **20 permintaan / menit** | **user_id** | **429** |
+| **Pencarian** | **30 permintaan / menit** | **user_id** | **429** |
+| **Endpoint umum lainnya** | **100 permintaan / menit** | **user_id (fallback IP)** | **429** |
+Platform Admin tidak diberikan bypass otomatis terhadap rate limiter untuk endpoint yang sama dengan pengguna biasa, kecuali endpoint /admin/* yang memiliki ambang batasnya sendiri (lebih longgar namun tetap dibatasi) untuk mencegah admin panel menjadi vektor abuse bila kredensial admin bocor.
+# 4. Audit Log
+Audit log memanfaatkan tabel audit_logs yang telah dirancang pada Database Design (Fase 4). Bagian ini merinci aksi apa saja yang wajib dicatat serta kebijakan retensi dan aksesnya.
+| **Kategori Aksi** | **Contoh action** | **Wajib Dicatat?** |
+| --- | --- | --- |
+| **Autentikasi** | **auth.login_failed, auth.login_success, auth.logout** | **Ya — termasuk percobaan gagal untuk deteksi brute-force** |
+| **Perubahan Role & Permission** | **role.create, role.update, role.assign** | **Ya — rawan privilege escalation** |
+| **Moderasi Server** | **member.kick, member.ban, message.delete_by_moderator** | **Ya** |
+| **Aksi Platform Admin** | **admin.user_suspend, admin.user_unsuspend** | **Ya — termasuk audit atas aksi admin itu sendiri (SRS-ADM-01)** |
+| **Operasi bulk** | **message.bulk_delete, member.bulk_kick** | **Ya — dicatat sebagai satu entri dengan daftar target di kolom metadata** |
+| **Operasi CRUD rutin non-sensitif** | **channel.view, message.read** | **Tidak — volume terlalu tinggi, tidak bernilai forensik** |
+Retensi audit log: 180 hari untuk log level server (dapat diakses Server Owner/Moderator berizin), dan 365 hari untuk log level platform (khusus Platform Admin), setelah itu diarsipkan (bukan dihapus permanen) ke cold storage.
+Audit log bersifat append-only dari sisi aplikasi — tidak ada endpoint UPDATE/DELETE untuk tabel audit_logs; koreksi kesalahan dilakukan dengan menambah entri baru yang merujuk entri sebelumnya, bukan mengubah data historis.
+Akses melihat audit log tunduk pada permission VIEW_AUDIT_LOG (level server) atau flag is_platform_admin (level platform), sesuai endpoint GET /admin/audit-logs pada API Specification.
+# 5. Device & Session Management
+
+*Diagram 1 - State Diagram: Siklus Hidup Sesi/Token*
+```mermaid
+stateDiagram-v2
+  [*] --> Active
+  Active --> Expired: access token expired
+  Active --> Revoked: logout / admin suspend
+  Expired --> Active: refresh token valid
+  Expired --> Revoked: refresh revoked
+  Revoked --> [*]
+```
+Access token: JWT berumur 15 menit, dikirim melalui header Authorization, tidak disimpan di storage persisten sisi klien (in-memory) untuk mengurangi risiko XSS token theft.
+Refresh token: opaque token berumur 30 hari, disimpan sebagai cookie HttpOnly + Secure + SameSite=Strict, dengan hash tersimpan di tabel sessions (bukan token mentah) sesuai Database Design.
+Pengguna dapat melihat daftar sesi aktif (device_info, ip_address, waktu login terakhir) melalui GET /auth/sessions dan mencabut sesi tertentu melalui DELETE /auth/sessions/{sessionId}.
+Saat Platform Admin melakukan suspend terhadap user (POST /admin/users/{userId}/suspend), seluruh sesi aktif user tersebut di-set revoked_at secara paksa, menegakkan postcondition SRS-ADM-01 ("status user tersinkron ke seluruh sesi aktif").
+# 6. Content Security Policy (CSP)
+Header CSP diterapkan pada seluruh response HTML untuk mengurangi risiko XSS, terutama mengingat pesan mendukung markdown dan embed link (FR-MSG-08) yang berpotensi disalahgunakan untuk menyisipkan skrip.
+Content-Security-Policy:
+  default-src 'self';
+  script-src 'self';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' https://res.cloudinary.com data:;
+  media-src 'self' https://res.cloudinary.com;
+  connect-src 'self' wss://*.example.com https://*.livekit.example.com;
+  frame-ancestors 'none';
+  base-uri 'self';
+Rendering markdown pesan dilakukan melalui sanitizer sisi server/klien (mis. DOMPurify) sebelum di-render sebagai HTML, sebagai lapisan pertahanan tambahan di luar CSP itu sendiri (defense in depth).
+Embed link (preview URL pihak ketiga) hanya menampilkan metadata (judul, deskripsi, gambar) yang telah diambil & divalidasi oleh server — tidak me-render iframe sembarang dari domain eksternal.
+# 7. CSRF Protection
+Karena mayoritas endpoint REST menggunakan Bearer token di header (tidak otomatis dikirim browser seperti cookie), permukaan serangan CSRF utama terbatas pada endpoint yang bergantung pada cookie, yaitu /auth/refresh dan /auth/logout.
+Cookie refresh token menggunakan atribut SameSite=Strict, yang sudah mencegah mayoritas skenario CSRF cross-site pada browser modern.
+Sebagai lapisan tambahan (defense in depth), endpoint berbasis cookie tetap mewajibkan header kustom (mis. X-Requested-With) yang secara praktis tidak dapat disertakan oleh form HTML lintas situs sederhana, menutup celah pada browser lama yang belum sepenuhnya menegakkan SameSite.
+Endpoint state-changing lain (kirim pesan, buat server, dsb.) menggunakan Bearer token di header Authorization sehingga secara desain tidak rentan CSRF (browser tidak menyertakan header ini secara otomatis lintas situs).
+# 8. Enkripsi
+| **Data** | **Perlindungan** |
+| --- | --- |
+| **Password pengguna** | **Di-hash dengan argon2id (parameter memori & waktu mengikuti rekomendasi OWASP terkini), tidak pernah disimpan/di-log dalam bentuk plaintext.** |
+| **Refresh token** | **Disimpan sebagai hash (SHA-256) pada kolom refresh_token_hash, bukan token mentah — sejalan dengan Database Design.** |
+| **Data in-transit** | **TLS 1.2+ pada seluruh koneksi (HTTPS & WSS) yang diterminasi di Traefik; komunikasi internal antar container tetap dalam jaringan Docker privat.** |
+| **Data at-rest sangat sensitif (jika ada di masa depan)** | **Dipertimbangkan menggunakan enkripsi kolom (pgcrypto) bila ada data sekelas informasi pembayaran; saat ini belum ada data sekritis itu dalam lingkup proyek.** |
+# 9. Anti-Spam
+Anti-spam bekerja berlapis, dimulai dari rate limiter (Bagian 3) sebagai lapisan pertama, ditambah heuristik berikut pada Messaging Module:
+Deteksi pesan duplikat: pesan dengan konten identik yang dikirim berulang oleh user yang sama dalam rentang waktu singkat (mis. 5 pesan identik dalam 30 detik) ditandai dan diblokir sementara (throttle), bukan otomatis dihapus.
+Deteksi mass-mention: pesan yang mention lebih dari N user/role sekaligus (mis. lebih dari 20) memerlukan permission MENTION_EVERYONE eksplisit, mencegah spam notifikasi massal oleh member biasa.
+Deteksi link mencurigakan: tautan pada pesan dari akun yang baru dibuat (< 24 jam) atau belum terverifikasi email dapat diberi label peringatan tambahan pada UI, tanpa memblokir pengiriman (agar tidak mengganggu pengguna sah).
+Akun yang berulang kali terkena throttle anti-spam dalam rentang waktu tertentu ditandai untuk peninjauan Platform Admin melalui Admin Panel (FR-ADM-01), bukan langsung di-suspend otomatis, untuk menghindari false positive.
+# 10. Otorisasi & Pencegahan Privilege Escalation
+Pembuatan/pengeditan role tidak dapat memberikan permission yang melebihi permission aktor sendiri (ditegakkan sejak SRS-PERM-01), mencegah member dengan MANAGE_ROLES membuat role "Super Admin" tandingan.
+Flag is_platform_admin tidak dapat diubah melalui endpoint API biasa (termasuk oleh Server Owner sendiri) — hanya dapat diberikan melalui proses operasional terpisah di luar aplikasi (mis. akses langsung database oleh tim proyek), menjaga pemisahan tegas antara otorisasi level-server dan level-platform.
+Endpoint bulk operation (bulk delete messages, bulk kick member — sesuai konfirmasi cakupan API Specification) tetap menjalankan permission check per-item sebelum eksekusi, bukan hanya validasi di awal permintaan, untuk mencegah eskalasi melalui item yang berada di luar cakupan izin aktor.
+# 11. Security Headers Tambahan
+| **Header** | **Nilai** | **Tujuan** |
+| --- | --- | --- |
+| **X-Content-Type-Options** | **nosniff** | **Mencegah MIME-sniffing oleh browser.** |
+| **X-Frame-Options** | **DENY** | **Mencegah aplikasi di-embed via iframe (clickjacking), melengkapi frame-ancestors pada CSP.** |
+| **Referrer-Policy** | **strict-origin-when-cross-origin** | **Membatasi informasi referrer yang bocor ke domain eksternal.** |
+| **Strict-Transport-Security** | **max-age=63072000; includeSubDomains** | **Memaksa HTTPS pada seluruh subdomain untuk mencegah downgrade attack.** |
+
+# Keputusan yang Telah Diambil
+Rate limiter menggunakan sliding window berbasis Redis dengan ambang batas berbeda per kategori endpoint, tanpa bypass otomatis untuk Platform Admin.
+Audit log bersifat append-only dengan retensi 180 hari (level server) dan 365 hari (level platform) sebelum diarsipkan.
+Access token JWT 15 menit (in-memory) + refresh token opaque 30 hari (HttpOnly cookie, tersimpan sebagai hash) ditetapkan sebagai strategi token.
+Password di-hash dengan argon2id; refresh token di-hash dengan SHA-256 sebelum disimpan.
+Perlindungan CSRF mengandalkan SameSite=Strict + header kustom untuk endpoint berbasis cookie, karena mayoritas endpoint sudah aman secara desain melalui Bearer token.
+Anti-spam berlapis: rate limiter sebagai lapisan pertama, ditambah deteksi duplikat/mass-mention/link mencurigakan sebagai lapisan kedua, dengan eskalasi ke peninjauan manual Platform Admin (bukan auto-ban) untuk mengurangi false positive.
+Endpoint bulk operation (dikonfirmasi masuk cakupan sejak Fase 5) tetap menjalankan permission check per-item untuk mencegah privilege escalation melalui operasi massal.
+# Keputusan yang Masih Perlu Dikonfirmasi
+Apakah durasi lock akun setelah 5x percobaan login gagal (15 menit) sudah sesuai, atau perlu mekanisme CAPTCHA tambahan setelah ambang tertentu.
+Apakah retensi audit log (180/365 hari) perlu disesuaikan dengan kebutuhan pembelajaran tertentu, mengingat proyek ini tidak tunduk pada regulasi formal (Non-Goals pada Vision Document).
+# Risiko Desain
+Deteksi anti-spam berbasis heuristik sederhana (duplikat, mass-mention) berpotensi menghasilkan false positive/negative dan memerlukan tuning lebih lanjut setelah pola penggunaan nyata teramati.
+Ketiadaan bypass rate limiter untuk Platform Admin dapat menyulitkan operasi darurat skala besar (mis. bulk moderation saat insiden) jika ambang batas endpoint /admin/* terlalu ketat — perlu dipantau saat implementasi.
+# Technical Debt yang Sengaja Diterima
+Enkripsi kolom at-rest (pgcrypto) untuk data selain password/refresh token belum diterapkan karena belum ada data sekritis itu dalam lingkup proyek saat ini; dicatat sebagai kandidat mitigasi lanjutan bila lingkup data berubah.
+CAPTCHA belum menjadi bagian dari alur login/register pada desain ini; rate limiter dan account lockout dianggap cukup untuk tahap pembelajaran, dengan CAPTCHA sebagai peningkatan lanjutan yang mungkin diperlukan.
+# Pertanyaan untuk Stakeholder Sebelum Melanjutkan ke Fase Berikutnya
+Apakah seluruh kebijakan keamanan (rate limit, retensi audit log, strategi token, CSP/CSRF, anti-spam) pada dokumen ini sudah dapat diterima sebelum lanjut ke UI/UX Specification (Fase 7)?

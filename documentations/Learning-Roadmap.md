@@ -1,0 +1,244 @@
+**LEARNING ROADMAP**
+**Discord-Like Web Application — Project-Based Learning**
+*Fase 0 — Dokumen 3 dari rangkaian dokumentasi enterprise*
+# Pendahuluan
+Learning Roadmap memecah seluruh cakupan proyek menjadi milestone yang disusun secara progresif — dari fondasi (tooling, autentikasi) menuju topik yang semakin kompleks (realtime scaling, voice/video, keamanan, skalabilitas). Urutan milestone dirancang agar setiap milestone dapat dibangun di atas fondasi milestone sebelumnya, sejalan dengan prinsip Progressive Complexity yang ditetapkan pada Vision Document.
+Setiap milestone mencantumkan Goal, Learning Objective, Deliverable, Dependency, Risiko, dan Estimasi Kompleksitas (skala S / M / L / XL) sesuai permintaan. Estimasi kompleksitas bersifat relatif antar-milestone dalam proyek ini, bukan estimasi waktu absolut — waktu detail akan dirinci pada Development Roadmap dan Sprint Breakdown (Fase 8-9).
+# Skala Estimasi Kompleksitas
+| **Level** | **Deskripsi** |
+| --- | --- |
+| **S (Small)** | **Konsep sudah familiar atau cakupan sempit; risiko teknis rendah.** |
+| **M (Medium)** | **Melibatkan integrasi baru atau konsep yang cukup baru namun terdokumentasi baik.** |
+| **L (Large)** | **Melibatkan desain sistem non-trivial (mis. scaling, distributed state) dengan banyak edge case.** |
+| **XL (Extra Large)** | **Melibatkan banyak komponen bergerak sekaligus dan/atau konsep yang benar-benar baru bagi learner; risiko tinggi molor.** |
+
+# Ringkasan Milestone
+| **#** | **Milestone** | **Fokus Utama** | **Kompleksitas** |
+| --- | --- | --- | --- |
+| **M0** | **Foundation & Tooling** | **Setup monorepo, Docker, Traefik, CI/CD, coding standard** | **M** |
+| **M1** | **Authentication & Authorization Foundation** | **Login/register, session, role & permission dasar** | **M** |
+| **M2** | **Workspace Core** | **Server, Category, Text Channel + permission granular** | **L** |
+| **M3** | **Core Messaging Realtime** | **WebSocket foundation, kirim/edit/hapus pesan, reply, mention, reaction, markdown** | **L** |
+| **M4** | **Presence & Realtime Scaling** | **Typing indicator, read receipt, presence, Redis Pub/Sub multi-instance** | **L** |
+| **M5** | **Notification System** | **Realtime & email notification, BullMQ job queue** | **M** |
+| **M6** | **File Upload & Media Storage** | **Upload s.d. 1GB, integrasi Cloudinary** | **M** |
+| **M7** | **Search** | **PostgreSQL Full Text Search lintas entitas** | **M** |
+| **M8** | **Voice & Video Channel** | **Integrasi LiveKit untuk voice/video channel** | **XL** |
+| **M9** | **Advanced Channel & Messaging** | **Forum, Announcement, Thread, Poll, Forward, Embed** | **L** |
+| **M10** | **Security Hardening** | **Rate limiter, audit log, session/device mgmt, CSP/CSRF, enkripsi, anti-spam** | **L** |
+| **M11** | **Admin Panel** | **Panel administrasi platform** | **M** |
+| **M12** | **PWA, Responsive Polish & Scalability Validation** | **PWA, responsive UI, validasi teoritis strategi scaling** | **M** |
+
+# Detail Milestone
+**M0 — Foundation & Tooling**
+**Goal: **Menyiapkan fondasi proyek: struktur monorepo Modular Monolith, containerization, reverse proxy, dan disiplin coding standard, sebelum satu pun fitur produk dibangun.
+**Learning Objective:**
+Memahami cara menyusun folder structure Modular Monolith yang menegakkan dependency rule antar modul.
+Mempraktikkan containerization dasar dengan Docker dan podman-compose/docker-compose.
+Memahami konfigurasi reverse proxy Traefik berbasis label untuk routing multi-service.
+Membiasakan diri dengan Conventional Commit, Husky, Commitlint, dan Biome sejak awal proyek.
+**Deliverable:**
+Skeleton monorepo dengan folder modul kosong (mengikuti batas modul dari Architecture Document nanti).
+docker-compose/podman-compose berjalan untuk PostgreSQL, Redis, dan aplikasi dasar.
+Pipeline GitHub Actions dasar (lint + build) berjalan hijau.
+Traefik dikonfigurasi untuk routing dasar ke satu service placeholder.
+**Dependency: **Tidak ada (milestone pertama).
+**Risiko:**
+Waktu belajar bisa habis untuk tooling sebelum menyentuh fitur — batasi time-box milestone ini agar tidak menjadi perfeksionis di tahap infrastruktur.
+| **Estimasi Kompleksitas** | **M** |
+| --- | --- |
+
+**M1 — Authentication & Authorization Foundation**
+**Goal: **Membangun sistem autentikasi (email & username) beserta fondasi role & permission yang akan menjadi basis seluruh fitur otorisasi berikutnya.
+**Learning Objective:**
+Memahami alur autentikasi modern (hashing password, session/token, refresh mechanism).
+Mendesain model data role & permission yang cukup fleksibel untuk kebutuhan Discord-like (server-level role, bukan hanya global role).
+**Deliverable:**
+Endpoint register & login (email dan username) berfungsi.
+Skema Prisma untuk User, Role, Permission dasar.
+Middleware autentikasi & otorisasi dasar di Express.js.
+**Dependency: **M0 (Foundation & Tooling).
+**Risiko:**
+Model permission yang terlalu sederhana di awal berisiko sulit di-extend saat fitur channel/role granular ditambahkan pada M2 — perlu direview ulang saat itu.
+| **Estimasi Kompleksitas** | **M** |
+| --- | --- |
+
+**M2 — Workspace Core (Server, Category, Text Channel)**
+**Goal: **Membangun struktur inti workspace ala Discord: Server → Category → Channel (fokus Text Channel dahulu), lengkap dengan role & permission granular per server.
+**Learning Objective:**
+Memahami desain hierarki data multi-tenant (server sebagai tenant, dengan membership dan role per server).
+Mempraktikkan desain permission granular (per-channel override terhadap role server), mirip model Discord.
+**Deliverable:**
+CRUD Server, Category, Text Channel.
+Sistem membership (join/leave server) dan role assignment per server.
+Permission check di level API untuk aksi channel (baca/tulis/kelola).
+**Dependency: **M1 (Authentication & Authorization Foundation).
+**Risiko:**
+Desain permission granular (channel-level override) adalah salah satu bagian paling kompleks dari seluruh proyek — berisiko under-estimasi bila tidak dipecah menjadi task kecil pada Sprint Breakdown nanti.
+| **Estimasi Kompleksitas** | **L** |
+| --- | --- |
+
+**M3 — Core Messaging Realtime**
+**Goal: **Membangun fondasi WebSocket native (sesuai ADR-002) dan fitur messaging inti: kirim, edit, hapus (soft delete), pin, reply, mention, reaction, dan rendering markdown.
+**Learning Objective:**
+Mendalami implementasi Native WebSocket dari nol: connection registry, message envelope/event schema, broadcast ke peserta channel yang relevan.
+Memahami trade-off soft delete vs hard delete pada sistem chat dan implikasinya terhadap query & audit.
+Mempraktikkan parsing/rendering markdown secara aman (sanitization untuk mencegah XSS).
+**Deliverable:**
+Server WebSocket berjalan berdampingan dengan REST API, dengan skema event terdefinisi.
+Endpoint & event realtime untuk kirim/edit/hapus/pin/reply/mention/reaction pesan.
+Render markdown di frontend dengan sanitasi HTML.
+**Dependency: **M2 (Workspace Core) — pesan hanya valid dalam konteks channel & permission yang sudah ada.
+**Risiko:**
+Karena reconnection & broadcast dibangun manual (bukan Socket.IO), race condition dan message loss saat reconnect adalah risiko nyata yang perlu ditangani eksplisit.
+Skema event yang tidak matang di awal bisa memaksa breaking change saat fitur presence/notifikasi (M4-M5) ditambahkan.
+| **Estimasi Kompleksitas** | **L** |
+| --- | --- |
+
+**M4 — Presence & Realtime Scaling**
+**Goal: **Menambahkan presence (online/offline/idle/DND/invisible), typing indicator, read receipt, serta menerapkan strategi scaling WebSocket lintas instance melalui Redis Pub/Sub sesuai ADR-002.
+**Learning Objective:**
+Memahami pengelolaan state presence yang bersifat ephemeral namun perlu konsisten lintas banyak koneksi/instance.
+Mempraktikkan pola Pub/Sub Redis untuk broadcast event lintas instance server aplikasi — inti dari strategi scaling horizontal pada Modular Monolith.
+**Deliverable:**
+Event presence (online/offline/idle/DND/invisible) tersinkron ke seluruh klien relevan.
+Typing indicator dan read receipt berfungsi realtime.
+Mekanisme broadcast lintas instance via Redis Pub/Sub terbukti bekerja pada simulasi multi-instance lokal (mis. dua kontainer aplikasi).
+**Dependency: **M3 (Core Messaging Realtime).
+**Risiko:**
+Ini adalah milestone dengan risiko distributed-system klasik tertinggi (out-of-order event, stale presence state) — perlu strategi idempotency/versioning event yang jelas.
+| **Estimasi Kompleksitas** | **L** |
+| --- | --- |
+
+**M5 — Notification System**
+**Goal: **Membangun sistem notifikasi realtime dan email, sekaligus memperkenalkan BullMQ untuk memproses pekerjaan asinkron di luar request-response cycle.
+**Learning Objective:**
+Memahami perbedaan pekerjaan yang harus realtime (push notification) vs yang bisa asinkron (email) dan kapan queue diperlukan.
+Mempraktikkan job queue dengan BullMQ: producer, worker, retry, dan failure handling dasar.
+**Deliverable:**
+Notifikasi realtime terkirim melalui kanal WebSocket yang sudah dibangun pada M3-M4.
+Notifikasi email dikirim melalui job queue BullMQ (worker terpisah dari API utama).
+**Dependency: **M4 (Presence & Realtime Scaling) — notifikasi realtime memanfaatkan kanal yang sama dengan presence/messaging.
+**Risiko:**
+Kegagalan pengiriman email (SMTP down, rate limit provider) perlu strategi retry/backoff yang jelas agar tidak menumpuk job gagal tanpa terpantau.
+| **Estimasi Kompleksitas** | **M** |
+| --- | --- |
+
+**M6 — File Upload & Media Storage**
+**Goal: **Mengimplementasikan upload file (image, video, audio, PDF, ZIP) hingga 1GB dengan integrasi Cloudinary.
+**Learning Objective:**
+Memahami strategi upload file besar (mis. chunked upload atau direct upload ke storage provider, bukan melalui server aplikasi sepenuhnya) agar tidak membebani memori server.
+Mempraktikkan integrasi Cloudinary API untuk transformasi dan delivery media.
+**Deliverable:**
+Flow upload end-to-end untuk seluruh tipe file yang didukung, hingga batas 1GB.
+Preview/thumbnail otomatis untuk image & video di UI chat.
+**Dependency: **M3 (Core Messaging Realtime) — file dilampirkan pada pesan.
+**Risiko:**
+Upload 1GB melalui server aplikasi secara naif dapat membebani memori/bandwidth; perlu strategi direct-upload/presigned URL yang divalidasi pada Architecture Document.
+| **Estimasi Kompleksitas** | **M** |
+| --- | --- |
+
+**M7 — Search**
+**Goal: **Mengimplementasikan pencarian lintas entitas (user, server, channel, message, file) menggunakan PostgreSQL Full Text Search.
+**Learning Objective:**
+Memahami konsep tsvector/tsquery, index GIN, dan ranking relevansi dasar pada PostgreSQL.
+Mempraktikkan desain query search yang efisien lintas beberapa tabel besar (terutama tabel message).
+**Deliverable:**
+Endpoint search dengan dukungan filter per tipe entitas.
+Index full text search dan composite index pendukung sudah diterapkan pada tabel relevan.
+**Dependency: **M2 & M3 (Workspace Core, Core Messaging) — search beroperasi di atas data yang sudah ada.
+**Risiko:**
+Search pada tabel message yang terus bertumbuh besar berisiko melambat tanpa strategi indexing dan pagination yang tepat — perlu direview saat volume data disimulasikan.
+| **Estimasi Kompleksitas** | **M** |
+| --- | --- |
+
+**M8 — Voice & Video Channel (LiveKit)**
+**Goal: **Mengintegrasikan voice channel dan video channel menggunakan LiveKit sesuai ADR-003, termasuk sinkronisasi dengan sistem permission dan presence yang sudah ada.
+**Learning Objective:**
+Memahami konsep dasar SFU (room, participant, track) melalui SDK LiveKit tanpa membangun media engine dari nol.
+Mempraktikkan integrasi signaling LiveKit dengan sistem permission channel yang sudah dibangun pada M2.
+Memahami strategi deployment LiveKit (self-hosted vs cloud) dan implikasinya terhadap arsitektur Traefik/Docker yang ada.
+**Deliverable:**
+Voice channel & video channel berfungsi end-to-end: join/leave room, mute/unmute, video on/off.
+Status "sedang di voice channel" tersinkron dengan sistem presence (M4).
+**Dependency: **M2 (Workspace Core untuk konsep channel) & M4 (Presence).
+**Risiko:**
+Milestone dengan kompleksitas tertinggi dalam roadmap: melibatkan komponen infrastruktur baru (LiveKit server), konsep jaringan WebRTC, dan sinkronisasi state lintas sistem (permission, presence).
+Keterbatasan jaringan lokal/NAT saat pengembangan dapat menghambat pengujian voice/video secara realistis.
+| **Estimasi Kompleksitas** | **XL** |
+| --- | --- |
+
+**M9 — Advanced Channel & Messaging**
+**Goal: **Melengkapi tipe channel (Forum, Announcement) dan fitur messaging lanjutan (Thread mendalam, Poll, Forward, Embed) yang belum dicakup pada M3.
+**Learning Objective:**
+Memahami perbedaan model data Thread (percabangan pesan) dibanding Reply sederhana yang sudah ada di M3.
+Mempraktikkan desain fitur Poll (voting) dan Embed (parsing metadata link/preview).
+**Deliverable:**
+Channel tipe Forum & Announcement berfungsi dengan aturan aksesnya sendiri (mis. Announcement hanya bisa ditulis role tertentu).
+Fitur Poll, Forward, dan Embed berfungsi pada Text Channel.
+**Dependency: **M3 (Core Messaging Realtime) & M2 (Workspace Core).
+**Risiko:**
+Forward pesan lintas channel/server berisiko menabrak batas permission (pesan di-forward ke channel yang pengirim aslinya tidak punya akses) — perlu aturan otorisasi eksplisit.
+| **Estimasi Kompleksitas** | **L** |
+| --- | --- |
+
+**M10 — Security Hardening**
+**Goal: **Menerapkan lapisan keamanan menyeluruh: rate limiter, audit log, device & session management, CSP, CSRF, enkripsi, dan anti-spam.
+**Learning Objective:**
+Memahami penerapan rate limiting pada level API dan WebSocket untuk mencegah abuse.
+Mempraktikkan audit log sebagai jejak forensik aksi sensitif (login, perubahan role, penghapusan data).
+Memahami CSP dan CSRF protection dalam konteks aplikasi SPA + REST API + WebSocket.
+**Deliverable:**
+Rate limiter aktif pada endpoint kritis (login, pengiriman pesan, upload).
+Audit log tercatat untuk aksi sensitif yang telah ditentukan.
+Device & session management: daftar sesi aktif dan kemampuan revoke sesi.
+CSP header, CSRF protection, dan mekanisme anti-spam dasar diterapkan.
+**Dependency: **M1, M2, M3 (fitur inti yang akan diamankan sudah harus ada terlebih dahulu).
+**Risiko:**
+Menambahkan security hardening setelah fitur inti selesai berisiko menemukan cacat desain yang mengharuskan refactor (mis. skema audit log yang idealnya dirancang sejak M1) — dicatat sebagai keputusan sadar untuk memprioritaskan fitur terlebih dahulu.
+| **Estimasi Kompleksitas** | **L** |
+| --- | --- |
+
+**M11 — Admin Panel**
+**Goal: **Membangun panel administrasi untuk mengelola user, server, dan konten secara terpusat.
+**Learning Objective:**
+Memahami desain UI/akses khusus admin yang terpisah dari akses pengguna biasa namun tetap menggunakan API/permission system yang sama.
+**Deliverable:**
+Admin panel untuk manajemen user (suspend/ban), moderasi konten, dan pemantauan dasar.
+**Dependency: **M1, M10 (Authentication/Authorization & Security Hardening).
+**Risiko:**
+Admin panel yang dibangun terakhir berisiko menjadi fitur "tempelan" tanpa integrasi audit log yang konsisten bila tidak direncanakan bersama M10.
+| **Estimasi Kompleksitas** | **M** |
+| --- | --- |
+
+**M12 — PWA, Responsive Polish & Scalability Validation**
+**Goal: **Menyelesaikan aspek Progressive Web App, memastikan responsivitas penuh, serta melakukan validasi teoritis terhadap strategi scaling terhadap target desain 10.000 concurrent user.
+**Learning Objective:**
+Memahami implementasi PWA (service worker, manifest, offline fallback dasar).
+Meninjau ulang seluruh strategi scaling (WebSocket via Redis Pub/Sub, LiveKit multi-node, Modular Monolith horizontal scaling) secara menyeluruh sebagai bahan evaluasi akhir pembelajaran.
+**Deliverable:**
+Aplikasi installable sebagai PWA dengan dukungan offline dasar.
+UI responsif penuh di seluruh breakpoint utama.
+Dokumen evaluasi ringkas: kesesuaian implementasi terhadap target desain non-fungsional (tanpa load-test nyata, sesuai keputusan Vision Document).
+**Dependency: **Seluruh milestone sebelumnya (M0-M11).
+**Risiko:**
+Karena tidak ada load-test sungguhan, evaluasi skalabilitas tetap bersifat teoritis/analitis — risiko ini sudah diterima secara eksplisit sejak Vision Document dan ADR.
+| **Estimasi Kompleksitas** | **M** |
+| --- | --- |
+
+# Keputusan yang Telah Diambil
+Roadmap disusun menjadi 13 milestone (M0-M12), berurutan dari fondasi tooling hingga PWA/validasi scaling, mengikuti prinsip Progressive Complexity dari Vision Document.
+Voice & Video Channel (M8) ditetapkan sebagai milestone dengan kompleksitas tertinggi (XL), mengingat kombinasi LiveKit, permission, dan presence sekaligus.
+Security Hardening (M10) sengaja ditempatkan setelah fitur inti selesai (M1-M9), sebagai keputusan sadar memprioritaskan pembelajaran fitur terlebih dahulu, dengan risiko refactor yang sudah dicatat.
+Validasi skalabilitas pada M12 bersifat teoritis/analitis, konsisten dengan keputusan Vision Document bahwa tidak akan ada load-testing sungguhan.
+# Keputusan yang Masih Perlu Dikonfirmasi
+Apakah urutan M8 (Voice & Video) tetap di tengah roadmap, atau perlu dipindah lebih awal/lebih akhir mengingat kompleksitasnya yang XL — akan berpengaruh pada Development Roadmap dan Sprint Breakdown di Fase 8-9.
+Apakah Security Hardening (M10) perlu sebagian dipecah lebih awal (mis. rate limiter dasar sejak M1) alih-alih seluruhnya di M10 — trade-off antara kecepatan belajar fitur vs risiko refactor keamanan di akhir.
+# Risiko Desain
+Beberapa milestone (M3, M4, M8) memiliki risiko teknis distributed-system/realtime yang signifikan dan berpotensi memperpanjang durasi belajar jauh melebihi estimasi kompleksitas relatifnya.
+Menunda Security Hardening ke M10 berisiko menemukan kebutuhan refactor skema data (audit log, session) yang idealnya sudah ada sejak M1.
+# Technical Debt yang Sengaja Diterima
+Skema event WebSocket pada M3 kemungkinan perlu direvisi saat fitur presence/notifikasi ditambahkan di M4-M5; ini diterima sebagai bagian dari proses belajar iteratif, bukan cacat desain fatal.
+Evaluasi skalabilitas akhir (M12) tidak divalidasi dengan load-test nyata, konsisten dengan keputusan yang sudah diambil di Vision Document dan ADR.
+# Pertanyaan untuk Stakeholder Sebelum Melanjutkan ke Fase Berikutnya
+Apakah struktur dan urutan 13 milestone ini sudah sesuai sebelum masuk ke Fase 1 (Product Requirement Document)?

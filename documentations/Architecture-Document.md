@@ -1,0 +1,260 @@
+**ARCHITECTURE DOCUMENT**
+**Discord-Like Web Application — Project-Based Learning**
+*Fase 3 — Dokumen tunggal fase ini*
+# 1. Pendahuluan
+Dokumen ini merinci implementasi arsitektur Modular Monolith (ADR-001) yang telah ditetapkan pada Fase 0: batas modul, dependency rule, struktur folder, pembagian layer, serta alur (flow) untuk event realtime, queue, upload, presence, notifikasi, dan autentikasi. Diagram disajikan dalam bentuk component/flow diagram yang setara secara fungsional dengan notasi Mermaid (flowchart, sequence, component, deployment) yang diminta, disesuaikan dengan tooling rendering yang tersedia di lingkungan ini.
+
+# 2. Module Boundary & Dependency Rule
+Sistem dibagi menjadi 10 modul fitur ditambah 1 shared kernel. Dependency rule utama: modul boleh bergantung pada shared kernel dan pada modul lain HANYA melalui service layer publik modul tersebut (bukan langsung ke repository/model internal modul lain), dan TIDAK BOLEH ada dependency melingkar (circular dependency) antar modul.
+
+*Diagram 1 - Component Diagram: Module Boundary*
+```mermaid
+flowchart LR
+  SharedCore[Shared Core]
+  Auth[Auth]
+  Workspace[Workspace]
+  Permission[Permission]
+  Messaging[Messaging]
+  Presence[Presence]
+  Notification[Notification]
+  Upload[Upload]
+  Search[Search]
+  VoiceVideo[Voice/Video]
+  Admin[Admin]
+
+  Auth --> SharedCore
+  Workspace --> Permission
+  Workspace --> SharedCore
+  Permission --> SharedCore
+  Messaging --> Workspace
+  Messaging --> Permission
+  Messaging --> SharedCore
+  Presence --> Workspace
+  Presence --> SharedCore
+  Notification --> Messaging
+  Notification --> Presence
+  Notification --> SharedCore
+  Upload --> Messaging
+  Upload --> SharedCore
+  Search --> Messaging
+  Search --> Workspace
+  Search --> SharedCore
+  VoiceVideo --> Workspace
+  VoiceVideo --> Permission
+  VoiceVideo --> SharedCore
+  Admin --> Auth
+  Admin --> Permission
+  Admin --> SharedCore
+```
+| **Modul** | **Tanggung Jawab** | **Bergantung Pada** |
+| --- | --- | --- |
+| **Auth** | **Registrasi, login, sesi/token, device management.** | **Shared Core** |
+| **Workspace** | **Server, Category, Channel (struktur & CRUD).** | **Permission, Shared Core** |
+| **Permission** | **Role, permission, assignment, authorization check.** | **Shared Core** |
+| **Messaging** | **Pesan, reply, thread, mention, reaksi, pin, forward, poll, embed.** | **Workspace, Permission, Shared Core** |
+| **Presence** | **Status online/offline/idle/DND/invisible, typing, read receipt.** | **Workspace, Shared Core** |
+| **Notification** | **Notifikasi realtime & email.** | **Messaging (event), Presence (status), Shared Core** |
+| **Upload** | **Upload file & metadata, integrasi Cloudinary.** | **Messaging, Shared Core** |
+| **Search** | **Pencarian lintas entitas (read-only).** | **Messaging, Workspace, Shared Core** |
+| **Voice/Video** | **Integrasi LiveKit, join/leave voice/video channel.** | **Workspace, Permission, Shared Core** |
+| **Admin** | **Manajemen user & audit log platform.** | **Auth, Permission, Shared Core** |
+| **Shared Core** | **Prisma Client, Logger (Pino), WebSocket Gateway, Error Handler — tidak bergantung ke modul manapun.** | **Tidak ada (paling dasar)** |
+
+# 3. Folder Structure
+Struktur folder mencerminkan batas modul di atas, dengan setiap modul memiliki sub-layer sendiri (route, controller, service, repository, schema).
+backend/
+├── src/
+│   ├── modules/
+│   │   ├── auth/
+│   │   │   ├── auth.routes.ts
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── auth.repository.ts
+│   │   │   └── auth.schema.ts        // validasi request (mis. Zod)
+│   │   ├── workspace/ ...
+│   │   ├── permission/ ...
+│   │   ├── messaging/ ...
+│   │   ├── presence/ ...
+│   │   ├── notification/ ...
+│   │   ├── upload/ ...
+│   │   ├── search/ ...
+│   │   ├── voice-video/ ...
+│   │   └── admin/ ...
+│   ├── shared/
+│   │   ├── prisma/               // Prisma client singleton & schema.prisma
+│   │   ├── logger/               // konfigurasi Pino
+│   │   ├── websocket/            // WebSocket gateway & connection registry
+│   │   ├── queue/                // konfigurasi BullMQ
+│   │   └── errors/               // error class & error handler middleware
+│   ├── config/                   // environment & konfigurasi aplikasi
+│   └── app.ts                     // entrypoint Express.js
+├── prisma/
+│   └── migrations/
+├── Dockerfile
+└── package.json
+
+# 4. Layer
+Setiap modul mengikuti pembagian layer yang konsisten agar dependency rule mudah ditegakkan dan mudah diuji secara terisolasi.
+| **Layer** | **Tanggung Jawab** | **Aturan** |
+| --- | --- | --- |
+| **Route** | **Mendefinisikan endpoint & memetakan ke Controller.** | **Tidak boleh berisi logika bisnis.** |
+| **Controller** | **Menerima request, memanggil Service, membentuk response.** | **Tidak boleh mengakses Repository/Prisma secara langsung.** |
+| **Service** | **Logika bisnis inti, orkestrasi antar Repository & modul lain.** | **Satu-satunya layer yang boleh dipanggil oleh modul lain (public API modul).** |
+| **Repository** | **Query ke database melalui Prisma Client.** | **Tidak boleh diakses langsung oleh modul lain di luar Service-nya sendiri.** |
+| **Schema/Validation** | **Validasi bentuk request (mis. Zod schema).** | **Dijalankan di level Route/Controller sebelum masuk ke Service.** |
+
+# 5. Authentication Flow
+
+*Diagram 2 - Authentication Flow (Login)*
+```mermaid
+sequenceDiagram
+  participant C as Client
+  participant R as Route
+  participant S as Auth Service
+  participant DB as DB
+  participant RL as Rate Limiter
+
+  C->>R: POST /auth/login
+  R->>S: validate credentials
+  S->>DB: find user
+  DB-->>S: user record / none
+  alt credentials valid
+    S->>RL: reset attempts
+    S-->>R: session/token
+    R-->>C: 200 OK
+  else credentials invalid
+    S->>RL: record failed attempt
+    S-->>R: generic auth error
+    R-->>C: 401 Unauthorized
+  end
+```
+Alur ini menegakkan SRS-AUTH-02: kredensial salah menghasilkan error generik (langkah 5b) dan dicatat oleh rate limiter untuk mencegah brute-force, sejalan dengan kebutuhan keamanan pada SRS Fase 2.
+# 6. Event Flow (Realtime Messaging)
+
+*Diagram 3 - Event Flow: Broadcast Pesan Lintas Instance*
+```mermaid
+sequenceDiagram
+  participant C1 as Client A
+  participant I1 as App Instance A
+  participant R as Redis Pub/Sub
+  participant I2 as App Instance B
+  participant C2 as Client B
+
+  C1->>I1: send message
+  I1->>I1: store + local registry
+  I1->>R: publish channel event
+  R-->>I2: deliver event
+  I2->>I2: route to local sockets
+  I2-->>C2: broadcast message
+```
+Pola ini adalah implementasi konkret dari keputusan ADR-002 (Native WebSocket + Redis Pub/Sub): setiap App Instance memelihara connection registry lokal (peta channel_id → daftar socket), dan Redis Pub/Sub digunakan sebagai bus penghubung antar-instance agar pesan tetap sampai ke Client yang terhubung ke instance berbeda.
+# 7. Presence Flow
+
+*Diagram 4 - Presence Flow*
+```mermaid
+sequenceDiagram
+  participant C as Client
+  participant I as App Instance
+  participant R as Redis
+
+  C->>I: connect / typing / status update
+  I->>R: write presence state
+  R-->>I: ack
+  I-->>C: presence reflected
+```
+State presence disimpan di Redis (bukan hanya di memory satu instance) agar tetap konsisten saat pengguna memiliki lebih dari satu koneksi (multi-device) dan agar dapat dibaca oleh instance manapun tanpa query database berulang.
+# 8. Notification Flow
+
+*Diagram 5 - Notification Flow*
+```mermaid
+flowchart TD
+  A[Message or event occurs] --> B{User online?}
+  B -- Yes --> C[Send realtime notification]
+  C --> D[Deliver via websocket channel]
+  B -- No --> E[Enqueue email job]
+  E --> F[BullMQ worker]
+  F --> G[Send email]
+```
+Percabangan pada langkah 3-4 mencerminkan keputusan desain: notifikasi realtime untuk pengguna online (memakai kanal Event Flow yang sama), dan job asinkron BullMQ untuk email saat pengguna offline, sesuai SRS-NOTIF-01.
+# 9. Queue Flow (BullMQ)
+
+*Diagram 6 - Queue Flow: BullMQ Job Lifecycle*
+```mermaid
+flowchart TD
+  A[Create job] --> B[Push to BullMQ queue]
+  B --> C[Worker picks job]
+  C --> D{Success?}
+  D -- Yes --> E[Mark completed]
+  D -- No --> F[Retry with backoff]
+  F --> G{Retries left?}
+  G -- Yes --> C
+  G -- No --> H[Move to dead-letter queue]
+```
+Mekanisme retry dengan exponential backoff dan dead-letter queue pada langkah 4b-5 adalah implementasi dari strategi Reliability yang telah ditetapkan pada SRS (Fase 2).
+# 10. Upload Flow
+
+*Diagram 7 - Upload Flow*
+```mermaid
+sequenceDiagram
+  participant C as Client
+  participant S as App Server
+  participant U as Cloudinary
+
+  C->>S: request upload signature / config
+  S-->>C: signed params
+  C->>U: direct upload file
+  U-->>C: upload result
+  C->>S: persist metadata
+  S-->>C: saved
+```
+Direct upload dari Client langsung ke Cloudinary (langkah 4) sengaja dipilih agar App server tidak menjadi bottleneck untuk file berukuran hingga 1GB, sesuai catatan risiko pada SRS-UP-01 dan Learning Roadmap M6.
+
+# 11. Deployment Diagram
+
+*Diagram 8 - Deployment Diagram: Infrastruktur Container*
+```mermaid
+flowchart LR
+  User --> Traefik
+  Traefik --> App1
+  Traefik --> App2
+  Traefik --> App3
+  App1 --> Redis
+  App2 --> Redis
+  App3 --> Redis
+  App1 --> Postgres
+  App2 --> Postgres
+  App3 --> Postgres
+  Worker --> Redis
+  Worker --> Postgres
+  App1 --> LiveKit
+  App2 --> LiveKit
+  App3 --> LiveKit
+
+  Traefik[Traefik / HTTPS-WSS]
+  App1[App Instance 1]
+  App2[App Instance 2]
+  App3[App Instance 3]
+  Worker[BullMQ Worker]
+  Redis[Redis]
+  Postgres[PostgreSQL]
+  LiveKit[LiveKit Server]
+```
+Traefik meneruskan trafik HTTPS/WSS ke beberapa replika App Instance yang stateless untuk REST, dengan state realtime dikoordinasikan lewat Redis. BullMQ Worker berjalan sebagai proses terpisah dari App Instance utama agar pemrosesan job asinkron tidak mengganggu responsivitas API. LiveKit Server berdiri sebagai komponen independen untuk voice/video, sejalan dengan ADR-003.
+
+# Keputusan yang Telah Diambil
+Dependency rule ditegakkan: modul hanya boleh saling memanggil melalui Service layer (public API modul), dengan Shared Core sebagai lapisan paling dasar tanpa dependency ke modul manapun.
+Struktur folder berbasis modul (bukan berbasis layer teknis semata) dipilih agar batas modul pada ADR-001 tercermin langsung di filesystem.
+Redis Pub/Sub ditetapkan sebagai mekanisme koordinasi WebSocket lintas instance, dan juga dipakai ulang untuk presence, sejalan dengan ADR-002.
+Upload file menggunakan pola direct upload ke Cloudinary (bukan melalui App server) untuk mendukung file hingga 1GB tanpa membebani memori server.
+BullMQ Worker dijalankan sebagai proses/kontainer terpisah dari App Instance utama.
+# Keputusan yang Masih Perlu Dikonfirmasi
+Apakah validasi request menggunakan Zod (disebutkan sebagai contoh pada folder structure) ditetapkan sebagai keputusan final, atau masih terbuka untuk library validasi lain.
+Apakah LiveKit Server di-deploy sebagai bagian dari docker-compose yang sama (self-hosted, seperti pada Deployment Diagram ini) atau menggunakan LiveKit Cloud - memengaruhi detail Diagram 8 di masa depan.
+# Risiko Desain
+Dependency rule (modul hanya lewat Service layer) memerlukan disiplin manual karena TypeScript/Express.js tidak menegakkan batas modul secara otomatis seperti pada arsitektur microservices dengan network boundary.
+Redis menjadi single point of coordination untuk presence & broadcast; kegagalan Redis akan berdampak luas pada fitur realtime, meski tidak menghentikan operasi CRUD dasar (REST API tetap berjalan ke PostgreSQL).
+# Technical Debt yang Sengaja Diterima
+Belum ada mekanisme otomatis (mis. lint rule/ESLint boundaries plugin) untuk mencegah pelanggaran dependency rule secara teknis; penegakan saat ini bergantung pada code review manual — dicatat sebagai peluang perbaikan lanjutan.
+Circuit breaker pada panggilan ke LiveKit/Cloudinary/SMTP (disebutkan pada SRS) belum dirinci library dan konfigurasinya pada dokumen ini; ditunda ke tahap implementasi.
+# Pertanyaan untuk Stakeholder Sebelum Melanjutkan ke Fase Berikutnya
+Apakah struktur modul, dependency rule, dan seluruh flow di atas sudah cukup jelas sebagai dasar untuk merancang skema database secara rinci pada Fase 4 (Database Design)?

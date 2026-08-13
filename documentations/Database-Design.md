@@ -1,0 +1,381 @@
+**DATABASE DESIGN**
+**Discord-Like Web Application — Project-Based Learning**
+*Fase 4 — Dokumen tunggal fase ini*
+# 1. Pendahuluan
+Dokumen ini merinci desain basis data PostgreSQL melalui Prisma ORM untuk seluruh entitas yang telah diidentifikasi pada SRS (Fase 2) dan Architecture Document (Fase 3). Penamaan tabel dan kolom mengikuti konvensi snake_case (sesuai standar PostgreSQL/Prisma @@map), sementara kode aplikasi (model TypeScript/Prisma Client) tetap menggunakan camelCase sesuai konvensi Prisma.
+
+# 2. Entity Relationship Diagram (ERD)
+
+*Diagram 1 - ERD Ringkasan (PK/FK utama per entitas)*
+```mermaid
+erDiagram
+  users ||--o{ sessions : has
+  users ||--o{ servers : owns
+  users ||--o{ notifications : receives
+  users ||--o{ audit_logs : acts
+  servers ||--o{ server_members : has
+  users ||--o{ server_members : joins
+  servers ||--o{ roles : has
+  server_members ||--o{ server_member_roles : assigned
+  roles ||--o{ server_member_roles : includes
+  servers ||--o{ categories : has
+  servers ||--o{ channels : has
+  categories ||--o{ channels : contains
+  channels ||--o{ channel_permission_overrides : has
+  channels ||--o{ messages : has
+  messages ||--o{ message_attachments : has
+  messages ||--o{ reactions : has
+  messages ||--o| polls : has
+  polls ||--o{ poll_options : has
+  poll_options ||--o{ poll_votes : has
+
+  users {
+    uuid id PK
+    varchar email
+    varchar username
+  }
+  sessions {
+    uuid id PK
+    uuid user_id FK
+  }
+  servers {
+    uuid id PK
+    uuid owner_id FK
+  }
+  server_members {
+    uuid id PK
+    uuid server_id FK
+    uuid user_id FK
+  }
+  roles {
+    uuid id PK
+    uuid server_id FK
+  }
+  categories {
+    uuid id PK
+    uuid server_id FK
+  }
+  channels {
+    uuid id PK
+    uuid server_id FK
+    uuid category_id FK
+  }
+  messages {
+    uuid id PK
+    uuid channel_id FK
+    uuid reply_to_id FK
+  }
+  polls {
+    uuid id PK
+    uuid message_id FK
+  }
+  notifications {
+    uuid id PK
+    uuid user_id FK
+  }
+  audit_logs {
+    uuid id PK
+    uuid actor_id FK
+  }
+```
+
+# 3. Daftar Tabel
+| **Tabel** | **Modul Terkait** | **Deskripsi Singkat** |
+| --- | --- | --- |
+| **users** | **Auth** | **Akun pengguna platform.** |
+| **sessions** | **Auth** | **Sesi/refresh token aktif per device (device management).** |
+| **servers** | **Workspace** | **Server (workspace) yang dibuat pengguna.** |
+| **server_members** | **Workspace** | **Keanggotaan pengguna pada suatu server.** |
+| **roles** | **Permission** | **Role kustom per server beserta permission bitmask.** |
+| **server_member_roles** | **Permission** | **Relasi many-to-many member ↔ role.** |
+| **categories** | **Workspace** | **Pengelompokan channel dalam server.** |
+| **channels** | **Workspace** | **Channel (text/voice/video/forum/announcement).** |
+| **channel_permission_overrides** | **Permission** | **Override izin per channel terhadap role/member tertentu.** |
+| **messages** | **Messaging** | **Pesan pada channel, termasuk reply & thread.** |
+| **message_attachments** | **Upload** | **File yang dilampirkan pada pesan.** |
+| **reactions** | **Messaging** | **Reaksi emoji pada pesan.** |
+| **polls** | **Messaging** | **Polling yang melekat pada satu pesan.** |
+| **poll_options** | **Messaging** | **Opsi jawaban polling.** |
+| **poll_votes** | **Messaging** | **Suara pengguna pada opsi polling.** |
+| **notifications** | **Notification** | **Riwayat notifikasi per pengguna.** |
+| **audit_logs** | **Admin/Security** | **Jejak audit aksi sensitif lintas modul.** |
+
+# 4. Relationship & Cardinality
+| **Relasi** | **Kardinalitas** | **Keterangan** |
+| --- | --- | --- |
+| **users → sessions** | **1 : N** | **Satu user dapat memiliki banyak sesi aktif (multi-device).** |
+| **users → servers (owner)** | **1 : N** | **Satu user dapat memiliki (owning) banyak server.** |
+| **servers ↔ users (via server_members)** | **N : N** | **Satu user dapat menjadi member banyak server dan sebaliknya.** |
+| **servers → roles** | **1 : N** | **Role bersifat spesifik per server, bukan global.** |
+| **server_members ↔ roles (via server_member_roles)** | **N : N** | **Satu member dapat memiliki banyak role, satu role dapat dimiliki banyak member.** |
+| **servers → categories** | **1 : N** | **Satu server dapat memiliki banyak category.** |
+| **servers → channels** | **1 : N** | **Channel selalu dimiliki satu server.** |
+| **categories → channels** | **1 : N (opsional)** | **Channel dapat tanpa category (uncategorized).** |
+| **channels → channel_permission_overrides** | **1 : N** | **Satu channel dapat memiliki banyak override, masing-masing menyasar satu role ATAU satu member.** |
+| **channels → messages** | **1 : N** | **Pesan selalu berada dalam satu channel.** |
+| **messages → messages (reply_to_id)** | **1 : N (self, opsional)** | **Satu pesan dapat memiliki banyak balasan; reply_to_id nullable.** |
+| **messages → message_attachments** | **1 : N** | **Satu pesan dapat memiliki lebih dari satu lampiran.** |
+| **messages → reactions** | **1 : N** | **Satu pesan dapat memiliki banyak reaksi dari berbagai user.** |
+| **messages → polls** | **1 : 0..1** | **Satu pesan dapat (opsional) memiliki tepat satu polling.** |
+| **polls → poll_options** | **1 : N** | **Satu polling memiliki minimal dua opsi.** |
+| **poll_options → poll_votes** | **1 : N** | **Satu opsi dapat menerima banyak suara dari user berbeda.** |
+| **users → notifications** | **1 : N** | **Satu user memiliki banyak riwayat notifikasi.** |
+| **users → audit_logs (actor)** | **1 : N** | **Satu user (termasuk Platform Admin) dapat menjadi aktor banyak entri audit log.** |
+
+# 5. Rincian Kolom per Tabel
+## 5.1 Identity & Access
+**users**
+Akun pengguna platform.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK, default uuid_generate_v4()** | **Identifier unik pengguna.** |
+| **email** | **varchar(255)** | **UNIQUE, NOT NULL** | **Alamat email untuk login & notifikasi.** |
+| **username** | **varchar(32)** | **UNIQUE, NOT NULL** | **Nama pengguna untuk login & mention.** |
+| **password_hash** | **varchar(255)** | **NOT NULL** | **Hash password (bcrypt/argon2).** |
+| **avatar_url** | **varchar(500)** | **NULLABLE** | **URL avatar (Cloudinary).** |
+| **is_platform_admin** | **boolean** | **NOT NULL, DEFAULT false** | **Penanda Platform Admin (FR-ADM).** |
+| **is_suspended** | **boolean** | **NOT NULL, DEFAULT false** | **Status suspend oleh Platform Admin.** |
+| **created_at** | **timestamptz** | **NOT NULL, DEFAULT now()** | **Waktu registrasi.** |
+| **updated_at** | **timestamptz** | **NOT NULL** | **Waktu pembaruan terakhir.** |
+
+**sessions**
+Sesi/refresh token aktif per device.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier sesi.** |
+| **user_id** | **uuid** | **FK → users.id, NOT NULL** | **Pemilik sesi.** |
+| **device_info** | **varchar(255)** | **NULLABLE** | **User-agent/nama perangkat untuk device management.** |
+| **ip_address** | **inet** | **NULLABLE** | **Alamat IP saat login, untuk audit keamanan.** |
+| **refresh_token_hash** | **varchar(255)** | **NOT NULL** | **Hash refresh token (tidak menyimpan token mentah).** |
+| **expires_at** | **timestamptz** | **NOT NULL** | **Masa berlaku sesi.** |
+| **revoked_at** | **timestamptz** | **NULLABLE** | **Waktu sesi dicabut manual oleh pengguna.** |
+| **created_at** | **timestamptz** | **NOT NULL, DEFAULT now()** | **Waktu sesi dibuat.** |
+
+## 5.2 Workspace & Permission
+**servers**
+Server (workspace) yang dibuat pengguna.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier server.** |
+| **owner_id** | **uuid** | **FK → users.id, NOT NULL** | **Pemilik server.** |
+| **name** | **varchar(100)** | **NOT NULL** | **Nama server.** |
+| **icon_url** | **varchar(500)** | **NULLABLE** | **URL ikon server.** |
+| **created_at** | **timestamptz** | **NOT NULL, DEFAULT now()** | **Waktu pembuatan server.** |
+| **updated_at** | **timestamptz** | **NOT NULL** | **Waktu pembaruan terakhir.** |
+
+**server_members**
+Keanggotaan pengguna pada suatu server.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier membership.** |
+| **server_id** | **uuid** | **FK → servers.id, NOT NULL** | **Server terkait.** |
+| **user_id** | **uuid** | **FK → users.id, NOT NULL** | **Pengguna terkait.** |
+| **nickname** | **varchar(32)** | **NULLABLE** | **Nama panggilan khusus di server ini.** |
+| **joined_at** | **timestamptz** | **NOT NULL, DEFAULT now()** | **Waktu bergabung.** |
+| **UNIQUE(server_id, user_id)** | **-** | **Composite unique** | **Mencegah duplikasi membership.** |
+
+**roles**
+Role kustom per server beserta permission bitmask.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier role.** |
+| **server_id** | **uuid** | **FK → servers.id, NOT NULL** | **Role selalu spesifik per server.** |
+| **name** | **varchar(50)** | **NOT NULL** | **Nama role.** |
+| **color** | **varchar(7)** | **NULLABLE** | **Warna role (hex) untuk tampilan UI.** |
+| **permissions_bitmask** | **bigint** | **NOT NULL, DEFAULT 0** | **Kombinasi permission dalam bentuk bitmask.** |
+| **position** | **integer** | **NOT NULL, DEFAULT 0** | **Urutan hierarki role.** |
+| **is_default** | **boolean** | **NOT NULL, DEFAULT false** | **Penanda role @everyone bawaan server.** |
+
+**server_member_roles**
+Relasi many-to-many member ↔ role.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **member_id** | **uuid** | **FK → server_members.id, NOT NULL** | **Bagian dari composite PK.** |
+| **role_id** | **uuid** | **FK → roles.id, NOT NULL** | **Bagian dari composite PK.** |
+| **PRIMARY KEY(member_id, role_id)** | **-** | **Composite PK** | **Satu member tidak dapat memiliki role yang sama dua kali.** |
+
+**categories**
+Pengelompokan channel dalam server.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier category.** |
+| **server_id** | **uuid** | **FK → servers.id, NOT NULL** | **Server pemilik category.** |
+| **name** | **varchar(100)** | **NOT NULL** | **Nama category.** |
+| **position** | **integer** | **NOT NULL, DEFAULT 0** | **Urutan tampilan category.** |
+
+**channels**
+Channel (text/voice/video/forum/announcement).
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier channel.** |
+| **server_id** | **uuid** | **FK → servers.id, NOT NULL** | **Server pemilik channel.** |
+| **category_id** | **uuid** | **FK → categories.id, NULLABLE** | **Category pengelompok (opsional).** |
+| **name** | **varchar(100)** | **NOT NULL** | **Nama channel.** |
+| **type** | **varchar(20)** | **NOT NULL, CHECK IN (text,voice,video,forum,announcement)** | **Tipe channel.** |
+| **topic** | **varchar(500)** | **NULLABLE** | **Deskripsi/topik channel.** |
+| **position** | **integer** | **NOT NULL, DEFAULT 0** | **Urutan tampilan channel.** |
+
+**channel_permission_overrides**
+Override izin per channel terhadap role/member tertentu.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier override.** |
+| **channel_id** | **uuid** | **FK → channels.id, NOT NULL** | **Channel yang menerapkan override.** |
+| **role_id** | **uuid** | **FK → roles.id, NULLABLE** | **Target override berbasis role (eksklusif dengan member_id).** |
+| **member_id** | **uuid** | **FK → server_members.id, NULLABLE** | **Target override berbasis member spesifik.** |
+| **allow_bitmask** | **bigint** | **NOT NULL, DEFAULT 0** | **Permission yang diizinkan secara eksplisit.** |
+| **deny_bitmask** | **bigint** | **NOT NULL, DEFAULT 0** | **Permission yang ditolak secara eksplisit.** |
+| **CHECK (role_id IS NOT NULL OR member_id IS NOT NULL)** | **-** | **Constraint** | **Override harus menyasar role ATAU member, tidak boleh kosong keduanya.** |
+
+## 5.3 Messaging
+**messages**
+Pesan pada channel, termasuk reply & thread.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier pesan.** |
+| **channel_id** | **uuid** | **FK → channels.id, NOT NULL** | **Channel tempat pesan dikirim.** |
+| **author_id** | **uuid** | **FK → users.id, NOT NULL** | **Pengirim pesan.** |
+| **reply_to_id** | **uuid** | **FK → messages.id, NULLABLE (self)** | **Pesan yang dibalas, bila ada.** |
+| **thread_root_id** | **uuid** | **FK → messages.id, NULLABLE (self)** | **Pesan akar thread, bila pesan ini bagian dari thread.** |
+| **content** | **text** | **NOT NULL** | **Isi pesan (markdown mentah).** |
+| **is_pinned** | **boolean** | **NOT NULL, DEFAULT false** | **Status pin pesan.** |
+| **is_deleted** | **boolean** | **NOT NULL, DEFAULT false** | **Status soft delete.** |
+| **search_vector** | **tsvector** | **GENERATED/TRIGGER** | **Vektor pencarian full text (lihat Bagian 8).** |
+| **created_at** | **timestamptz** | **NOT NULL, DEFAULT now()** | **Waktu pengiriman.** |
+| **updated_at** | **timestamptz** | **NOT NULL** | **Waktu edit terakhir.** |
+| **deleted_at** | **timestamptz** | **NULLABLE** | **Waktu soft delete.** |
+
+**message_attachments**
+File yang dilampirkan pada pesan.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier attachment.** |
+| **message_id** | **uuid** | **FK → messages.id, NOT NULL** | **Pesan pemilik lampiran.** |
+| **file_url** | **varchar(500)** | **NOT NULL** | **URL file di Cloudinary.** |
+| **thumbnail_url** | **varchar(500)** | **NULLABLE** | **URL thumbnail (image/video).** |
+| **file_type** | **varchar(50)** | **NOT NULL** | **MIME type file.** |
+| **file_size** | **bigint** | **NOT NULL** | **Ukuran file dalam byte (maks. 1GB).** |
+| **file_name** | **varchar(255)** | **NOT NULL** | **Nama file asli.** |
+
+**reactions**
+Reaksi emoji pada pesan.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier reaksi.** |
+| **message_id** | **uuid** | **FK → messages.id, NOT NULL** | **Pesan yang diberi reaksi.** |
+| **user_id** | **uuid** | **FK → users.id, NOT NULL** | **Pemberi reaksi.** |
+| **emoji** | **varchar(32)** | **NOT NULL** | **Kode/unicode emoji.** |
+| **UNIQUE(message_id, user_id, emoji)** | **-** | **Composite unique** | **Satu user tidak dapat memberi emoji sama dua kali pada pesan yang sama.** |
+
+**polls**
+Polling yang melekat pada satu pesan.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier polling.** |
+| **message_id** | **uuid** | **FK → messages.id, UNIQUE, NOT NULL** | **Pesan pemilik polling (relasi 1:0..1).** |
+| **question** | **varchar(255)** | **NOT NULL** | **Pertanyaan polling.** |
+| **expires_at** | **timestamptz** | **NULLABLE** | **Waktu polling ditutup.** |
+
+**poll_options**
+Opsi jawaban polling.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier opsi.** |
+| **poll_id** | **uuid** | **FK → polls.id, NOT NULL** | **Polling pemilik opsi.** |
+| **text** | **varchar(100)** | **NOT NULL** | **Teks opsi jawaban.** |
+
+**poll_votes**
+Suara pengguna pada opsi polling.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier suara.** |
+| **poll_option_id** | **uuid** | **FK → poll_options.id, NOT NULL** | **Opsi yang dipilih.** |
+| **user_id** | **uuid** | **FK → users.id, NOT NULL** | **Pemilih.** |
+| **UNIQUE(poll_option_id, user_id)** | **-** | **Composite unique (untuk polling single-choice)** | **Mencegah user memilih opsi yang sama dua kali.** |
+
+## 5.4 Notification & Audit
+**notifications**
+Riwayat notifikasi per pengguna.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier notifikasi.** |
+| **user_id** | **uuid** | **FK → users.id, NOT NULL** | **Penerima notifikasi.** |
+| **type** | **varchar(50)** | **NOT NULL** | **Jenis notifikasi (mention/reply/dsb.).** |
+| **payload** | **jsonb** | **NOT NULL** | **Data pendukung notifikasi (mis. message_id, channel_id).** |
+| **is_read** | **boolean** | **NOT NULL, DEFAULT false** | **Status telah dibaca.** |
+| **created_at** | **timestamptz** | **NOT NULL, DEFAULT now()** | **Waktu notifikasi dibuat.** |
+
+**audit_logs**
+Jejak audit aksi sensitif lintas modul.
+| **Kolom** | **Tipe** | **Constraint** | **Deskripsi** |
+| --- | --- | --- | --- |
+| **id** | **uuid** | **PK** | **Identifier entri audit.** |
+| **actor_id** | **uuid** | **FK → users.id, NOT NULL** | **Pengguna yang melakukan aksi.** |
+| **action** | **varchar(100)** | **NOT NULL** | **Jenis aksi (mis. role.update, user.suspend).** |
+| **target_type** | **varchar(50)** | **NOT NULL** | **Tipe entitas target (mis. server, user, role).** |
+| **target_id** | **uuid** | **NOT NULL** | **Identifier entitas target.** |
+| **metadata** | **jsonb** | **NULLABLE** | **Detail tambahan (before/after value, dsb.).** |
+| **created_at** | **timestamptz** | **NOT NULL, DEFAULT now()** | **Waktu aksi terjadi.** |
+
+# 6. Index Recommendation
+| **Tabel** | **Index** | **Alasan** |
+| --- | --- | --- |
+| **users** | **UNIQUE (email), UNIQUE (username)** | **Lookup login cepat & menegakkan keunikan.** |
+| **sessions** | **INDEX (user_id)** | **Mempercepat pengambilan daftar sesi aktif per user (device management).** |
+| **server_members** | **INDEX (user_id), UNIQUE (server_id, user_id)** | **Mempercepat query "daftar server milik user" dan mencegah duplikasi membership.** |
+| **roles** | **INDEX (server_id)** | **Mempercepat pengambilan seluruh role dalam satu server.** |
+| **channels** | **INDEX (server_id), INDEX (category_id)** | **Mempercepat navigasi struktur server → category → channel.** |
+| **messages** | **INDEX (channel_id, created_at DESC)** | **Query paling umum: riwayat pesan terbaru per channel dengan pagination.** |
+| **messages** | **INDEX (reply_to_id), INDEX (thread_root_id)** | **Mempercepat pengambilan balasan/thread suatu pesan.** |
+| **notifications** | **INDEX (user_id, is_read)** | **Mempercepat query "notifikasi belum dibaca milik user".** |
+| **audit_logs** | **INDEX (actor_id), INDEX (target_type, target_id)** | **Mempercepat penelusuran audit per aktor maupun per entitas target.** |
+# 7. Composite Index
+| **Composite Index** | **Query yang Dioptimalkan** |
+| --- | --- |
+| **messages (channel_id, created_at DESC)** | **Pagination riwayat pesan per channel — index composite ini menghindari sort tambahan setelah filter channel_id.** |
+| **server_members (server_id, user_id)** | **Pengecekan cepat "apakah user ini member server ini" sekaligus menegakkan uniqueness.** |
+| **channel_permission_overrides (channel_id, role_id)** | **Pengecekan override permission per channel & role secara efisien saat evaluasi otorisasi.** |
+| **reactions (message_id, user_id, emoji)** | **Pengecekan cepat status reaksi user tertentu pada pesan tertentu, sekaligus menegakkan uniqueness.** |
+| **notifications (user_id, is_read, created_at DESC)** | **Menampilkan daftar notifikasi belum dibaca terbaru milik user tanpa full scan.** |
+# 8. Full Text Search Index
+Full Text Search menggunakan kolom tsvector pada tabel messages, servers, dan channels, disertai index GIN untuk performa pencarian, serta trigger PostgreSQL agar search_vector selalu ter-update otomatis saat data berubah (tanpa perlu logic tambahan di application layer).
+-- Contoh pada tabel messages
+ALTER TABLE messages ADD COLUMN search_vector tsvector;
+CREATE INDEX idx_messages_search_vector ON messages USING GIN (search_vector);
+
+CREATE FUNCTION messages_search_vector_update() RETURNS trigger AS $$
+BEGIN
+NEW.search_vector := to_tsvector('indonesian', coalesce(NEW.content, ''));
+RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_messages_search_vector
+BEFORE INSERT OR UPDATE ON messages
+FOR EACH ROW EXECUTE FUNCTION messages_search_vector_update();
+
+Pola yang sama diterapkan pada kolom name (servers, channels) dan username (users) untuk mendukung FR-SRC-01 (pencarian user/server/channel/message/file). Pencarian file (message_attachments) memanfaatkan kolom file_name dengan pendekatan ILIKE atau tsvector sederhana, karena volume data attachment relatif lebih kecil dibanding pesan.
+# 9. Migration Strategy
+Migrasi dikelola melalui Prisma Migrate (`prisma migrate dev` untuk development, `prisma migrate deploy` untuk production), dengan setiap perubahan skema dicatat sebagai file migrasi bernomor urut di folder prisma/migrations.
+Setiap migration wajib bersifat backward-compatible sedapat mungkin pada tahap deploy (mis. menambah kolom nullable terlebih dahulu, backfill data, baru menerapkan NOT NULL pada migration terpisah) untuk mendukung strategi deployment tanpa downtime di masa depan.
+Trigger & function PostgreSQL untuk Full Text Search (Bagian 8) disertakan sebagai raw SQL migration (`prisma migrate dev --create-only` lalu edit manual), karena tidak seluruhnya dapat diekspresikan langsung melalui schema.prisma.
+Seed data (mis. role @everyone default, permission bitmask konstanta) dikelola melalui script seed Prisma (`prisma/seed.ts`) yang idempotent agar aman dijalankan berulang.
+Setiap migration di-review sebagai bagian dari Pull Request (sejalan dengan Feature Branch Workflow pada ADR) sebelum di-merge, dan dijalankan otomatis pada tahap CI/CD (GitHub Actions) terhadap database staging sebelum deploy ke production.
+
+# Keputusan yang Telah Diambil
+Seluruh primary key menggunakan tipe uuid (bukan auto-increment integer) untuk menghindari kebocoran informasi jumlah data dan mempermudah penggabungan data lintas lingkungan.
+Role bersifat per-server (bukan global), dengan permission disimpan sebagai bitmask (bigint) mengikuti pola Discord.
+Soft delete diterapkan pada tabel messages (kolom is_deleted, deleted_at), bukan hard delete, untuk mendukung audit dan kebutuhan moderasi.
+Full Text Search menggunakan tsvector + GIN index dengan trigger otomatis, bukan pembaruan manual dari application layer.
+Composite index message (channel_id, created_at DESC) ditetapkan sebagai index terpenting mengingat riwayat pesan adalah query dengan frekuensi tertinggi di seluruh sistem.
+# Keputusan yang Masih Perlu Dikonfirmasi
+Apakah diperlukan partitioning pada tabel messages (mis. berdasarkan channel_id atau rentang waktu) mengingat target skala 100.000 member/server — saat ini belum diterapkan dan dianggap belum diperlukan pada tahap awal pembelajaran.
+Apakah poll bersifat single-choice saja (sesuai UNIQUE constraint pada poll_votes saat ini) atau perlu mendukung multiple-choice di masa depan, yang akan mengubah constraint tersebut.
+# Risiko Desain
+Tabel messages berpotensi menjadi tabel dengan pertumbuhan tercepat dan terbesar; tanpa strategi partitioning/archival di masa depan, performa query dapat menurun signifikan pada skala mendekati target desain (100.000 member/server).
+Bitmask permission (bigint) memiliki batas jumlah flag permission (maks. 63 bit dengan bigint signed); perlu dipantau agar jumlah jenis permission tidak melebihi batas tersebut seiring pertumbuhan fitur.
+# Technical Debt yang Sengaja Diterima
+Partitioning/archival tabel messages sengaja belum diterapkan pada desain awal ini, konsisten dengan keputusan untuk tidak melakukan load-testing skala penuh; dicatat sebagai evolusi skema yang perlu dipertimbangkan bila skala data nyata mendekati target desain.
+Trigger PostgreSQL untuk Full Text Search berada di luar jangkauan langsung Prisma schema (dikelola sebagai raw SQL migration) — ini diterima sebagai trade-off yang wajar untuk mendapatkan FTS performan tanpa menambah dependency search engine terpisah.
+# Pertanyaan untuk Stakeholder Sebelum Melanjutkan ke Fase Berikutnya
+Apakah skema tabel dan strategi indexing pada dokumen ini sudah cukup sebagai dasar untuk merancang kontrak API secara rinci pada Fase 5 (API Specification)?

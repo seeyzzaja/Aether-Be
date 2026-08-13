@@ -1,0 +1,259 @@
+**API SPECIFICATION**
+**Discord-Like Web Application — Project-Based Learning**
+*Fase 5 — Dokumen tunggal fase ini*
+# 1. Konvensi Umum
+## 1.1 Base URL & Format
+Seluruh REST API menggunakan format JSON (Content-Type: application/json) dan diakses melalui base path /api/v1. Penamaan field pada request/response body menggunakan camelCase, sedangkan penamaan tabel/kolom database tetap snake_case sesuai Database Design (Fase 4) — konversi ditangani otomatis oleh Prisma Client/mapper layer.
+## 1.2 Autentikasi
+Autentikasi menggunakan Bearer access token pada header Authorization (mis. Authorization: Bearer <accessToken>). Access token berumur pendek (mis. 15 menit) dan diperbarui melalui endpoint refresh menggunakan refresh token yang tersimpan sebagai HttpOnly cookie, sejalan dengan SRS-AUTH-02 dan desain sessions pada Database Design.
+## 1.3 Otorisasi
+Setiap endpoint yang beroperasi dalam konteks server (workspace) memvalidasi permission aktor terhadap permissions_bitmask role dan channel_permission_overrides yang relevan (lihat Database Design Bagian 5.2), sebelum aksi dieksekusi. Endpoint Admin Panel memvalidasi flag is_platform_admin, terpisah dari permission per-server.
+## 1.4 Format Error Standar
+Seluruh error dikembalikan dengan struktur konsisten sebagai berikut, agar penanganan error di sisi klien seragam untuk seluruh endpoint:
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Pesan error yang dapat ditampilkan ke pengguna",
+    "details": [ { "field": "email", "issue": "Format email tidak valid" } ]
+  }
+}
+| **HTTP Status** | **Kode Error** | **Kapan Terjadi** |
+| --- | --- | --- |
+| **400** | **VALIDATION_ERROR** | **Input tidak valid (divalidasi Zod schema).** |
+| **401** | **UNAUTHENTICATED** | **Access token tidak ada/tidak valid/kedaluwarsa.** |
+| **403** | **FORBIDDEN** | **Aktor terautentikasi namun tidak memiliki permission yang diperlukan.** |
+| **404** | **NOT_FOUND** | **Resource yang diminta tidak ditemukan atau di luar akses aktor.** |
+| **409** | **CONFLICT** | **Konflik data, mis. email/username sudah terdaftar.** |
+| **429** | **RATE_LIMITED** | **Melebihi ambang batas rate limiter (lihat Bagian 5).** |
+| **500** | **INTERNAL_ERROR** | **Kegagalan tak terduga di sisi server.** |
+## 1.5 Pagination
+Dua pola pagination digunakan sesuai karakteristik data:
+Cursor-based pagination untuk data dengan volume besar & append-only, khususnya riwayat pesan (messages) — menggunakan parameter before/after berupa message id, sejalan dengan index composite (channel_id, created_at DESC) pada Database Design.
+Offset/limit pagination untuk data list yang relatif lebih kecil (mis. daftar server, daftar member, daftar role).
+GET /api/v1/channels/{channelId}/messages?limit=50&before=msg_01HXYZ...
+
+{
+  "data": [ { "id": "msg_01H...", "content": "...", "createdAt": "..." } ],
+  "pagination": { "hasMore": true, "nextCursor": "msg_01HABC..." }
+}
+## 1.6 Rate Limiting
+Rate limit diterapkan per-akun dan per-IP menggunakan Redis (sliding window), dengan header standar berikut disertakan pada setiap response: X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset. Ambang batas per kategori endpoint dirinci pada Bagian 5.
+
+# 2. Endpoint Reference
+## 2.1 Autentikasi
+| **Method** | **Path** | **Deskripsi** | **Auth** |
+| --- | --- | --- | --- |
+| **POST** | **/auth/register** | **Registrasi akun baru.** | **Publik** |
+| **POST** | **/auth/login** | **Login & terbitkan access/refresh token.** | **Publik** |
+| **POST** | **/auth/refresh** | **Perbarui access token menggunakan refresh token.** | **Refresh token (cookie)** |
+| **POST** | **/auth/logout** | **Cabut sesi saat ini.** | **Bearer token** |
+| **GET** | **/auth/sessions** | **Daftar sesi/device aktif milik pengguna.** | **Bearer token** |
+| **DELETE** | **/auth/sessions/{sessionId}** | **Cabut sesi/device tertentu.** | **Bearer token** |
+## 2.2 Workspace: Server, Category, Channel
+| **Method** | **Path** | **Deskripsi** | **Auth/Permission** |
+| --- | --- | --- | --- |
+| **POST** | **/servers** | **Membuat server baru.** | **Bearer token** |
+| **GET** | **/servers/{serverId}** | **Detail server.** | **Member server** |
+| **PATCH** | **/servers/{serverId}** | **Mengubah data server.** | **MANAGE_SERVER** |
+| **DELETE** | **/servers/{serverId}** | **Menghapus server.** | **Owner** |
+| **POST** | **/servers/{serverId}/categories** | **Membuat category.** | **MANAGE_CHANNELS** |
+| **POST** | **/servers/{serverId}/channels** | **Membuat channel.** | **MANAGE_CHANNELS** |
+| **PATCH** | **/channels/{channelId}** | **Mengubah channel (nama/posisi/topic).** | **MANAGE_CHANNELS** |
+| **DELETE** | **/channels/{channelId}** | **Menghapus channel.** | **MANAGE_CHANNELS** |
+| **POST** | **/servers/{serverId}/members/{userId}/kick** | **Mengeluarkan member.** | **KICK_MEMBERS** |
+| **POST** | **/servers/{serverId}/bans** | **Ban member.** | **BAN_MEMBERS** |
+## 2.3 Role & Permission
+| **Method** | **Path** | **Deskripsi** | **Auth/Permission** |
+| --- | --- | --- | --- |
+| **POST** | **/servers/{serverId}/roles** | **Membuat role kustom.** | **MANAGE_ROLES** |
+| **PATCH** | **/roles/{roleId}** | **Mengubah permission/nama/warna role.** | **MANAGE_ROLES** |
+| **POST** | **/servers/{serverId}/members/{userId}/roles/{roleId}** | **Assign role ke member.** | **MANAGE_ROLES** |
+| **PUT** | **/channels/{channelId}/permission-overrides** | **Set override permission channel.** | **MANAGE_CHANNELS** |
+## 2.4 Messaging
+| **Method** | **Path** | **Deskripsi** | **Auth/Permission** |
+| --- | --- | --- | --- |
+| **GET** | **/channels/{channelId}/messages** | **Riwayat pesan (cursor pagination).** | **READ_MESSAGES** |
+| **POST** | **/channels/{channelId}/messages** | **Kirim pesan baru.** | **SEND_MESSAGES** |
+| **PATCH** | **/messages/{messageId}** | **Edit pesan.** | **Pengirim asli** |
+| **DELETE** | **/messages/{messageId}** | **Hapus (soft delete) pesan.** | **Pengirim asli / MANAGE_MESSAGES** |
+| **POST** | **/messages/{messageId}/pin** | **Sematkan pesan.** | **MANAGE_MESSAGES** |
+| **POST** | **/messages/{messageId}/reactions** | **Tambah reaksi emoji.** | **READ_MESSAGES** |
+| **POST** | **/messages/{messageId}/forward** | **Teruskan pesan ke channel lain.** | **READ_MESSAGES (asal) & SEND_MESSAGES (tujuan)** |
+| **POST** | **/messages/{messageId}/poll** | **Buat polling pada pesan.** | **SEND_MESSAGES** |
+| **POST** | **/polls/{pollId}/votes** | **Memberi suara pada polling.** | **READ_MESSAGES** |
+## 2.5 Notifikasi
+| **Method** | **Path** | **Deskripsi** | **Auth** |
+| --- | --- | --- | --- |
+| **GET** | **/notifications** | **Daftar notifikasi milik pengguna (offset pagination).** | **Bearer token** |
+| **PATCH** | **/notifications/{notificationId}/read** | **Tandai notifikasi telah dibaca.** | **Bearer token (pemilik)** |
+## 2.6 Upload
+| **Method** | **Path** | **Deskripsi** | **Auth/Permission** |
+| --- | --- | --- | --- |
+| **POST** | **/uploads/signed-url** | **Meminta signed URL untuk direct upload ke Cloudinary.** | **ATTACH_FILES** |
+| **POST** | **/uploads/confirm** | **Konfirmasi upload sukses & simpan metadata file.** | **ATTACH_FILES** |
+## 2.7 Pencarian
+| **Method** | **Path** | **Deskripsi** | **Auth** |
+| --- | --- | --- | --- |
+| **GET** | **/search** | **Pencarian lintas entitas (user/server/channel/message/file).** | **Bearer token** |
+## 2.8 Voice & Video
+| **Method** | **Path** | **Deskripsi** | **Auth/Permission** |
+| --- | --- | --- | --- |
+| **POST** | **/channels/{channelId}/voice/token** | **Membuat LiveKit access token untuk join room.** | **CONNECT** |
+| **POST** | **/channels/{channelId}/voice/leave** | **Menandai peserta keluar dari voice/video channel.** | **CONNECT** |
+## 2.9 Admin Panel
+| **Method** | **Path** | **Deskripsi** | **Auth** |
+| --- | --- | --- | --- |
+| **GET** | **/admin/users** | **Daftar user platform (offset pagination + filter).** | **Platform Admin** |
+| **POST** | **/admin/users/{userId}/suspend** | **Suspend user secara platform-wide.** | **Platform Admin** |
+| **GET** | **/admin/audit-logs** | **Daftar audit log lintas server.** | **Platform Admin** |
+
+# 3. Detail Request/Response — Endpoint Kunci
+Bagian ini merinci contoh request/response untuk endpoint yang paling representatif dari sisi kompleksitas otorisasi dan struktur data. Endpoint lain mengikuti pola yang konsisten dengan konvensi pada Bagian 1.
+** POST ****  /auth/register**
+Registrasi akun baru menggunakan email, username, dan password (SRS-AUTH-01).
+**Autentikasi/Otorisasi: **Publik (tidak memerlukan token).
+**Request Body:**
+{
+  "email": "budi@example.com",
+  "username": "budi_dev",
+  "password": "P@ssw0rd123!"
+}
+**Response (Sukses):**
+{
+  "data": {
+    "id": "usr_01H...",
+    "email": "budi@example.com",
+    "username": "budi_dev",
+    "createdAt": "2026-07-30T10:00:00Z"
+  }
+}
+**Error yang Mungkin Terjadi:**
+400 VALIDATION_ERROR — format email tidak valid / password terlalu lemah.
+409 CONFLICT — email atau username sudah terdaftar.
+** POST ****  /servers/{serverId}/channels**
+Membuat channel baru pada server (SRS-WS-02).
+**Autentikasi/Otorisasi: **Bearer token; aktor harus memiliki permission MANAGE_CHANNELS pada server terkait.
+**Request Body:**
+{
+  "name": "general",
+  "type": "text",
+  "categoryId": "cat_01H...",
+  "topic": "Diskusi umum"
+}
+**Response (Sukses):**
+{
+  "data": {
+    "id": "chn_01H...",
+    "serverId": "srv_01H...",
+    "categoryId": "cat_01H...",
+    "name": "general",
+    "type": "text",
+    "position": 3
+  }
+}
+**Error yang Mungkin Terjadi:**
+403 FORBIDDEN — aktor tidak memiliki MANAGE_CHANNELS.
+400 VALIDATION_ERROR — tipe channel tidak dikenal.
+404 NOT_FOUND — categoryId tidak ditemukan pada server terkait.
+** POST ****  /channels/{channelId}/messages**
+Mengirim pesan baru ke channel (SRS-MSG-01), disiarkan realtime via Event Flow (Architecture Document Bagian 6).
+**Autentikasi/Otorisasi: **Bearer token; aktor harus memiliki permission SEND_MESSAGES pada channel terkait.
+**Request Body:**
+{
+  "content": "Halo semua! @budi_dev cek pesan ini ya.",
+  "replyToId": null,
+  "attachmentIds": ["att_01H..."]
+}
+**Response (Sukses):**
+{
+  "data": {
+    "id": "msg_01H...",
+    "channelId": "chn_01H...",
+    "authorId": "usr_01H...",
+    "content": "Halo semua! @budi_dev cek pesan ini ya.",
+    "createdAt": "2026-07-30T10:05:00Z"
+  }
+}
+**Error yang Mungkin Terjadi:**
+403 FORBIDDEN — aktor tidak memiliki SEND_MESSAGES pada channel.
+404 NOT_FOUND — replyToId merujuk pesan yang tidak ada di channel yang sama.
+429 RATE_LIMITED — melebihi batas kirim pesan per menit.
+** GET ****  /search**
+Pencarian lintas entitas sesuai akses aktor (SRS-SRC-01).
+**Autentikasi/Otorisasi: **Bearer token. Hasil difilter agar hanya menampilkan entitas yang aktor memiliki akses baca.
+**Response (Sukses):**
+GET /api/v1/search?q=roadmap&type=message&serverId=srv_01H...
+
+{
+  "data": {
+    "messages": [ { "id": "msg_01H...", "channelId": "chn_01H...", "snippet": "...roadmap milestone..." } ],
+    "channels": [],
+    "files": []
+  },
+  "pagination": { "hasMore": false }
+}
+**Error yang Mungkin Terjadi:**
+400 VALIDATION_ERROR — query kosong atau kurang dari panjang minimum.
+401 UNAUTHENTICATED — token tidak valid.
+** POST ****  /channels/{channelId}/voice/token**
+Menerbitkan LiveKit access token untuk bergabung ke voice/video channel (SRS-VV-01).
+**Autentikasi/Otorisasi: **Bearer token; aktor harus memiliki permission CONNECT (dan SPEAK/VIDEO bila relevan).
+**Request Body:**
+{
+  "withVideo": true
+}
+**Response (Sukses):**
+{
+  "data": {
+    "livekitUrl": "wss://livekit.internal.example.com",
+    "token": "eyJhbGciOi...",
+    "roomName": "channel_chn_01H..."
+  }
+}
+**Error yang Mungkin Terjadi:**
+403 FORBIDDEN — aktor tidak memiliki permission CONNECT.
+503 (dipetakan ke INTERNAL_ERROR) — LiveKit server tidak dapat dihubungi.
+** POST ****  /admin/users/{userId}/suspend**
+Menangguhkan user secara platform-wide (SRS-ADM-01), memaksa logout seluruh sesi aktif user tersebut.
+**Autentikasi/Otorisasi: **Bearer token; aktor harus memiliki flag is_platform_admin = true.
+**Request Body:**
+{
+  "reason": "Pelanggaran kebijakan komunitas — spam massal"
+}
+**Response (Sukses):**
+{
+  "data": {
+    "userId": "usr_01H...",
+    "isSuspended": true,
+    "suspendedAt": "2026-07-30T10:10:00Z"
+  }
+}
+**Error yang Mungkin Terjadi:**
+403 FORBIDDEN — aktor bukan Platform Admin.
+404 NOT_FOUND — userId tidak ditemukan.
+
+# 4. Rate Limit per Kategori Endpoint
+| **Kategori** | **Ambang Batas** | **Kunci Limiter** |
+| --- | --- | --- |
+| **Login/Register** | **5 percobaan / menit** | **Per IP + per email/username** |
+| **Kirim Pesan** | **10 pesan / 10 detik** | **Per user per channel** |
+| **Upload (permintaan signed URL)** | **20 permintaan / menit** | **Per user** |
+| **Pencarian** | **30 permintaan / menit** | **Per user** |
+| **Endpoint umum lainnya** | **100 permintaan / menit** | **Per user (fallback per IP untuk publik)** |
+
+# Keputusan yang Telah Diambil
+Format error dan struktur response (data/pagination) distandarisasi untuk seluruh endpoint agar konsisten di sisi klien.
+Pagination cursor-based dipilih khusus untuk riwayat pesan mengikuti index composite (channel_id, created_at DESC) pada Database Design; endpoint list lain menggunakan offset/limit.
+Endpoint voice/video hanya menerbitkan token LiveKit dari server (Server API), bukan melakukan signaling media secara langsung, sejalan dengan ADR-003.
+Rate limit ditetapkan berbeda per kategori endpoint, dengan kategori kirim pesan dan login mendapat ambang batas paling ketat karena risiko abuse paling tinggi.
+# Keputusan yang Masih Perlu Dikonfirmasi
+Apakah endpoint /messages/{messageId}/poll perlu diperluas untuk mendukung parameter allowMultipleChoice, menyusul keputusan Database Design bahwa polling akan mendukung multiple-choice di masa depan (memengaruhi constraint poll_votes).
+Apakah dibutuhkan endpoint bulk operation (mis. bulk delete messages, bulk kick member) untuk kebutuhan moderasi skala besar, atau cukup operasi satu-per-satu pada tahap awal.
+# Risiko Desain
+Endpoint forward pesan (POST /messages/{messageId}/forward) memerlukan validasi otorisasi ganda (akses baca channel asal DAN akses tulis channel tujuan) — berisiko menjadi celah keamanan bila salah satu validasi terlewat saat implementasi.
+Rate limit per-channel untuk pengiriman pesan (10 pesan/10 detik) mungkin perlu disesuaikan setelah pengujian penggunaan nyata; ambang batas saat ini adalah estimasi awal, bukan hasil pengukuran empiris.
+# Technical Debt yang Sengaja Diterima
+Dukungan multiple-choice pada polling belum tercermin pada kontrak endpoint /messages/{messageId}/poll dan /polls/{pollId}/votes di dokumen ini — sengaja ditunda ke iterasi API berikutnya agar tidak memblokir penyelesaian Fase 5 secara keseluruhan; perubahan constraint poll_votes (Database Design) turut memerlukan revisi endpoint ini nanti.
+Endpoint bulk operation belum dirancang pada dokumen ini, konsisten dengan prioritas MoSCoW Should/Could pada PRD untuk fitur moderasi lanjutan.
+# Pertanyaan untuk Stakeholder Sebelum Melanjutkan ke Fase Berikutnya
+Apakah kontrak endpoint dan konvensi (error, pagination, rate limit) pada dokumen ini sudah cukup sebagai acuan sebelum lanjut ke Security Design (Fase 6)?

@@ -1,0 +1,32 @@
+model Message {
+  id           String                   @id @default(uuid())
+  channelId    String
+  authorId     String
+  replyToId    String?
+  threadRootId String?
+  content      String
+  isPinned     Boolean                  @default(false)
+  isDeleted    Boolean                  @default(false)
+  searchVector Unsupported("tsvector")? @map("search_vector")
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  deletedAt    DateTime?
+
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  author  User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  replyTo     Message?            @relation("MessageReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies     Message[]           @relation("MessageReplies")
+  reactions   Reaction[]
+  readStates  ChannelReadState[]
+  attachments MessageAttachment[]
+  poll        Poll?
+
+  threadRoot     Message?  @relation("MessageThreadRoot", fields: [threadRootId], references: [id], onDelete: SetNull)
+  threadMessages Message[] @relation("MessageThreadRoot")
+
+  @@index([channelId, createdAt(sort: Desc)])
+  @@index([replyToId])
+  @@index([threadRootId])
+  @@map("messages")
+}

@@ -1,0 +1,18 @@
+model ChannelReadState {
+  id                String   @id @default(uuid())
+  userId            String
+  channelId         String
+  lastReadMessageId String?
+  readAt            DateTime @default(now())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel Channel  @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  message Message? @relation(fields: [lastReadMessageId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, channelId])
+  @@index([channelId])
+  @@index([lastReadMessageId])
+  @@map("channel_read_states")
+}

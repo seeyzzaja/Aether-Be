@@ -1,0 +1,138 @@
+**UI/UX SPECIFICATION**
+**Discord-Like Web Application — Project-Based Learning**
+*Fase 7 — Dokumen tunggal fase ini*
+# 1. Prinsip Desain
+Visual dan tata letak semirip mungkin dengan Discord (sesuai Vision Document), dengan tema gelap (dark theme) sebagai default, mengingat pola penggunaan chat realtime dalam durasi lama.
+Kepadatan informasi tinggi namun tetap scannable: struktur 3 kolom (server rail → channel sidebar → chat area) dipertahankan pada desktop, disederhanakan menjadi navigasi bertingkat pada mobile.
+Feedback instan untuk aksi realtime (optimistic UI saat kirim pesan, indikator typing, status presence) agar aplikasi terasa responsif walau di balik layar menunggu konfirmasi server (Event Flow, Architecture Document).
+Aksesibilitas sebagai kebutuhan dasar, bukan tambahan: kontras warna, navigasi keyboard, dan label ARIA diperhatikan sejak desain awal, bukan diperbaiki belakangan.
+
+# 2. Design System
+## 2.1 Palet Warna (Dark Theme Default)
+Background utama (chat area) — #36393F
+Background sidebar channel — #2F3136
+Background server rail — #202225
+Warna aksen/brand (tombol primer, link, mention) — #5865F2
+Status online — #3BA55D
+Status idle — #FAA61A
+Status Do Not Disturb / error — #ED4245
+Status offline/invisible & teks sekunder — #747F8D
+Teks utama di atas background gelap — #FFFFFF
+## 2.2 Tipografi
+| **Elemen** | **Font & Ukuran** | **Penggunaan** |
+| --- | --- | --- |
+| **Font utama** | **Inter / system-ui, 16px base** | **Seluruh teks aplikasi (readability tinggi di layar).** |
+| **Heading channel/server** | **600 weight, 16-20px** | **Nama server, nama channel, judul modal.** |
+| **Isi pesan** | **400 weight, 15px, line-height 1.375** | **Konten pesan chat.** |
+| **Metadata (waktu, status)** | **400 weight, 12px, warna sekunder** | **Timestamp, "sedang mengetik...", label kecil.** |
+| **Monospace** | **Consolas/Fira Code, 14px** | **Blok kode dalam markdown pesan.** |
+## 2.3 Spacing & Grid
+Menggunakan skala spacing 4px (4, 8, 12, 16, 24, 32px) untuk konsistensi jarak antar elemen, selaras dengan utility class TailwindCSS (spacing scale bawaan) yang menjadi bagian dari stack proyek.
+## 2.4 Komponen Inti
+| **Komponen** | **Deskripsi** | **State yang Didukung** |
+| --- | --- | --- |
+| **Avatar** | **Foto profil bulat dengan indikator status presence di sudut kanan bawah.** | **online, idle, dnd, offline/invisible, loading (skeleton)** |
+| **Message Bubble** | **Baris pesan dengan avatar, nama, waktu, isi, reaksi.** | **default, edited, deleted (placeholder "pesan dihapus"), pending (optimistic), failed** |
+| **Channel Item** | **Item pada sidebar dengan ikon tipe channel (#, 🔊, 📢).** | **default, active, unread (bold + dot indicator), muted** |
+| **Server Icon** | **Ikon bulat pada server rail.** | **default, active (indikator garis kiri), unread (dot), notifikasi (badge angka)** |
+| **Input Composer** | **Text area multi-baris dengan tombol attach, emoji, kirim.** | **empty, typing, dengan attachment preview, disabled (tanpa permission)** |
+| **Toast/Banner** | **Notifikasi sementara untuk error/sukses (mis. gagal kirim, upload sukses).** | **info, success, warning, error** |
+| **Modal** | **Dialog untuk aksi konfirmasi (hapus pesan, kick member, dsb.).** | **default, loading, error** |
+
+# 3. Layout Utama
+
+*Diagram 1 - Wireframe Desktop: Server Rail, Channel Sidebar, Chat Area*
+```mermaid
+flowchart LR
+  SR[Server Rail]
+  CS[Channel Sidebar]
+  CA[Chat Area]
+  ML[Member List Optional]
+  SR --> CS --> CA
+  CA -. optional .-> ML
+```
+Pada layar lebar (≥1024px), Member List (daftar member online di sisi kanan) dapat ditampilkan sebagai kolom ke-4 opsional, di-toggle melalui ikon pada Top Bar, agar chat area tidak terlalu sempit pada layar sedang.
+
+*Diagram 2 - Wireframe Mobile: Single Pane dengan Bottom Navigation*
+```mermaid
+flowchart TD
+  BN[Bottom Navigation]
+  SP[Single Pane View]
+  SR[Server List]
+  CL[Channel List]
+  CA[Chat Area]
+  BN --> SP
+  SP --> SR --> CL --> CA
+```
+Pada mobile (<768px), Server Rail dan Channel Sidebar disembunyikan secara default dan diakses melalui swipe/tombol back, mengikuti pola navigasi bertingkat (Server Rail → Channel List → Chat), dengan Bottom Navigation sebagai jalan pintas ke area utama (Server, DM, Search, Akun).
+# 4. Navigation Flow
+
+*Diagram 3 - Navigation Flow / Information Architecture*
+```mermaid
+flowchart TD
+  Home[App Entry]
+  Server[Server Rail]
+  Channel[Channel Sidebar]
+  Chat[Chat Area]
+  Settings[User Settings]
+  Admin[Admin Panel]
+
+  Home --> Server --> Channel --> Chat
+  Chat --> Settings
+  Home --> Settings
+  Home --> Admin
+```
+Admin Panel hanya muncul sebagai opsi navigasi bagi pengguna dengan flag is_platform_admin (sejalan dengan Security Design Bagian 10), disembunyikan sepenuhnya dari UI untuk pengguna biasa, bukan hanya dinonaktifkan (disabled state) — untuk mengurangi permukaan serangan dan kebingungan pengguna.
+
+# 5. Spesifikasi Layar Kunci
+## 5.1 Login & Register
+Form terpusat (centered card) di atas background gelap dengan branding aplikasi; toggle antara form Login dan Register pada kartu yang sama.
+Validasi inline real-time (mis. kekuatan password, ketersediaan username) tanpa menunggu submit, mengurangi trial-error pengguna.
+## 5.2 Text Channel View
+Message List dengan infinite scroll ke atas (memuat pesan lama), grouping pesan berurutan dari pengirim yang sama dalam rentang waktu singkat (mengurangi repetisi avatar/nama).
+Reply ditampilkan sebagai kutipan ringkas di atas pesan yang membalas; Thread dibuka sebagai panel terpisah di sisi kanan (tidak menggantikan Message List utama), agar konteks channel utama tidak hilang.
+Typing indicator muncul sebagai baris kecil di atas Message Composer ("Budi sedang mengetik..."), dengan debounce agar tidak mengedip berlebihan saat banyak orang mengetik bersamaan.
+## 5.3 Voice & Video Channel View
+Menampilkan grid peserta (avatar membesar saat berbicara — voice activity indicator), dengan kontrol mute/unmute, camera on/off, dan leave call selalu terlihat (docked di bagian bawah).
+Channel tetap menampilkan daftar peserta pada Channel Sidebar (di bawah nama channel voice) meski pengguna sedang berada di layar lain, agar status kehadiran (Presence Flow) tetap terlihat tanpa harus membuka voice channel.
+## 5.4 Search Overlay
+Overlay modal full-width dengan filter cepat (dari user, dalam channel, tipe file) di atas hasil pencarian, hasil dikelompokkan per tipe entitas (pesan, file, channel, user) sesuai endpoint GET /search.
+## 5.5 Notification Panel
+Panel dropdown dari ikon lonceng pada Server Rail, menampilkan notifikasi terbaru dengan status belum/sudah dibaca, dan tautan langsung ke pesan/konteks terkait saat diklik.
+## 5.6 User Settings
+Termasuk sub-halaman: Profil (avatar, username), Sesi & Perangkat (daftar sesi aktif + tombol revoke, sesuai Security Design Bagian 5), dan Preferensi Notifikasi (toggle realtime/email per jenis event).
+## 5.7 Admin Panel
+Tabel daftar user dengan aksi suspend/unsuspend dan pencarian, serta tabel audit log dengan filter aktor/aksi/rentang waktu, mengikuti struktur data audit_logs (Database Design).
+Aksi destruktif (suspend user, bulk kick/delete) selalu melalui modal konfirmasi eksplisit yang menampilkan ringkasan dampak sebelum dieksekusi.
+
+# 6. Responsive & PWA Behavior
+| **Breakpoint** | **Perilaku Layout** |
+| --- | --- |
+| **< 768px (Mobile)** | **Single pane + bottom navigation; Server Rail & Channel Sidebar sebagai layar terpisah yang diakses via navigasi, bukan kolom paralel.** |
+| **768px – 1023px (Tablet)** | **2 kolom (Channel Sidebar + Chat Area); Server Rail disembunyikan di balik tombol menu; Member List disembunyikan default.** |
+| **≥ 1024px (Desktop)** | **3-4 kolom penuh (Server Rail, Channel Sidebar, Chat Area, Member List opsional).** |
+Sebagai PWA, aplikasi menyediakan manifest.json (nama, ikon, theme_color mengikuti palet dark theme) dan service worker untuk caching asset statis serta fallback offline sederhana (halaman "tidak ada koneksi", bukan cache pesan penuh).
+Notifikasi push browser (Web Push) memanfaatkan service worker untuk menampilkan notifikasi native OS saat aplikasi berada di background, melengkapi Notification Flow (Architecture Document) untuk skenario PWA.
+# 7. Aksesibilitas
+Kontras warna teks-terhadap-background pada dark theme mengikuti minimum rasio WCAG AA (4.5:1 untuk teks normal, 3:1 untuk teks besar/ikon).
+Seluruh elemen interaktif (channel item, tombol, avatar dengan aksi) dapat diakses via keyboard (Tab/Shift+Tab) dengan focus ring yang terlihat jelas, dan mendukung navigasi panah (arrow key) antar item pada Channel Sidebar mengikuti pola ARIA listbox.
+Elemen non-teks (ikon status presence, ikon tipe channel) disertai label ARIA (aria-label) agar tetap bermakna bagi pengguna screen reader.
+Live region (aria-live="polite") digunakan pada Message List agar pesan baru yang masuk diumumkan oleh screen reader tanpa memaksa fokus berpindah paksa dari aktivitas pengguna saat itu.
+
+# Keputusan yang Telah Diambil
+Dark theme ditetapkan sebagai default, dengan palet warna terinspirasi langsung dari Discord agar UI "semirip mungkin" sesuai Vision Document.
+Struktur navigasi 3-4 kolom pada desktop disederhanakan menjadi single-pane + bottom navigation pada mobile, bukan mencoba memaksakan kolom paralel pada layar sempit.
+Thread dibuka sebagai panel terpisah di sisi kanan (bukan menggantikan Message List), demi menjaga konteks channel utama tetap terlihat.
+Admin Panel disembunyikan sepenuhnya (bukan hanya disabled) dari navigasi pengguna non-admin.
+Aksesibilitas (kontras WCAG AA, navigasi keyboard, ARIA label/live region) menjadi kebutuhan desain sejak awal, bukan penambahan di akhir.
+# Keputusan yang Masih Perlu Dikonfirmasi
+Apakah dibutuhkan mode Light Theme sebagai opsi tambahan di masa depan, atau Dark Theme cukup sebagai satu-satunya tema untuk keseluruhan proyek pembelajaran ini.
+Apakah Member List (kolom ke-4) perlu tersedia juga pada breakpoint Tablet dalam bentuk overlay, atau cukup disembunyikan total di bawah Desktop sesuai desain saat ini.
+# Risiko Desain
+Kepadatan informasi ala Discord (3-4 kolom, banyak indikator status) berisiko terasa berat/kompleks bagi pengguna baru bila tidak dibantu onboarding/empty state yang jelas — belum dirinci pada dokumen ini.
+Live region pada Message List perlu diuji lebih lanjut agar tidak membanjiri screen reader pada channel dengan volume pesan sangat tinggi; strategi throttling pengumuman belum dirinci di sini.
+# Technical Debt yang Sengaja Diterima
+Light Theme belum dirancang pada fase ini; seluruh token warna Bagian 2.1 hanya mencakup Dark Theme, konsisten dengan keputusan untuk fokus pada satu tema terlebih dahulu.
+Wireframe pada dokumen ini adalah tingkat kerangka (low-fidelity); desain visual detail (mis. shadow, micro-interaction, animasi transisi) didelegasikan ke tahap implementasi frontend, bukan dirinci sebagai mockup high-fidelity di sini.
+# Pertanyaan untuk Stakeholder Sebelum Melanjutkan ke Fase Berikutnya
+Apakah design system, layout, dan navigation flow pada dokumen ini sudah cukup sebagai acuan sebelum lanjut ke Development Roadmap (Fase 8)?

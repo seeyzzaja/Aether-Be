@@ -1,0 +1,93 @@
+{
+  "name": "project-be",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch --conditions=development src/index.ts",
+    "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && tsc",
+    "start": "node dist/src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prisma.generate": "prisma generate",
+    "prisma.migrate": "prisma migrate dev",
+    "prisma.migrate.prod": "prisma migrate deploy",
+    "prisma.format": "prisma format",
+    "prisma.validate": "prisma validate",
+    "lint": "biome check src prisma.config.ts biome.json commitlint.config.cjs package.json",
+    "lint:fix": "biome check --write src prisma.config.ts biome.json commitlint.config.cjs package.json",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "prepare": "husky",
+    "prisma.seed": "tsx --conditions=development src/prisma/seed/seed.ts",
+    "worker:email": "tsx --conditions=development src/shared/queue/email.worker.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seeyzzaja/Aether-Be.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "imports": {
+    "#*": {
+      "development": "./src/*.ts",
+      "default": "./dist/src/*.js"
+    },
+    "#websocket": {
+      "development": "./src/websocket/index.ts",
+      "default": "./dist/src/websocket/index.js"
+    },
+    "#websocket/broadcast": {
+      "development": "./src/websocket/broadcast/index.ts",
+      "default": "./dist/src/websocket/broadcast/index.js"
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/seeyzzaja/Aether-Be/issues"
+  },
+  "homepage": "https://github.com/seeyzzaja/Aether-Be#readme",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "argon2": "^0.45.1",
+    "bcrypt": "^6.0.0",
+    "bullmq": "^6.0.11",
+    "cloudinary": "^2.10.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "helmet": "^8.3.0",
+    "ioredis": "^6.0.0",
+    "jsonwebtoken": "^9.0.3",
+    "livekit-server-sdk": "^2.17.0",
+    "nodemailer": "^9.0.5",
+    "pg": "^8.22.0",
+    "pino": "^10.3.1",
+    "prisma": "^7.9.1",
+    "redis": "^6.2.0",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1",
+    "ws": "^8.21.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.6",
+    "@commitlint/cli": "^21.2.1",
+    "@commitlint/config-conventional": "^21.2.0",
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.1.2",
+    "@types/nodemailer": "^8.0.1",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
+    "@types/ws": "^8.18.1",
+    "husky": "^9.1.7",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
+  }
+}

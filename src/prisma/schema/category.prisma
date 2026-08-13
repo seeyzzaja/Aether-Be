@@ -1,0 +1,15 @@
+model Category {
+  id       String @id @default(uuid())
+  serverId String
+  name     String @db.VarChar(100)
+  position Int    @default(0)
+
+  server   Server    @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  channels Channel[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([serverId])
+  @@map("categories")
+}

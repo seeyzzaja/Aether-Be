@@ -1,0 +1,1534 @@
+import type * as runtime from "@prisma/client/runtime/client";
+import type * as Prisma from "../internal/prismaNamespace.js";
+/**
+ * Model Role
+ *
+ */
+export type RoleModel = runtime.Types.Result.DefaultSelection<Prisma.$RolePayload>;
+export type AggregateRole = {
+    _count: RoleCountAggregateOutputType | null;
+    _avg: RoleAvgAggregateOutputType | null;
+    _sum: RoleSumAggregateOutputType | null;
+    _min: RoleMinAggregateOutputType | null;
+    _max: RoleMaxAggregateOutputType | null;
+};
+export type RoleAvgAggregateOutputType = {
+    permissionsBitmask: number | null;
+    position: number | null;
+};
+export type RoleSumAggregateOutputType = {
+    permissionsBitmask: bigint | null;
+    position: number | null;
+};
+export type RoleMinAggregateOutputType = {
+    id: string | null;
+    serverId: string | null;
+    name: string | null;
+    color: string | null;
+    permissionsBitmask: bigint | null;
+    position: number | null;
+    isDefault: boolean | null;
+};
+export type RoleMaxAggregateOutputType = {
+    id: string | null;
+    serverId: string | null;
+    name: string | null;
+    color: string | null;
+    permissionsBitmask: bigint | null;
+    position: number | null;
+    isDefault: boolean | null;
+};
+export type RoleCountAggregateOutputType = {
+    id: number;
+    serverId: number;
+    name: number;
+    color: number;
+    permissionsBitmask: number;
+    position: number;
+    isDefault: number;
+    _all: number;
+};
+export type RoleAvgAggregateInputType = {
+    permissionsBitmask?: true;
+    position?: true;
+};
+export type RoleSumAggregateInputType = {
+    permissionsBitmask?: true;
+    position?: true;
+};
+export type RoleMinAggregateInputType = {
+    id?: true;
+    serverId?: true;
+    name?: true;
+    color?: true;
+    permissionsBitmask?: true;
+    position?: true;
+    isDefault?: true;
+};
+export type RoleMaxAggregateInputType = {
+    id?: true;
+    serverId?: true;
+    name?: true;
+    color?: true;
+    permissionsBitmask?: true;
+    position?: true;
+    isDefault?: true;
+};
+export type RoleCountAggregateInputType = {
+    id?: true;
+    serverId?: true;
+    name?: true;
+    color?: true;
+    permissionsBitmask?: true;
+    position?: true;
+    isDefault?: true;
+    _all?: true;
+};
+export type RoleAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Filter which Role to aggregate.
+     */
+    where?: Prisma.RoleWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Roles to fetch.
+     */
+    orderBy?: Prisma.RoleOrderByWithRelationInput | Prisma.RoleOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: Prisma.RoleWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Roles from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Roles.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned Roles
+    **/
+    _count?: true | RoleCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+    **/
+    _avg?: RoleAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+    **/
+    _sum?: RoleSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+    **/
+    _min?: RoleMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+    **/
+    _max?: RoleMaxAggregateInputType;
+};
+export type GetRoleAggregateType<T extends RoleAggregateArgs> = {
+    [P in keyof T & keyof AggregateRole]: P extends '_count' | 'count' ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregateRole[P]> : Prisma.GetScalarType<T[P], AggregateRole[P]>;
+};
+export type RoleGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.RoleWhereInput;
+    orderBy?: Prisma.RoleOrderByWithAggregationInput | Prisma.RoleOrderByWithAggregationInput[];
+    by: Prisma.RoleScalarFieldEnum[] | Prisma.RoleScalarFieldEnum;
+    having?: Prisma.RoleScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: RoleCountAggregateInputType | true;
+    _avg?: RoleAvgAggregateInputType;
+    _sum?: RoleSumAggregateInputType;
+    _min?: RoleMinAggregateInputType;
+    _max?: RoleMaxAggregateInputType;
+};
+export type RoleGroupByOutputType = {
+    id: string;
+    serverId: string;
+    name: string;
+    color: string | null;
+    permissionsBitmask: bigint;
+    position: number;
+    isDefault: boolean;
+    _count: RoleCountAggregateOutputType | null;
+    _avg: RoleAvgAggregateOutputType | null;
+    _sum: RoleSumAggregateOutputType | null;
+    _min: RoleMinAggregateOutputType | null;
+    _max: RoleMaxAggregateOutputType | null;
+};
+export type GetRoleGroupByPayload<T extends RoleGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<RoleGroupByOutputType, T['by']> & {
+    [P in ((keyof T) & (keyof RoleGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], RoleGroupByOutputType[P]> : Prisma.GetScalarType<T[P], RoleGroupByOutputType[P]>;
+}>>;
+export type RoleWhereInput = {
+    AND?: Prisma.RoleWhereInput | Prisma.RoleWhereInput[];
+    OR?: Prisma.RoleWhereInput[];
+    NOT?: Prisma.RoleWhereInput | Prisma.RoleWhereInput[];
+    id?: Prisma.StringFilter<"Role"> | string;
+    serverId?: Prisma.StringFilter<"Role"> | string;
+    name?: Prisma.StringFilter<"Role"> | string;
+    color?: Prisma.StringNullableFilter<"Role"> | string | null;
+    permissionsBitmask?: Prisma.BigIntFilter<"Role"> | bigint | number;
+    position?: Prisma.IntFilter<"Role"> | number;
+    isDefault?: Prisma.BoolFilter<"Role"> | boolean;
+    members?: Prisma.ServerMemberRoleListRelationFilter;
+    server?: Prisma.XOR<Prisma.ServerScalarRelationFilter, Prisma.ServerWhereInput>;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideListRelationFilter;
+};
+export type RoleOrderByWithRelationInput = {
+    id?: Prisma.SortOrder;
+    serverId?: Prisma.SortOrder;
+    name?: Prisma.SortOrder;
+    color?: Prisma.SortOrderInput | Prisma.SortOrder;
+    permissionsBitmask?: Prisma.SortOrder;
+    position?: Prisma.SortOrder;
+    isDefault?: Prisma.SortOrder;
+    members?: Prisma.ServerMemberRoleOrderByRelationAggregateInput;
+    server?: Prisma.ServerOrderByWithRelationInput;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideOrderByRelationAggregateInput;
+};
+export type RoleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string;
+    AND?: Prisma.RoleWhereInput | Prisma.RoleWhereInput[];
+    OR?: Prisma.RoleWhereInput[];
+    NOT?: Prisma.RoleWhereInput | Prisma.RoleWhereInput[];
+    serverId?: Prisma.StringFilter<"Role"> | string;
+    name?: Prisma.StringFilter<"Role"> | string;
+    color?: Prisma.StringNullableFilter<"Role"> | string | null;
+    permissionsBitmask?: Prisma.BigIntFilter<"Role"> | bigint | number;
+    position?: Prisma.IntFilter<"Role"> | number;
+    isDefault?: Prisma.BoolFilter<"Role"> | boolean;
+    members?: Prisma.ServerMemberRoleListRelationFilter;
+    server?: Prisma.XOR<Prisma.ServerScalarRelationFilter, Prisma.ServerWhereInput>;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideListRelationFilter;
+}, "id">;
+export type RoleOrderByWithAggregationInput = {
+    id?: Prisma.SortOrder;
+    serverId?: Prisma.SortOrder;
+    name?: Prisma.SortOrder;
+    color?: Prisma.SortOrderInput | Prisma.SortOrder;
+    permissionsBitmask?: Prisma.SortOrder;
+    position?: Prisma.SortOrder;
+    isDefault?: Prisma.SortOrder;
+    _count?: Prisma.RoleCountOrderByAggregateInput;
+    _avg?: Prisma.RoleAvgOrderByAggregateInput;
+    _max?: Prisma.RoleMaxOrderByAggregateInput;
+    _min?: Prisma.RoleMinOrderByAggregateInput;
+    _sum?: Prisma.RoleSumOrderByAggregateInput;
+};
+export type RoleScalarWhereWithAggregatesInput = {
+    AND?: Prisma.RoleScalarWhereWithAggregatesInput | Prisma.RoleScalarWhereWithAggregatesInput[];
+    OR?: Prisma.RoleScalarWhereWithAggregatesInput[];
+    NOT?: Prisma.RoleScalarWhereWithAggregatesInput | Prisma.RoleScalarWhereWithAggregatesInput[];
+    id?: Prisma.StringWithAggregatesFilter<"Role"> | string;
+    serverId?: Prisma.StringWithAggregatesFilter<"Role"> | string;
+    name?: Prisma.StringWithAggregatesFilter<"Role"> | string;
+    color?: Prisma.StringNullableWithAggregatesFilter<"Role"> | string | null;
+    permissionsBitmask?: Prisma.BigIntWithAggregatesFilter<"Role"> | bigint | number;
+    position?: Prisma.IntWithAggregatesFilter<"Role"> | number;
+    isDefault?: Prisma.BoolWithAggregatesFilter<"Role"> | boolean;
+};
+export type RoleCreateInput = {
+    id?: string;
+    name: string;
+    color?: string | null;
+    permissionsBitmask?: bigint | number;
+    position?: number;
+    isDefault?: boolean;
+    members?: Prisma.ServerMemberRoleCreateNestedManyWithoutRoleInput;
+    server: Prisma.ServerCreateNestedOneWithoutRolesInput;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideCreateNestedManyWithoutRoleInput;
+};
+export type RoleUncheckedCreateInput = {
+    id?: string;
+    serverId: string;
+    name: string;
+    color?: string | null;
+    permissionsBitmask?: bigint | number;
+    position?: number;
+    isDefault?: boolean;
+    members?: Prisma.ServerMemberRoleUncheckedCreateNestedManyWithoutRoleInput;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedCreateNestedManyWithoutRoleInput;
+};
+export type RoleUpdateInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    members?: Prisma.ServerMemberRoleUpdateManyWithoutRoleNestedInput;
+    server?: Prisma.ServerUpdateOneRequiredWithoutRolesNestedInput;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUpdateManyWithoutRoleNestedInput;
+};
+export type RoleUncheckedUpdateInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    serverId?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    members?: Prisma.ServerMemberRoleUncheckedUpdateManyWithoutRoleNestedInput;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedUpdateManyWithoutRoleNestedInput;
+};
+export type RoleCreateManyInput = {
+    id?: string;
+    serverId: string;
+    name: string;
+    color?: string | null;
+    permissionsBitmask?: bigint | number;
+    position?: number;
+    isDefault?: boolean;
+};
+export type RoleUpdateManyMutationInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+};
+export type RoleUncheckedUpdateManyInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    serverId?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+};
+export type RoleScalarRelationFilter = {
+    is?: Prisma.RoleWhereInput;
+    isNot?: Prisma.RoleWhereInput;
+};
+export type RoleCountOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    serverId?: Prisma.SortOrder;
+    name?: Prisma.SortOrder;
+    color?: Prisma.SortOrder;
+    permissionsBitmask?: Prisma.SortOrder;
+    position?: Prisma.SortOrder;
+    isDefault?: Prisma.SortOrder;
+};
+export type RoleAvgOrderByAggregateInput = {
+    permissionsBitmask?: Prisma.SortOrder;
+    position?: Prisma.SortOrder;
+};
+export type RoleMaxOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    serverId?: Prisma.SortOrder;
+    name?: Prisma.SortOrder;
+    color?: Prisma.SortOrder;
+    permissionsBitmask?: Prisma.SortOrder;
+    position?: Prisma.SortOrder;
+    isDefault?: Prisma.SortOrder;
+};
+export type RoleMinOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    serverId?: Prisma.SortOrder;
+    name?: Prisma.SortOrder;
+    color?: Prisma.SortOrder;
+    permissionsBitmask?: Prisma.SortOrder;
+    position?: Prisma.SortOrder;
+    isDefault?: Prisma.SortOrder;
+};
+export type RoleSumOrderByAggregateInput = {
+    permissionsBitmask?: Prisma.SortOrder;
+    position?: Prisma.SortOrder;
+};
+export type RoleListRelationFilter = {
+    every?: Prisma.RoleWhereInput;
+    some?: Prisma.RoleWhereInput;
+    none?: Prisma.RoleWhereInput;
+};
+export type RoleOrderByRelationAggregateInput = {
+    _count?: Prisma.SortOrder;
+};
+export type RoleCreateNestedOneWithoutChannelPermissionOverridesInput = {
+    create?: Prisma.XOR<Prisma.RoleCreateWithoutChannelPermissionOverridesInput, Prisma.RoleUncheckedCreateWithoutChannelPermissionOverridesInput>;
+    connectOrCreate?: Prisma.RoleCreateOrConnectWithoutChannelPermissionOverridesInput;
+    connect?: Prisma.RoleWhereUniqueInput;
+};
+export type RoleUpdateOneRequiredWithoutChannelPermissionOverridesNestedInput = {
+    create?: Prisma.XOR<Prisma.RoleCreateWithoutChannelPermissionOverridesInput, Prisma.RoleUncheckedCreateWithoutChannelPermissionOverridesInput>;
+    connectOrCreate?: Prisma.RoleCreateOrConnectWithoutChannelPermissionOverridesInput;
+    upsert?: Prisma.RoleUpsertWithoutChannelPermissionOverridesInput;
+    connect?: Prisma.RoleWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.RoleUpdateToOneWithWhereWithoutChannelPermissionOverridesInput, Prisma.RoleUpdateWithoutChannelPermissionOverridesInput>, Prisma.RoleUncheckedUpdateWithoutChannelPermissionOverridesInput>;
+};
+export type RoleCreateNestedOneWithoutMembersInput = {
+    create?: Prisma.XOR<Prisma.RoleCreateWithoutMembersInput, Prisma.RoleUncheckedCreateWithoutMembersInput>;
+    connectOrCreate?: Prisma.RoleCreateOrConnectWithoutMembersInput;
+    connect?: Prisma.RoleWhereUniqueInput;
+};
+export type RoleUpdateOneRequiredWithoutMembersNestedInput = {
+    create?: Prisma.XOR<Prisma.RoleCreateWithoutMembersInput, Prisma.RoleUncheckedCreateWithoutMembersInput>;
+    connectOrCreate?: Prisma.RoleCreateOrConnectWithoutMembersInput;
+    upsert?: Prisma.RoleUpsertWithoutMembersInput;
+    connect?: Prisma.RoleWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.RoleUpdateToOneWithWhereWithoutMembersInput, Prisma.RoleUpdateWithoutMembersInput>, Prisma.RoleUncheckedUpdateWithoutMembersInput>;
+};
+export type RoleCreateNestedManyWithoutServerInput = {
+    create?: Prisma.XOR<Prisma.RoleCreateWithoutServerInput, Prisma.RoleUncheckedCreateWithoutServerInput> | Prisma.RoleCreateWithoutServerInput[] | Prisma.RoleUncheckedCreateWithoutServerInput[];
+    connectOrCreate?: Prisma.RoleCreateOrConnectWithoutServerInput | Prisma.RoleCreateOrConnectWithoutServerInput[];
+    createMany?: Prisma.RoleCreateManyServerInputEnvelope;
+    connect?: Prisma.RoleWhereUniqueInput | Prisma.RoleWhereUniqueInput[];
+};
+export type RoleUncheckedCreateNestedManyWithoutServerInput = {
+    create?: Prisma.XOR<Prisma.RoleCreateWithoutServerInput, Prisma.RoleUncheckedCreateWithoutServerInput> | Prisma.RoleCreateWithoutServerInput[] | Prisma.RoleUncheckedCreateWithoutServerInput[];
+    connectOrCreate?: Prisma.RoleCreateOrConnectWithoutServerInput | Prisma.RoleCreateOrConnectWithoutServerInput[];
+    createMany?: Prisma.RoleCreateManyServerInputEnvelope;
+    connect?: Prisma.RoleWhereUniqueInput | Prisma.RoleWhereUniqueInput[];
+};
+export type RoleUpdateManyWithoutServerNestedInput = {
+    create?: Prisma.XOR<Prisma.RoleCreateWithoutServerInput, Prisma.RoleUncheckedCreateWithoutServerInput> | Prisma.RoleCreateWithoutServerInput[] | Prisma.RoleUncheckedCreateWithoutServerInput[];
+    connectOrCreate?: Prisma.RoleCreateOrConnectWithoutServerInput | Prisma.RoleCreateOrConnectWithoutServerInput[];
+    upsert?: Prisma.RoleUpsertWithWhereUniqueWithoutServerInput | Prisma.RoleUpsertWithWhereUniqueWithoutServerInput[];
+    createMany?: Prisma.RoleCreateManyServerInputEnvelope;
+    set?: Prisma.RoleWhereUniqueInput | Prisma.RoleWhereUniqueInput[];
+    disconnect?: Prisma.RoleWhereUniqueInput | Prisma.RoleWhereUniqueInput[];
+    delete?: Prisma.RoleWhereUniqueInput | Prisma.RoleWhereUniqueInput[];
+    connect?: Prisma.RoleWhereUniqueInput | Prisma.RoleWhereUniqueInput[];
+    update?: Prisma.RoleUpdateWithWhereUniqueWithoutServerInput | Prisma.RoleUpdateWithWhereUniqueWithoutServerInput[];
+    updateMany?: Prisma.RoleUpdateManyWithWhereWithoutServerInput | Prisma.RoleUpdateManyWithWhereWithoutServerInput[];
+    deleteMany?: Prisma.RoleScalarWhereInput | Prisma.RoleScalarWhereInput[];
+};
+export type RoleUncheckedUpdateManyWithoutServerNestedInput = {
+    create?: Prisma.XOR<Prisma.RoleCreateWithoutServerInput, Prisma.RoleUncheckedCreateWithoutServerInput> | Prisma.RoleCreateWithoutServerInput[] | Prisma.RoleUncheckedCreateWithoutServerInput[];
+    connectOrCreate?: Prisma.RoleCreateOrConnectWithoutServerInput | Prisma.RoleCreateOrConnectWithoutServerInput[];
+    upsert?: Prisma.RoleUpsertWithWhereUniqueWithoutServerInput | Prisma.RoleUpsertWithWhereUniqueWithoutServerInput[];
+    createMany?: Prisma.RoleCreateManyServerInputEnvelope;
+    set?: Prisma.RoleWhereUniqueInput | Prisma.RoleWhereUniqueInput[];
+    disconnect?: Prisma.RoleWhereUniqueInput | Prisma.RoleWhereUniqueInput[];
+    delete?: Prisma.RoleWhereUniqueInput | Prisma.RoleWhereUniqueInput[];
+    connect?: Prisma.RoleWhereUniqueInput | Prisma.RoleWhereUniqueInput[];
+    update?: Prisma.RoleUpdateWithWhereUniqueWithoutServerInput | Prisma.RoleUpdateWithWhereUniqueWithoutServerInput[];
+    updateMany?: Prisma.RoleUpdateManyWithWhereWithoutServerInput | Prisma.RoleUpdateManyWithWhereWithoutServerInput[];
+    deleteMany?: Prisma.RoleScalarWhereInput | Prisma.RoleScalarWhereInput[];
+};
+export type RoleCreateWithoutChannelPermissionOverridesInput = {
+    id?: string;
+    name: string;
+    color?: string | null;
+    permissionsBitmask?: bigint | number;
+    position?: number;
+    isDefault?: boolean;
+    members?: Prisma.ServerMemberRoleCreateNestedManyWithoutRoleInput;
+    server: Prisma.ServerCreateNestedOneWithoutRolesInput;
+};
+export type RoleUncheckedCreateWithoutChannelPermissionOverridesInput = {
+    id?: string;
+    serverId: string;
+    name: string;
+    color?: string | null;
+    permissionsBitmask?: bigint | number;
+    position?: number;
+    isDefault?: boolean;
+    members?: Prisma.ServerMemberRoleUncheckedCreateNestedManyWithoutRoleInput;
+};
+export type RoleCreateOrConnectWithoutChannelPermissionOverridesInput = {
+    where: Prisma.RoleWhereUniqueInput;
+    create: Prisma.XOR<Prisma.RoleCreateWithoutChannelPermissionOverridesInput, Prisma.RoleUncheckedCreateWithoutChannelPermissionOverridesInput>;
+};
+export type RoleUpsertWithoutChannelPermissionOverridesInput = {
+    update: Prisma.XOR<Prisma.RoleUpdateWithoutChannelPermissionOverridesInput, Prisma.RoleUncheckedUpdateWithoutChannelPermissionOverridesInput>;
+    create: Prisma.XOR<Prisma.RoleCreateWithoutChannelPermissionOverridesInput, Prisma.RoleUncheckedCreateWithoutChannelPermissionOverridesInput>;
+    where?: Prisma.RoleWhereInput;
+};
+export type RoleUpdateToOneWithWhereWithoutChannelPermissionOverridesInput = {
+    where?: Prisma.RoleWhereInput;
+    data: Prisma.XOR<Prisma.RoleUpdateWithoutChannelPermissionOverridesInput, Prisma.RoleUncheckedUpdateWithoutChannelPermissionOverridesInput>;
+};
+export type RoleUpdateWithoutChannelPermissionOverridesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    members?: Prisma.ServerMemberRoleUpdateManyWithoutRoleNestedInput;
+    server?: Prisma.ServerUpdateOneRequiredWithoutRolesNestedInput;
+};
+export type RoleUncheckedUpdateWithoutChannelPermissionOverridesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    serverId?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    members?: Prisma.ServerMemberRoleUncheckedUpdateManyWithoutRoleNestedInput;
+};
+export type RoleCreateWithoutMembersInput = {
+    id?: string;
+    name: string;
+    color?: string | null;
+    permissionsBitmask?: bigint | number;
+    position?: number;
+    isDefault?: boolean;
+    server: Prisma.ServerCreateNestedOneWithoutRolesInput;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideCreateNestedManyWithoutRoleInput;
+};
+export type RoleUncheckedCreateWithoutMembersInput = {
+    id?: string;
+    serverId: string;
+    name: string;
+    color?: string | null;
+    permissionsBitmask?: bigint | number;
+    position?: number;
+    isDefault?: boolean;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedCreateNestedManyWithoutRoleInput;
+};
+export type RoleCreateOrConnectWithoutMembersInput = {
+    where: Prisma.RoleWhereUniqueInput;
+    create: Prisma.XOR<Prisma.RoleCreateWithoutMembersInput, Prisma.RoleUncheckedCreateWithoutMembersInput>;
+};
+export type RoleUpsertWithoutMembersInput = {
+    update: Prisma.XOR<Prisma.RoleUpdateWithoutMembersInput, Prisma.RoleUncheckedUpdateWithoutMembersInput>;
+    create: Prisma.XOR<Prisma.RoleCreateWithoutMembersInput, Prisma.RoleUncheckedCreateWithoutMembersInput>;
+    where?: Prisma.RoleWhereInput;
+};
+export type RoleUpdateToOneWithWhereWithoutMembersInput = {
+    where?: Prisma.RoleWhereInput;
+    data: Prisma.XOR<Prisma.RoleUpdateWithoutMembersInput, Prisma.RoleUncheckedUpdateWithoutMembersInput>;
+};
+export type RoleUpdateWithoutMembersInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    server?: Prisma.ServerUpdateOneRequiredWithoutRolesNestedInput;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUpdateManyWithoutRoleNestedInput;
+};
+export type RoleUncheckedUpdateWithoutMembersInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    serverId?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedUpdateManyWithoutRoleNestedInput;
+};
+export type RoleCreateWithoutServerInput = {
+    id?: string;
+    name: string;
+    color?: string | null;
+    permissionsBitmask?: bigint | number;
+    position?: number;
+    isDefault?: boolean;
+    members?: Prisma.ServerMemberRoleCreateNestedManyWithoutRoleInput;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideCreateNestedManyWithoutRoleInput;
+};
+export type RoleUncheckedCreateWithoutServerInput = {
+    id?: string;
+    name: string;
+    color?: string | null;
+    permissionsBitmask?: bigint | number;
+    position?: number;
+    isDefault?: boolean;
+    members?: Prisma.ServerMemberRoleUncheckedCreateNestedManyWithoutRoleInput;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedCreateNestedManyWithoutRoleInput;
+};
+export type RoleCreateOrConnectWithoutServerInput = {
+    where: Prisma.RoleWhereUniqueInput;
+    create: Prisma.XOR<Prisma.RoleCreateWithoutServerInput, Prisma.RoleUncheckedCreateWithoutServerInput>;
+};
+export type RoleCreateManyServerInputEnvelope = {
+    data: Prisma.RoleCreateManyServerInput | Prisma.RoleCreateManyServerInput[];
+    skipDuplicates?: boolean;
+};
+export type RoleUpsertWithWhereUniqueWithoutServerInput = {
+    where: Prisma.RoleWhereUniqueInput;
+    update: Prisma.XOR<Prisma.RoleUpdateWithoutServerInput, Prisma.RoleUncheckedUpdateWithoutServerInput>;
+    create: Prisma.XOR<Prisma.RoleCreateWithoutServerInput, Prisma.RoleUncheckedCreateWithoutServerInput>;
+};
+export type RoleUpdateWithWhereUniqueWithoutServerInput = {
+    where: Prisma.RoleWhereUniqueInput;
+    data: Prisma.XOR<Prisma.RoleUpdateWithoutServerInput, Prisma.RoleUncheckedUpdateWithoutServerInput>;
+};
+export type RoleUpdateManyWithWhereWithoutServerInput = {
+    where: Prisma.RoleScalarWhereInput;
+    data: Prisma.XOR<Prisma.RoleUpdateManyMutationInput, Prisma.RoleUncheckedUpdateManyWithoutServerInput>;
+};
+export type RoleScalarWhereInput = {
+    AND?: Prisma.RoleScalarWhereInput | Prisma.RoleScalarWhereInput[];
+    OR?: Prisma.RoleScalarWhereInput[];
+    NOT?: Prisma.RoleScalarWhereInput | Prisma.RoleScalarWhereInput[];
+    id?: Prisma.StringFilter<"Role"> | string;
+    serverId?: Prisma.StringFilter<"Role"> | string;
+    name?: Prisma.StringFilter<"Role"> | string;
+    color?: Prisma.StringNullableFilter<"Role"> | string | null;
+    permissionsBitmask?: Prisma.BigIntFilter<"Role"> | bigint | number;
+    position?: Prisma.IntFilter<"Role"> | number;
+    isDefault?: Prisma.BoolFilter<"Role"> | boolean;
+};
+export type RoleCreateManyServerInput = {
+    id?: string;
+    name: string;
+    color?: string | null;
+    permissionsBitmask?: bigint | number;
+    position?: number;
+    isDefault?: boolean;
+};
+export type RoleUpdateWithoutServerInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    members?: Prisma.ServerMemberRoleUpdateManyWithoutRoleNestedInput;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUpdateManyWithoutRoleNestedInput;
+};
+export type RoleUncheckedUpdateWithoutServerInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    members?: Prisma.ServerMemberRoleUncheckedUpdateManyWithoutRoleNestedInput;
+    channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedUpdateManyWithoutRoleNestedInput;
+};
+export type RoleUncheckedUpdateManyWithoutServerInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+    position?: Prisma.IntFieldUpdateOperationsInput | number;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+};
+/**
+ * Count Type RoleCountOutputType
+ */
+export type RoleCountOutputType = {
+    members: number;
+    channelPermissionOverrides: number;
+};
+export type RoleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    members?: boolean | RoleCountOutputTypeCountMembersArgs;
+    channelPermissionOverrides?: boolean | RoleCountOutputTypeCountChannelPermissionOverridesArgs;
+};
+/**
+ * RoleCountOutputType without action
+ */
+export type RoleCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoleCountOutputType
+     */
+    select?: Prisma.RoleCountOutputTypeSelect<ExtArgs> | null;
+};
+/**
+ * RoleCountOutputType without action
+ */
+export type RoleCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.ServerMemberRoleWhereInput;
+};
+/**
+ * RoleCountOutputType without action
+ */
+export type RoleCountOutputTypeCountChannelPermissionOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.ChannelPermissionOverrideWhereInput;
+};
+export type RoleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    serverId?: boolean;
+    name?: boolean;
+    color?: boolean;
+    permissionsBitmask?: boolean;
+    position?: boolean;
+    isDefault?: boolean;
+    members?: boolean | Prisma.Role$membersArgs<ExtArgs>;
+    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
+    channelPermissionOverrides?: boolean | Prisma.Role$channelPermissionOverridesArgs<ExtArgs>;
+    _count?: boolean | Prisma.RoleCountOutputTypeDefaultArgs<ExtArgs>;
+}, ExtArgs["result"]["role"]>;
+export type RoleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    serverId?: boolean;
+    name?: boolean;
+    color?: boolean;
+    permissionsBitmask?: boolean;
+    position?: boolean;
+    isDefault?: boolean;
+    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
+}, ExtArgs["result"]["role"]>;
+export type RoleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    serverId?: boolean;
+    name?: boolean;
+    color?: boolean;
+    permissionsBitmask?: boolean;
+    position?: boolean;
+    isDefault?: boolean;
+    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
+}, ExtArgs["result"]["role"]>;
+export type RoleSelectScalar = {
+    id?: boolean;
+    serverId?: boolean;
+    name?: boolean;
+    color?: boolean;
+    permissionsBitmask?: boolean;
+    position?: boolean;
+    isDefault?: boolean;
+};
+export type RoleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "serverId" | "name" | "color" | "permissionsBitmask" | "position" | "isDefault", ExtArgs["result"]["role"]>;
+export type RoleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    members?: boolean | Prisma.Role$membersArgs<ExtArgs>;
+    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
+    channelPermissionOverrides?: boolean | Prisma.Role$channelPermissionOverridesArgs<ExtArgs>;
+    _count?: boolean | Prisma.RoleCountOutputTypeDefaultArgs<ExtArgs>;
+};
+export type RoleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
+};
+export type RoleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
+};
+export type $RolePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    name: "Role";
+    objects: {
+        members: Prisma.$ServerMemberRolePayload<ExtArgs>[];
+        server: Prisma.$ServerPayload<ExtArgs>;
+        channelPermissionOverrides: Prisma.$ChannelPermissionOverridePayload<ExtArgs>[];
+    };
+    scalars: runtime.Types.Extensions.GetPayloadResult<{
+        id: string;
+        serverId: string;
+        name: string;
+        color: string | null;
+        permissionsBitmask: bigint;
+        position: number;
+        isDefault: boolean;
+    }, ExtArgs["result"]["role"]>;
+    composites: {};
+};
+export type RoleGetPayload<S extends boolean | null | undefined | RoleDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$RolePayload, S>;
+export type RoleCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<RoleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    select?: RoleCountAggregateInputType | true;
+};
+export interface RoleDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: {
+        types: Prisma.TypeMap<ExtArgs>['model']['Role'];
+        meta: {
+            name: 'Role';
+        };
+    };
+    /**
+     * Find zero or one Role that matches the filter.
+     * @param {RoleFindUniqueArgs} args - Arguments to find a Role
+     * @example
+     * // Get one Role
+     * const role = await prisma.role.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RoleFindUniqueArgs>(args: Prisma.SelectSubset<T, RoleFindUniqueArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find one Role that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RoleFindUniqueOrThrowArgs} args - Arguments to find a Role
+     * @example
+     * // Get one Role
+     * const role = await prisma.role.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RoleFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, RoleFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find the first Role that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleFindFirstArgs} args - Arguments to find a Role
+     * @example
+     * // Get one Role
+     * const role = await prisma.role.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RoleFindFirstArgs>(args?: Prisma.SelectSubset<T, RoleFindFirstArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find the first Role that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleFindFirstOrThrowArgs} args - Arguments to find a Role
+     * @example
+     * // Get one Role
+     * const role = await prisma.role.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RoleFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, RoleFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find zero or more Roles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Roles
+     * const roles = await prisma.role.findMany()
+     *
+     * // Get first 10 Roles
+     * const roles = await prisma.role.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const roleWithIdOnly = await prisma.role.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends RoleFindManyArgs>(args?: Prisma.SelectSubset<T, RoleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+    /**
+     * Create a Role.
+     * @param {RoleCreateArgs} args - Arguments to create a Role.
+     * @example
+     * // Create one Role
+     * const Role = await prisma.role.create({
+     *   data: {
+     *     // ... data to create a Role
+     *   }
+     * })
+     *
+     */
+    create<T extends RoleCreateArgs>(args: Prisma.SelectSubset<T, RoleCreateArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Create many Roles.
+     * @param {RoleCreateManyArgs} args - Arguments to create many Roles.
+     * @example
+     * // Create many Roles
+     * const role = await prisma.role.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends RoleCreateManyArgs>(args?: Prisma.SelectSubset<T, RoleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    /**
+     * Create many Roles and returns the data saved in the database.
+     * @param {RoleCreateManyAndReturnArgs} args - Arguments to create many Roles.
+     * @example
+     * // Create many Roles
+     * const role = await prisma.role.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many Roles and only return the `id`
+     * const roleWithIdOnly = await prisma.role.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends RoleCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, RoleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+    /**
+     * Delete a Role.
+     * @param {RoleDeleteArgs} args - Arguments to delete one Role.
+     * @example
+     * // Delete one Role
+     * const Role = await prisma.role.delete({
+     *   where: {
+     *     // ... filter to delete one Role
+     *   }
+     * })
+     *
+     */
+    delete<T extends RoleDeleteArgs>(args: Prisma.SelectSubset<T, RoleDeleteArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Update one Role.
+     * @param {RoleUpdateArgs} args - Arguments to update one Role.
+     * @example
+     * // Update one Role
+     * const role = await prisma.role.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends RoleUpdateArgs>(args: Prisma.SelectSubset<T, RoleUpdateArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Delete zero or more Roles.
+     * @param {RoleDeleteManyArgs} args - Arguments to filter Roles to delete.
+     * @example
+     * // Delete a few Roles
+     * const { count } = await prisma.role.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends RoleDeleteManyArgs>(args?: Prisma.SelectSubset<T, RoleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    /**
+     * Update zero or more Roles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Roles
+     * const role = await prisma.role.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends RoleUpdateManyArgs>(args: Prisma.SelectSubset<T, RoleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    /**
+     * Update zero or more Roles and returns the data updated in the database.
+     * @param {RoleUpdateManyAndReturnArgs} args - Arguments to update many Roles.
+     * @example
+     * // Update many Roles
+     * const role = await prisma.role.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more Roles and only return the `id`
+     * const roleWithIdOnly = await prisma.role.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends RoleUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, RoleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+    /**
+     * Create or update one Role.
+     * @param {RoleUpsertArgs} args - Arguments to update or create a Role.
+     * @example
+     * // Update or create a Role
+     * const role = await prisma.role.upsert({
+     *   create: {
+     *     // ... data to create a Role
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Role we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RoleUpsertArgs>(args: Prisma.SelectSubset<T, RoleUpsertArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Count the number of Roles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleCountArgs} args - Arguments to filter Roles to count.
+     * @example
+     * // Count the number of Roles
+     * const count = await prisma.role.count({
+     *   where: {
+     *     // ... the filter for the Roles we want to count
+     *   }
+     * })
+    **/
+    count<T extends RoleCountArgs>(args?: Prisma.Subset<T, RoleCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], RoleCountAggregateOutputType> : number>;
+    /**
+     * Allows you to perform aggregations operations on a Role.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RoleAggregateArgs>(args: Prisma.Subset<T, RoleAggregateArgs>): Prisma.PrismaPromise<GetRoleAggregateType<T>>;
+    /**
+     * Group by Role.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+    **/
+    groupBy<T extends RoleGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
+        orderBy: RoleGroupByArgs['orderBy'];
+    } : {
+        orderBy?: RoleGroupByArgs['orderBy'];
+    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<T['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
+        [P in HavingFields]: P extends ByFields ? never : P extends string ? `Error: Field "${P}" used in "having" needs to be provided in "by".` : [
+            Error,
+            'Field ',
+            P,
+            ` in "having" needs to be provided in "by"`
+        ];
+    }[HavingFields] : 'take' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : 'skip' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "skip", you also need to provide "orderBy"' : ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields]>(args: Prisma.SubsetIntersection<T, RoleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRoleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the Role model
+     */
+    readonly fields: RoleFieldRefs;
+}
+/**
+ * The delegate class that acts as a "Promise-like" for Role.
+ * Why is this prefixed with `Prisma__`?
+ * Because we want to prevent naming conflicts as mentioned in
+ * https://github.com/prisma/prisma-client-js/issues/707
+ */
+export interface Prisma__RoleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    members<T extends Prisma.Role$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Role$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServerMemberRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    server<T extends Prisma.ServerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServerDefaultArgs<ExtArgs>>): Prisma.Prisma__ServerClient<runtime.Types.Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+    channelPermissionOverrides<T extends Prisma.Role$channelPermissionOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Role$channelPermissionOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChannelPermissionOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
+}
+/**
+ * Fields of the Role model
+ */
+export interface RoleFieldRefs {
+    readonly id: Prisma.FieldRef<"Role", 'String'>;
+    readonly serverId: Prisma.FieldRef<"Role", 'String'>;
+    readonly name: Prisma.FieldRef<"Role", 'String'>;
+    readonly color: Prisma.FieldRef<"Role", 'String'>;
+    readonly permissionsBitmask: Prisma.FieldRef<"Role", 'BigInt'>;
+    readonly position: Prisma.FieldRef<"Role", 'Int'>;
+    readonly isDefault: Prisma.FieldRef<"Role", 'Boolean'>;
+}
+/**
+ * Role findUnique
+ */
+export type RoleFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: Prisma.RoleSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: Prisma.RoleOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.RoleInclude<ExtArgs> | null;
+    /**
+     * Filter, which Role to fetch.
+     */
+    where: Prisma.RoleWhereUniqueInput;
+};
+/**
+ * Role findUniqueOrThrow
+ */
+export type RoleFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: Prisma.RoleSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: Prisma.RoleOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.RoleInclude<ExtArgs> | null;
+    /**
+     * Filter, which Role to fetch.
+     */
+    where: Prisma.RoleWhereUniqueInput;
+};
+/**
+ * Role findFirst
+ */
+export type RoleFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: Prisma.RoleSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: Prisma.RoleOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.RoleInclude<ExtArgs> | null;
+    /**
+     * Filter, which Role to fetch.
+     */
+    where?: Prisma.RoleWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Roles to fetch.
+     */
+    orderBy?: Prisma.RoleOrderByWithRelationInput | Prisma.RoleOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Roles.
+     */
+    cursor?: Prisma.RoleWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Roles from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Roles.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Roles.
+     */
+    distinct?: Prisma.RoleScalarFieldEnum | Prisma.RoleScalarFieldEnum[];
+};
+/**
+ * Role findFirstOrThrow
+ */
+export type RoleFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: Prisma.RoleSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: Prisma.RoleOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.RoleInclude<ExtArgs> | null;
+    /**
+     * Filter, which Role to fetch.
+     */
+    where?: Prisma.RoleWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Roles to fetch.
+     */
+    orderBy?: Prisma.RoleOrderByWithRelationInput | Prisma.RoleOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Roles.
+     */
+    cursor?: Prisma.RoleWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Roles from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Roles.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Roles.
+     */
+    distinct?: Prisma.RoleScalarFieldEnum | Prisma.RoleScalarFieldEnum[];
+};
+/**
+ * Role findMany
+ */
+export type RoleFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: Prisma.RoleSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: Prisma.RoleOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.RoleInclude<ExtArgs> | null;
+    /**
+     * Filter, which Roles to fetch.
+     */
+    where?: Prisma.RoleWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Roles to fetch.
+     */
+    orderBy?: Prisma.RoleOrderByWithRelationInput | Prisma.RoleOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing Roles.
+     */
+    cursor?: Prisma.RoleWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Roles from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Roles.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Roles.
+     */
+    distinct?: Prisma.RoleScalarFieldEnum | Prisma.RoleScalarFieldEnum[];
+};
+/**
+ * Role create
+ */
+export type RoleCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: Prisma.RoleSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: Prisma.RoleOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.RoleInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a Role.
+     */
+    data: Prisma.XOR<Prisma.RoleCreateInput, Prisma.RoleUncheckedCreateInput>;
+};
+/**
+ * Role createMany
+ */
+export type RoleCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Roles.
+     */
+    data: Prisma.RoleCreateManyInput | Prisma.RoleCreateManyInput[];
+    skipDuplicates?: boolean;
+};
+/**
+ * Role createManyAndReturn
+ */
+export type RoleCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: Prisma.RoleSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: Prisma.RoleOmit<ExtArgs> | null;
+    /**
+     * The data used to create many Roles.
+     */
+    data: Prisma.RoleCreateManyInput | Prisma.RoleCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.RoleIncludeCreateManyAndReturn<ExtArgs> | null;
+};
+/**
+ * Role update
+ */
+export type RoleUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: Prisma.RoleSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: Prisma.RoleOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.RoleInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a Role.
+     */
+    data: Prisma.XOR<Prisma.RoleUpdateInput, Prisma.RoleUncheckedUpdateInput>;
+    /**
+     * Choose, which Role to update.
+     */
+    where: Prisma.RoleWhereUniqueInput;
+};
+/**
+ * Role updateMany
+ */
+export type RoleUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Roles.
+     */
+    data: Prisma.XOR<Prisma.RoleUpdateManyMutationInput, Prisma.RoleUncheckedUpdateManyInput>;
+    /**
+     * Filter which Roles to update
+     */
+    where?: Prisma.RoleWhereInput;
+    /**
+     * Limit how many Roles to update.
+     */
+    limit?: number;
+};
+/**
+ * Role updateManyAndReturn
+ */
+export type RoleUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: Prisma.RoleSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: Prisma.RoleOmit<ExtArgs> | null;
+    /**
+     * The data used to update Roles.
+     */
+    data: Prisma.XOR<Prisma.RoleUpdateManyMutationInput, Prisma.RoleUncheckedUpdateManyInput>;
+    /**
+     * Filter which Roles to update
+     */
+    where?: Prisma.RoleWhereInput;
+    /**
+     * Limit how many Roles to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.RoleIncludeUpdateManyAndReturn<ExtArgs> | null;
+};
+/**
+ * Role upsert
+ */
+export type RoleUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: Prisma.RoleSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: Prisma.RoleOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.RoleInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the Role to update in case it exists.
+     */
+    where: Prisma.RoleWhereUniqueInput;
+    /**
+     * In case the Role found by the `where` argument doesn't exist, create a new Role with this data.
+     */
+    create: Prisma.XOR<Prisma.RoleCreateInput, Prisma.RoleUncheckedCreateInput>;
+    /**
+     * In case the Role was found with the provided `where` argument, update it with this data.
+     */
+    update: Prisma.XOR<Prisma.RoleUpdateInput, Prisma.RoleUncheckedUpdateInput>;
+};
+/**
+ * Role delete
+ */
+export type RoleDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: Prisma.RoleSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: Prisma.RoleOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.RoleInclude<ExtArgs> | null;
+    /**
+     * Filter which Role to delete.
+     */
+    where: Prisma.RoleWhereUniqueInput;
+};
+/**
+ * Role deleteMany
+ */
+export type RoleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Filter which Roles to delete
+     */
+    where?: Prisma.RoleWhereInput;
+    /**
+     * Limit how many Roles to delete.
+     */
+    limit?: number;
+};
+/**
+ * Role.members
+ */
+export type Role$membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServerMemberRole
+     */
+    select?: Prisma.ServerMemberRoleSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ServerMemberRole
+     */
+    omit?: Prisma.ServerMemberRoleOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ServerMemberRoleInclude<ExtArgs> | null;
+    where?: Prisma.ServerMemberRoleWhereInput;
+    orderBy?: Prisma.ServerMemberRoleOrderByWithRelationInput | Prisma.ServerMemberRoleOrderByWithRelationInput[];
+    cursor?: Prisma.ServerMemberRoleWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.ServerMemberRoleScalarFieldEnum | Prisma.ServerMemberRoleScalarFieldEnum[];
+};
+/**
+ * Role.channelPermissionOverrides
+ */
+export type Role$channelPermissionOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelPermissionOverride
+     */
+    select?: Prisma.ChannelPermissionOverrideSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ChannelPermissionOverride
+     */
+    omit?: Prisma.ChannelPermissionOverrideOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ChannelPermissionOverrideInclude<ExtArgs> | null;
+    where?: Prisma.ChannelPermissionOverrideWhereInput;
+    orderBy?: Prisma.ChannelPermissionOverrideOrderByWithRelationInput | Prisma.ChannelPermissionOverrideOrderByWithRelationInput[];
+    cursor?: Prisma.ChannelPermissionOverrideWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.ChannelPermissionOverrideScalarFieldEnum | Prisma.ChannelPermissionOverrideScalarFieldEnum[];
+};
+/**
+ * Role without action
+ */
+export type RoleDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: Prisma.RoleSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: Prisma.RoleOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.RoleInclude<ExtArgs> | null;
+};
+//# sourceMappingURL=Role.d.ts.map

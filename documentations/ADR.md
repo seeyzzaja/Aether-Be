@@ -1,0 +1,141 @@
+**ARCHITECTURE DECISION RECORD (ADR)**
+**Discord-Like Web Application — Project-Based Learning**
+*Fase 0 — Dokumen 2 dari rangkaian dokumentasi enterprise*
+# Pendahuluan
+Dokumen ini mencatat keputusan-keputusan arsitektur penting untuk proyek, mengikuti format Architecture Decision Record (ADR). Setiap ADR berisi konteks masalah, opsi yang dipertimbangkan, keputusan yang diambil, serta konsekuensi (dampak positif dan negatif) dari keputusan tersebut.
+Dua ADR utama — pemilihan mekanisme realtime (ADR-002) dan pemilihan infrastruktur voice/video (ADR-003) — dibahas secara mendalam sesuai permintaan eksplisit, karena keduanya adalah keputusan dengan trade-off paling signifikan terhadap kompleksitas dan skalabilitas sistem. ADR lain mencatat keputusan stack yang sudah ditetapkan sejak awal proyek, namun tetap disertai alasan dan trade-off agar bernilai sebagai bahan pembelajaran.
+
+# ADR-001 — Gaya Arsitektur: Modular Monolith
+**STATUS: DITERIMA (Permanen)**
+## Konteks
+Proyek memerlukan gaya arsitektur yang mendukung kecepatan pengembangan solo/PBL, namun tetap mengajarkan disiplin batas modul yang biasa ditemukan pada sistem microservices.
+## Opsi yang Dipertimbangkan
+| **Opsi** | **Kelebihan** | **Kekurangan** |
+| --- | --- | --- |
+| **Monolith tradisional (tanpa batas modul jelas)** | **Paling cepat dikembangkan di awal** | **Cepat menjadi "big ball of mud"; sulit dipelajari sebagai praktik disiplin arsitektur** |
+| **Microservices sejak awal** | **Skalabilitas independen per layanan; isolasi kegagalan** | **Overhead operasional (service discovery, distributed tracing, network latency) terlalu tinggi untuk proyek solo/PBL tahap awal** |
+| **Modular Monolith (dipilih)** | **Disiplin batas modul & dependency rule tanpa overhead distributed system; mudah di-deploy sebagai satu unit; tetap bisa dipecah ke microservices di masa depan bila diperlukan** | **Skalabilitas horizontal terbatas pada level modul (semua modul scale bersamaan sebagai satu proses/replika)** |
+## Keputusan
+Modular Monolith dipilih dan ditetapkan sebagai keputusan permanen (dikonfirmasi stakeholder) — tidak ada rencana migrasi ke microservices di masa depan untuk proyek ini.
+## Konsekuensi
+Positif: kompleksitas operasional (deployment, observability, networking) tetap rendah, cocok untuk skala tim solo/PBL.
+Positif: batas modul yang dijaga ketat tetap memberi manfaat pembelajaran arsitektur yang mirip microservices tanpa biaya distributed system.
+Negatif: scaling harus dilakukan dengan mereplikasi seluruh aplikasi (horizontal scaling di level proses), bukan per modul; strategi ini perlu dijelaskan rinci di Architecture Document.
+Negatif: karena bersifat permanen, keterbatasan ini diterima sebagai batasan desain jangka panjang, bukan sekadar solusi sementara.
+
+# ADR-002 — Mekanisme Realtime: Native WebSocket vs Socket.IO
+**STATUS: DITERIMA**
+## Konteks
+Aplikasi membutuhkan komunikasi realtime dua arah untuk fitur presence, typing indicator, read receipt, notifikasi realtime, dan update pesan instan. REST API digunakan untuk operasi CRUD standar, sedangkan kanal realtime dibutuhkan untuk event yang bersifat push dari server ke klien maupun sebaliknya secara instan.
+## Opsi 1: Native WebSocket (modul `ws`)
+Modul `ws` adalah implementasi WebSocket protocol (RFC 6455) murni untuk Node.js tanpa lapisan abstraksi tambahan.
+## Opsi 2: Socket.IO
+Socket.IO adalah library realtime yang dibangun di atas WebSocket dengan lapisan abstraksi tambahan: automatic reconnection, fallback transport (long-polling), room/namespace, dan acknowledgement callback bawaan.
+## Perbandingan Mendalam
+| **Kriteria** | **Native WebSocket (ws)** | **Socket.IO** |
+| --- | --- | --- |
+| **Performance** | **Overhead paling rendah — hanya frame WebSocket murni, tanpa lapisan protokol tambahan, cocok untuk throughput tinggi dan latency minimal.** | **Overhead sedikit lebih tinggi karena ada framing tambahan (Engine.IO packet encoding) di atas WebSocket, namun perbedaannya kecil untuk beban kerja tipikal chat/presence.** |
+| **Scalability** | **Scaling horizontal (multi-instance) harus diimplementasikan sendiri, misalnya lewat Redis Pub/Sub untuk broadcast lintas instance.** | **Scaling horizontal sudah punya pola matang via `socket.io-redis-adapter`, mengurangi effort implementasi broadcast lintas instance.** |
+| **Fitur** | **Minimal: hanya open/message/close/error. Room, broadcast, reconnection, dan fallback harus dibangun manual.** | **Kaya fitur bawaan: room & namespace, automatic reconnection dengan backoff, acknowledgement (callback ala RPC), broadcast API, dan fallback ke HTTP long-polling bila WebSocket diblokir jaringan/proxy tertentu.** |
+| **Learning Curve** | **Lebih curam untuk fitur lanjutan karena semua (reconnection, room, broadcast) harus dirancang dan diimplementasikan sendiri — namun ini justru bernilai tinggi untuk tujuan pembelajaran mendalam.** | **Lebih landai untuk mencapai fitur lengkap dengan cepat, karena API tingkat tinggi sudah tersedia; risiko belajar "cara pakai library" tanpa memahami mekanisme di baliknya.** |
+| **Kapan Digunakan** | **Cocok saat tim ingin kontrol penuh atas protokol, performa maksimal, atau sedang belajar cara kerja realtime dari dasar.** | **Cocok saat prioritas adalah kecepatan pengembangan fitur realtime yang kaya (room, reconnection otomatis) dengan effort minimal.** |
+| **Kelebihan** | **Ringan, standar protokol terbuka, kontrol penuh, tidak ada dependency tambahan di sisi klien selain WebSocket API bawaan browser.** | **Reconnection, room, dan fallback transport sudah teruji dan dipakai luas di industri; ekosistem dan dokumentasi besar.** |
+| **Kekurangan** | **Banyak hal "gratis" di Socket.IO (reconnection, room) harus dibangun manual, menambah waktu pengembangan fitur non-inti.** | **Protokol Engine.IO/Socket.IO tidak kompatibel langsung dengan WebSocket client generik lain (butuh client Socket.IO khusus); ada overhead abstraksi.** |
+## Keputusan & Rekomendasi
+Direkomendasikan menggunakan Native WebSocket (`ws`) sebagai fondasi, dengan alasan utama sebagai berikut:
+Tujuan proyek adalah Project-Based Learning yang secara eksplisit ingin mendalami desain sistem realtime — membangun sendiri mekanisme reconnection, broadcast, dan scaling lintas instance (via Redis Pub/Sub) memberi nilai belajar jauh lebih tinggi dibanding memakai abstraksi siap pakai.
+Karena backend menggunakan Redis untuk keperluan lain (cache, BullMQ), pola scaling WebSocket lintas instance via Redis Pub/Sub dapat dibangun secara konsisten dalam satu ekosistem infrastruktur, tanpa dependency tambahan seperti `socket.io-redis-adapter`.
+REST API tetap digunakan untuk operasi CRUD utama; WebSocket murni cukup untuk event presence, typing, read receipt, dan push notifikasi realtime yang bentuk pesannya dapat dirancang sendiri (mis. JSON envelope dengan tipe event eksplisit) tanpa memerlukan fitur room/namespace bawaan Socket.IO — batas "room" (per channel/server) dapat dipetakan secara manual pada connection registry di level aplikasi, sejalan dengan pola Modular Monolith.
+Trade-off yang diterima secara sadar: effort implementasi fitur pendukung (reconnection strategy di klien, message envelope, broadcast registry) menjadi tanggung jawab tim, dan didokumentasikan rinci pada Architecture Document (Event Flow) agar tidak menjadi utang teknis yang tidak disengaja.
+
+# ADR-003 — Infrastruktur Voice & Video: LiveKit vs Alternatif
+**STATUS: DITERIMA**
+## Konteks
+Aplikasi membutuhkan voice channel dan video channel mirip Discord, yang berarti dibutuhkan Selective Forwarding Unit (SFU) untuk menangani banyak peserta dalam satu room tanpa membebani setiap klien untuk mengirim stream ke semua peserta lain (mesh WebRTC murni tidak efisien untuk group call skala besar).
+## Opsi yang Dipertimbangkan
+| **Kriteria** | **WebRTC Murni (mesh)** | **mediasoup** | **Janus** | **Jitsi (Jitsi Videobridge)** | **LiveKit (dipilih)** |
+| --- | --- | --- | --- | --- | --- |
+| **Model** | **Peer-to-peer penuh, tanpa SFU** | **SFU library (Node.js), butuh membangun signaling sendiri** | **SFU generik berbasis plugin, signaling custom** | **SFU siap pakai + komponen lengkap (Jicofo, Prosody), relatif berat untuk deploy** | **SFU siap pakai + server lengkap + SDK klien resmi untuk banyak platform** |
+| **Learning Curve** | **Rendah untuk 1-1 call, sangat tinggi untuk group call (harus handle N koneksi manual)** | **Tinggi — perlu memahami mediasoup worker/router/transport API secara detail** | **Tinggi — konfigurasi plugin dan signaling protocol Janus cukup kompleks** | **Sedang — komponen banyak (videobridge, Jicofo, Prosody/XMPP) menambah kurva belajar deployment** | **Sedang — SDK dan dokumentasi dirancang developer-friendly, signaling sudah tersedia** |
+| **Skalabilitas Group Call** | **Buruk (bandwidth klien naik linear terhadap jumlah peserta)** | **Baik, tapi scaling multi-node harus dirancang sendiri** | **Baik, dengan konfigurasi tambahan untuk multi-node** | **Baik, dengan Octo (multi-bridge) untuk scaling, tapi setup kompleks** | **Baik, mendukung distributed multi-node secara native dengan konfigurasi lebih sederhana** |
+| **Effort Integrasi ke Aplikasi Web** | **Rendah untuk 1-1, sangat tinggi untuk fitur Discord-like** | **Tinggi — hanya menyediakan media layer, signaling & room management dibangun sendiri** | **Tinggi — sama seperti mediasoup, signaling custom diperlukan** | **Sedang — API tersedia namun arsitektur multi-komponen menambah kompleksitas ops** | **Rendah–Sedang — menyediakan server API + SDK klien (React) + room/track management siap pakai** |
+| **Kecocokan dengan Modular Monolith & tujuan PBL** | **Kurang relevan untuk group voice channel gaya Discord** | **Cocok untuk belajar internal SFU secara sangat mendalam, namun menambah beban signaling di luar cakupan fitur inti** | **Serupa mediasoup, kompleksitas ops lebih tinggi tanpa manfaat belajar tambahan yang signifikan** | **Kompleksitas deployment (banyak service) kurang sejalan dengan prinsip menjaga operasional sederhana pada Modular Monolith** | **Selaras — cukup untuk dipelajari sebagai "cara mengintegrasikan SFU production-grade", tanpa mengorbankan waktu belajar untuk membangun signaling media dari nol** |
+## Keputusan & Rekomendasi
+LiveKit dipilih sebagai infrastruktur voice & video, dengan alasan:
+Fokus pembelajaran proyek ini pada level aplikasi (bagaimana voice/video channel terintegrasi dengan permission, presence, dan UI Discord-like), bukan pada membangun SFU/media engine dari nol — mediasoup dan Janus lebih cocok bila tujuan belajarnya secara spesifik adalah internal media engine.
+LiveKit menyediakan SDK klien resmi untuk React beserta server API dan konsep room/participant/track yang langsung memetakan ke model voice channel Discord-like, mempercepat integrasi tanpa mengorbankan pemahaman konsep inti WebRTC/SFU.
+Dibanding Jitsi, LiveKit memiliki jumlah komponen operasional yang lebih sedikit untuk di-deploy dan dipelihara, lebih selaras dengan prinsip menjaga kompleksitas operasional tetap rendah pada arsitektur Modular Monolith.
+LiveKit mendukung skenario scaling multi-node secara native, sehingga tetap relevan sebagai bahan belajar strategi scaling voice/video untuk mendekati target desain (10.000 concurrent user), meski divalidasi secara teoritis, bukan load-test nyata.
+## Konsekuensi
+Positif: waktu belajar terfokus pada integrasi voice/video dengan permission & presence, bukan pada membangun signaling protocol dari nol.
+Negatif: pemahaman mendalam tentang internal SFU (packet forwarding, simulcast, congestion control) tidak didapat secara langsung — ini dicatat sebagai technical debt pembelajaran yang sengaja diterima, dapat dieksplorasi lebih lanjut sebagai proyek belajar terpisah bila diperlukan.
+Negatif: proyek bergantung pada server LiveKit (baik self-hosted maupun LiveKit Cloud) sebagai komponen infrastruktur tambahan di luar stack inti Node.js/PostgreSQL.
+
+# ADR-004 — Database & ORM: PostgreSQL + Prisma
+**STATUS: DITERIMA**
+## Konteks
+Data aplikasi bersifat sangat relasional (user, server, membership, role, permission, channel, message, reaction) dengan kebutuhan query kompleks (join lintas tabel, pagination, full text search).
+## Alasan Pemilihan
+PostgreSQL dipilih karena dukungan relasi kuat, transaksi ACID, serta fitur Full Text Search bawaan yang menghindari kebutuhan mesin pencari terpisah (mis. Elasticsearch) pada tahap awal — selaras dengan prinsip menjaga kompleksitas operasional tetap rendah.
+Prisma dipilih sebagai ORM karena type-safety end-to-end dengan TypeScript, migration tool bawaan yang eksplisit dan mudah dipelajari, serta Prisma Studio yang mempercepat inspeksi data selama proses belajar.
+## Alternatif yang Dipertimbangkan
+| **Alternatif** | **Alasan Tidak Dipilih** |
+| --- | --- |
+| **MongoDB (NoSQL)** | **Model data aplikasi ini dominan relasional (permission, membership, thread), sehingga skema relasional PostgreSQL lebih natural dan lebih bernilai untuk pembelajaran desain database relasional skala besar.** |
+| **TypeORM / Sequelize** | **Prisma menawarkan type-safety yang lebih ketat dan developer experience migrasi yang lebih eksplisit, dinilai lebih baik untuk tujuan pembelajaran best practice modern.** |
+| **Elasticsearch untuk search** | **Ditunda karena PostgreSQL Full Text Search sudah cukup untuk skala awal proyek pembelajaran ini; sudah menjadi keputusan eksplisit pada spesifikasi awal proyek.** |
+## Konsekuensi
+Positif: satu sistem database untuk data relasional maupun pencarian teks, mengurangi jumlah moving parts infrastruktur.
+Negatif: PostgreSQL Full Text Search kurang powerful dibanding Elasticsearch untuk kebutuhan relevansi pencarian yang sangat kompleks — diterima sebagai batasan pada skala proyek ini, dan dicatat sebagai kandidat evolusi di masa depan bila diperlukan.
+
+# ADR-005 — Caching: Redis
+**STATUS: DITERIMA**
+Redis dipilih sebagai layer cache untuk data yang sering diakses (mis. presence state, session, rate-limit counter) karena performa in-memory, dukungan struktur data kaya (hash, sorted set untuk presence/leaderboard-like use case), serta ekosistem integrasi matang dengan BullMQ (queue) dan potensi Pub/Sub untuk broadcast WebSocket lintas instance (lihat ADR-002).
+Alternatif seperti Memcached tidak dipilih karena Redis menyediakan struktur data lebih kaya dan dapat merangkap peran Pub/Sub serta backing store BullMQ, mengurangi jumlah komponen infrastruktur terpisah.
+
+# ADR-006 — Background Job Queue: BullMQ
+**STATUS: DITERIMA**
+BullMQ dipilih untuk memproses pekerjaan asinkron (mis. pengiriman email notifikasi, transkoding/pemrosesan lanjutan file upload, pembersihan data) di luar request-response cycle utama, agar API tetap responsif. BullMQ dibangun di atas Redis, sehingga tidak menambah dependency infrastruktur baru di luar Redis yang sudah digunakan untuk caching.
+
+# ADR-007 — Object Storage: Cloudinary
+**STATUS: DITERIMA**
+Cloudinary dipilih untuk menyimpan file upload (image, video, audio, PDF, ZIP hingga 1GB) karena menyediakan transformasi media (resize, thumbnail, optimasi) siap pakai dan CDN delivery bawaan, mengurangi kebutuhan membangun infrastruktur object storage dan image-processing pipeline sendiri pada tahap awal pembelajaran.
+
+# ADR-008 — Search: PostgreSQL Full Text Search
+**STATUS: DITERIMA**
+Dibahas bersamaan dengan ADR-004. PostgreSQL Full Text Search (tsvector/tsquery) digunakan untuk pencarian user, server, channel, message, dan file tanpa menambah komponen infrastruktur baru, dengan trade-off relevansi pencarian yang lebih sederhana dibanding mesin pencari khusus.
+
+# ADR-009 — Reverse Proxy: Traefik
+**STATUS: DITERIMA**
+Traefik dipilih sebagai reverse proxy karena konfigurasi berbasis label Docker yang deklaratif, dukungan otomatis untuk TLS (Let's Encrypt), serta kemudahan routing untuk banyak service (API, WebSocket, LiveKit) dalam satu titik masuk — relevan untuk pembelajaran praktik deployment modern berbasis container.
+
+# ADR-010 — Logging: Pino
+**STATUS: DITERIMA**
+Pino dipilih karena performa logging JSON terstruktur yang sangat cepat dengan overhead rendah, penting agar instrumentasi logging tidak menjadi bottleneck pada jalur realtime bervolume tinggi (mis. event presence dan messaging).
+
+# ADR-011 — CI/CD: GitHub Actions
+**STATUS: DITERIMA**
+GitHub Actions dipilih karena terintegrasi langsung dengan repository, konfigurasi berbasis YAML yang mudah dipelajari, dan cukup untuk kebutuhan pipeline (lint, test, build image, deploy) pada skala proyek pembelajaran ini tanpa memerlukan CI/CD server terpisah.
+
+# ADR-012 — Containerization: Docker
+**STATUS: DITERIMA**
+Docker dipilih sebagai standar containerization untuk memastikan konsistensi environment development dan production, serta menjadi fondasi bagi orkestrasi Traefik dan strategi deployment Modular Monolith yang dibahas rinci pada Architecture Document.
+
+# Keputusan yang Telah Diambil
+Native WebSocket (`ws`) dipilih sebagai mekanisme realtime utama, dengan scaling lintas instance direncanakan melalui Redis Pub/Sub.
+LiveKit dipilih sebagai infrastruktur voice & video dibanding mediasoup, Janus, Jitsi, dan WebRTC murni.
+Modular Monolith ditetapkan permanen sebagai gaya arsitektur (dikonfirmasi stakeholder, tidak ada migrasi microservices di masa depan).
+Seluruh komponen stack pendukung (PostgreSQL+Prisma, Redis, BullMQ, Cloudinary, PostgreSQL FTS, Traefik, Pino, GitHub Actions, Docker) dicatat dan diterima sebagai keputusan arsitektur dengan alasan masing-masing.
+Target 10.000 concurrent user dan 100.000 member/server dikonfirmasi sebagai target desain teoritis, tidak akan divalidasi melalui load-testing sungguhan.
+# Keputusan yang Masih Perlu Dikonfirmasi
+Detail teknis pola message envelope dan connection registry untuk Native WebSocket (format event, strategi reconnection di klien) — akan dirinci pada Architecture Document (Event Flow), bukan pada ADR ini.
+Apakah LiveKit akan di-deploy self-hosted (sejalan dengan filosofi Docker/Traefik proyek) atau menggunakan LiveKit Cloud pada tahap awal pembelajaran — akan diputuskan pada Architecture Document / Deployment Diagram.
+# Risiko Desain
+Membangun scaling WebSocket lintas instance secara manual (via Redis Pub/Sub) berisiko menimbulkan bug distributed-system klasik (message duplication, race condition saat instance restart) yang harus diantisipasi khusus pada Architecture Document.
+Karena Modular Monolith bersifat permanen, seluruh strategi scaling ke depan (termasuk voice/video via LiveKit) harus tetap bekerja dalam batasan "scale seluruh proses bersamaan", bukan scaling granular per modul.
+# Technical Debt yang Sengaja Diterima
+Pemahaman mendalam tentang internal SFU/media engine (congestion control, simulcast) sengaja tidak menjadi fokus karena memilih LiveKit dibanding mediasoup/Janus — dicatat sebagai peluang pembelajaran lanjutan terpisah, bukan kekurangan proyek ini.
+Reconnection strategy dan fallback transport (yang otomatis tersedia di Socket.IO) harus dibangun manual di atas Native WebSocket; sampai Architecture Document merincinya, ini dianggap utang teknis yang disengaja dan terlacak.
+# Pertanyaan untuk Stakeholder Sebelum Melanjutkan ke Fase Berikutnya
+Apakah rekomendasi Native WebSocket (dibanding Socket.IO) dan LiveKit (dibanding alternatif SFU lain) dapat diterima sepenuhnya sebagai keputusan final Fase 0?
+Apakah siap melanjutkan ke dokumen terakhir Fase 0, yaitu Learning Roadmap, yang akan memecah seluruh topik pembelajaran ini menjadi milestone bertahap?

@@ -1,0 +1,110 @@
+**VISION DOCUMENT**
+**Discord-Like Web Application — Project-Based Learning**
+*Fase 0 — Dokumen 1 dari rangkaian dokumentasi enterprise*
+# 1. Ringkasan Eksekutif
+Proyek ini membangun aplikasi web bergaya Discord (server, channel, messaging, voice/video, presence, notifikasi) menggunakan stack modern: React di sisi frontend serta Express.js, PostgreSQL, dan Prisma di sisi backend, dengan realtime melalui WebSocket dan voice/video melalui LiveKit.
+Yang membedakan proyek ini dari sekadar kloning produk adalah tujuan intinya: proyek ini adalah wahana Project-Based Learning (PBL) untuk mendalami rekayasa perangkat lunak modern secara menyeluruh — mulai dari pengambilan keputusan arsitektur, desain basis data skala besar, keamanan aplikasi, hingga praktik DevOps dan disiplin engineering di industri teknologi.
+Karena itu, seluruh rangkaian dokumen (Vision, ADR, PRD, SRS, Architecture, Database Design, API Specification, Security Design, UI/UX Specification, Development Roadmap, Sprint Breakdown, dan Task Checklist) disusun dengan standar kualitas setara dokumentasi perusahaan teknologi profesional, dan diproduksi satu per satu sesuai urutan fase agar setiap keputusan dapat dipahami secara mendalam sebelum melangkah ke fase berikutnya.
+# 2. Latar Belakang & Motivasi
+Belajar software engineering hanya melalui tutorial parsial (mis. "cara membuat REST API" atau "cara pakai WebSocket") seringkali gagal memberi pemahaman utuh tentang bagaimana sebuah sistem production-grade dirancang, dibangun, dan dioperasikan. Kompleksitas nyata biasanya muncul dari interaksi antar komponen: bagaimana autentikasi berinteraksi dengan permission, bagaimana presence berskala ke puluhan ribu koneksi, bagaimana upload besar ditangani tanpa membebani server, dan seterusnya.
+Discord dipilih sebagai studi kasus karena mencakup hampir seluruh spektrum tantangan teknis modern dalam satu produk: realtime messaging, voice/video call, sistem permission granular, notifikasi, pencarian, moderasi, hingga skalabilitas untuk jutaan pengguna. Ini menjadikannya kanvas latihan yang sangat kaya untuk PBL, tanpa proyek ini bertujuan menyaingi atau menggantikan Discord sebagai produk komersial.
+# 3. Tujuan Proyek
+## 3.1 Tujuan Pembelajaran (Learning Goals) — Prioritas Utama
+Memahami dan mempraktikkan proses pengambilan keputusan arsitektur (Architecture Decision Record) secara terstruktur, termasuk analisis trade-off antar opsi teknologi.
+Mendalami desain sistem realtime (WebSocket, presence, typing indicator, read receipt) dan implikasi skalabilitasnya.
+Mendalami desain basis data relasional skala besar: pemodelan ERD, indexing strategy, full text search, dan strategi migrasi.
+Mempraktikkan arsitektur Modular Monolith secara disiplin: batas modul, dependency rule, dan pemisahan layer.
+Memahami integrasi layanan pihak ketiga untuk voice/video (LiveKit), queue (BullMQ), cache (Redis), dan storage (Cloudinary).
+Membangun kebiasaan engineering profesional: Conventional Commit, feature branch workflow, CI/CD, linting/formatting otomatis (Biome), dan commit hook (Husky, Commitlint).
+Memahami praktik keamanan aplikasi web modern: rate limiting, audit log, session & device management, CSRF/CSP, enkripsi, dan anti-spam.
+## 3.2 Tujuan Produk (Product Goals) — Pendukung Tujuan Pembelajaran
+Menghasilkan aplikasi web Discord-like yang benar-benar berfungsi (bukan sekadar prototipe UI) sebagai bukti nyata dari pembelajaran yang dilakukan.
+Aplikasi dapat diakses sebagai website responsif dan Progressive Web App (PWA).
+Mendukung fitur inti: autentikasi, server/kategori/channel, messaging kaya fitur, presence, notifikasi, upload file, voice/video, dan pencarian.
+# 4. Non-Goals (Di Luar Cakupan)
+Bagian ini penting agar ekspektasi tetap realistis mengingat sifat proyek sebagai pembelajaran, bukan startup komersial.
+Proyek ini tidak bertujuan mencapai parity fitur 100% dengan Discord (mis. integrasi bot marketplace, Nitro/monetisasi, aplikasi desktop native, mobile native app).
+Tidak ada target monetisasi, akuisisi pengguna nyata, atau kompetisi pasar dengan Discord.
+Uji beban pada skala 10.000 concurrent user akan dilakukan secara simulasi/load-testing, bukan trafik produksi sungguhan.
+Kepatuhan regulasi formal (mis. sertifikasi SOC 2, audit kepatuhan hukum lintas negara) berada di luar cakupan, meskipun praktik keamanan dasar tetap diterapkan sebagai bahan pembelajaran.
+# 5. Target Audiens
+## 5.1 Pengguna Akhir Simulasi (Persona dalam Aplikasi)
+Mengikuti pola pengguna Discord: individu maupun komunitas yang berkomunikasi melalui teks, suara, dan video dalam ruang (server) yang terorganisir menjadi kategori dan channel, dengan kebutuhan akan kontrol peran/izin, notifikasi, dan pencarian.
+## 5.2 Pemilik Proyek (Learner)
+Developer yang menjalankan proyek ini untuk memperdalam kemampuan sebagai software engineer, dengan fokus pada backend dan arsitektur sistem, sekaligus memperkuat kemampuan frontend modern dan praktik DevOps.
+# 6. Kriteria Keberhasilan
+| **Dimensi** | **Indikator Keberhasilan** |
+| --- | --- |
+| **Pembelajaran** | **Setiap keputusan arsitektur besar (realtime, voice/video, database, caching) dapat dijelaskan alasan dan trade-off-nya secara mandiri oleh learner.** |
+| **Fungsional** | **Seluruh fitur inti (auth, server/channel, messaging, presence, notifikasi, upload, voice/video, search, admin panel) berjalan end-to-end.** |
+| **Non-Fungsional** | **Sistem terbukti (via desain dan/atau load test) mampu menampung target 10.000 concurrent user dan 100.000 member per server sesuai strategi scaling yang didefinisikan pada fase Architecture.** |
+| **Kualitas Dokumentasi** | **Seluruh dokumen fase 0-10 selesai dengan kualitas setara dokumentasi enterprise, termasuk diagram Mermaid yang relevan.** |
+| **Kualitas Kode** | **Kode mengikuti standar Conventional Commit, lolos lint (Biome), dan tervalidasi melalui CI/CD (GitHub Actions).** |
+# 7. Lingkup Fitur Tingkat Tinggi
+Rincian lengkap akan dijabarkan pada dokumen PRD dan SRS. Ringkasan lingkup:
+Autentikasi: registrasi & login berbasis email dan username.
+Workspace: Server → Category → Channel (Text, Voice, Video, Forum, Announcement).
+Messaging: reply, thread, mention, edit, delete/soft delete, pin, forward, emoji reaction, poll, markdown, embed.
+Presence & Realtime: online/offline/idle/DND/invisible, typing indicator, read receipt.
+Notifikasi: realtime dan email.
+Upload: image, video, audio, PDF, ZIP (maksimum 1 GB).
+Role & Permission bergaya Discord.
+Pencarian: user, server, channel, message, file.
+Admin Panel.
+Voice & Video call melalui LiveKit.
+# 8. Prinsip Panduan (Guiding Principles)
+Documentation-first: tidak ada implementasi besar tanpa dokumen keputusan yang jelas terlebih dahulu.
+Explain the why, not just the what: setiap keputusan teknis disertai trade-off dan alasan pemilihan.
+Modular Monolith disiplin: batas modul dijaga ketat agar migrasi ke microservices (bila suatu saat diperlukan sebagai latihan lanjutan) tetap memungkinkan.
+Progressive complexity: pembelajaran dimulai dari fondasi (autentikasi, database) sebelum masuk ke topik lanjutan (realtime scaling, voice/video, queue).
+Production-mindset: keputusan desain mempertimbangkan skenario production (skalabilitas, keamanan, observability) meskipun proyek ini adalah proyek belajar.
+# 9. Batasan & Asumsi Awal
+## 9.1 Batasan Teknis (Given)
+Stack teknologi (React, Express.js, PostgreSQL, Prisma, WebSocket, LiveKit, BullMQ, Redis, Cloudinary, Traefik, Pino, GitHub Actions, Docker) telah ditetapkan sebagai bagian dari tujuan pembelajaran, bukan hasil evaluasi terbuka — kecuali pada titik keputusan yang secara eksplisit diminta dianalisis pada ADR (native WebSocket vs Socket.IO; LiveKit vs mediasoup/Janus/Jitsi/WebRTC murni).
+Arsitektur ditetapkan sebagai Modular Monolith.
+## 9.2 Asumsi Awal
+Learner memiliki waktu belajar bertahap (part-time/self-paced), sehingga roadmap akan dipecah menjadi milestone yang dapat dicapai secara inkremental.
+Infrastruktur pengembangan awal berjalan di lingkungan lokal/single-host menggunakan Docker sebelum mempertimbangkan skenario multi-node untuk mencapai target 10.000 concurrent user.
+Target 10.000 concurrent user dan 100.000 member/server adalah target desain (design target) yang memengaruhi keputusan arsitektur, bukan komitmen kapasitas infrastruktur nyata yang sudah di-provision sejak awal.
+# 10. Risiko Tingkat Tinggi
+| **Risiko** | **Dampak** | **Mitigasi Awal** |
+| --- | --- | --- |
+| **Scope creep akibat mengikuti seluruh fitur Discord** | **Roadmap pembelajaran menjadi terlalu panjang/tidak selesai** | **Non-Goals didefinisikan eksplisit; fitur diprioritaskan pada dokumen PRD/Roadmap** |
+| **Kompleksitas realtime & voice/video melebihi kemampuan saat ini** | **Milestone terkait dapat tertunda signifikan** | **Learning Roadmap memecah topik ini menjadi milestone bertahap dengan estimasi kompleksitas** |
+| **Target skala (10.000 concurrent user) sulit divalidasi tanpa infrastruktur nyata** | **Klaim skalabilitas hanya bersifat teoritis** | **Strategi scaling didokumentasikan jelas pada Architecture Document, divalidasi via load-test terbatas bila memungkinkan** |
+# 11. Peta Fase Dokumen
+Dokumen ini adalah Dokumen 1 dari 13 dalam rangkaian dokumentasi. Setelah dokumen ini disetujui/dikonfirmasi, proyek berlanjut ke dokumen berikutnya sesuai permintaan eksplisit.
+| **Fase** | **Dokumen** |
+| --- | --- |
+| **Fase 0** | **Vision Document (dokumen ini), Architecture Decision Record, Learning Roadmap** |
+| **Fase 1** | **Product Requirement Document (PRD)** |
+| **Fase 2** | **Software Requirement Specification (SRS)** |
+| **Fase 3** | **Architecture Document** |
+| **Fase 4** | **Database Design** |
+| **Fase 5** | **API Specification** |
+| **Fase 6** | **Security Design** |
+| **Fase 7** | **UI/UX Specification** |
+| **Fase 8** | **Development Roadmap** |
+| **Fase 9** | **Sprint Breakdown** |
+| **Fase 10** | **Task Checklist** |
+
+# Keputusan yang Telah Diambil
+Tujuan utama proyek adalah Project-Based Learning; produk Discord-like adalah sarana, bukan tujuan akhir.
+Seluruh dokumentasi mengikuti struktur fase 0-10 dan dibuat satu per satu.
+Stack teknologi utama (frontend, backend, database, realtime, voice/video, infrastruktur) mengikuti spesifikasi yang diberikan di awal proyek.
+Arsitektur mengikuti pola Modular Monolith.
+Non-Goals proyek (tanpa monetisasi, tanpa parity fitur 100%, tanpa kepatuhan regulasi formal) ditetapkan sejak Vision Document ini.
+# Keputusan yang Masih Perlu Dikonfirmasi
+Apakah target 10.000 concurrent user dan 100.000 member/server akan divalidasi melalui load-testing sungguhan pada suatu fase, atau tetap sebagai target desain teoritis saja.
+Prioritas relatif antar fitur (mis. apakah voice/video atau messaging kaya fitur yang menjadi prioritas milestone awal) — akan diputuskan lebih rinci pada Learning Roadmap dan Development Roadmap.
+Apakah proyek akan berhenti pada arsitektur Modular Monolith secara permanen, atau suatu saat menjadi latihan lanjutan migrasi ke microservices.
+# Risiko Desain
+Kombinasi banyak layanan pihak ketiga (LiveKit, Cloudinary, Redis, BullMQ) menambah kompleksitas operasional yang mungkin melebihi kebutuhan pembelajaran pada tahap awal.
+Fitur granular seperti role & permission bergaya Discord memiliki kompleksitas desain otorisasi yang tinggi dan berisiko menjadi bottleneck waktu belajar jika tidak dipecah dengan baik.
+# Technical Debt yang Sengaja Diterima
+Pada tahap awal, validasi skalabilitas nyata (load testing skala penuh) sengaja ditunda demi memprioritaskan kelengkapan fitur dan kualitas dokumentasi arsitektur terlebih dahulu.
+Observability lanjutan (mis. distributed tracing) belum menjadi prioritas Vision Document ini dan akan dipertimbangkan ulang pada Architecture Document.
+# Pertanyaan untuk Stakeholder Sebelum Melanjutkan ke Fase Berikutnya
+Apakah Vision Document ini sudah merepresentasikan tujuan pembelajaran dan batasan proyek dengan akurat?
+Apakah ada fitur Discord tambahan yang secara eksplisit ingin dimasukkan atau dikecualikan dari Non-Goals?
+Apakah siap melanjutkan ke dokumen berikutnya, yaitu Architecture Decision Record (ADR), yang akan membahas perbandingan mendalam WebSocket native vs Socket.IO, serta LiveKit vs alternatif lain?

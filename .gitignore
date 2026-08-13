@@ -1,0 +1,18 @@
+# dependencies
+node_modules/
+
+# build hasil compile
+dist/
+build/
+
+# enviromemnt
+.env
+
+
+#os
+.DS_Store
+Thumbs.db
+/src/generated/prisma
+/generated/prisma
+
+/generated/prisma

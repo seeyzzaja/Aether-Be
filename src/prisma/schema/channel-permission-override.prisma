@@ -1,0 +1,19 @@
+model ChannelPermissionOverride {
+  id String @id @default(uuid())
+
+  channelId String
+  roleId    String
+
+  allowBitmask BigInt @default(0)
+  denyBitmask  BigInt @default(0)
+
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  role    Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([channelId, roleId])
+  @@index([channelId])
+  @@index([roleId])
+}

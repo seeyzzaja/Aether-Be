@@ -1,0 +1,14 @@
+model MessageAttachment {
+  id           String  @id @default(uuid())
+  messageId    String? @map("message_id")
+  fileUrl      String  @map("file_url") @db.VarChar(500)
+  thumbnailUrl String? @map("thumbnail_url") @db.VarChar(500)
+  fileType     String  @map("file_type") @db.VarChar(50)
+  fileSize     BigInt  @map("file_size")
+  fileName     String  @map("file_name") @db.VarChar(255)
+
+  message Message? @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([messageId])
+  @@map("message_attachments")
+}
