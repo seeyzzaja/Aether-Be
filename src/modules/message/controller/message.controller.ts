@@ -1,10 +1,16 @@
 import type { NextFunction, Request, Response } from "express";
+import {
+  createMessageSchema,
+  embedMetadataSchema,
+  forwardMessageSchema,
+  updateMessageSchema,
+} from "#modules/message/schema/message.schema";
+import { messageSearchQuerySchema } from "#modules/message/schema/message-search.schema";
+import { embedService } from "#modules/message/service/embed.service";
 import { messageService } from "#modules/message/service/message.service";
 import { BadRequestError, UnauthorizedError } from "#shared/errors/app-error";
 import { successResponse } from "#utils/response";
 import { serializeBigInt } from "#utils/serialize-bigint";
-import { createMessageSchema, updateMessageSchema } from "../schema/message.schema.js";
-import { messageSearchQuerySchema } from "../schema/message-search.schema.js";
 
 export class MessageController {
   private getChannelId(req: Request): string {
@@ -154,6 +160,38 @@ export class MessageController {
       const thread = await messageService.getThread(threadRootId, userId);
 
       return successResponse(res, "Thread berhasil diambil", serializeBigInt(thread));
+    } catch (error) {
+      next(error);
+    }
+  }
+  async forward(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = this.getUserId(req);
+      const messageId = this.getMessageId(req);
+
+      const validatedData = forwardMessageSchema.parse(req.body);
+
+      const message = await messageService.forward(
+        messageId,
+        userId,
+        validatedData.destinationChannelId,
+      );
+
+      return successResponse(res, "Pesan berhasil diteruskan", serializeBigInt(message), null, 201);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async embed(req: Request, res: Response, next: NextFunction) {
+    try {
+      this.getUserId(req);
+
+      const validatedData = embedMetadataSchema.parse(req.query);
+
+      const metadata = await embedService.fetchMetadata(validatedData.url);
+
+      return successResponse(res, "Metadata link berhasil diambil", metadata);
     } catch (error) {
       next(error);
     }

@@ -312,4 +312,79 @@ router.delete("/:messageId", (req, res, next) => messageController.delete(req, r
  *         description: Terjadi kesalahan internal server
  */
 router.get("/:messageId/thread", (req, res, next) => messageController.getThread(req, res, next));
+
+/**
+ * @swagger
+ * /api/message/{messageId}/forward:
+ *   post:
+ *     summary: Meneruskan pesan ke channel lain
+ *     tags: [Message]
+ *     description: Meneruskan pesan dengan validasi VIEW_CHANNEL pada channel asal dan SEND_MESSAGES pada channel tujuan.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: messageId
+ *         in: path
+ *         required: true
+ *         description: UUID pesan yang ingin diteruskan
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - destinationChannelId
+ *             properties:
+ *               destinationChannelId:
+ *                 type: string
+ *                 format: uuid
+ *                 description: UUID channel tujuan
+ *     responses:
+ *       201:
+ *         description: Pesan berhasil diteruskan
+ *       400:
+ *         description: Request tidak valid
+ *       401:
+ *         description: Pengguna belum login
+ *       403:
+ *         description: Tidak memiliki VIEW_CHANNEL pada channel asal atau SEND_MESSAGES pada channel tujuan
+ *       404:
+ *         description: Pesan atau channel tidak ditemukan
+ *       500:
+ *         description: Terjadi kesalahan internal server
+ */
+router.post("/:messageId/forward", (req, res, next) => messageController.forward(req, res, next));
+
+/**
+ * @swagger
+ * /api/message/embed:
+ *   get:
+ *     summary: Mengambil metadata URL untuk embed preview
+ *     tags: [Message]
+ *     description: Mengambil metadata title, description, dan image dari halaman HTML. Response hanya berupa metadata JSON dan tidak menjalankan iframe atau script eksternal.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: url
+ *         in: query
+ *         required: true
+ *         description: URL halaman yang ingin diambil metadata-nya
+ *         schema:
+ *           type: string
+ *           format: uri
+ *     responses:
+ *       200:
+ *         description: Metadata berhasil diambil
+ *       400:
+ *         description: URL tidak valid atau metadata gagal diambil
+ *       401:
+ *         description: Pengguna belum login
+ *       500:
+ *         description: Terjadi kesalahan internal server
+ */
+router.get("/embed", (req, res, next) => messageController.embed(req, res, next));
 export default router;
