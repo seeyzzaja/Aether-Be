@@ -46,14 +46,30 @@ export class MessageService {
     );
   }
 
-  private async ensureSendMessagesPermission(serverId: string, userId: string) {
-    const permissions = await this.getActorPermissions(serverId, userId);
+  private async ensureSendMessagesPermission(serverId: string, channelId: string, userId: string) {
+    const serverPermissions = await this.getActorPermissions(serverId, userId);
 
-    if (!hasPermission(permissions, Permission.SEND_MESSAGES)) {
-      throw new ForbiddenError("Kamu tidak memiliki permission untuk mengirim pesan");
+    if (hasPermission(serverPermissions, Permission.ADMINISTRATOR)) {
+      return serverPermissions;
     }
 
-    return permissions;
+    const channelPermissions = await messageRepository.findChannelPermissions(
+      channelId,
+      serverId,
+      userId,
+    );
+
+    if (channelPermissions === null) {
+      throw new ForbiddenError("Kamu bukan member dari server ini");
+    }
+
+    if (!hasPermission(channelPermissions, Permission.SEND_MESSAGES)) {
+      throw new ForbiddenError(
+        "Kamu tidak memiliki permission untuk mengirim pesan di channel ini",
+      );
+    }
+
+    return channelPermissions;
   }
 
   private async getMessage(messageId: string) {
@@ -76,7 +92,7 @@ export class MessageService {
 
     const channel = await this.getChannel(channelId);
 
-    await this.ensureSendMessagesPermission(channel.serverId, userId);
+    await this.ensureSendMessagesPermission(channel.serverId, channelId, userId);
 
     if (input.replyToId) {
       await this.ensureValidReplyTarget(input.replyToId, channelId);
@@ -413,6 +429,30 @@ export class MessageService {
       total,
       offset: input.offset,
       limit: input.limit,
+    };
+  }
+  async getThread(threadRootId: string, userId: string) {
+    const rootMessage = await messageRepository.findByIdWithChannel(threadRootId);
+
+    if (!rootMessage) {
+      throw new NotFoundError("Thread root message tidak ditemukan");
+    }
+
+    if (rootMessage.isDeleted) {
+      throw new NotFoundError("Thread root message tidak ditemukan");
+    }
+
+    await this.ensureSendMessagesPermission(
+      rootMessage.channel.serverId,
+      rootMessage.channelId,
+      userId,
+    );
+
+    const messages = await messageRepository.findThreadMessages(threadRootId);
+
+    return {
+      rootMessage,
+      messages,
     };
   }
 }

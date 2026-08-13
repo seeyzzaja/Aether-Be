@@ -25,6 +25,15 @@ export class ServerRepository {
         },
       });
 
+      const ownerRole = await tx.role.create({
+        data: {
+          serverId: server.id,
+          name: "Owner",
+          permissionsBitmask: BigInt(8192),
+          position: 1,
+          isDefault: false,
+        },
+      });
       const member = await tx.serverMember.create({
         data: {
           serverId: server.id,
@@ -32,11 +41,17 @@ export class ServerRepository {
         },
       });
 
-      await tx.serverMemberRole.create({
-        data: {
-          serverMemberId: member.id,
-          roleId: everyoneRole.id,
-        },
+      await tx.serverMemberRole.createMany({
+        data: [
+          {
+            serverMemberId: member.id,
+            roleId: everyoneRole.id,
+          },
+          {
+            serverMemberId: member.id,
+            roleId: ownerRole.id,
+          },
+        ],
       });
 
       return server;
