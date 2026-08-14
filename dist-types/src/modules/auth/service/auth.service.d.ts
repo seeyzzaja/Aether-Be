@@ -10,6 +10,9 @@ export declare class AuthService {
         username: string;
         createdAt: Date;
     }>;
+    private getLoginKey;
+    private isLoginLocked;
+    private recordFailedLogin;
     login(data: LoginInput, metadata: SessionMetadata): Promise<{
         user: {
             id: string;

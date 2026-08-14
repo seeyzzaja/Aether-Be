@@ -1,19 +1,16 @@
 export declare class MembershipRoleRepository {
     assign(serverMemberId: string, roleId: string): Promise<{
+        serverMemberId: string;
+        roleId: string;
         role: {
             id: string;
             serverId: string;
             name: string;
             color: string | null;
-            permissionsBitmask: bigint;
             position: number;
             isDefault: boolean;
+            permissionsBitmask: string;
         };
-    } & {
-        id: string;
-        serverMemberId: string;
-        roleId: string;
-        createdAt: Date;
     }>;
     remove(serverMemberId: string, roleId: string): Promise<{
         id: string;

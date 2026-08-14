@@ -1,3 +1,4 @@
+import { logger } from "#shared/logger/logger";
 import { WebSocketEvent } from "#websocket/constants/events";
 import { connectionRegistry } from "#websocket/registry/index";
 
@@ -14,6 +15,7 @@ type MessageBroadcastPayload = {
   updatedAt: Date;
   deletedAt: Date | null;
 };
+
 type MessageMentionPayload = {
   messageId: string;
   channelId: string;
@@ -25,10 +27,14 @@ type MessageMentionPayload = {
 function broadcastToChannel(channelId: string, event: string, data: MessageBroadcastPayload): void {
   const sockets = connectionRegistry.getConnections(channelId);
 
-  console.log("===== MESSAGE BROADCAST =====");
-  console.log("event:", event);
-  console.log("channelId:", channelId);
-  console.log("connections:", sockets.size);
+  logger.debug(
+    {
+      event,
+      channelId,
+      connections: sockets.size,
+    },
+    "Broadcasting message event to channel",
+  );
 
   const payload = JSON.stringify({
     event,
@@ -36,15 +42,27 @@ function broadcastToChannel(channelId: string, event: string, data: MessageBroad
   });
 
   for (const socket of sockets) {
-    console.log("socket readyState:", socket.readyState);
+    logger.debug(
+      {
+        event,
+        channelId,
+        readyState: socket.readyState,
+      },
+      "Checking WebSocket connection",
+    );
 
     if (socket.readyState === socket.OPEN) {
-      console.log("sending:", event);
+      logger.debug(
+        {
+          event,
+          channelId,
+        },
+        "Sending WebSocket event",
+      );
+
       socket.send(payload);
     }
   }
-
-  console.log("=============================");
 }
 
 export function broadcastMessageCreated(message: MessageBroadcastPayload): void {
@@ -58,6 +76,7 @@ export function broadcastMessageUpdated(message: MessageBroadcastPayload): void 
 export function broadcastMessageDeleted(message: MessageBroadcastPayload): void {
   broadcastToChannel(message.channelId, WebSocketEvent.MESSAGE_DELETED, message);
 }
+
 export function broadcastMessageMention(payload: MessageMentionPayload): void {
   const sockets = connectionRegistry.getConnections(payload.channelId);
 

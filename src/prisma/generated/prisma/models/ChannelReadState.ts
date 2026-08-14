@@ -371,10 +371,6 @@ export type ChannelReadStateOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type ChannelReadStateCreateNestedManyWithoutChannelInput = {
   create?: Prisma.XOR<Prisma.ChannelReadStateCreateWithoutChannelInput, Prisma.ChannelReadStateUncheckedCreateWithoutChannelInput> | Prisma.ChannelReadStateCreateWithoutChannelInput[] | Prisma.ChannelReadStateUncheckedCreateWithoutChannelInput[]
   connectOrCreate?: Prisma.ChannelReadStateCreateOrConnectWithoutChannelInput | Prisma.ChannelReadStateCreateOrConnectWithoutChannelInput[]

@@ -97,6 +97,29 @@ export class MembershipRepository {
       },
     });
   }
+  async findServersByUserId(userId: string) {
+    return prisma.serverMember.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        serverId: true,
+        createdAt: true,
+        server: {
+          select: {
+            id: true,
+            name: true,
+            ownerId: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+  }
 }
 
 export const membershipRepository = new MembershipRepository();

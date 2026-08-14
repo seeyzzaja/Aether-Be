@@ -1,5 +1,6 @@
 import { Router } from "express";
 
+import { auditLogMiddleware } from "#middlewares/audit-log.middleware";
 import { requireAuth } from "#middlewares/auth-middleware";
 import { categoryController } from "#modules/category/controller/category.controller";
 
@@ -65,8 +66,22 @@ const categoryPaths = {
   item: ["/:serverId/category/:categoryId", "/:serverId/categories/:categoryId"],
 };
 
-router.post(categoryPaths.collection, (req, res, next) =>
-  categoryController.create(req, res, next),
+router.post(
+  categoryPaths.collection,
+  auditLogMiddleware({
+    action: "CATEGORY_CREATE",
+    targetType: "CATEGORY",
+    getTargetId: (req) => {
+      const { serverId } = req.params;
+
+      if (typeof serverId !== "string") {
+        throw new Error("serverId tidak valid");
+      }
+
+      return serverId;
+    },
+  }),
+  (req, res, next) => categoryController.create(req, res, next),
 );
 
 /**
@@ -197,7 +212,23 @@ router.get(categoryPaths.item, (req, res, next) => categoryController.getById(re
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.patch(categoryPaths.item, (req, res, next) => categoryController.update(req, res, next));
+router.patch(
+  categoryPaths.item,
+  auditLogMiddleware({
+    action: "CATEGORY_UPDATE",
+    targetType: "CATEGORY",
+    getTargetId: (req) => {
+      const { categoryId } = req.params;
+
+      if (typeof categoryId !== "string") {
+        throw new Error("categoryId tidak valid");
+      }
+
+      return categoryId;
+    },
+  }),
+  (req, res, next) => categoryController.update(req, res, next),
+);
 
 /**
  * @swagger
@@ -238,6 +269,22 @@ router.patch(categoryPaths.item, (req, res, next) => categoryController.update(r
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.delete(categoryPaths.item, (req, res, next) => categoryController.delete(req, res, next));
+router.delete(
+  categoryPaths.item,
+  auditLogMiddleware({
+    action: "CATEGORY_DELETE",
+    targetType: "CATEGORY",
+    getTargetId: (req) => {
+      const { categoryId } = req.params;
+
+      if (typeof categoryId !== "string") {
+        throw new Error("categoryId tidak valid");
+      }
+
+      return categoryId;
+    },
+  }),
+  (req, res, next) => categoryController.delete(req, res, next),
+);
 
 export default router;

@@ -1,3 +1,4 @@
+import { logger } from "#shared/logger/logger";
 import type { AuthenticatedSocket } from "#websocket/types/socket";
 
 export class ConnectionRegistry {
@@ -82,18 +83,20 @@ export class ConnectionRegistry {
   }
 
   public dump(): void {
-    console.log("===== Connection Registry =====");
+    const channelConnections = Object.fromEntries(
+      Array.from(this.channels.entries()).map(([channelId, sockets]) => [channelId, sockets.size]),
+    );
 
-    for (const [channelId, sockets] of this.channels) {
-      console.log(`${channelId}: ${sockets.size} socket(s)`);
-    }
+    const userConnections = Object.fromEntries(
+      Array.from(this.users.entries()).map(([userId, sockets]) => [userId, sockets.size]),
+    );
 
-    console.log("===== User Connections =====");
-
-    for (const [userId, sockets] of this.users) {
-      console.log(`${userId}: ${sockets.size} socket(s)`);
-    }
-
-    console.log("==============================");
+    logger.debug(
+      {
+        channelConnections,
+        userConnections,
+      },
+      "Connection registry state",
+    );
   }
 }

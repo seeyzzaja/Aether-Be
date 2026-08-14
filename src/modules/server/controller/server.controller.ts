@@ -28,7 +28,7 @@ export class ServerController {
       const validatedData = createServerSchema.parse(req.body);
 
       const server = await serverService.create(user.userId, validatedData);
-
+      res.locals.auditTargetId = server.id;
       return successResponse(res, "Server berhasil dibuat", server, null, 201);
     } catch (error) {
       next(error);

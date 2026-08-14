@@ -20,6 +20,9 @@ export declare const config: {
     CLOUDINARY_CLOUD_NAME: string;
     CLOUDINARY_API_KEY: string;
     CLOUDINARY_API_SECRET: string;
+    LIVEKIT_URL: string;
+    LIVEKIT_API_KEY: string;
+    LIVEKIT_API_SECRET: string;
 };
 export default config;
 //# sourceMappingURL=env.d.ts.map

@@ -1,6 +1,7 @@
 import { createClient } from "redis";
 
 import { config } from "#config/env";
+import { logger } from "#shared/logger/logger";
 import { REDIS_CHANNEL } from "#shared/redis/redis.publisher";
 import type { RedisWebSocketEvent } from "#shared/redis/redis.types";
 
@@ -12,7 +13,12 @@ export async function subscribeWebSocketEvents(
   });
 
   subscriber.on("error", (error) => {
-    console.error("Redis Subscriber Error:", error);
+    logger.error(
+      {
+        err: error,
+      },
+      "Redis subscriber error",
+    );
   });
 
   await subscriber.connect();
@@ -27,15 +33,32 @@ export async function subscribeWebSocketEvents(
         !("event" in parsed) ||
         !("data" in parsed)
       ) {
-        console.error("Invalid Redis WebSocket event:", message);
+        logger.warn(
+          {
+            channel: REDIS_CHANNEL,
+          },
+          "Invalid Redis WebSocket event",
+        );
+
         return;
       }
 
       onMessage(parsed as RedisWebSocketEvent);
     } catch (error) {
-      console.error("Failed to parse Redis WebSocket event:", error);
+      logger.error(
+        {
+          err: error,
+          channel: REDIS_CHANNEL,
+        },
+        "Failed to parse Redis WebSocket event",
+      );
     }
   });
 
-  console.log(`Redis subscriber connected to ${REDIS_CHANNEL}`);
+  logger.info(
+    {
+      channel: REDIS_CHANNEL,
+    },
+    "Redis subscriber connected",
+  );
 }

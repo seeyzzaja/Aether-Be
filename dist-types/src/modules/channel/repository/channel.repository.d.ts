@@ -69,6 +69,72 @@ export declare class ChannelRepository {
         topic: string | null;
         position: number;
     }>;
+    findPermissionOverrides(channelId: string): Promise<({
+        role: {
+            id: string;
+            serverId: string;
+            name: string;
+            color: string | null;
+            permissionsBitmask: bigint;
+            position: number;
+            isDefault: boolean;
+        };
+    } & {
+        id: string;
+        channelId: string;
+        roleId: string;
+        allowBitmask: bigint;
+        denyBitmask: bigint;
+        createdAt: Date;
+        updatedAt: Date;
+    })[]>;
+    findPermissionOverride(channelId: string, roleId: string): Promise<({
+        role: {
+            id: string;
+            serverId: string;
+            name: string;
+            color: string | null;
+            permissionsBitmask: bigint;
+            position: number;
+            isDefault: boolean;
+        };
+    } & {
+        id: string;
+        channelId: string;
+        roleId: string;
+        allowBitmask: bigint;
+        denyBitmask: bigint;
+        createdAt: Date;
+        updatedAt: Date;
+    }) | null>;
+    upsertPermissionOverride(channelId: string, roleId: string, allowBitmask: bigint, denyBitmask: bigint): Promise<{
+        role: {
+            id: string;
+            serverId: string;
+            name: string;
+            color: string | null;
+            permissionsBitmask: bigint;
+            position: number;
+            isDefault: boolean;
+        };
+    } & {
+        id: string;
+        channelId: string;
+        roleId: string;
+        allowBitmask: bigint;
+        denyBitmask: bigint;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
+    deletePermissionOverride(channelId: string, roleId: string): Promise<{
+        id: string;
+        channelId: string;
+        roleId: string;
+        allowBitmask: bigint;
+        denyBitmask: bigint;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
 }
 export declare const channelRepository: ChannelRepository;
 //# sourceMappingURL=channel.repository.d.ts.map

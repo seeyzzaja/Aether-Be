@@ -7,7 +7,9 @@ import {
   markNotificationAsRead,
 } from "#modules/notification/repository/notification.repository";
 import { AppError } from "#shared/errors/app-error";
+import { logger } from "#shared/logger/logger";
 import { emailQueue } from "#shared/queue/email.queue";
+
 export async function getNotifications(userId: string, skip: number, take: number) {
   const [notifications, total] = await Promise.all([
     findNotificationsByUserId(userId, skip, take),
@@ -52,21 +54,23 @@ export async function enqueueEmailNotification(data: {
   text: string;
   html: string;
 }) {
-  console.log("[EmailNotification] enqueue start", {
-    userId: data.userId,
-  });
+  logger.info({ userId: data.userId }, "Email notification enqueue started");
 
   const user = await getUserEmailNotificationPreference(data.userId);
 
-  console.log("[EmailNotification] preference", {
-    userId: data.userId,
-    found: !!user,
-    email: user?.email,
-    enabled: user?.emailNotificationEnabled,
-  });
+  logger.info(
+    {
+      userId: data.userId,
+      found: Boolean(user),
+      email: user?.email,
+      enabled: user?.emailNotificationEnabled,
+    },
+    "Email notification preference checked",
+  );
 
   if (!user?.emailNotificationEnabled) {
-    console.log("[EmailNotification] skipped");
+    logger.info({ userId: data.userId }, "Email notification skipped");
+
     return null;
   }
 
@@ -77,10 +81,14 @@ export async function enqueueEmailNotification(data: {
     html: data.html,
   });
 
-  console.log("[EmailNotification] job queued", {
-    jobId: job.id,
-    to: user.email,
-  });
+  logger.info(
+    {
+      userId: data.userId,
+      jobId: job.id,
+      to: user.email,
+    },
+    "Email notification job queued",
+  );
 
   return job;
 }

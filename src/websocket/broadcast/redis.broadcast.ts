@@ -1,3 +1,4 @@
+import { logger } from "#shared/logger/logger";
 import { connectionRegistry } from "#websocket/registry/index";
 
 type RedisWebSocketEvent = {
@@ -20,16 +21,26 @@ export function broadcastRedisEvent(event: RedisWebSocketEvent): void {
     const userId = event.data.userId;
 
     if (!userId) {
-      console.warn(`Redis event ${event.event} tidak memiliki userId:`, event);
+      logger.warn(
+        {
+          event: event.event,
+        },
+        "Redis user event does not contain userId",
+      );
+
       return;
     }
 
     const sockets = connectionRegistry.getUserConnections(userId);
 
-    console.log("===== REDIS USER BROADCAST =====");
-    console.log("event:", event.event);
-    console.log("userId:", userId);
-    console.log("connections:", sockets.size);
+    logger.debug(
+      {
+        event: event.event,
+        userId,
+        connections: sockets.size,
+      },
+      "Broadcasting Redis event to user",
+    );
 
     for (const socket of sockets) {
       if (socket.readyState === socket.OPEN) {
@@ -37,7 +48,6 @@ export function broadcastRedisEvent(event: RedisWebSocketEvent): void {
       }
     }
 
-    console.log("================================");
     return;
   }
 
@@ -45,22 +55,30 @@ export function broadcastRedisEvent(event: RedisWebSocketEvent): void {
   const channelId = event.data.channelId;
 
   if (!channelId) {
-    console.warn("Redis event tidak memiliki channelId:", event);
+    logger.warn(
+      {
+        event: event.event,
+      },
+      "Redis channel event does not contain channelId",
+    );
+
     return;
   }
 
   const sockets = connectionRegistry.getConnections(channelId);
 
-  console.log("===== REDIS CHANNEL BROADCAST =====");
-  console.log("event:", event.event);
-  console.log("channelId:", channelId);
-  console.log("connections:", sockets.size);
+  logger.debug(
+    {
+      event: event.event,
+      channelId,
+      connections: sockets.size,
+    },
+    "Broadcasting Redis event to channel",
+  );
 
   for (const socket of sockets) {
     if (socket.readyState === socket.OPEN) {
       socket.send(payload);
     }
   }
-
-  console.log("===================================");
 }

@@ -3,11 +3,19 @@ import type { ApiErrorDetails } from "#utils/response";
 export class AppError extends Error {
   public readonly statusCode: number;
   public readonly errors: ApiErrorDetails | null;
+  public readonly code: string | null;
 
-  constructor(message: string, statusCode = 500, errors: ApiErrorDetails | null = null) {
+  constructor(
+    message: string,
+    statusCode = 500,
+    errors: ApiErrorDetails | null = null,
+    code: string | null = null,
+  ) {
     super(message);
     this.statusCode = statusCode;
     this.errors = errors;
+    this.code = code;
+
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
@@ -39,5 +47,11 @@ export class NotFoundError extends AppError {
 export class ConflictError extends AppError {
   constructor(message = "Conflict", errors: ApiErrorDetails | null = null) {
     super(message, 409, errors);
+  }
+}
+
+export class TooManyRequestsError extends AppError {
+  constructor(message = "Too Many Requests", errors: ApiErrorDetails | null = null) {
+    super(message, 429, errors, "RATE_LIMITED");
   }
 }

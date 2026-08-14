@@ -1,4 +1,14 @@
 export declare class AuthRepository {
+    findUserByUsername(username: string): Promise<{
+        id: string;
+        email: string;
+        username: string;
+        passwordHash: string;
+        emailNotificationEnabled: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        deletedAt: Date | null;
+    } | null>;
     findUserByEmail(email: string): Promise<{
         id: string;
         email: string;

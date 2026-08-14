@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+
 import {
   createMessageSchema,
   embedMetadataSchema,
@@ -9,6 +10,7 @@ import { messageSearchQuerySchema } from "#modules/message/schema/message-search
 import { embedService } from "#modules/message/service/embed.service";
 import { messageService } from "#modules/message/service/message.service";
 import { BadRequestError, UnauthorizedError } from "#shared/errors/app-error";
+import { logger } from "#shared/logger/logger";
 import { successResponse } from "#utils/response";
 import { serializeBigInt } from "#utils/serialize-bigint";
 
@@ -47,18 +49,16 @@ export class MessageController {
     try {
       const userId = this.getUserId(req);
       const channelId = this.getChannelId(req);
-      console.log("[MessageController.create] request received", {
-        userId,
-        channelId,
-      });
+
+      logger.info({ userId, channelId }, "[MessageController.create] request received");
 
       const validatedData = createMessageSchema.parse(req.body);
-      console.log("[MessageController.create] payload validated");
+
+      logger.info("[MessageController.create] payload validated");
 
       const message = await messageService.create(channelId, userId, validatedData);
-      console.log("[MessageController.create] message created", {
-        messageId: message.id,
-      });
+
+      logger.info({ messageId: message.id }, "[MessageController.create] message created");
 
       return successResponse(res, "Pesan berhasil dikirim", serializeBigInt(message), null, 201);
     } catch (error) {
@@ -93,6 +93,7 @@ export class MessageController {
       next(error);
     }
   }
+
   async pin(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = this.getUserId(req);
@@ -118,6 +119,7 @@ export class MessageController {
       next(error);
     }
   }
+
   async search(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = this.getUserId(req);
@@ -152,6 +154,7 @@ export class MessageController {
       next(error);
     }
   }
+
   async getThread(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = this.getUserId(req);
@@ -164,6 +167,7 @@ export class MessageController {
       next(error);
     }
   }
+
   async forward(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = this.getUserId(req);

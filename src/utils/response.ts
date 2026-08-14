@@ -10,6 +10,7 @@ export type ApiErrorDetails =
 interface ApiResponse {
   success: boolean;
   message: string;
+  code?: string;
   data?: unknown;
   pagination?: {
     page: number;
@@ -24,13 +25,19 @@ export const successResponse = (
   res: Response,
   message: string,
   data: unknown = null,
-  pagination: { page: number; limit: number; total: number; totalPages?: number } | null = null,
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages?: number;
+  } | null = null,
   statusCode: number = 200,
 ) => {
   const response: ApiResponse = {
     success: true,
     message,
   };
+
   if (data !== null) response.data = data;
   if (pagination) response.pagination = pagination;
 
@@ -42,11 +49,15 @@ export const errorResponse = (
   message: string,
   statusCode: number = 400,
   errors: ApiErrorDetails | null = null,
+  code?: string,
 ) => {
   const response: ApiResponse = {
     success: false,
     message,
   };
+
+  if (code) response.code = code;
   if (errors) response.errors = errors;
+
   return res.status(statusCode).json(response);
 };

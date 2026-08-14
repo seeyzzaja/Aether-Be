@@ -17,6 +17,8 @@ services:
       LIVEKIT_URL: ${LIVEKIT_URL}
       LIVEKIT_API_KEY: ${LIVEKIT_API_KEY}
       LIVEKIT_API_SECRET: ${LIVEKIT_API_SECRET}
+    volumes:
+      - app-logs:/app/logs
     depends_on:
       postgres:
         condition: service_healthy
@@ -122,6 +124,8 @@ volumes:
   postgres-data:
     external: true
     name: project-be_postgres-data
+
+  app-logs:
 
 networks:
   aether-network:

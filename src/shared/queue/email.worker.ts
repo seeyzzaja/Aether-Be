@@ -1,16 +1,28 @@
 import { Worker } from "bullmq";
 import { sendEmail } from "#shared/email/email.service";
+import { logger } from "#shared/logger/logger";
 import { EMAIL_QUEUE_NAME, type EmailNotificationJob } from "#shared/queue/email.queue";
 import { queueConnection } from "#shared/queue/redis.connection";
 
 export const emailWorker = new Worker<EmailNotificationJob>(
   EMAIL_QUEUE_NAME,
   async (job) => {
-    console.log(`[EMAIL] Sending job ${job.id} to ${job.data.to}`);
+    logger.info(
+      {
+        jobId: job.id,
+        to: job.data.to,
+      },
+      "Sending email job",
+    );
 
     await sendEmail(job.data);
 
-    console.log(`[EMAIL] Job ${job.id} sent successfully`);
+    logger.info(
+      {
+        jobId: job.id,
+      },
+      "Email job sent successfully",
+    );
   },
   {
     connection: queueConnection,
@@ -19,13 +31,29 @@ export const emailWorker = new Worker<EmailNotificationJob>(
 );
 
 emailWorker.on("completed", (job) => {
-  console.log(`[EMAIL] Job ${job.id} completed`);
+  logger.info(
+    {
+      jobId: job.id,
+    },
+    "Email job completed",
+  );
 });
 
 emailWorker.on("failed", (job, error) => {
-  console.error(`[EMAIL] Job ${job?.id ?? "unknown"} failed:`, error);
+  logger.error(
+    {
+      jobId: job?.id,
+      err: error,
+    },
+    "Email job failed",
+  );
 });
 
 emailWorker.on("error", (error) => {
-  console.error("[EMAIL] Worker error:", error);
+  logger.error(
+    {
+      err: error,
+    },
+    "Email worker error",
+  );
 });

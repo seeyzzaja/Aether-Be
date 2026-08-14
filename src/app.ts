@@ -6,6 +6,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "#config/swagger";
 import swaggerUiOptions from "#config/swagger-ui-theme";
 import { errorHandlerMiddleware } from "#middlewares/error-handler";
+import { apiRateLimiter } from "#middlewares/rate-limiters";
 import authRouter from "#modules/auth/route/auth.route";
 import categoryRouter from "#modules/category/route/category.route";
 import channelRouter from "#modules/channel/route/channel.routes";
@@ -78,7 +79,7 @@ app.get("/health", (_req, res) => {
     message: "Aether API is healthy",
   });
 });
-
+app.use("/api", apiRateLimiter);
 app.use("/api/auth", authRouter);
 app.use("/api/device", deviceRouter);
 app.use("/api/servers", serverRouter);

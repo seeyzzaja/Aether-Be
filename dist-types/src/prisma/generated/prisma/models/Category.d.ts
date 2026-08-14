@@ -327,18 +327,12 @@ export type CategoryListRelationFilter = {
 export type CategoryOrderByRelationAggregateInput = {
     _count?: Prisma.SortOrder;
 };
-export type StringFieldUpdateOperationsInput = {
-    set?: string;
-};
 export type IntFieldUpdateOperationsInput = {
     set?: number;
     increment?: number;
     decrement?: number;
     multiply?: number;
     divide?: number;
-};
-export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string;
 };
 export type CategoryCreateNestedOneWithoutChannelsInput = {
     create?: Prisma.XOR<Prisma.CategoryCreateWithoutChannelsInput, Prisma.CategoryUncheckedCreateWithoutChannelsInput>;
