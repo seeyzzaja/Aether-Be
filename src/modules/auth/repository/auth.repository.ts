@@ -33,6 +33,18 @@ export class AuthRepository {
     });
   }
 
+  async findSessionByRefreshTokenHash(refreshTokenHash: string) {
+    return prisma.session.findFirst({
+      where: {
+        refreshTokenHash,
+        revokedAt: null,
+      },
+      include: {
+        user: true,
+      },
+    });
+  }
+
   async createUser(data: { email: string; username: string; passwordHash: string }) {
     return prisma.user.create({
       data: {

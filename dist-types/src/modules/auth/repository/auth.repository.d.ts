@@ -4,6 +4,7 @@ export declare class AuthRepository {
         email: string;
         username: string;
         passwordHash: string;
+        emailVerifiedAt: Date | null;
         emailNotificationEnabled: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -14,6 +15,7 @@ export declare class AuthRepository {
         email: string;
         username: string;
         passwordHash: string;
+        emailVerifiedAt: Date | null;
         emailNotificationEnabled: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -24,6 +26,7 @@ export declare class AuthRepository {
         email: string;
         username: string;
         passwordHash: string;
+        emailVerifiedAt: Date | null;
         emailNotificationEnabled: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -40,6 +43,29 @@ export declare class AuthRepository {
         createdAt: Date;
         updatedAt: Date;
     } | null>;
+    findSessionByRefreshTokenHash(refreshTokenHash: string): Promise<({
+        user: {
+            id: string;
+            email: string;
+            username: string;
+            passwordHash: string;
+            emailVerifiedAt: Date | null;
+            emailNotificationEnabled: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            deletedAt: Date | null;
+        };
+    } & {
+        id: string;
+        userId: string;
+        refreshTokenHash: string;
+        deviceInfo: string | null;
+        ipAddress: string | null;
+        expiresAt: Date;
+        revokedAt: Date | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }) | null>;
     createUser(data: {
         email: string;
         username: string;
@@ -49,6 +75,7 @@ export declare class AuthRepository {
         email: string;
         username: string;
         passwordHash: string;
+        emailVerifiedAt: Date | null;
         emailNotificationEnabled: boolean;
         createdAt: Date;
         updatedAt: Date;

@@ -3,6 +3,7 @@ import cors from "cors";
 import express, { type NextFunction, type Request, type Response } from "express";
 import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
+import { config } from "#config/env";
 import swaggerSpec from "#config/swagger";
 import swaggerUiOptions from "#config/swagger-ui-theme";
 import { errorHandlerMiddleware } from "#middlewares/error-handler";
@@ -26,6 +27,11 @@ import { NotFoundError } from "#shared/errors/app-error";
 import { successResponse } from "#utils/response";
 
 const app = express();
+const allowedOrigins = new Set(
+  [config.BASE_URL, ...config.CORS_ORIGINS.split(",").map((origin) => origin.trim())].filter(
+    Boolean,
+  ),
+);
 
 app.use((req: Request, _res: Response, next: NextFunction) => {
   req.startTime = Date.now();
@@ -34,7 +40,19 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
 
 app.use(
   cors({
-    origin: true,
+    origin: (origin, callback) => {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      if (allowedOrigins.has(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`CORS origin tidak diizinkan: ${origin}`));
+    },
     credentials: true,
   }),
 );
@@ -45,10 +63,24 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
-        styleSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com", "fonts.googleapis.com"],
-        imgSrc: ["'self'", "data:", "validator.swagger.io"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "https://res.cloudinary.com", "data:"],
+        mediaSrc: ["'self'", "https://res.cloudinary.com"],
+        connectSrc: ["'self'", "wss://*.example.com", "https://*.livekit.example.com"],
+        frameAncestors: ["'none'"],
+        baseUri: ["'self'"],
       },
+    },
+    frameguard: {
+      action: "deny",
+    },
+    referrerPolicy: {
+      policy: "strict-origin-when-cross-origin",
+    },
+    hsts: {
+      maxAge: 63072000,
+      includeSubDomains: true,
     },
   }),
 );

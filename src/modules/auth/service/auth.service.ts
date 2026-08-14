@@ -1,10 +1,13 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomBytes, randomUUID } from "node:crypto";
+
 import { auditService } from "#modules/audit/service/audit.service";
 import { loginAttemptService } from "#modules/auth/service/login-attempt.service";
 import { ConflictError, TooManyRequestsError, UnauthorizedError } from "#shared/errors/app-error";
 import { connectRedis, redisClient } from "#shared/redis/redis.client";
-import { generateAccessToken, generateRefreshToken } from "#utils/jwt";
+import { generateCsrfToken } from "#utils/csrf";
+import { generateAccessToken } from "#utils/jwt";
 import { hashPassword, verifyPassword } from "#utils/password";
+
 import { authRepository } from "../repository/auth.repository.js";
 import type { LoginInput, RegisterInput } from "../schema/auth.schema.js";
 
@@ -12,9 +15,13 @@ type SessionMetadata = {
   deviceInfo: string | null;
   ipAddress: string | null;
 };
+
 const LOGIN_MAX_FAILED_ATTEMPTS = 5;
 const LOGIN_LOCK_SECONDS = 15 * 60;
 const LOGIN_ATTEMPT_WINDOW_SECONDS = 15 * 60;
+
+const REFRESH_TOKEN_EXPIRES_DAYS = 30;
+
 export class AuthService {
   async register(data: RegisterInput) {
     const existingUserByEmail = await authRepository.findUserByEmail(data.email);
@@ -44,6 +51,7 @@ export class AuthService {
       createdAt: user.createdAt,
     };
   }
+
   private getLoginKey(ipAddress: string | null, email: string) {
     const ip = ipAddress ?? "unknown";
     const normalizedEmail = email.trim().toLowerCase();
@@ -81,6 +89,11 @@ export class AuthService {
       await redisClient.del(attemptKey);
     }
   }
+
+  private generateRefreshToken(): string {
+    return randomBytes(32).toString("hex");
+  }
+
   async login(data: LoginInput, metadata: SessionMetadata) {
     const isLocked = await this.isLoginLocked(metadata.ipAddress, data.email);
 
@@ -92,7 +105,9 @@ export class AuthService {
 
     if (!user) {
       const attempt = await loginAttemptService.recordFailure(metadata.ipAddress, data.email);
+
       await this.recordFailedLogin(metadata.ipAddress, data.email);
+
       await auditService.log({
         actorId: null,
         action: "auth.login_failed",
@@ -109,6 +124,10 @@ export class AuthService {
       });
 
       throw new UnauthorizedError("Email atau password salah");
+    }
+
+    if (!user.emailVerifiedAt) {
+      throw new UnauthorizedError("Email belum diverifikasi");
     }
 
     const isPasswordValid = await verifyPassword(user.passwordHash, data.password);
@@ -130,6 +149,7 @@ export class AuthService {
 
       throw new UnauthorizedError("Email atau password salah");
     }
+
     await loginAttemptService.clearFailures(metadata.ipAddress, data.email);
 
     const sessionId = randomUUID();
@@ -141,14 +161,13 @@ export class AuthService {
       sessionId,
     });
 
-    const refreshToken = generateRefreshToken({
-      userId: user.id,
-      sessionId,
-    });
+    const refreshToken = this.generateRefreshToken();
 
-    const refreshTokenHash = await hashPassword(refreshToken);
+    const refreshTokenHash = this.hashRefreshToken(refreshToken);
 
-    const refreshTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const refreshTokenExpiresAt = new Date(
+      Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
+    );
 
     await authRepository.createSession({
       id: sessionId,
@@ -179,25 +198,78 @@ export class AuthService {
       },
       accessToken,
       refreshToken,
+      csrfToken: generateCsrfToken(sessionId),
     };
   }
 
-  async logout(sessionId: string, userId: string) {
-    const result = await authRepository.revokeSession(sessionId, userId);
+  async logout(refreshToken: string) {
+    const refreshTokenHash = this.hashRefreshToken(refreshToken);
+
+    const session = await authRepository.findSessionByRefreshTokenHash(refreshTokenHash);
+
+    if (!session) {
+      throw new UnauthorizedError("Refresh token tidak valid atau sesi tidak ditemukan");
+    }
+
+    const result = await authRepository.revokeSession(session.id, session.userId);
 
     if (result.count === 0) {
       throw new UnauthorizedError("Sesi tidak ditemukan atau sudah dicabut");
     }
 
     await auditService.log({
-      actorId: userId,
+      actorId: session.userId,
       action: "auth.logout",
       targetType: "session",
-      targetId: sessionId,
+      targetId: session.id,
       metadata: {
-        userId,
+        userId: session.userId,
       },
     });
+  }
+
+  async refresh(refreshToken: string) {
+    const refreshTokenHash = this.hashRefreshToken(refreshToken);
+
+    const session = await authRepository.findSessionByRefreshTokenHash(refreshTokenHash);
+
+    if (!session) {
+      throw new UnauthorizedError("Refresh token tidak valid");
+    }
+
+    if (session.revokedAt) {
+      throw new UnauthorizedError("Sesi sudah dicabut");
+    }
+
+    if (session.expiresAt <= new Date()) {
+      throw new UnauthorizedError("Refresh token sudah kedaluwarsa");
+    }
+
+    const newAccessToken = generateAccessToken({
+      userId: session.user.id,
+      email: session.user.email,
+      username: session.user.username,
+      sessionId: session.id,
+    });
+
+    const newRefreshToken = this.generateRefreshToken();
+
+    const newRefreshTokenHash = this.hashRefreshToken(newRefreshToken);
+
+    await authRepository.updateSessionRefreshToken(
+      session.id,
+      newRefreshTokenHash,
+      session.expiresAt,
+    );
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+      csrfToken: generateCsrfToken(session.id),
+    };
+  }
+  private hashRefreshToken(refreshToken: string): string {
+    return createHash("sha256").update(refreshToken).digest("hex");
   }
 }
 

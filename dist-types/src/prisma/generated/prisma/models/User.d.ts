@@ -15,6 +15,7 @@ export type UserMinAggregateOutputType = {
     email: string | null;
     username: string | null;
     passwordHash: string | null;
+    emailVerifiedAt: Date | null;
     emailNotificationEnabled: boolean | null;
     createdAt: Date | null;
     updatedAt: Date | null;
@@ -25,6 +26,7 @@ export type UserMaxAggregateOutputType = {
     email: string | null;
     username: string | null;
     passwordHash: string | null;
+    emailVerifiedAt: Date | null;
     emailNotificationEnabled: boolean | null;
     createdAt: Date | null;
     updatedAt: Date | null;
@@ -35,6 +37,7 @@ export type UserCountAggregateOutputType = {
     email: number;
     username: number;
     passwordHash: number;
+    emailVerifiedAt: number;
     emailNotificationEnabled: number;
     createdAt: number;
     updatedAt: number;
@@ -46,6 +49,7 @@ export type UserMinAggregateInputType = {
     email?: true;
     username?: true;
     passwordHash?: true;
+    emailVerifiedAt?: true;
     emailNotificationEnabled?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -56,6 +60,7 @@ export type UserMaxAggregateInputType = {
     email?: true;
     username?: true;
     passwordHash?: true;
+    emailVerifiedAt?: true;
     emailNotificationEnabled?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -66,6 +71,7 @@ export type UserCountAggregateInputType = {
     email?: true;
     username?: true;
     passwordHash?: true;
+    emailVerifiedAt?: true;
     emailNotificationEnabled?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -139,6 +145,7 @@ export type UserGroupByOutputType = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt: Date | null;
     emailNotificationEnabled: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -158,6 +165,7 @@ export type UserWhereInput = {
     email?: Prisma.StringFilter<"User"> | string;
     username?: Prisma.StringFilter<"User"> | string;
     passwordHash?: Prisma.StringFilter<"User"> | string;
+    emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFilter<"User"> | boolean;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
@@ -177,6 +185,7 @@ export type UserOrderByWithRelationInput = {
     email?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
     passwordHash?: Prisma.SortOrder;
+    emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
     emailNotificationEnabled?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -199,6 +208,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     OR?: Prisma.UserWhereInput[];
     NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
     passwordHash?: Prisma.StringFilter<"User"> | string;
+    emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFilter<"User"> | boolean;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
@@ -218,6 +228,7 @@ export type UserOrderByWithAggregationInput = {
     email?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
     passwordHash?: Prisma.SortOrder;
+    emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
     emailNotificationEnabled?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -234,6 +245,7 @@ export type UserScalarWhereWithAggregatesInput = {
     email?: Prisma.StringWithAggregatesFilter<"User"> | string;
     username?: Prisma.StringWithAggregatesFilter<"User"> | string;
     passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string;
+    emailVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolWithAggregatesFilter<"User"> | boolean;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
@@ -244,6 +256,7 @@ export type UserCreateInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -263,6 +276,7 @@ export type UserUncheckedCreateInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -282,6 +296,7 @@ export type UserUpdateInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -301,6 +316,7 @@ export type UserUncheckedUpdateInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -320,6 +336,7 @@ export type UserCreateManyInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -330,6 +347,7 @@ export type UserUpdateManyMutationInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -340,6 +358,7 @@ export type UserUncheckedUpdateManyInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -358,6 +377,7 @@ export type UserCountOrderByAggregateInput = {
     email?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
     passwordHash?: Prisma.SortOrder;
+    emailVerifiedAt?: Prisma.SortOrder;
     emailNotificationEnabled?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -368,6 +388,7 @@ export type UserMaxOrderByAggregateInput = {
     email?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
     passwordHash?: Prisma.SortOrder;
+    emailVerifiedAt?: Prisma.SortOrder;
     emailNotificationEnabled?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -378,6 +399,7 @@ export type UserMinOrderByAggregateInput = {
     email?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
     passwordHash?: Prisma.SortOrder;
+    emailVerifiedAt?: Prisma.SortOrder;
     emailNotificationEnabled?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -498,6 +520,7 @@ export type UserCreateWithoutAuditLogsInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -516,6 +539,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -547,6 +571,7 @@ export type UserUpdateWithoutAuditLogsInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -565,6 +590,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -583,6 +609,7 @@ export type UserCreateWithoutReadStatesInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -601,6 +628,7 @@ export type UserUncheckedCreateWithoutReadStatesInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -632,6 +660,7 @@ export type UserUpdateWithoutReadStatesInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -650,6 +679,7 @@ export type UserUncheckedUpdateWithoutReadStatesInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -668,6 +698,7 @@ export type UserCreateWithoutMessagesInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -686,6 +717,7 @@ export type UserUncheckedCreateWithoutMessagesInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -717,6 +749,7 @@ export type UserUpdateWithoutMessagesInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -735,6 +768,7 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -753,6 +787,7 @@ export type UserCreateWithoutNotificationsInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -771,6 +806,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -802,6 +838,7 @@ export type UserUpdateWithoutNotificationsInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -820,6 +857,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -838,6 +876,7 @@ export type UserCreateWithoutPollVotesInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -856,6 +895,7 @@ export type UserUncheckedCreateWithoutPollVotesInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -887,6 +927,7 @@ export type UserUpdateWithoutPollVotesInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -905,6 +946,7 @@ export type UserUncheckedUpdateWithoutPollVotesInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -923,6 +965,7 @@ export type UserCreateWithoutReactionsInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -941,6 +984,7 @@ export type UserUncheckedCreateWithoutReactionsInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -972,6 +1016,7 @@ export type UserUpdateWithoutReactionsInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -990,6 +1035,7 @@ export type UserUncheckedUpdateWithoutReactionsInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1008,6 +1054,7 @@ export type UserCreateWithoutServerMembershipsInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1026,6 +1073,7 @@ export type UserUncheckedCreateWithoutServerMembershipsInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1057,6 +1105,7 @@ export type UserUpdateWithoutServerMembershipsInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1075,6 +1124,7 @@ export type UserUncheckedUpdateWithoutServerMembershipsInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1093,6 +1143,7 @@ export type UserCreateWithoutOwnedServersInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1111,6 +1162,7 @@ export type UserUncheckedCreateWithoutOwnedServersInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1142,6 +1194,7 @@ export type UserUpdateWithoutOwnedServersInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1160,6 +1213,7 @@ export type UserUncheckedUpdateWithoutOwnedServersInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1178,6 +1232,7 @@ export type UserCreateWithoutSessionsInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1196,6 +1251,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
     email: string;
     username: string;
     passwordHash: string;
+    emailVerifiedAt?: Date | string | null;
     emailNotificationEnabled?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1227,6 +1283,7 @@ export type UserUpdateWithoutSessionsInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1245,6 +1302,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1351,6 +1409,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     email?: boolean;
     username?: boolean;
     passwordHash?: boolean;
+    emailVerifiedAt?: boolean;
     emailNotificationEnabled?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -1371,6 +1430,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     email?: boolean;
     username?: boolean;
     passwordHash?: boolean;
+    emailVerifiedAt?: boolean;
     emailNotificationEnabled?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -1381,6 +1441,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     email?: boolean;
     username?: boolean;
     passwordHash?: boolean;
+    emailVerifiedAt?: boolean;
     emailNotificationEnabled?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -1391,12 +1452,13 @@ export type UserSelectScalar = {
     email?: boolean;
     username?: boolean;
     passwordHash?: boolean;
+    emailVerifiedAt?: boolean;
     emailNotificationEnabled?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     deletedAt?: boolean;
 };
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "emailNotificationEnabled" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["user"]>;
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "emailVerifiedAt" | "emailNotificationEnabled" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["user"]>;
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>;
     ownedServers?: boolean | Prisma.User$ownedServersArgs<ExtArgs>;
@@ -1429,6 +1491,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         email: string;
         username: string;
         passwordHash: string;
+        emailVerifiedAt: Date | null;
         emailNotificationEnabled: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -1800,6 +1863,7 @@ export interface UserFieldRefs {
     readonly email: Prisma.FieldRef<"User", 'String'>;
     readonly username: Prisma.FieldRef<"User", 'String'>;
     readonly passwordHash: Prisma.FieldRef<"User", 'String'>;
+    readonly emailVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>;
     readonly emailNotificationEnabled: Prisma.FieldRef<"User", 'Boolean'>;
     readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>;
     readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>;

@@ -220,6 +220,7 @@ export declare const UserScalarFieldEnum: {
     readonly email: 'email';
     readonly username: 'username';
     readonly passwordHash: 'passwordHash';
+    readonly emailVerifiedAt: 'emailVerifiedAt';
     readonly emailNotificationEnabled: 'emailNotificationEnabled';
     readonly createdAt: 'createdAt';
     readonly updatedAt: 'updatedAt';

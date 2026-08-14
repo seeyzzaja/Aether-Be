@@ -21,6 +21,8 @@ export const Permission = {
   ADMINISTRATOR: 1n << 13n,
 
   ATTACH_FILES: 1n << 14n,
+
+  MENTION_EVERYONE: 1n << 15n,
 } as const;
 
 export type PermissionValue = (typeof Permission)[keyof typeof Permission];

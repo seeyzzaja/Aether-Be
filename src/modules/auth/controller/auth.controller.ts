@@ -1,5 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
 
+import {
+  CSRF_TOKEN_COOKIE,
+  csrfTokenCookieOptions,
+  REFRESH_TOKEN_COOKIE,
+  refreshTokenCookieOptions,
+} from "#modules/auth/auth-cookie";
 import { authService } from "#modules/auth/service/auth.service";
 import { UnauthorizedError } from "#shared/errors/app-error";
 import { successResponse } from "#utils/response";
@@ -32,10 +38,41 @@ export class AuthController {
         ipAddress: req.ip ?? null,
       });
 
+      res.cookie(REFRESH_TOKEN_COOKIE, result.refreshToken, refreshTokenCookieOptions);
+      res.cookie(CSRF_TOKEN_COOKIE, result.csrfToken, csrfTokenCookieOptions);
+
       return res.status(200).json({
         success: true,
         message: "Login berhasil",
-        data: result,
+        data: {
+          user: result.user,
+          accessToken: result.accessToken,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async refresh(req: Request, res: Response, next: NextFunction) {
+    try {
+      const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE];
+
+      if (!refreshToken) {
+        throw new UnauthorizedError("Refresh token tidak ditemukan");
+      }
+
+      const result = await authService.refresh(refreshToken);
+
+      res.cookie(REFRESH_TOKEN_COOKIE, result.refreshToken, refreshTokenCookieOptions);
+      res.cookie(CSRF_TOKEN_COOKIE, result.csrfToken, csrfTokenCookieOptions);
+
+      return res.status(200).json({
+        success: true,
+        message: "Token berhasil diperbarui",
+        data: {
+          accessToken: result.accessToken,
+        },
       });
     } catch (error) {
       next(error);
@@ -44,16 +81,15 @@ export class AuthController {
 
   async logout(req: Request, res: Response, next: NextFunction) {
     try {
-      const user = req.user;
+      const refreshToken = req.cookies?.[REFRESH_TOKEN_COOKIE];
 
-      if (!user?.sessionId) {
-        throw new UnauthorizedError("Session ID tidak ditemukan pada token");
+      if (!refreshToken) {
+        throw new UnauthorizedError("Refresh token tidak ditemukan");
       }
 
-      await authService.logout(user.sessionId, user.userId);
+      await authService.logout(refreshToken);
 
-      res.clearCookie("accessToken");
-      res.clearCookie("refreshToken");
+      res.clearCookie(REFRESH_TOKEN_COOKIE, refreshTokenCookieOptions);
 
       return successResponse(res, "Logout berhasil", null, null, 200);
     } catch (error) {

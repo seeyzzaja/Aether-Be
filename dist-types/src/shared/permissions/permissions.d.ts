@@ -14,6 +14,7 @@ export declare const Permission: {
     readonly MANAGE_SERVER: bigint;
     readonly ADMINISTRATOR: bigint;
     readonly ATTACH_FILES: bigint;
+    readonly MENTION_EVERYONE: bigint;
 };
 export type PermissionValue = (typeof Permission)[keyof typeof Permission];
 //# sourceMappingURL=permissions.d.ts.map
