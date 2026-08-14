@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { requireAuth } from "#middlewares/auth-middleware";
+import { uploadRateLimiter } from "#middlewares/rate-limiters";
 import { uploadController } from "#modules/upload/controller/upload.controller";
 
 const router = Router();
@@ -18,46 +19,53 @@ router.use(requireAuth);
  * @swagger
  * /api/upload/signature/{channelId}:
  *   post:
- *     summary: Membuat signed Cloudinary upload
+ *     summary: Membuat signature upload
  *     tags: [Upload]
- *     description: Menghasilkan signature untuk direct upload file ke Cloudinary tanpa melewati server aplikasi.
+ *     description: Membuat signature untuk upload file ke Cloudinary. Rate limit maksimal 20 request per menit per user.
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: channelId
+ *       - name: channelId
+ *         in: path
  *         required: true
+ *         description: UUID channel tempat file akan dikirim
  *         schema:
  *           type: string
  *           format: uuid
- *         description: UUID channel tujuan file
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - fileName
- *               - fileType
- *               - fileSize
- *             properties:
- *               fileName:
- *                 type: string
- *                 maxLength: 255
- *                 example: laporan-project.pdf
- *               fileType:
- *                 type: string
- *                 example: application/pdf
- *               fileSize:
- *                 type: integer
- *                 minimum: 1
- *                 maximum: 1073741824
- *                 description: Ukuran file dalam byte. Maksimal 1GB.
- *                 example: 5242880
+ *           example: 69fe24b7-84b5-4342-b08a-bd1426471724
  *     responses:
  *       200:
- *         description: Signature Cloudinary berhasil dibuat
+ *         description: Signature upload berhasil dibuat
+ *       400:
+ *         description: Parameter request tidak valid
+ *       401:
+ *         description: Pengguna belum login atau token tidak valid
+ *       403:
+ *         description: Pengguna tidak memiliki akses ke channel
+ *       404:
+ *         description: Channel tidak ditemukan
+ *       429:
+ *         description: Terlalu banyak request upload
+ *         headers:
+ *           X-RateLimit-Limit:
+ *             description: Maksimal request dalam 1 menit
+ *             schema:
+ *               type: integer
+ *               example: 20
+ *           X-RateLimit-Remaining:
+ *             description: Sisa request yang tersedia
+ *             schema:
+ *               type: integer
+ *               example: 0
+ *           X-RateLimit-Reset:
+ *             description: Unix timestamp ketika rate limit di-reset
+ *             schema:
+ *               type: integer
+ *           Retry-After:
+ *             description: Waktu tunggu dalam detik sebelum mencoba kembali
+ *             schema:
+ *               type: integer
+ *               example: 60
  *         content:
  *           application/json:
  *             schema:
@@ -65,56 +73,17 @@ router.use(requireAuth);
  *               properties:
  *                 success:
  *                   type: boolean
- *                   example: true
+ *                   example: false
+ *                 code:
+ *                   type: string
+ *                   example: RATE_LIMITED
  *                 message:
  *                   type: string
- *                   example: Upload signature berhasil dibuat
- *                 data:
- *                   type: object
- *                   properties:
- *                     signature:
- *                       type: string
- *                       description: Signature yang digunakan untuk direct upload ke Cloudinary
- *                     timestamp:
- *                       type: integer
- *                       example: 1786507218
- *                     apiKey:
- *                       type: string
- *                       example: 123456789012345
- *                     cloudName:
- *                       type: string
- *                       example: codingstudy
- *                     folder:
- *                       type: string
- *                       example: aether/server-id/channel-id
- *                     resourceType:
- *                       type: string
- *                       example: auto
- *                     uploadUrl:
- *                       type: string
- *                       format: uri
- *                       example: https://api.cloudinary.com/v1_1/codingstudy/auto/upload
- *                     fileName:
- *                       type: string
- *                       example: laporan-project.pdf
- *                     fileType:
- *                       type: string
- *                       example: application/pdf
- *                     fileSize:
- *                       type: integer
- *                       example: 5242880
- *       400:
- *         description: Data upload tidak valid, tipe file tidak didukung, atau ukuran file melebihi 1GB
- *       401:
- *         description: Pengguna belum login atau token tidak valid
- *       403:
- *         description: Pengguna tidak memiliki permission ATTACH_FILES
- *       404:
- *         description: Channel tidak ditemukan
+ *                   example: Terlalu banyak request. Silakan coba lagi nanti.
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.post("/signature/:channelId", (req, res, next) =>
+router.post("/signature/:channelId", uploadRateLimiter, (req, res, next) =>
   uploadController.createSignature(req, res, next),
 );
 

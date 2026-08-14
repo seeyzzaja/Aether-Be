@@ -11,8 +11,8 @@ export interface PrismaClientConstructor {
    * const prisma = new PrismaClient({
    *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
    * })
-   * // Fetch zero or more Categories
-   * const categories = await prisma.category.findMany()
+   * // Fetch zero or more AuditLogs
+   * const auditLogs = await prisma.auditLog.findMany()
    * ```
    *
    * Read more in our [docs](https://pris.ly/d/client).
@@ -30,8 +30,8 @@ export interface PrismaClientConstructor {
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Categories
- * const categories = await prisma.category.findMany()
+ * // Fetch zero or more AuditLogs
+ * const auditLogs = await prisma.auditLog.findMany()
  * ```
  *
  * Read more in our [docs](https://pris.ly/d/client).
@@ -118,13 +118,24 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         extArgs: ExtArgs;
     }>>;
     /**
- * `prisma.category`: Exposes CRUD operations for the **Category** model.
+ * `prisma.auditLog`: Exposes CRUD operations for the **AuditLog** model.
   * Example usage:
   * ```ts
-  * // Fetch zero or more Categories
-  * const categories = await prisma.category.findMany()
+  * // Fetch zero or more AuditLogs
+  * const auditLogs = await prisma.auditLog.findMany()
   * ```
   */
+    get auditLog(): Prisma.AuditLogDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.category`: Exposes CRUD operations for the **Category** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Categories
+      * const categories = await prisma.category.findMany()
+      * ```
+      */
     get category(): Prisma.CategoryDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
@@ -192,6 +203,39 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
       * ```
       */
     get notification(): Prisma.NotificationDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.poll`: Exposes CRUD operations for the **Poll** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Polls
+      * const polls = await prisma.poll.findMany()
+      * ```
+      */
+    get poll(): Prisma.PollDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.pollOption`: Exposes CRUD operations for the **PollOption** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more PollOptions
+      * const pollOptions = await prisma.pollOption.findMany()
+      * ```
+      */
+    get pollOption(): Prisma.PollOptionDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.pollVote`: Exposes CRUD operations for the **PollVote** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more PollVotes
+      * const pollVotes = await prisma.pollVote.findMany()
+      * ```
+      */
+    get pollVote(): Prisma.PollVoteDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**

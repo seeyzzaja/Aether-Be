@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { auditLogMiddleware } from "#middlewares/audit-log.middleware";
 import { requireAuth } from "#middlewares/auth-middleware";
 import { serverController } from "#modules/server/controller/server.controller";
 
@@ -82,7 +83,23 @@ router.use(requireAuth);
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.post("/", (req, res, next) => serverController.create(req, res, next));
+router.post(
+  "/",
+  auditLogMiddleware({
+    action: "SERVER_CREATE",
+    targetType: "SERVER",
+    getTargetId: (_req, res) => {
+      const targetId = res.locals.auditTargetId;
+
+      if (typeof targetId !== "string") {
+        throw new Error("audit targetId tidak ditemukan");
+      }
+
+      return targetId;
+    },
+  }),
+  (req, res, next) => serverController.create(req, res, next),
+);
 
 /**
  * @swagger
@@ -338,7 +355,23 @@ router.get("/:serverId", (req, res, next) => serverController.getById(req, res, 
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.patch("/:serverId", (req, res, next) => serverController.update(req, res, next));
+router.patch(
+  "/:serverId",
+  auditLogMiddleware({
+    action: "SERVER_UPDATE",
+    targetType: "SERVER",
+    getTargetId: (req) => {
+      const { serverId } = req.params;
+
+      if (typeof serverId !== "string") {
+        throw new Error("serverId tidak valid");
+      }
+
+      return serverId;
+    },
+  }),
+  (req, res, next) => serverController.update(req, res, next),
+);
 
 /**
  * @swagger
@@ -382,6 +415,21 @@ router.patch("/:serverId", (req, res, next) => serverController.update(req, res,
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.delete("/:serverId", (req, res, next) => serverController.delete(req, res, next));
+router.delete(
+  "/:serverId",
+  auditLogMiddleware({
+    action: "SERVER_DELETE",
+    targetType: "SERVER",
+    getTargetId: (req) => {
+      const { serverId } = req.params;
 
+      if (typeof serverId !== "string") {
+        throw new Error("serverId tidak valid");
+      }
+
+      return serverId;
+    },
+  }),
+  (req, res, next) => serverController.delete(req, res, next),
+);
 export default router;

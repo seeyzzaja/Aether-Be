@@ -3,11 +3,35 @@ export declare class MessageService {
     private runInBackground;
     private getActorPermissions;
     private ensureSendMessagesPermission;
+    private ensureViewChannelPermission;
     private getMessage;
     create(channelId: string, userId: string, input: CreateMessageInput): Promise<{
         attachments: {
             id: string;
-            messageId: string;
+            messageId: string | null;
+            fileUrl: string;
+            thumbnailUrl: string | null;
+            fileType: string;
+            fileSize: bigint;
+            fileName: string;
+        }[];
+    } & {
+        id: string;
+        channelId: string;
+        authorId: string;
+        replyToId: string | null;
+        threadRootId: string | null;
+        content: string;
+        isPinned: boolean;
+        isDeleted: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        deletedAt: Date | null;
+    }>;
+    forward(messageId: string, userId: string, destinationChannelId: string): Promise<{
+        attachments: {
+            id: string;
+            messageId: string | null;
             fileUrl: string;
             thumbnailUrl: string | null;
             fileType: string;
@@ -103,6 +127,73 @@ export declare class MessageService {
         id: string;
         isDeleted: boolean;
         isPinned: boolean;
+    }>;
+    search(serverId: string, userId: string, input: {
+        q: string;
+        channelId?: string;
+        limit: number;
+        offset: number;
+    }): Promise<{
+        messages: {
+            id: string;
+            channelId: string;
+            authorId: string;
+            content: string;
+            createdAt: Date;
+            updatedAt: Date;
+            rank: number;
+        }[];
+        total: number;
+        offset: number;
+        limit: number;
+    }>;
+    getThread(threadRootId: string, userId: string): Promise<{
+        rootMessage: {
+            channel: {
+                id: string;
+                serverId: string;
+                categoryId: string | null;
+                name: string;
+                type: import("../../../prisma/generated/prisma/enums.js").ChannelType;
+                topic: string | null;
+                position: number;
+            };
+        } & {
+            id: string;
+            channelId: string;
+            authorId: string;
+            replyToId: string | null;
+            threadRootId: string | null;
+            content: string;
+            isPinned: boolean;
+            isDeleted: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            deletedAt: Date | null;
+        };
+        messages: ({
+            attachments: {
+                id: string;
+                messageId: string | null;
+                fileUrl: string;
+                thumbnailUrl: string | null;
+                fileType: string;
+                fileSize: bigint;
+                fileName: string;
+            }[];
+        } & {
+            id: string;
+            channelId: string;
+            authorId: string;
+            replyToId: string | null;
+            threadRootId: string | null;
+            content: string;
+            isPinned: boolean;
+            isDeleted: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            deletedAt: Date | null;
+        })[];
     }>;
 }
 export declare const messageService: MessageService;

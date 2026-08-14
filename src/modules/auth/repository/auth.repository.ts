@@ -1,6 +1,14 @@
 import prisma from "#utils/prisma";
 
 export class AuthRepository {
+  async findUserByUsername(username: string) {
+    return prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
+  }
+
   async findUserByEmail(email: string) {
     return prisma.user.findUnique({
       where: {

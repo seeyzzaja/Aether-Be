@@ -1,9 +1,9 @@
+import { logger } from "#shared/logger/logger";
 import { WebSocketEvent } from "#websocket/constants/events";
 import { connectionRegistry } from "#websocket/registry/index";
 import type { UnsubscribeEventData } from "#websocket/types/events";
 import type { WebSocketMessage } from "#websocket/types/message";
 import type { AuthenticatedSocket } from "#websocket/types/socket";
-
 export function handleUnsubscribe(
   socket: AuthenticatedSocket,
   message: WebSocketMessage<UnsubscribeEventData>,
@@ -21,5 +21,11 @@ export function handleUnsubscribe(
     }),
   );
 
-  console.log(`❌ ${socket.user.username} unsubscribed from ${channelId}`);
+  logger.debug(
+    {
+      userId: socket.user.userId,
+      channelId,
+    },
+    "WebSocket channel unsubscribed",
+  );
 }

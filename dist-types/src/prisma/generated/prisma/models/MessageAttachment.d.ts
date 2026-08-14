@@ -158,7 +158,7 @@ export type MessageAttachmentGroupByArgs<ExtArgs extends runtime.Types.Extension
 };
 export type MessageAttachmentGroupByOutputType = {
     id: string;
-    messageId: string;
+    messageId: string | null;
     fileUrl: string;
     thumbnailUrl: string | null;
     fileType: string;
@@ -178,17 +178,17 @@ export type MessageAttachmentWhereInput = {
     OR?: Prisma.MessageAttachmentWhereInput[];
     NOT?: Prisma.MessageAttachmentWhereInput | Prisma.MessageAttachmentWhereInput[];
     id?: Prisma.StringFilter<"MessageAttachment"> | string;
-    messageId?: Prisma.StringFilter<"MessageAttachment"> | string;
+    messageId?: Prisma.StringNullableFilter<"MessageAttachment"> | string | null;
     fileUrl?: Prisma.StringFilter<"MessageAttachment"> | string;
     thumbnailUrl?: Prisma.StringNullableFilter<"MessageAttachment"> | string | null;
     fileType?: Prisma.StringFilter<"MessageAttachment"> | string;
     fileSize?: Prisma.BigIntFilter<"MessageAttachment"> | bigint | number;
     fileName?: Prisma.StringFilter<"MessageAttachment"> | string;
-    message?: Prisma.XOR<Prisma.MessageScalarRelationFilter, Prisma.MessageWhereInput>;
+    message?: Prisma.XOR<Prisma.MessageNullableScalarRelationFilter, Prisma.MessageWhereInput> | null;
 };
 export type MessageAttachmentOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
-    messageId?: Prisma.SortOrder;
+    messageId?: Prisma.SortOrderInput | Prisma.SortOrder;
     fileUrl?: Prisma.SortOrder;
     thumbnailUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
     fileType?: Prisma.SortOrder;
@@ -201,17 +201,17 @@ export type MessageAttachmentWhereUniqueInput = Prisma.AtLeast<{
     AND?: Prisma.MessageAttachmentWhereInput | Prisma.MessageAttachmentWhereInput[];
     OR?: Prisma.MessageAttachmentWhereInput[];
     NOT?: Prisma.MessageAttachmentWhereInput | Prisma.MessageAttachmentWhereInput[];
-    messageId?: Prisma.StringFilter<"MessageAttachment"> | string;
+    messageId?: Prisma.StringNullableFilter<"MessageAttachment"> | string | null;
     fileUrl?: Prisma.StringFilter<"MessageAttachment"> | string;
     thumbnailUrl?: Prisma.StringNullableFilter<"MessageAttachment"> | string | null;
     fileType?: Prisma.StringFilter<"MessageAttachment"> | string;
     fileSize?: Prisma.BigIntFilter<"MessageAttachment"> | bigint | number;
     fileName?: Prisma.StringFilter<"MessageAttachment"> | string;
-    message?: Prisma.XOR<Prisma.MessageScalarRelationFilter, Prisma.MessageWhereInput>;
+    message?: Prisma.XOR<Prisma.MessageNullableScalarRelationFilter, Prisma.MessageWhereInput> | null;
 }, "id">;
 export type MessageAttachmentOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
-    messageId?: Prisma.SortOrder;
+    messageId?: Prisma.SortOrderInput | Prisma.SortOrder;
     fileUrl?: Prisma.SortOrder;
     thumbnailUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
     fileType?: Prisma.SortOrder;
@@ -228,7 +228,7 @@ export type MessageAttachmentScalarWhereWithAggregatesInput = {
     OR?: Prisma.MessageAttachmentScalarWhereWithAggregatesInput[];
     NOT?: Prisma.MessageAttachmentScalarWhereWithAggregatesInput | Prisma.MessageAttachmentScalarWhereWithAggregatesInput[];
     id?: Prisma.StringWithAggregatesFilter<"MessageAttachment"> | string;
-    messageId?: Prisma.StringWithAggregatesFilter<"MessageAttachment"> | string;
+    messageId?: Prisma.StringNullableWithAggregatesFilter<"MessageAttachment"> | string | null;
     fileUrl?: Prisma.StringWithAggregatesFilter<"MessageAttachment"> | string;
     thumbnailUrl?: Prisma.StringNullableWithAggregatesFilter<"MessageAttachment"> | string | null;
     fileType?: Prisma.StringWithAggregatesFilter<"MessageAttachment"> | string;
@@ -242,11 +242,11 @@ export type MessageAttachmentCreateInput = {
     fileType: string;
     fileSize: bigint | number;
     fileName: string;
-    message: Prisma.MessageCreateNestedOneWithoutAttachmentsInput;
+    message?: Prisma.MessageCreateNestedOneWithoutAttachmentsInput;
 };
 export type MessageAttachmentUncheckedCreateInput = {
     id?: string;
-    messageId: string;
+    messageId?: string | null;
     fileUrl: string;
     thumbnailUrl?: string | null;
     fileType: string;
@@ -260,11 +260,11 @@ export type MessageAttachmentUpdateInput = {
     fileType?: Prisma.StringFieldUpdateOperationsInput | string;
     fileSize?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
     fileName?: Prisma.StringFieldUpdateOperationsInput | string;
-    message?: Prisma.MessageUpdateOneRequiredWithoutAttachmentsNestedInput;
+    message?: Prisma.MessageUpdateOneWithoutAttachmentsNestedInput;
 };
 export type MessageAttachmentUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
-    messageId?: Prisma.StringFieldUpdateOperationsInput | string;
+    messageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fileUrl?: Prisma.StringFieldUpdateOperationsInput | string;
     thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fileType?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -273,7 +273,7 @@ export type MessageAttachmentUncheckedUpdateInput = {
 };
 export type MessageAttachmentCreateManyInput = {
     id?: string;
-    messageId: string;
+    messageId?: string | null;
     fileUrl: string;
     thumbnailUrl?: string | null;
     fileType: string;
@@ -290,7 +290,7 @@ export type MessageAttachmentUpdateManyMutationInput = {
 };
 export type MessageAttachmentUncheckedUpdateManyInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
-    messageId?: Prisma.StringFieldUpdateOperationsInput | string;
+    messageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fileUrl?: Prisma.StringFieldUpdateOperationsInput | string;
     thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fileType?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -418,7 +418,7 @@ export type MessageAttachmentScalarWhereInput = {
     OR?: Prisma.MessageAttachmentScalarWhereInput[];
     NOT?: Prisma.MessageAttachmentScalarWhereInput | Prisma.MessageAttachmentScalarWhereInput[];
     id?: Prisma.StringFilter<"MessageAttachment"> | string;
-    messageId?: Prisma.StringFilter<"MessageAttachment"> | string;
+    messageId?: Prisma.StringNullableFilter<"MessageAttachment"> | string | null;
     fileUrl?: Prisma.StringFilter<"MessageAttachment"> | string;
     thumbnailUrl?: Prisma.StringNullableFilter<"MessageAttachment"> | string | null;
     fileType?: Prisma.StringFilter<"MessageAttachment"> | string;
@@ -465,7 +465,7 @@ export type MessageAttachmentSelect<ExtArgs extends runtime.Types.Extensions.Int
     fileType?: boolean;
     fileSize?: boolean;
     fileName?: boolean;
-    message?: boolean | Prisma.MessageDefaultArgs<ExtArgs>;
+    message?: boolean | Prisma.MessageAttachment$messageArgs<ExtArgs>;
 }, ExtArgs["result"]["messageAttachment"]>;
 export type MessageAttachmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -475,7 +475,7 @@ export type MessageAttachmentSelectCreateManyAndReturn<ExtArgs extends runtime.T
     fileType?: boolean;
     fileSize?: boolean;
     fileName?: boolean;
-    message?: boolean | Prisma.MessageDefaultArgs<ExtArgs>;
+    message?: boolean | Prisma.MessageAttachment$messageArgs<ExtArgs>;
 }, ExtArgs["result"]["messageAttachment"]>;
 export type MessageAttachmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -485,7 +485,7 @@ export type MessageAttachmentSelectUpdateManyAndReturn<ExtArgs extends runtime.T
     fileType?: boolean;
     fileSize?: boolean;
     fileName?: boolean;
-    message?: boolean | Prisma.MessageDefaultArgs<ExtArgs>;
+    message?: boolean | Prisma.MessageAttachment$messageArgs<ExtArgs>;
 }, ExtArgs["result"]["messageAttachment"]>;
 export type MessageAttachmentSelectScalar = {
     id?: boolean;
@@ -498,22 +498,22 @@ export type MessageAttachmentSelectScalar = {
 };
 export type MessageAttachmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "messageId" | "fileUrl" | "thumbnailUrl" | "fileType" | "fileSize" | "fileName", ExtArgs["result"]["messageAttachment"]>;
 export type MessageAttachmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    message?: boolean | Prisma.MessageDefaultArgs<ExtArgs>;
+    message?: boolean | Prisma.MessageAttachment$messageArgs<ExtArgs>;
 };
 export type MessageAttachmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    message?: boolean | Prisma.MessageDefaultArgs<ExtArgs>;
+    message?: boolean | Prisma.MessageAttachment$messageArgs<ExtArgs>;
 };
 export type MessageAttachmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    message?: boolean | Prisma.MessageDefaultArgs<ExtArgs>;
+    message?: boolean | Prisma.MessageAttachment$messageArgs<ExtArgs>;
 };
 export type $MessageAttachmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     name: "MessageAttachment";
     objects: {
-        message: Prisma.$MessagePayload<ExtArgs>;
+        message: Prisma.$MessagePayload<ExtArgs> | null;
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
-        messageId: string;
+        messageId: string | null;
         fileUrl: string;
         thumbnailUrl: string | null;
         fileType: string;
@@ -848,7 +848,7 @@ export interface MessageAttachmentDelegate<ExtArgs extends runtime.Types.Extensi
  */
 export interface Prisma__MessageAttachmentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
-    message<T extends Prisma.MessageDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MessageDefaultArgs<ExtArgs>>): Prisma.Prisma__MessageClient<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+    message<T extends Prisma.MessageAttachment$messageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MessageAttachment$messageArgs<ExtArgs>>): Prisma.Prisma__MessageClient<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1263,6 +1263,24 @@ export type MessageAttachmentDeleteManyArgs<ExtArgs extends runtime.Types.Extens
      * Limit how many MessageAttachments to delete.
      */
     limit?: number;
+};
+/**
+ * MessageAttachment.message
+ */
+export type MessageAttachment$messageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: Prisma.MessageSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: Prisma.MessageOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.MessageInclude<ExtArgs> | null;
+    where?: Prisma.MessageWhereInput;
 };
 /**
  * MessageAttachment without action

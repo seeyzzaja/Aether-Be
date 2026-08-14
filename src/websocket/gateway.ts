@@ -1,5 +1,4 @@
 import type { WebSocketServer } from "ws";
-
 import {
   decrementPresenceConnections,
   incrementPresenceConnections,
@@ -9,6 +8,7 @@ import {
   schedulePresenceOffline,
 } from "#modules/presence/service/presence.grace-period";
 import { updatePresence } from "#modules/presence/service/presence.service";
+import { logger } from "#shared/logger/logger";
 import { handleMessage } from "#websocket/message-handler";
 import { authenticateSocket } from "#websocket/middleware/auth.middleware";
 import { connectionRegistry } from "#websocket/registry/index";
@@ -36,8 +36,8 @@ export function registerGateway(wss: WebSocketServer): void {
       await updatePresence(userId, "online");
     }
 
-    console.log(` ${authSocket.user.username} connected`);
-    console.log("[PRESENCE] Global connections:", connections);
+    logger.info({ userId: authSocket.user.userId }, "WebSocket client connected");
+    logger.debug({ connections }, "Global presence connections");
 
     authSocket.send(
       JSON.stringify({
@@ -56,33 +56,33 @@ export function registerGateway(wss: WebSocketServer): void {
 
     authSocket.on("close", async () => {
       if (presenceConnectionReleased) {
-        console.log("[PRESENCE] Duplicate close ignored:", userId);
+        logger.debug({ userId }, "Duplicate WebSocket close ignored");
         return;
       }
 
       presenceConnectionReleased = true;
 
-      console.log("[PRESENCE] WebSocket close:", userId);
+      logger.debug({ userId }, "WebSocket connection closed");
 
       connectionRegistry.removeSocket(authSocket);
 
       const connections = await decrementPresenceConnections(userId);
 
-      console.log("[PRESENCE] Global connections:", connections);
+      logger.debug({ connections }, "Global presence connections");
 
       if (connections === 0) {
-        console.log("[PRESENCE] Scheduling offline:", userId);
+        logger.debug({ userId }, "Scheduling presence offline");
 
         schedulePresenceOffline(userId);
       }
 
       connectionRegistry.dump();
 
-      console.log(` ${authSocket.user.username} disconnected`);
+      logger.info({ userId: authSocket.user.userId }, "WebSocket client disconnected");
     });
 
     authSocket.on("error", (error) => {
-      console.error(error);
+      logger.error({ err: error }, "WebSocket error");
     });
   });
 }

@@ -14,6 +14,14 @@ export declare const createMessageSchema: z.ZodObject<{
 export declare const updateMessageSchema: z.ZodObject<{
     content: z.ZodString;
 }, z.core.$strip>;
+export declare const forwardMessageSchema: z.ZodObject<{
+    destinationChannelId: z.ZodString;
+}, z.core.$strip>;
+export declare const embedMetadataSchema: z.ZodObject<{
+    url: z.ZodString;
+}, z.core.$strip>;
+export type ForwardMessageInput = z.infer<typeof forwardMessageSchema>;
+export type EmbedMetadataInput = z.infer<typeof embedMetadataSchema>;
 export type CreateMessageInput = z.infer<typeof createMessageSchema>;
 export type UpdateMessageInput = z.infer<typeof updateMessageSchema>;
 //# sourceMappingURL=message.schema.d.ts.map

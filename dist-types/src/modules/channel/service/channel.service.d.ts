@@ -41,6 +41,47 @@ export declare class ChannelService {
         position: number;
     }>;
     delete(serverId: string, channelId: string, userId: string): Promise<void>;
+    private ensureCanManageChannelPermissions;
+    getPermissionOverrides(serverId: string, channelId: string, userId: string): Promise<{
+        id: string;
+        channelId: string;
+        roleId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        allowBitmask: string;
+        denyBitmask: string;
+        role: {
+            id: string;
+            serverId: string;
+            name: string;
+            color: string | null;
+            position: number;
+            isDefault: boolean;
+            permissionsBitmask: string;
+        };
+    }[]>;
+    upsertPermissionOverride(serverId: string, channelId: string, roleId: string, userId: string, data: {
+        allowBitmask: string;
+        denyBitmask: string;
+    }): Promise<{
+        id: string;
+        channelId: string;
+        roleId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        allowBitmask: string;
+        denyBitmask: string;
+        role: {
+            id: string;
+            serverId: string;
+            name: string;
+            color: string | null;
+            position: number;
+            isDefault: boolean;
+            permissionsBitmask: string;
+        };
+    }>;
+    deletePermissionOverride(serverId: string, channelId: string, roleId: string, userId: string): Promise<void>;
 }
 export declare const channelService: ChannelService;
 //# sourceMappingURL=channel.service.d.ts.map

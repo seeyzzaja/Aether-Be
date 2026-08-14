@@ -4,6 +4,6 @@ export declare class RoleController {
     findAll(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     findById(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     update(req: Request, res: Response, next: (error?: unknown) => void): Promise<Response<any, Record<string, any>> | undefined>;
-    delete(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
+    delete(req: Request, res: Response, next: (error?: unknown) => void): Promise<Response<any, Record<string, any>> | undefined>;
 }
 //# sourceMappingURL=role.controller.d.ts.map

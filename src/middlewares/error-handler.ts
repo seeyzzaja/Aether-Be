@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 
 import { config } from "#config/env";
 import { AppError } from "#shared/errors/app-error";
+import { logger } from "#shared/logger/logger";
 import { errorResponse } from "#utils/response";
 
 export const errorHandlerMiddleware = (
@@ -12,7 +13,7 @@ export const errorHandlerMiddleware = (
   _next: NextFunction,
 ) => {
   if (err instanceof AppError) {
-    return errorResponse(res, err.message, err.statusCode, err.errors);
+    return errorResponse(res, err.message, err.statusCode, err.errors, err.code ?? undefined);
   }
 
   if (err instanceof ZodError) {
@@ -20,10 +21,13 @@ export const errorHandlerMiddleware = (
       field: issue.path.join("."),
       message: issue.message,
     }));
+
     return errorResponse(res, "Validasi data gagal", 400, formattedErrors);
   }
 
-  console.error("Unhandled Error:", err);
+  logger.error({ err }, "Unhandled Error");
+
   const stack = config.NODE_ENV === "development" ? err.stack : undefined;
+
   return errorResponse(res, "Terjadi kesalahan internal server", 500, stack ? { stack } : null);
 };
