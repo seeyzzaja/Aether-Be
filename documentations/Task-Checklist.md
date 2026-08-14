@@ -17,14 +17,14 @@ Total 26 Task tercakup pada dokumen ini, mencakup seluruh fitur inti hingga fitu
 | **Estimasi Waktu** | **6 jam** |
 | **Definition of Done** | **Environment lokal dapat dijalankan siapapun dengan satu perintah (docker-compose up).** |
 **Subtask:**
-Inisialisasi repo & konfigurasi TypeScript.
-Tulis docker-compose.yml (postgres, redis).
-Buat struktur folder sesuai Architecture Document.
-Setup Prisma init & koneksi ke database.
+- [x] Inisialisasi repo & konfigurasi TypeScript.
+- [x] Tulis docker-compose.yml (postgres, redis).
+- [x] Buat struktur folder sesuai Architecture Document.
+- [x] Setup Prisma init & koneksi ke database.
 **Checklist Verifikasi:**
-docker-compose up berhasil tanpa error
-Prisma berhasil connect ke database
-Struktur folder sesuai Architecture Document
+- [x] docker-compose up berhasil tanpa error
+- [x] Prisma berhasil connect ke database
+- [x] Struktur folder sesuai Architecture Document
 
 **T1.2 — Setup Traefik, Linting, dan CI**
 | **Deskripsi** | **Konfigurasi Traefik sebagai reverse proxy dasar, tooling Biome/Husky/Commitlint, dan pipeline GitHub Actions.** |
@@ -36,14 +36,14 @@ Struktur folder sesuai Architecture Document
 | **Estimasi Waktu** | **8 jam** |
 | **Definition of Done** | **Kontribusi kode baru otomatis tervalidasi format & lint sebelum masuk ke branch utama.** |
 **Subtask:**
-Tulis konfigurasi Traefik (label docker-compose).
-Install & konfigurasi Biome.
-Install Husky + Commitlint dengan aturan conventional commit.
-Tulis workflow GitHub Actions (lint + build).
+- [x] Tulis konfigurasi Traefik (label docker-compose).
+- [x] Install & konfigurasi Biome.
+- [x] Install Husky + Commitlint dengan aturan conventional commit.
+- [x] Tulis workflow GitHub Actions (lint + build).
 **Checklist Verifikasi:**
-Traefik routing berhasil diuji manual
-Commit tidak valid ditolak otomatis
-CI pipeline hijau pada PR pertama
+- [x] Traefik routing berhasil diuji manual
+- [x] Commit tidak valid ditolak otomatis
+- [x] CI pipeline hijau pada PR pertama
 
 ## Feature S2 — Authentication & Authorization Foundation
 **T2.1 — Implementasi Register & Login**
@@ -56,14 +56,14 @@ CI pipeline hijau pada PR pertama
 | **Estimasi Waktu** | **10 jam** |
 | **Definition of Done** | **Pengguna baru dapat register, login, dan menerima token valid untuk endpoint terproteksi.** |
 **Subtask:**
-Buat Prisma schema users & sessions.
-Implementasi service register (validasi Zod, hashing password).
-Implementasi service login (verifikasi & penerbitan JWT + refresh token).
-Tulis unit test dasar service auth.
+- [x] Buat Prisma schema users & sessions.
+- [x] Implementasi service register (validasi Zod, hashing password).
+- [x] Implementasi service login (verifikasi & penerbitan JWT + refresh token).
+- [ ] Tulis unit test dasar service auth.
 **Checklist Verifikasi:**
-Register & login berhasil diuji via Postman
-Password tidak pernah tersimpan sebagai plaintext
-Access token kedaluwarsa sesuai konfigurasi (15 menit)
+- [x] Register & login berhasil diuji via Postman
+- [x] Password tidak pernah tersimpan sebagai plaintext
+- [x] Access token kedaluwarsa sesuai konfigurasi (15 menit)
 
 **T2.2 — Session & Device Management**
 | **Deskripsi** | **Endpoint untuk melihat dan mencabut sesi aktif sesuai Security Design.** |
@@ -75,12 +75,12 @@ Access token kedaluwarsa sesuai konfigurasi (15 menit)
 | **Estimasi Waktu** | **5 jam** |
 | **Definition of Done** | **Pengguna dapat mengelola perangkat/sesi aktif miliknya secara mandiri.** |
 **Subtask:**
-Implementasi endpoint list session.
-Implementasi endpoint revoke session.
-Tambahkan middleware pengecekan revoked_at pada validasi token.
+- [x] Implementasi endpoint list session.
+- [x] Implementasi endpoint revoke session.
+- [x] Tambahkan middleware pengecekan revoked_at pada validasi token.
 **Checklist Verifikasi:**
-Sesi yang di-revoke tidak dapat lagi digunakan
-Device info & IP tercatat saat login
+- [x] Sesi yang di-revoke tidak dapat lagi digunakan
+- [x] Device info & IP tercatat saat login
 
 # EPIC 2 — Workspace & Permission (v0.2)
 ## Feature S3 — Server & Membership
@@ -94,14 +94,14 @@ Device info & IP tercatat saat login
 | **Estimasi Waktu** | **10 jam** |
 | **Definition of Done** | **Server dapat dibuat, di-join, dan dikelola dasarnya sesuai SRS-WS-01.** |
 **Subtask:**
-Prisma schema servers & server_members.
-Endpoint CRUD server.
-Endpoint join/leave server.
-Logic pembuatan role default @everyone & assignment Owner.
+- [x] Prisma schema servers & server_members.
+- [x] Endpoint CRUD server.
+- [x] Endpoint join/leave server.
+- [x] Logic pembuatan role default @everyone & assignment Owner.
 **Checklist Verifikasi:**
-Server baru otomatis punya role @everyone
-Join/leave server tervalidasi & tidak duplikat
-Hanya Owner yang dapat menghapus server
+- [x] Server baru otomatis punya role @everyone
+- [x] Join/leave server tervalidasi & tidak duplikat
+- [x] Hanya Owner yang dapat menghapus server
 
 ## Feature S4 — Category/Channel & Role/Permission
 **T4.1 — CRUD Category & Channel**
@@ -114,12 +114,12 @@ Hanya Owner yang dapat menghapus server
 | **Estimasi Waktu** | **8 jam** |
 | **Definition of Done** | **Struktur Server → Category → Channel berfungsi sesuai SRS-WS-02.** |
 **Subtask:**
-Prisma schema categories & channels.
-Endpoint CRUD category & channel.
-Logic reordering posisi (position field).
+- [x] Prisma schema categories & channels.
+- [x] Endpoint CRUD category & channel.
+- [x] Logic reordering posisi (position field).
 **Checklist Verifikasi:**
-Channel tampil terkelompok sesuai category
-Reordering tidak menimbulkan konflik posisi duplikat
+- [x] Channel tampil terkelompok sesuai category
+- [x] Reordering tidak menimbulkan konflik posisi duplikat
 
 **T4.2 — Role & Permission Engine**
 | **Deskripsi** | **Membangun engine evaluasi permission berbasis bitmask, termasuk role kustom dan channel permission override.** |
@@ -131,14 +131,14 @@ Reordering tidak menimbulkan konflik posisi duplikat
 | **Estimasi Waktu** | **12 jam** |
 | **Definition of Done** | **Sistem permission granular berfungsi dan aman dari privilege escalation dasar.** |
 **Subtask:**
-Prisma schema roles, server_member_roles, channel_permission_overrides.
-Middleware evaluasi permission bitmask + override.
-Endpoint create/update role & assignment ke member.
-Endpoint set channel permission override.
+- [x] Prisma schema roles, server_member_roles, channel_permission_overrides.
+- [x] Middleware evaluasi permission bitmask + override.
+- [x] Endpoint create/update role & assignment ke member.
+- [x] Endpoint set channel permission override.
 **Checklist Verifikasi:**
-Percobaan privilege escalation ditolak (diuji manual)
-Override channel mengalahkan permission role dasar sesuai aturan allow/deny
-Middleware permission dipakai konsisten di seluruh endpoint terkait
+- [x] Percobaan privilege escalation ditolak (diuji manual)
+- [x] Override channel mengalahkan permission role dasar sesuai aturan allow/deny
+- [x] Middleware permission dipakai konsisten di seluruh endpoint terkait
 
 # EPIC 3 — Realtime Messaging Core (v0.3)
 ## Feature S5 — WebSocket Foundation
@@ -152,13 +152,13 @@ Middleware permission dipakai konsisten di seluruh endpoint terkait
 | **Estimasi Waktu** | **10 jam** |
 | **Definition of Done** | **Klien dapat terhubung WebSocket dan menerima event dummy end-to-end.** |
 **Subtask:**
-Setup ws server terpisah dari REST API listener.
-Implementasi autentikasi handshake via token.
-Implementasi connection registry (Map channel_id -> Set socket).
-Implementasi subscribe/unsubscribe channel.
+- [x] Setup ws server terpisah dari REST API listener.
+- [x] Implementasi autentikasi handshake via token.
+- [x] Implementasi connection registry (Map channel_id -> Set socket).
+- [x] Implementasi subscribe/unsubscribe channel.
 **Checklist Verifikasi:**
-Koneksi tanpa token valid ditolak
-Klien dapat subscribe & unsubscribe channel dengan benar
+- [x] Koneksi tanpa token valid ditolak
+- [x] Klien dapat subscribe & unsubscribe channel dengan benar
 
 ## Feature S6 — Core Messaging CRUD + Broadcast
 **T6.1 — Message CRUD & Realtime Broadcast**
@@ -171,14 +171,14 @@ Klien dapat subscribe & unsubscribe channel dengan benar
 | **Estimasi Waktu** | **14 jam** |
 | **Definition of Done** | **Messaging inti berfungsi end-to-end sesuai SRS-MSG-01.** |
 **Subtask:**
-Prisma schema messages.
-Endpoint POST/PATCH/DELETE message dengan permission check.
-Broadcast event message.created/updated/deleted via WebSocket.
-Parsing reply_to_id & mention dari konten pesan.
+- [x] Prisma schema messages.
+- [x] Endpoint POST/PATCH/DELETE message dengan permission check.
+- [x] Broadcast event message.created/updated/deleted via WebSocket.
+- [x] Parsing reply_to_id & mention dari konten pesan.
 **Checklist Verifikasi:**
-Kirim/edit/hapus pesan realtime teruji end-to-end
-Soft delete tidak menghapus data secara fisik dari database
-Permission check menolak aktor tanpa SEND_MESSAGES
+- [x] Kirim/edit/hapus pesan realtime teruji end-to-end
+- [x] Soft delete tidak menghapus data secara fisik dari database
+- [x] Permission check menolak aktor tanpa SEND_MESSAGES
 
 ## Feature S7 — Reactions/Pin + Redis Pub/Sub Scaling
 **T7.1 — Reactions & Pin**
@@ -191,12 +191,12 @@ Permission check menolak aktor tanpa SEND_MESSAGES
 | **Estimasi Waktu** | **6 jam** |
 | **Definition of Done** | **Reaksi & pin berfungsi sesuai FR-MSG-04/06.** |
 **Subtask:**
-Prisma schema reactions.
-Endpoint add/remove reaction.
-Endpoint pin/unpin message.
+- [x] Prisma schema reactions.
+- [x] Endpoint add/remove reaction.
+- [x] Endpoint pin/unpin message.
 **Checklist Verifikasi:**
-Reaksi duplikat ditolak (UNIQUE constraint)
-Pin/unpin tersinkron realtime ke seluruh client
+- [x] Reaksi duplikat ditolak (UNIQUE constraint)
+- [x] Pin/unpin tersinkron realtime ke seluruh client
 
 **T7.2 — Redis Pub/Sub Cross-Instance Broadcast**
 | **Deskripsi** | **Implementasi koordinasi broadcast WebSocket lintas instance aplikasi melalui Redis Pub/Sub, sesuai ADR-002.** |
@@ -208,12 +208,12 @@ Pin/unpin tersinkron realtime ke seluruh client
 | **Estimasi Waktu** | **10 jam** |
 | **Definition of Done** | **Strategi scaling WebSocket lintas instance (Architecture Document Bagian 6) terbukti bekerja.** |
 **Subtask:**
-Implementasi publish event ke Redis channel saat broadcast lokal.
-Implementasi subscriber di setiap instance untuk relay ke connection registry lokal.
-Uji dengan menjalankan 2 replika aplikasi via docker-compose scale.
+- [x] Implementasi publish event ke Redis channel saat broadcast lokal.
+- [x] Implementasi subscriber di setiap instance untuk relay ke connection registry lokal.
+- [x] Uji dengan menjalankan 2 replika aplikasi via docker-compose scale.
 **Checklist Verifikasi:**
-Broadcast lintas instance terverifikasi dengan 2 replika
-Tidak ada event yang diterima ganda oleh client yang sama
+- [x] Broadcast lintas instance terverifikasi dengan 2 replika
+- [x] Tidak ada event yang diterima ganda oleh client yang sama
 
 ## Feature S8 — Presence & Typing/Read Receipt
 **T8.1 — Presence State & Broadcast**
@@ -226,12 +226,12 @@ Tidak ada event yang diterima ganda oleh client yang sama
 | **Estimasi Waktu** | **8 jam** |
 | **Definition of Done** | **Presence berfungsi end-to-end sesuai FR-PRES-01.** |
 **Subtask:**
-Simpan state presence di Redis per user_id.
-Broadcast event presence.updated via Pub/Sub.
-Implementasi grace period sebelum status offline pada disconnect.
+- [x] Simpan state presence di Redis per user_id.
+- [x] Broadcast event presence.updated via Pub/Sub.
+- [x] Implementasi grace period sebelum status offline pada disconnect.
 **Checklist Verifikasi:**
-Presence tersinkron realtime lintas instance
-Status invisible bekerja sesuai spesifikasi SRS-PRES-01
+- [x] Presence tersinkron realtime lintas instance
+- [x] Status invisible bekerja sesuai spesifikasi SRS-PRES-01
 
 **T8.2 — Typing Indicator & Read Receipt**
 | **Deskripsi** | **Event typing indicator (dengan debounce) dan tracking read receipt per channel.** |
@@ -243,11 +243,11 @@ Status invisible bekerja sesuai spesifikasi SRS-PRES-01
 | **Estimasi Waktu** | **6 jam** |
 | **Definition of Done** | **Typing indicator & read receipt berfungsi sesuai FR-PRES-02/03.** |
 **Subtask:**
-Implementasi event typing dengan debounce di sisi server.
-Implementasi tracking & endpoint read receipt.
+- [x] Implementasi event typing dengan debounce di sisi server.
+- [x] Implementasi tracking & endpoint read receipt.
 **Checklist Verifikasi:**
-Typing indicator hilang otomatis setelah beberapa detik tanpa aktivitas
-Read receipt terupdate saat channel dibuka
+- [x] Typing indicator hilang otomatis setelah beberapa detik tanpa aktivitas
+- [x] Read receipt terupdate saat channel dibuka
 
 # EPIC 4 — Engagement Features (v0.4)
 ## Feature S9 — Notification System
@@ -261,13 +261,13 @@ Read receipt terupdate saat channel dibuka
 | **Estimasi Waktu** | **10 jam** |
 | **Definition of Done** | **Notification Flow berfungsi end-to-end sesuai SRS-NOTIF-01.** |
 **Subtask:**
-Prisma schema notifications.
-Trigger notifikasi pada event mention/reply.
-Setup BullMQ worker & job pengiriman email.
-Integrasi provider SMTP/API & konfigurasi retry/backoff.
+- [x] Prisma schema notifications.
+- [x] Trigger notifikasi pada event mention/reply.
+- [x] Setup BullMQ worker & job pengiriman email.
+- [x] Integrasi provider SMTP/API & konfigurasi retry/backoff.
 **Checklist Verifikasi:**
-Notifikasi realtime diterima instan saat online
-Email terkirim & job gagal masuk retry/dead-letter sesuai desain
+- [x] Notifikasi realtime diterima instan saat online
+- [x] Email terkirim & job gagal masuk retry/dead-letter sesuai desain
 
 ## Feature S10 — Upload & Media
 **T10.1 — Direct Upload Flow ke Cloudinary**
@@ -280,13 +280,13 @@ Email terkirim & job gagal masuk retry/dead-letter sesuai desain
 | **Estimasi Waktu** | **10 jam** |
 | **Definition of Done** | **Upload file end-to-end berfungsi sesuai SRS-UP-01.** |
 **Subtask:**
-Prisma schema message_attachments.
-Endpoint permintaan signed URL (validasi tipe & ukuran).
-Endpoint konfirmasi upload & simpan metadata.
-Konfigurasi thumbnail otomatis di Cloudinary.
+- [x] Prisma schema message_attachments.
+- [x] Endpoint permintaan signed URL (validasi tipe & ukuran).
+- [x] Endpoint konfirmasi upload & simpan metadata.
+- [x] Konfigurasi thumbnail otomatis di Cloudinary.
 **Checklist Verifikasi:**
-Upload file besar (mendekati 1GB) berhasil diuji
-File tipe/ukuran tidak valid ditolak sebelum upload dimulai
+- [x] Upload file besar (mendekati 1GB) berhasil diuji
+- [x] File tipe/ukuran tidak valid ditolak sebelum upload dimulai
 
 ## Feature S11 — Search
 **T11.1 — Full Text Search Implementation**
@@ -299,12 +299,12 @@ File tipe/ukuran tidak valid ditolak sebelum upload dimulai
 | **Estimasi Waktu** | **9 jam** |
 | **Definition of Done** | **Pencarian lintas entitas berfungsi sesuai FR-SRC-01.** |
 **Subtask:**
-Migration tsvector + trigger + index GIN pada messages/servers/channels.
-Endpoint GET /search dengan filter tipe entitas.
-Komponen search overlay pada frontend.
+- [x] Migration tsvector + trigger + index GIN pada messages/servers/channels.
+- [x] Endpoint GET /search dengan filter tipe entitas.
+- [x] Implementasi API pagination dan sorting untuk hasil pencarian.
 **Checklist Verifikasi:**
-Hasil pencarian terfilter sesuai akses aktor
-Waktu respons pencarian sesuai target SRS (p95 < 500ms)
+- [x] Hasil pencarian terfilter sesuai akses aktor
+- [x] Waktu respons pencarian sesuai target SRS (p95 < 500ms)
 
 # EPIC 5 — Voice & Video (v0.5)
 ## Feature S12 — LiveKit Server Setup & Token Issuance
@@ -318,53 +318,53 @@ Waktu respons pencarian sesuai target SRS (p95 < 500ms)
 | **Estimasi Waktu** | **10 jam** |
 | **Definition of Done** | **Server dapat menerbitkan token LiveKit yang valid sesuai SRS-VV-01.** |
 **Subtask:**
-Tambahkan service LiveKit ke docker-compose.
-Integrasi LiveKit Server SDK untuk membuat room & token.
-Endpoint penerbitan token dengan permission check.
+- [x] Tambahkan service LiveKit ke docker-compose.
+- [x] Integrasi LiveKit Server SDK untuk membuat room & token.
+- [x] Endpoint penerbitan token dengan permission check.
 **Checklist Verifikasi:**
-Token yang diterbitkan berhasil diverifikasi LiveKit
-Permission CONNECT ditegakkan sebelum token diterbitkan
+- [x] Token yang diterbitkan berhasil diverifikasi LiveKit
+- [x] Permission CONNECT ditegakkan sebelum token diterbitkan
 
-## Feature S13 — Voice Channel Client Integration
-**T13.1 — Integrasi Voice Channel Frontend**
-| **Deskripsi** | **Integrasi LiveKit Client SDK (React) untuk join/leave/mute/unmute voice channel.** |
+## Feature S13 — Voice Channel Webhook & State
+**T13.1 — Integrasi LiveKit Webhook & Room Management**
+| **Deskripsi** | **Menerima event webhook dari LiveKit untuk sinkronisasi state partisipan di backend.** |
 | --- | --- |
-| **Acceptance Criteria** | **1. Pengguna dapat join & leave voice channel dari UI.  2. Status "sedang di voice" tersinkron dengan Presence Module.** |
+| **Acceptance Criteria** | **1. Webhook dari LiveKit tervalidasi signature-nya.  2. Status "sedang di voice" (participant-joined/left) tersinkron dengan Presence Module.** |
 | **Dependency** | **T12.1, T8.1** |
 | **Priority** | **Must** |
 | **Estimasi Kesulitan** | **Medium** |
 | **Estimasi Waktu** | **10 jam** |
 | **Definition of Done** | **Voice channel berfungsi end-to-end sesuai FR-VV-01.** |
 **Subtask:**
-Integrasi LiveKit Client SDK di komponen voice channel.
-Implementasi kontrol join/leave/mute/unmute.
-Sinkronisasi status voice dengan Presence Module.
+- [x] Implementasi endpoint webhook LiveKit.
+- [x] Verifikasi signature webhook LiveKit.
+- [x] Update state Presence berdasarkan event participant-joined/left.
 **Checklist Verifikasi:**
-Join/leave voice channel berfungsi end-to-end
-Status voice tampil pada Channel Sidebar sesuai UI/UX Specification
+- [x] Webhook LiveKit terverifikasi aman
+- [x] State voice terupdate realtime saat webhook diterima
 
-## Feature S14 — Video Channel & Polish
-**T14.1 — Video Channel & Error Handling**
-| **Deskripsi** | **Kontrol kamera on/off, UI grid peserta, dan penanganan error koneksi LiveKit gagal.** |
+## Feature S14 — Room Moderation & Cleanup
+**T14.1 — Voice/Video Room Moderation API**
+| **Deskripsi** | **Endpoint untuk moderasi room (mute/kick participant) via Server SDK dan room cleanup.** |
 | --- | --- |
-| **Acceptance Criteria** | **1. Kamera dapat dinyalakan/dimatikan tanpa memutus koneksi audio.  2. Kegagalan koneksi LiveKit ditampilkan sebagai error eksplisit ke pengguna, bukan silent failure.** |
+| **Acceptance Criteria** | **1. Moderator dapat me-mute/kick peserta dari room via API.  2. Room yang sudah kosong dibersihkan dari state backend secara berkala atau event.** |
 | **Dependency** | **T13.1** |
 | **Priority** | **Must** |
 | **Estimasi Kesulitan** | **Medium** |
 | **Estimasi Waktu** | **8 jam** |
 | **Definition of Done** | **Video channel berfungsi end-to-end sesuai FR-VV-02.** |
 **Subtask:**
-Implementasi kontrol video on/off.
-Bangun UI grid peserta dengan voice activity indicator.
-Implementasi penanganan error koneksi & tombol leave call.
+- [x] Endpoint POST /channels/{id}/voice/kick dengan permission check.
+- [x] Endpoint POST /channels/{id}/voice/mute dengan permission check.
+- [x] Logic room cleanup saat event room-empty diterima.
 **Checklist Verifikasi:**
-Video on/off berfungsi tanpa mengganggu audio
-Error koneksi ditampilkan jelas ke pengguna
+- [x] Moderator berhasil kick participant via API
+- [x] State room bersih saat seluruh peserta keluar
 
 # EPIC 6 — Advanced Messaging & Security (v0.6)
 ## Feature S15 — Forum & Announcement + Thread Lanjutan
 **T15.1 — Forum/Announcement Channel Rules & Thread Panel**
-| **Deskripsi** | **Aturan akses khusus per tipe channel dan panel thread terpisah di frontend.** |
+| **Deskripsi** | **Aturan akses khusus per tipe channel dan API khusus untuk penanganan thread.** |
 | --- | --- |
 | **Acceptance Criteria** | **1. Channel Announcement hanya dapat ditulis oleh role yang diizinkan.  2. Thread dibuka sebagai panel terpisah tanpa mengganti Message List utama.** |
 | **Dependency** | **T6.1, T4.2** |
@@ -373,12 +373,12 @@ Error koneksi ditampilkan jelas ke pengguna
 | **Estimasi Waktu** | **9 jam** |
 | **Definition of Done** | **Forum, Announcement, dan Thread berfungsi sesuai FR-WS-03 & FR-MSG-02.** |
 **Subtask:**
-Implementasi aturan permission khusus tipe channel forum/announcement.
-Implementasi logic thread_root_id pada Messaging Module.
-Bangun komponen thread panel di frontend.
+- [x] Implementasi aturan permission khusus tipe channel forum/announcement.
+- [x] Implementasi logic thread_root_id pada Messaging Module.
+- [x] Implementasi struktur hirarki dan pagination untuk pesan di dalam thread.
 **Checklist Verifikasi:**
-Percobaan menulis di Announcement tanpa izin ditolak
-Thread dapat dibuka & ditutup tanpa kehilangan konteks channel utama
+- [x] Percobaan menulis di Announcement tanpa izin ditolak
+- [x] Pagination cursor/offset berfungsi khusus untuk parent-child thread
 
 ## Feature S16 — Poll, Forward, Embed
 **T16.1 — Poll (Single & Multiple Choice)**
@@ -391,12 +391,12 @@ Thread dapat dibuka & ditutup tanpa kehilangan konteks channel utama
 | **Estimasi Waktu** | **9 jam** |
 | **Definition of Done** | **Poll berfungsi sesuai FR-MSG-07 dengan dukungan multiple-choice.** |
 **Subtask:**
-Update schema polls/poll_options/poll_votes untuk mendukung allowMultipleChoice.
-Endpoint create poll & submit vote.
-Komponen UI poll dengan hasil realtime.
+- [x] Update schema polls/poll_options/poll_votes untuk mendukung allowMultipleChoice.
+- [x] Endpoint create poll & submit vote.
+- [x] Optimasi query untuk rekapitulasi hasil polling secara realtime.
 **Checklist Verifikasi:**
-Single-choice poll menolak vote kedua pada opsi berbeda
-Multiple-choice poll mengizinkan lebih dari satu opsi per user
+- [x] Single-choice poll menolak vote kedua pada opsi berbeda
+- [x] Multiple-choice poll mengizinkan lebih dari satu opsi per user
 
 **T16.2 — Forward & Embed**
 | **Deskripsi** | **Meneruskan pesan ke channel lain dengan validasi izin ganda, dan menampilkan preview metadata link.** |
@@ -408,12 +408,12 @@ Multiple-choice poll mengizinkan lebih dari satu opsi per user
 | **Estimasi Waktu** | **8 jam** |
 | **Definition of Done** | **Forward & Embed berfungsi sesuai FR-MSG-05/08.** |
 **Subtask:**
-Endpoint forward dengan validasi otorisasi ganda.
-Fetch & sanitasi metadata link untuk embed.
-Komponen UI embed preview.
+- [x] Endpoint forward dengan validasi otorisasi ganda.
+- [x] Fetch & sanitasi metadata link untuk embed.
+- [x] Implementasi caching (Redis/memory) untuk metadata link (embed preview).
 **Checklist Verifikasi:**
-Forward ke channel tanpa izin tulis ditolak
-Embed tidak me-render iframe/skrip dari domain eksternal
+- [x] Forward ke channel tanpa izin tulis ditolak
+- [x] Embed tidak me-render iframe/skrip dari domain eksternal
 
 ## Feature S17 — Security Hardening Penuh
 **T17.1 — Rate Limiter & Audit Log Middleware**
@@ -426,12 +426,12 @@ Embed tidak me-render iframe/skrip dari domain eksternal
 | **Estimasi Waktu** | **10 jam** |
 | **Definition of Done** | **Rate limiter & audit log aktif sesuai Security Design Bagian 3-4.** |
 **Subtask:**
-Implementasi middleware rate limiter per kategori endpoint.
-Implementasi middleware audit log generik untuk aksi sensitif.
-Uji ambang batas untuk kategori login, kirim pesan, dan endpoint umum.
+- [ ] Implementasi middleware rate limiter per kategori endpoint.
+- [ ] Implementasi middleware audit log generik untuk aksi sensitif.
+- [ ] Uji ambang batas untuk kategori login, kirim pesan, dan endpoint umum.
 **Checklist Verifikasi:**
-Rate limit login/kirim pesan sesuai ambang Security Design
-Aksi sensitif tercatat lengkap di audit_logs
+- [ ] Rate limit login/kirim pesan sesuai ambang Security Design
+- [ ] Aksi sensitif tercatat lengkap di audit_logs
 
 **T17.2 — CSP/CSRF & Anti-Spam**
 | **Deskripsi** | **Konfigurasi header CSP/CSRF/security headers dan heuristik anti-spam (duplikat, mass-mention, link mencurigakan).** |
@@ -443,17 +443,17 @@ Aksi sensitif tercatat lengkap di audit_logs
 | **Estimasi Waktu** | **8 jam** |
 | **Definition of Done** | **Seluruh kontrol pada Security Design (Fase 6) aktif dan teruji.** |
 **Subtask:**
-Konfigurasi header CSP/CSRF/security headers pada middleware.
-Implementasi deteksi duplikat pesan.
-Implementasi deteksi mass-mention & link mencurigakan.
+- [x] Konfigurasi header CSP/CSRF/security headers pada middleware.
+- [ ] Implementasi deteksi duplikat pesan.
+- [ ] Implementasi deteksi mass-mention & link mencurigakan.
 **Checklist Verifikasi:**
-Header keamanan terverifikasi via response inspector
-Pesan duplikat/mass-mention di-throttle sesuai desain
+- [x] Header keamanan terverifikasi via response inspector
+- [ ] Pesan duplikat/mass-mention di-throttle sesuai desain
 
 # EPIC 7 — Admin & Launch Polish (v0.7)
 ## Feature S18 — Admin Panel
 **T18.1 — Admin User Management, Audit Log Viewer & Bulk Operation**
-| **Deskripsi** | **Endpoint & UI manajemen user platform, viewer audit log dengan filter, serta operasi bulk dengan permission check per-item.** |
+| **Deskripsi** | **Endpoint manajemen user platform, API audit log dengan filter, serta operasi bulk dengan permission check per-item.** |
 | --- | --- |
 | **Acceptance Criteria** | **1. Suspend user memaksa logout seluruh sesi aktif user tersebut.  2. Operasi bulk (delete/kick) tetap menjalankan permission check untuk setiap item, bukan hanya di awal permintaan.** |
 | **Dependency** | **T17.1, T4.2** |
@@ -462,46 +462,47 @@ Pesan duplikat/mass-mention di-throttle sesuai desain
 | **Estimasi Waktu** | **12 jam** |
 | **Definition of Done** | **Admin Panel berfungsi penuh sesuai FR-ADM-01/02.** |
 **Subtask:**
-Endpoint list/suspend user platform.
-UI audit log viewer dengan filter aktor/aksi/waktu.
-Endpoint bulk delete message & bulk kick member dengan permission check per-item.
+- [ ] Endpoint list/suspend user platform.
+- [ ] Endpoint GET /admin/audit-logs dengan dukungan query parameter filter (aktor, aksi, waktu, dll).
+- [ ] Endpoint bulk delete message & bulk kick member dengan permission check per-item.
 **Checklist Verifikasi:**
-Suspend user mencabut seluruh sesi aktifnya
-Bulk operation menolak item yang di luar izin aktor, bukan seluruh request
+- [ ] Suspend user mencabut seluruh sesi aktifnya
+- [ ] Bulk operation menolak item yang di luar izin aktor, bukan seluruh request
 
-## Feature S19 — PWA, Responsive & Scalability Validation
-**T19.1 — Setup PWA**
-| **Deskripsi** | **Konfigurasi manifest.json, service worker caching aset statis, dan fallback offline sederhana.** |
+## Feature S19 — API Docs, Testing & Scalability Validation
+**T19.1 — API Documentation & Health Check**
+| **Deskripsi** | **Konfigurasi Swagger/OpenAPI untuk dokumentasi interaktif dan endpoint /health untuk monitoring.** |
 | --- | --- |
-| **Acceptance Criteria** | **1. Aplikasi dapat di-install sebagai PWA di browser modern.  2. Halaman fallback offline tampil saat tidak ada koneksi.** |
+| **Acceptance Criteria** | **1. Dokumentasi Swagger UI dapat diakses.  2. Endpoint /health merespons 200 OK dengan status koneksi DB dan Redis.** |
 | **Dependency** | **Seluruh fitur inti (T1-T18)** |
 | **Priority** | **Should** |
 | **Estimasi Kesulitan** | **Easy** |
 | **Estimasi Waktu** | **6 jam** |
-| **Definition of Done** | **Aplikasi installable sebagai PWA sesuai Vision Document (platform: PWA).** |
+| **Definition of Done** | **API terdokumentasi interaktif dan termonitor status layanannya.** |
 **Subtask:**
-Buat manifest.json dengan ikon & theme_color.
-Implementasi service worker caching aset statis.
-Buat halaman fallback offline.
+- [x] Integrasi library Swagger/OpenAPI (mis. swagger-ui-express/NestJS Swagger).
+- [x] Tulis spesifikasi OpenAPI untuk endpoint kunci.
+- [x] Implementasi endpoint /health (cek DB & Redis connection).
 **Checklist Verifikasi:**
-Prompt install PWA muncul di browser
-Fallback offline tampil saat koneksi diputus
+- [x] Swagger UI tampil tanpa error saat diakses
+- [x] Endpoint /health menampilkan HTTP 200 OK beserta metrik status
 
-**T19.2 — Responsive Polish & Dokumen Evaluasi Scalability**
-| **Deskripsi** | **Verifikasi breakpoint responsif (mobile/tablet/desktop) dan penyusunan dokumen evaluasi teoritis strategi scaling terhadap target desain.** |
+**T19.2 — Load Testing & Dokumen Evaluasi Scalability**
+| **Deskripsi** | **Pengujian beban (load test) pada API kritis (k6/Artillery) dan penyusunan dokumen evaluasi strategi scaling.** |
 | --- | --- |
-| **Acceptance Criteria** | **1. UI berfungsi baik pada ketiga breakpoint (UI/UX Specification Bagian 6).  2. Dokumen evaluasi scaling merujuk target NFR pada SRS & strategi pada Architecture Document.** |
+| **Acceptance Criteria** | **1. Hasil load testing (throughput, latency) terdokumentasi.  2. Dokumen evaluasi scaling merujuk hasil test dan strategi pada Architecture Document.** |
 | **Dependency** | **T19.1** |
 | **Priority** | **Should** |
 | **Estimasi Kesulitan** | **Medium** |
 | **Estimasi Waktu** | **8 jam** |
-| **Definition of Done** | **Aplikasi responsif penuh dan evaluasi scalability terdokumentasi, menandai selesainya seluruh 19 sprint.** |
+| **Definition of Done** | **Laporan load test & evaluasi scalability terdokumentasi, menandai selesainya seluruh sprint backend.** |
 **Subtask:**
-Uji & perbaiki layout pada breakpoint mobile/tablet/desktop.
-Tulis dokumen evaluasi teoritis scalability (tanpa load-test nyata, sesuai keputusan Vision Document).
+- [ ] Buat script load test (k6/Artillery) untuk flow auth & kirim pesan.
+- [ ] Eksekusi load test dan catat metrik performa.
+- [ ] Tulis dokumen evaluasi scalability berdasarkan data empiris.
 **Checklist Verifikasi:**
-Tidak ada elemen UI terpotong/tumpang tindih di ketiga breakpoint
-Dokumen evaluasi scalability selesai & konsisten dengan keputusan sebelumnya
+- [ ] Script load test tereksekusi sukses
+- [ ] Laporan performa & evaluasi scalability selesai disusun
 
 # Keputusan yang Telah Diambil
 Struktur Epic (7) → Feature (19) → Task (26) → Subtask → Checklist ditetapkan sebagai level rincian final proyek, konsisten 1:1 dengan Development Roadmap dan Sprint Breakdown.
@@ -516,6 +517,6 @@ T4.2 (Role & Permission Engine) dan T17.1-T17.2 (Security Hardening) memiliki Es
 Beberapa Task memiliki Dependency ganda (mis. T9.1 bergantung pada T8.1 dan T6.1) — keterlambatan pada satu dependency berisiko menunda beberapa Task sekaligus di sprint berikutnya.
 # Technical Debt yang Sengaja Diterima
 Checklist Verifikasi pada dokumen ini berbasis pengujian manual, bukan automated test — konsisten dengan keputusan Development Roadmap dan Sprint Breakdown bahwa automated E2E test belum menjadi bagian Definition of Done proyek ini.
-Task ini tidak mencakup dokumentasi API interaktif (mis. Swagger/OpenAPI UI) secara eksplisit; API Specification (Fase 5) dianggap cukup sebagai referensi selama proyek pembelajaran ini berlangsung.
+Task T19.1 sekarang secara spesifik mencakup implementasi dokumentasi API interaktif (Swagger/OpenAPI) menggantikan prioritas PWA sebelumnya untuk fokus di Backend.
 # Pertanyaan untuk Stakeholder
 Apakah seluruh 26 Task pada Task Checklist ini sudah dianggap lengkap sebagai acuan implementasi, mengingat ini adalah dokumen terakhir dari 11 dokumen (Fase 0-10) yang direncanakan sejak Vision Document?
