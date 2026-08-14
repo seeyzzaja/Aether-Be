@@ -159,7 +159,7 @@ export class MembershipService {
 
     await auditService.log({
       actorId,
-      action: "role.assign",
+      action: "ROLE_ASSIGN",
       targetType: "role",
       targetId: roleId,
       metadata: {
@@ -222,7 +222,7 @@ export class MembershipService {
 
     await auditService.log({
       actorId,
-      action: "role.remove",
+      action: "ROLE_REMOVE",
       targetType: "role",
       targetId: roleId,
       metadata: {

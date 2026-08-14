@@ -523,21 +523,5 @@ router.post(
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.get(
-  "/embed",
-  auditLogMiddleware({
-    action: "MESSAGE_EMBED",
-    targetType: "URL",
-    getTargetId: (req) => {
-      const { url } = req.query;
-
-      if (typeof url !== "string") {
-        throw new Error("url tidak valid");
-      }
-
-      return url;
-    },
-  }),
-  (req, res, next) => messageController.embed(req, res, next),
-);
+router.get("/embed", (req, res, next) => messageController.embed(req, res, next));
 export default router;
