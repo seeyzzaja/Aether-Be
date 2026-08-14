@@ -219,6 +219,11 @@ export declare class MessageRepository {
         id: string;
         isDeleted: boolean;
     } | null>;
+    findUserTrustProfile(userId: string): Promise<{
+        createdAt: Date;
+        emailVerifiedAt: Date | null;
+        id: string;
+    } | null>;
 }
 export declare const messageRepository: MessageRepository;
 //# sourceMappingURL=message.repository.d.ts.map

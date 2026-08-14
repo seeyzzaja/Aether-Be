@@ -4,6 +4,7 @@ export declare const config: {
     PORT: number;
     HOST: string;
     BASE_URL: string;
+    CORS_ORIGINS: string;
     DATABASE_URL: string;
     REDIS_URL: string;
     WS_PORT: number;

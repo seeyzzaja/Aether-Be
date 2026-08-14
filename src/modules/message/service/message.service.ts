@@ -1,3 +1,5 @@
+import { createHash, randomUUID } from "node:crypto";
+import { auditService } from "#modules/audit/service/audit.service";
 import { messageRepository } from "#modules/message/repository/message.repository";
 import type {
   CreateMessageInput,
@@ -8,13 +10,45 @@ import {
   enqueueEmailNotification,
 } from "#modules/notification/service/notification.service";
 import { getPresenceConnections } from "#modules/presence/repository/presence.repository";
-import { ForbiddenError, NotFoundError } from "#shared/errors/app-error";
+import { ForbiddenError, NotFoundError, TooManyRequestsError } from "#shared/errors/app-error";
 import { logger } from "#shared/logger/logger";
 import { Permission } from "#shared/permissions/permissions";
+import { connectRedis, redisClient } from "#shared/redis/redis.client";
 import { publishWebSocketEvent } from "#shared/redis/redis.publisher";
-import { parseMentions } from "#utils/mention.parser";
+import { parseMentions, parseRoleMentions } from "#utils/mention.parser";
 import { hasPermission } from "#utils/permission";
 import { WebSocketEvent } from "#websocket/constants/events";
+
+const DUPLICATE_MESSAGE_WINDOW_SECONDS = 30;
+const DUPLICATE_MESSAGE_THRESHOLD = 5;
+const DUPLICATE_MESSAGE_THROTTLE_SECONDS = 60;
+const ANTI_SPAM_THROTTLE_REVIEW_WINDOW_SECONDS = 30 * 24 * 60 * 60;
+const ANTI_SPAM_REVIEW_THRESHOLD = 3;
+const SUSPICIOUS_LINK_ACCOUNT_AGE_MS = 24 * 60 * 60 * 1000;
+
+type MessageWarningFlags = {
+  suspiciousLink: boolean;
+  antiSpam: {
+    duplicate: boolean;
+    throttled: boolean;
+    reviewFlagged: boolean;
+  };
+};
+
+function extractUrls(content: string): string[] {
+  const matches = content.match(/https?:\/\/[^\s<>()]+/gi) ?? [];
+
+  return [...new Set(matches.map((value) => value.replace(/[.,!?;:]+$/, "")))];
+}
+
+function normalizeContentForSpam(content: string) {
+  return content
+    .normalize("NFKC")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export class MessageService {
   private runInBackground(task: Promise<unknown>, label: string) {
     void task.catch((error: unknown) => {
@@ -95,6 +129,129 @@ export class MessageService {
     return channelPermissions;
   }
 
+  private async checkDuplicateThrottle(userId: string, channelId: string, content: string) {
+    await connectRedis();
+
+    const normalizedContent = normalizeContentForSpam(content);
+    const contentHash = createHash("sha256").update(normalizedContent).digest("hex");
+    const key = `anti-spam:duplicate:${userId}:${channelId}:${contentHash}`;
+    const throttleKey = `${key}:throttle`;
+
+    const isThrottled = await redisClient.exists(throttleKey);
+
+    if (isThrottled) {
+      await this.flagAntiSpamThrottle(userId, channelId, "duplicate_message");
+
+      throw new TooManyRequestsError("Terlalu banyak pesan identik. Silakan coba lagi nanti.");
+    }
+
+    const now = Date.now();
+    const windowStart = now - DUPLICATE_MESSAGE_WINDOW_SECONDS * 1000;
+    const member = `${now}:${randomUUID()}`;
+
+    const pipeline = redisClient.multi();
+    pipeline.zRemRangeByScore(key, 0, windowStart);
+    pipeline.zAdd(key, {
+      score: now,
+      value: member,
+    });
+    pipeline.zCard(key);
+    pipeline.expire(key, DUPLICATE_MESSAGE_WINDOW_SECONDS);
+
+    const results = await pipeline.exec();
+    const currentCount = Number(results?.[2] ?? 0);
+
+    if (currentCount >= DUPLICATE_MESSAGE_THRESHOLD) {
+      await redisClient.set(throttleKey, "1", {
+        EX: DUPLICATE_MESSAGE_THROTTLE_SECONDS,
+      });
+
+      await this.flagAntiSpamThrottle(userId, channelId, "duplicate_message", currentCount);
+
+      throw new TooManyRequestsError("Terlalu banyak pesan identik. Silakan coba lagi nanti.");
+    }
+  }
+
+  private async assessMessageWarnings(
+    userId: string,
+    content: string,
+  ): Promise<MessageWarningFlags> {
+    const user = await messageRepository.findUserTrustProfile(userId);
+
+    const suspiciousLink = extractUrls(content).length > 0;
+    const createdAtMs = user?.createdAt.getTime() ?? 0;
+    const accountAgeMs = Date.now() - createdAtMs;
+    const emailVerified = user?.emailVerifiedAt !== null && user?.emailVerifiedAt !== undefined;
+
+    return {
+      suspiciousLink:
+        suspiciousLink && (accountAgeMs < SUSPICIOUS_LINK_ACCOUNT_AGE_MS || !emailVerified),
+      antiSpam: {
+        duplicate: false,
+        throttled: false,
+        reviewFlagged: false,
+      },
+    };
+  }
+
+  private async flagAntiSpamThrottle(
+    userId: string,
+    channelId: string,
+    reason: string,
+    duplicateCount?: number,
+  ) {
+    const throttleCounterKey = `anti-spam:throttle-count:${userId}`;
+
+    await connectRedis();
+
+    const throttleCount = await redisClient.incr(throttleCounterKey);
+
+    if (throttleCount === 1) {
+      await redisClient.expire(throttleCounterKey, ANTI_SPAM_THROTTLE_REVIEW_WINDOW_SECONDS);
+    }
+
+    await auditService.log({
+      actorId: userId,
+      action: "ANTI_SPAM_THROTTLED",
+      targetType: "MESSAGE",
+      targetId: channelId,
+      metadata: {
+        reason,
+        channelId,
+        duplicateCount,
+        throttleCount,
+      },
+    });
+
+    if (throttleCount >= ANTI_SPAM_REVIEW_THRESHOLD) {
+      await auditService.log({
+        actorId: userId,
+        action: "ANTI_SPAM_REVIEW_FLAGGED",
+        targetType: "USER",
+        targetId: userId,
+        metadata: {
+          reason: "repeated_anti_spam_throttle",
+          channelId,
+          duplicateCount,
+          throttleCount,
+        },
+      });
+    }
+  }
+
+  private async flagSuspiciousLinkWarning(userId: string, channelId: string) {
+    await auditService.log({
+      actorId: userId,
+      action: "ANTI_SPAM_WARNING",
+      targetType: "USER",
+      targetId: userId,
+      metadata: {
+        reason: "suspicious_link",
+        channelId,
+      },
+    });
+  }
+
   private async getMessage(messageId: string) {
     const message = await messageRepository.findServerContext(messageId);
 
@@ -118,6 +275,21 @@ export class MessageService {
       await this.ensureValidThreadRoot(input.threadRootId, channelId);
     }
 
+    const mentionedUserIds = parseMentions(input.content);
+    const mentionedRoleIds = parseRoleMentions(input.content);
+
+    if (mentionedUserIds.length + mentionedRoleIds.length > 20) {
+      const permissions = await this.getActorPermissions(channel.serverId, userId);
+
+      if (!hasPermission(permissions, Permission.MENTION_EVERYONE)) {
+        throw new ForbiddenError("Kamu tidak memiliki permission MENTION_EVERYONE");
+      }
+    }
+
+    await this.checkDuplicateThrottle(userId, channelId, input.content);
+
+    const warnings = await this.assessMessageWarnings(userId, input.content);
+
     const message = await messageRepository.create({
       channelId,
       authorId: userId,
@@ -134,16 +306,6 @@ export class MessageService {
         })),
       }),
     });
-
-    this.runInBackground(
-      publishWebSocketEvent({
-        event: WebSocketEvent.MESSAGE_CREATED,
-        data: message,
-      }),
-      "publish message.created",
-    );
-
-    const mentionedUserIds = parseMentions(input.content);
 
     for (const mentionedUserId of mentionedUserIds) {
       if (mentionedUserId === userId) {
@@ -208,7 +370,27 @@ export class MessageService {
       );
     }
 
-    return message;
+    const messageWithModeration = {
+      ...message,
+      moderation: warnings,
+    };
+
+    this.runInBackground(
+      publishWebSocketEvent({
+        event: WebSocketEvent.MESSAGE_CREATED,
+        data: messageWithModeration,
+      }),
+      "publish message.created",
+    );
+
+    if (warnings.suspiciousLink) {
+      this.runInBackground(
+        this.flagSuspiciousLinkWarning(userId, channelId),
+        "flag suspicious link warning",
+      );
+    }
+
+    return messageWithModeration;
   }
   async forward(messageId: string, userId: string, destinationChannelId: string) {
     const sourceMessage = await messageRepository.findForwardSource(messageId);

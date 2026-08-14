@@ -1,21 +1,23 @@
 import type { CreateMessageInput, UpdateMessageInput } from "#modules/message/schema/message.schema";
+type MessageWarningFlags = {
+    suspiciousLink: boolean;
+    antiSpam: {
+        duplicate: boolean;
+        throttled: boolean;
+        reviewFlagged: boolean;
+    };
+};
 export declare class MessageService {
     private runInBackground;
     private getActorPermissions;
     private ensureSendMessagesPermission;
     private ensureViewChannelPermission;
+    private checkDuplicateThrottle;
+    private assessMessageWarnings;
+    private flagAntiSpamThrottle;
+    private flagSuspiciousLinkWarning;
     private getMessage;
     create(channelId: string, userId: string, input: CreateMessageInput): Promise<{
-        attachments: {
-            id: string;
-            messageId: string | null;
-            fileUrl: string;
-            thumbnailUrl: string | null;
-            fileType: string;
-            fileSize: bigint;
-            fileName: string;
-        }[];
-    } & {
         id: string;
         channelId: string;
         authorId: string;
@@ -27,6 +29,16 @@ export declare class MessageService {
         createdAt: Date;
         updatedAt: Date;
         deletedAt: Date | null;
+        moderation: MessageWarningFlags;
+        attachments: {
+            id: string;
+            messageId: string | null;
+            fileUrl: string;
+            thumbnailUrl: string | null;
+            fileType: string;
+            fileSize: bigint;
+            fileName: string;
+        }[];
     }>;
     forward(messageId: string, userId: string, destinationChannelId: string): Promise<{
         attachments: {
@@ -197,4 +209,5 @@ export declare class MessageService {
     }>;
 }
 export declare const messageService: MessageService;
+export {};
 //# sourceMappingURL=message.service.d.ts.map

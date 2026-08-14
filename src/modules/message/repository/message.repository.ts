@@ -422,6 +422,19 @@ export class MessageRepository {
       },
     });
   }
+
+  async findUserTrustProfile(userId: string) {
+    return prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        emailVerifiedAt: true,
+      },
+    });
+  }
 }
 
 export const messageRepository = new MessageRepository();
