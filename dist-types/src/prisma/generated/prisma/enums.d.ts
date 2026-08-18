@@ -1,3 +1,8 @@
+export declare const AuthTokenType: {
+    readonly EMAIL_VERIFICATION: 'EMAIL_VERIFICATION';
+    readonly PASSWORD_RESET: 'PASSWORD_RESET';
+};
+export type AuthTokenType = (typeof AuthTokenType)[keyof typeof AuthTokenType];
 export declare const ChannelType: {
     readonly TEXT: 'TEXT';
     readonly VOICE: 'VOICE';
@@ -6,4 +11,10 @@ export declare const ChannelType: {
     readonly ANNOUNCEMENT: 'ANNOUNCEMENT';
 };
 export type ChannelType = (typeof ChannelType)[keyof typeof ChannelType];
+export declare const OAuthProvider: {
+    readonly GOOGLE: 'GOOGLE';
+    readonly GITHUB: 'GITHUB';
+    readonly FACEBOOK: 'FACEBOOK';
+};
+export type OAuthProvider = (typeof OAuthProvider)[keyof typeof OAuthProvider];
 //# sourceMappingURL=enums.d.ts.map

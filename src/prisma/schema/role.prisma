@@ -1,16 +1,14 @@
 model Role {
-  id                 String  @id @default(uuid())
-  serverId           String
-  name               String
-  color              String?
-  permissionsBitmask BigInt  @default(0)
-  position           Int     @default(0)
-  isDefault          Boolean @default(false)
-
-  members ServerMemberRole[]
-
-  server                     Server                      @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  id                         String                      @id @default(uuid())
+  serverId                   String
+  name                       String
+  color                      String?
+  permissionsBitmask         BigInt                      @default(0)
+  position                   Int                         @default(0)
+  isDefault                  Boolean                     @default(false)
   channelPermissionOverrides ChannelPermissionOverride[]
+  server                     Server                      @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  members                    ServerMemberRole[]
 
   @@index([serverId])
 }

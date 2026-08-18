@@ -27,6 +27,7 @@ export declare const JsonNull: import("@prisma/client-runtime-utils").JsonNullCl
 export declare const AnyNull: import("@prisma/client-runtime-utils").AnyNullClass;
 export declare const ModelName: {
     readonly AuditLog: 'AuditLog';
+    readonly AuthToken: 'AuthToken';
     readonly Category: 'Category';
     readonly ChannelPermissionOverride: 'ChannelPermissionOverride';
     readonly ChannelReadState: 'ChannelReadState';
@@ -34,6 +35,7 @@ export declare const ModelName: {
     readonly MessageAttachment: 'MessageAttachment';
     readonly Message: 'Message';
     readonly Notification: 'Notification';
+    readonly OAuthAccount: 'OAuthAccount';
     readonly Poll: 'Poll';
     readonly PollOption: 'PollOption';
     readonly PollVote: 'PollVote';
@@ -63,6 +65,17 @@ export declare const AuditLogScalarFieldEnum: {
     readonly createdAt: 'createdAt';
 };
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum];
+export declare const AuthTokenScalarFieldEnum: {
+    readonly id: 'id';
+    readonly userId: 'userId';
+    readonly type: 'type';
+    readonly tokenHash: 'tokenHash';
+    readonly expiresAt: 'expiresAt';
+    readonly usedAt: 'usedAt';
+    readonly createdAt: 'createdAt';
+    readonly updatedAt: 'updatedAt';
+};
+export type AuthTokenScalarFieldEnum = (typeof AuthTokenScalarFieldEnum)[keyof typeof AuthTokenScalarFieldEnum];
 export declare const CategoryScalarFieldEnum: {
     readonly id: 'id';
     readonly serverId: 'serverId';
@@ -135,6 +148,15 @@ export declare const NotificationScalarFieldEnum: {
     readonly createdAt: 'createdAt';
 };
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum];
+export declare const OAuthAccountScalarFieldEnum: {
+    readonly id: 'id';
+    readonly userId: 'userId';
+    readonly provider: 'provider';
+    readonly providerAccountId: 'providerAccountId';
+    readonly createdAt: 'createdAt';
+    readonly updatedAt: 'updatedAt';
+};
+export type OAuthAccountScalarFieldEnum = (typeof OAuthAccountScalarFieldEnum)[keyof typeof OAuthAccountScalarFieldEnum];
 export declare const PollScalarFieldEnum: {
     readonly id: 'id';
     readonly messageId: 'messageId';
@@ -207,12 +229,12 @@ export declare const SessionScalarFieldEnum: {
     readonly id: 'id';
     readonly userId: 'userId';
     readonly refreshTokenHash: 'refreshTokenHash';
-    readonly deviceInfo: 'deviceInfo';
-    readonly ipAddress: 'ipAddress';
     readonly expiresAt: 'expiresAt';
     readonly revokedAt: 'revokedAt';
     readonly createdAt: 'createdAt';
     readonly updatedAt: 'updatedAt';
+    readonly deviceInfo: 'deviceInfo';
+    readonly ipAddress: 'ipAddress';
 };
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum];
 export declare const UserScalarFieldEnum: {

@@ -1,29 +1,27 @@
+model Channel {
+  id                  String                      @id @default(uuid())
+  serverId            String
+  categoryId          String?
+  name                String                      @db.VarChar(100)
+  type                ChannelType
+  topic               String?                     @db.VarChar(500)
+  position            Int                         @default(0)
+  searchVector        Unsupported("tsvector")?    @map("search_vector")
+  permissionOverrides ChannelPermissionOverride[]
+  readStates          ChannelReadState[]
+  category            Category?                   @relation(fields: [categoryId], references: [id])
+  server              Server                      @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  messages            Message[]
+
+  @@index([serverId])
+  @@index([categoryId])
+  @@map("channels")
+}
+
 enum ChannelType {
   TEXT
   VOICE
   VIDEO
   FORUM
   ANNOUNCEMENT
-}
-
-model Channel {
-  id         String      @id @default(uuid())
-  serverId   String
-  categoryId String?
-  name       String      @db.VarChar(100)
-  type       ChannelType
-  topic      String?     @db.VarChar(500)
-  position   Int         @default(0)
-
-  searchVector Unsupported("tsvector")? @map("search_vector")
-
-  server              Server                      @relation(fields: [serverId], references: [id], onDelete: Cascade)
-  category            Category?                   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  permissionOverrides ChannelPermissionOverride[]
-  messages            Message[]
-  readStates          ChannelReadState[]
-
-  @@index([serverId])
-  @@index([categoryId])
-  @@map("channels")
 }

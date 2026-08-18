@@ -174,8 +174,8 @@ export type ServerMemberRoleWhereInput = {
   serverMemberId?: Prisma.StringFilter<"ServerMemberRole"> | string
   roleId?: Prisma.StringFilter<"ServerMemberRole"> | string
   createdAt?: Prisma.DateTimeFilter<"ServerMemberRole"> | Date | string
-  serverMember?: Prisma.XOR<Prisma.ServerMemberScalarRelationFilter, Prisma.ServerMemberWhereInput>
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
+  serverMember?: Prisma.XOR<Prisma.ServerMemberScalarRelationFilter, Prisma.ServerMemberWhereInput>
 }
 
 export type ServerMemberRoleOrderByWithRelationInput = {
@@ -183,8 +183,8 @@ export type ServerMemberRoleOrderByWithRelationInput = {
   serverMemberId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  serverMember?: Prisma.ServerMemberOrderByWithRelationInput
   role?: Prisma.RoleOrderByWithRelationInput
+  serverMember?: Prisma.ServerMemberOrderByWithRelationInput
 }
 
 export type ServerMemberRoleWhereUniqueInput = Prisma.AtLeast<{
@@ -196,8 +196,8 @@ export type ServerMemberRoleWhereUniqueInput = Prisma.AtLeast<{
   serverMemberId?: Prisma.StringFilter<"ServerMemberRole"> | string
   roleId?: Prisma.StringFilter<"ServerMemberRole"> | string
   createdAt?: Prisma.DateTimeFilter<"ServerMemberRole"> | Date | string
-  serverMember?: Prisma.XOR<Prisma.ServerMemberScalarRelationFilter, Prisma.ServerMemberWhereInput>
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
+  serverMember?: Prisma.XOR<Prisma.ServerMemberScalarRelationFilter, Prisma.ServerMemberWhereInput>
 }, "id" | "serverMemberId_roleId">
 
 export type ServerMemberRoleOrderByWithAggregationInput = {
@@ -223,8 +223,8 @@ export type ServerMemberRoleScalarWhereWithAggregatesInput = {
 export type ServerMemberRoleCreateInput = {
   id?: string
   createdAt?: Date | string
-  serverMember: Prisma.ServerMemberCreateNestedOneWithoutRolesInput
   role: Prisma.RoleCreateNestedOneWithoutMembersInput
+  serverMember: Prisma.ServerMemberCreateNestedOneWithoutRolesInput
 }
 
 export type ServerMemberRoleUncheckedCreateInput = {
@@ -237,8 +237,8 @@ export type ServerMemberRoleUncheckedCreateInput = {
 export type ServerMemberRoleUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  serverMember?: Prisma.ServerMemberUpdateOneRequiredWithoutRolesNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutMembersNestedInput
+  serverMember?: Prisma.ServerMemberUpdateOneRequiredWithoutRolesNestedInput
 }
 
 export type ServerMemberRoleUncheckedUpdateInput = {
@@ -528,8 +528,8 @@ export type ServerMemberRoleSelect<ExtArgs extends runtime.Types.Extensions.Inte
   serverMemberId?: boolean
   roleId?: boolean
   createdAt?: boolean
-  serverMember?: boolean | Prisma.ServerMemberDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  serverMember?: boolean | Prisma.ServerMemberDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["serverMemberRole"]>
 
 export type ServerMemberRoleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -537,8 +537,8 @@ export type ServerMemberRoleSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   serverMemberId?: boolean
   roleId?: boolean
   createdAt?: boolean
-  serverMember?: boolean | Prisma.ServerMemberDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  serverMember?: boolean | Prisma.ServerMemberDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["serverMemberRole"]>
 
 export type ServerMemberRoleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -546,8 +546,8 @@ export type ServerMemberRoleSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   serverMemberId?: boolean
   roleId?: boolean
   createdAt?: boolean
-  serverMember?: boolean | Prisma.ServerMemberDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  serverMember?: boolean | Prisma.ServerMemberDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["serverMemberRole"]>
 
 export type ServerMemberRoleSelectScalar = {
@@ -559,23 +559,23 @@ export type ServerMemberRoleSelectScalar = {
 
 export type ServerMemberRoleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "serverMemberId" | "roleId" | "createdAt", ExtArgs["result"]["serverMemberRole"]>
 export type ServerMemberRoleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  serverMember?: boolean | Prisma.ServerMemberDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  serverMember?: boolean | Prisma.ServerMemberDefaultArgs<ExtArgs>
 }
 export type ServerMemberRoleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  serverMember?: boolean | Prisma.ServerMemberDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  serverMember?: boolean | Prisma.ServerMemberDefaultArgs<ExtArgs>
 }
 export type ServerMemberRoleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  serverMember?: boolean | Prisma.ServerMemberDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  serverMember?: boolean | Prisma.ServerMemberDefaultArgs<ExtArgs>
 }
 
 export type $ServerMemberRolePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ServerMemberRole"
   objects: {
-    serverMember: Prisma.$ServerMemberPayload<ExtArgs>
     role: Prisma.$RolePayload<ExtArgs>
+    serverMember: Prisma.$ServerMemberPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -976,8 +976,8 @@ readonly fields: ServerMemberRoleFieldRefs;
  */
 export interface Prisma__ServerMemberRoleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  serverMember<T extends Prisma.ServerMemberDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServerMemberDefaultArgs<ExtArgs>>): Prisma.Prisma__ServerMemberClient<runtime.Types.Result.GetResult<Prisma.$ServerMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   role<T extends Prisma.RoleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoleDefaultArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  serverMember<T extends Prisma.ServerMemberDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServerMemberDefaultArgs<ExtArgs>>): Prisma.Prisma__ServerMemberClient<runtime.Types.Result.GetResult<Prisma.$ServerMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

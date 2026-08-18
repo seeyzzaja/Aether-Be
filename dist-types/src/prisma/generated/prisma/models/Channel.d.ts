@@ -185,11 +185,11 @@ export type ChannelWhereInput = {
     type?: Prisma.EnumChannelTypeFilter<"Channel"> | $Enums.ChannelType;
     topic?: Prisma.StringNullableFilter<"Channel"> | string | null;
     position?: Prisma.IntFilter<"Channel"> | number;
-    server?: Prisma.XOR<Prisma.ServerScalarRelationFilter, Prisma.ServerWhereInput>;
-    category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null;
     permissionOverrides?: Prisma.ChannelPermissionOverrideListRelationFilter;
-    messages?: Prisma.MessageListRelationFilter;
     readStates?: Prisma.ChannelReadStateListRelationFilter;
+    category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null;
+    server?: Prisma.XOR<Prisma.ServerScalarRelationFilter, Prisma.ServerWhereInput>;
+    messages?: Prisma.MessageListRelationFilter;
 };
 export type ChannelOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -199,11 +199,11 @@ export type ChannelOrderByWithRelationInput = {
     type?: Prisma.SortOrder;
     topic?: Prisma.SortOrderInput | Prisma.SortOrder;
     position?: Prisma.SortOrder;
-    server?: Prisma.ServerOrderByWithRelationInput;
-    category?: Prisma.CategoryOrderByWithRelationInput;
     permissionOverrides?: Prisma.ChannelPermissionOverrideOrderByRelationAggregateInput;
-    messages?: Prisma.MessageOrderByRelationAggregateInput;
     readStates?: Prisma.ChannelReadStateOrderByRelationAggregateInput;
+    category?: Prisma.CategoryOrderByWithRelationInput;
+    server?: Prisma.ServerOrderByWithRelationInput;
+    messages?: Prisma.MessageOrderByRelationAggregateInput;
 };
 export type ChannelWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -216,11 +216,11 @@ export type ChannelWhereUniqueInput = Prisma.AtLeast<{
     type?: Prisma.EnumChannelTypeFilter<"Channel"> | $Enums.ChannelType;
     topic?: Prisma.StringNullableFilter<"Channel"> | string | null;
     position?: Prisma.IntFilter<"Channel"> | number;
-    server?: Prisma.XOR<Prisma.ServerScalarRelationFilter, Prisma.ServerWhereInput>;
-    category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null;
     permissionOverrides?: Prisma.ChannelPermissionOverrideListRelationFilter;
-    messages?: Prisma.MessageListRelationFilter;
     readStates?: Prisma.ChannelReadStateListRelationFilter;
+    category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null;
+    server?: Prisma.XOR<Prisma.ServerScalarRelationFilter, Prisma.ServerWhereInput>;
+    messages?: Prisma.MessageListRelationFilter;
 }, "id">;
 export type ChannelOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -254,11 +254,11 @@ export type ChannelCreateInput = {
     type: $Enums.ChannelType;
     topic?: string | null;
     position?: number;
-    server: Prisma.ServerCreateNestedOneWithoutChannelsInput;
-    category?: Prisma.CategoryCreateNestedOneWithoutChannelsInput;
     permissionOverrides?: Prisma.ChannelPermissionOverrideCreateNestedManyWithoutChannelInput;
-    messages?: Prisma.MessageCreateNestedManyWithoutChannelInput;
     readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutChannelInput;
+    category?: Prisma.CategoryCreateNestedOneWithoutChannelsInput;
+    server: Prisma.ServerCreateNestedOneWithoutChannelsInput;
+    messages?: Prisma.MessageCreateNestedManyWithoutChannelInput;
 };
 export type ChannelUncheckedCreateInput = {
     id?: string;
@@ -269,8 +269,8 @@ export type ChannelUncheckedCreateInput = {
     topic?: string | null;
     position?: number;
     permissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedCreateNestedManyWithoutChannelInput;
-    messages?: Prisma.MessageUncheckedCreateNestedManyWithoutChannelInput;
     readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutChannelInput;
+    messages?: Prisma.MessageUncheckedCreateNestedManyWithoutChannelInput;
 };
 export type ChannelUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -278,11 +278,11 @@ export type ChannelUpdateInput = {
     type?: Prisma.EnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType;
     topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
-    server?: Prisma.ServerUpdateOneRequiredWithoutChannelsNestedInput;
-    category?: Prisma.CategoryUpdateOneWithoutChannelsNestedInput;
     permissionOverrides?: Prisma.ChannelPermissionOverrideUpdateManyWithoutChannelNestedInput;
-    messages?: Prisma.MessageUpdateManyWithoutChannelNestedInput;
     readStates?: Prisma.ChannelReadStateUpdateManyWithoutChannelNestedInput;
+    category?: Prisma.CategoryUpdateOneWithoutChannelsNestedInput;
+    server?: Prisma.ServerUpdateOneRequiredWithoutChannelsNestedInput;
+    messages?: Prisma.MessageUpdateManyWithoutChannelNestedInput;
 };
 export type ChannelUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -293,8 +293,8 @@ export type ChannelUncheckedUpdateInput = {
     topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
     permissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedUpdateManyWithoutChannelNestedInput;
-    messages?: Prisma.MessageUncheckedUpdateManyWithoutChannelNestedInput;
     readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutChannelNestedInput;
+    messages?: Prisma.MessageUncheckedUpdateManyWithoutChannelNestedInput;
 };
 export type ChannelCreateManyInput = {
     id?: string;
@@ -487,10 +487,10 @@ export type ChannelCreateWithoutCategoryInput = {
     type: $Enums.ChannelType;
     topic?: string | null;
     position?: number;
-    server: Prisma.ServerCreateNestedOneWithoutChannelsInput;
     permissionOverrides?: Prisma.ChannelPermissionOverrideCreateNestedManyWithoutChannelInput;
-    messages?: Prisma.MessageCreateNestedManyWithoutChannelInput;
     readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutChannelInput;
+    server: Prisma.ServerCreateNestedOneWithoutChannelsInput;
+    messages?: Prisma.MessageCreateNestedManyWithoutChannelInput;
 };
 export type ChannelUncheckedCreateWithoutCategoryInput = {
     id?: string;
@@ -500,8 +500,8 @@ export type ChannelUncheckedCreateWithoutCategoryInput = {
     topic?: string | null;
     position?: number;
     permissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedCreateNestedManyWithoutChannelInput;
-    messages?: Prisma.MessageUncheckedCreateNestedManyWithoutChannelInput;
     readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutChannelInput;
+    messages?: Prisma.MessageUncheckedCreateNestedManyWithoutChannelInput;
 };
 export type ChannelCreateOrConnectWithoutCategoryInput = {
     where: Prisma.ChannelWhereUniqueInput;
@@ -542,10 +542,10 @@ export type ChannelCreateWithoutPermissionOverridesInput = {
     type: $Enums.ChannelType;
     topic?: string | null;
     position?: number;
-    server: Prisma.ServerCreateNestedOneWithoutChannelsInput;
-    category?: Prisma.CategoryCreateNestedOneWithoutChannelsInput;
-    messages?: Prisma.MessageCreateNestedManyWithoutChannelInput;
     readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutChannelInput;
+    category?: Prisma.CategoryCreateNestedOneWithoutChannelsInput;
+    server: Prisma.ServerCreateNestedOneWithoutChannelsInput;
+    messages?: Prisma.MessageCreateNestedManyWithoutChannelInput;
 };
 export type ChannelUncheckedCreateWithoutPermissionOverridesInput = {
     id?: string;
@@ -555,8 +555,8 @@ export type ChannelUncheckedCreateWithoutPermissionOverridesInput = {
     type: $Enums.ChannelType;
     topic?: string | null;
     position?: number;
-    messages?: Prisma.MessageUncheckedCreateNestedManyWithoutChannelInput;
     readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutChannelInput;
+    messages?: Prisma.MessageUncheckedCreateNestedManyWithoutChannelInput;
 };
 export type ChannelCreateOrConnectWithoutPermissionOverridesInput = {
     where: Prisma.ChannelWhereUniqueInput;
@@ -577,10 +577,10 @@ export type ChannelUpdateWithoutPermissionOverridesInput = {
     type?: Prisma.EnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType;
     topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
-    server?: Prisma.ServerUpdateOneRequiredWithoutChannelsNestedInput;
-    category?: Prisma.CategoryUpdateOneWithoutChannelsNestedInput;
-    messages?: Prisma.MessageUpdateManyWithoutChannelNestedInput;
     readStates?: Prisma.ChannelReadStateUpdateManyWithoutChannelNestedInput;
+    category?: Prisma.CategoryUpdateOneWithoutChannelsNestedInput;
+    server?: Prisma.ServerUpdateOneRequiredWithoutChannelsNestedInput;
+    messages?: Prisma.MessageUpdateManyWithoutChannelNestedInput;
 };
 export type ChannelUncheckedUpdateWithoutPermissionOverridesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -590,8 +590,8 @@ export type ChannelUncheckedUpdateWithoutPermissionOverridesInput = {
     type?: Prisma.EnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType;
     topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
-    messages?: Prisma.MessageUncheckedUpdateManyWithoutChannelNestedInput;
     readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutChannelNestedInput;
+    messages?: Prisma.MessageUncheckedUpdateManyWithoutChannelNestedInput;
 };
 export type ChannelCreateWithoutReadStatesInput = {
     id?: string;
@@ -599,9 +599,9 @@ export type ChannelCreateWithoutReadStatesInput = {
     type: $Enums.ChannelType;
     topic?: string | null;
     position?: number;
-    server: Prisma.ServerCreateNestedOneWithoutChannelsInput;
-    category?: Prisma.CategoryCreateNestedOneWithoutChannelsInput;
     permissionOverrides?: Prisma.ChannelPermissionOverrideCreateNestedManyWithoutChannelInput;
+    category?: Prisma.CategoryCreateNestedOneWithoutChannelsInput;
+    server: Prisma.ServerCreateNestedOneWithoutChannelsInput;
     messages?: Prisma.MessageCreateNestedManyWithoutChannelInput;
 };
 export type ChannelUncheckedCreateWithoutReadStatesInput = {
@@ -634,9 +634,9 @@ export type ChannelUpdateWithoutReadStatesInput = {
     type?: Prisma.EnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType;
     topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
-    server?: Prisma.ServerUpdateOneRequiredWithoutChannelsNestedInput;
-    category?: Prisma.CategoryUpdateOneWithoutChannelsNestedInput;
     permissionOverrides?: Prisma.ChannelPermissionOverrideUpdateManyWithoutChannelNestedInput;
+    category?: Prisma.CategoryUpdateOneWithoutChannelsNestedInput;
+    server?: Prisma.ServerUpdateOneRequiredWithoutChannelsNestedInput;
     messages?: Prisma.MessageUpdateManyWithoutChannelNestedInput;
 };
 export type ChannelUncheckedUpdateWithoutReadStatesInput = {
@@ -656,10 +656,10 @@ export type ChannelCreateWithoutMessagesInput = {
     type: $Enums.ChannelType;
     topic?: string | null;
     position?: number;
-    server: Prisma.ServerCreateNestedOneWithoutChannelsInput;
-    category?: Prisma.CategoryCreateNestedOneWithoutChannelsInput;
     permissionOverrides?: Prisma.ChannelPermissionOverrideCreateNestedManyWithoutChannelInput;
     readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutChannelInput;
+    category?: Prisma.CategoryCreateNestedOneWithoutChannelsInput;
+    server: Prisma.ServerCreateNestedOneWithoutChannelsInput;
 };
 export type ChannelUncheckedCreateWithoutMessagesInput = {
     id?: string;
@@ -691,10 +691,10 @@ export type ChannelUpdateWithoutMessagesInput = {
     type?: Prisma.EnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType;
     topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
-    server?: Prisma.ServerUpdateOneRequiredWithoutChannelsNestedInput;
-    category?: Prisma.CategoryUpdateOneWithoutChannelsNestedInput;
     permissionOverrides?: Prisma.ChannelPermissionOverrideUpdateManyWithoutChannelNestedInput;
     readStates?: Prisma.ChannelReadStateUpdateManyWithoutChannelNestedInput;
+    category?: Prisma.CategoryUpdateOneWithoutChannelsNestedInput;
+    server?: Prisma.ServerUpdateOneRequiredWithoutChannelsNestedInput;
 };
 export type ChannelUncheckedUpdateWithoutMessagesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -713,10 +713,10 @@ export type ChannelCreateWithoutServerInput = {
     type: $Enums.ChannelType;
     topic?: string | null;
     position?: number;
-    category?: Prisma.CategoryCreateNestedOneWithoutChannelsInput;
     permissionOverrides?: Prisma.ChannelPermissionOverrideCreateNestedManyWithoutChannelInput;
-    messages?: Prisma.MessageCreateNestedManyWithoutChannelInput;
     readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutChannelInput;
+    category?: Prisma.CategoryCreateNestedOneWithoutChannelsInput;
+    messages?: Prisma.MessageCreateNestedManyWithoutChannelInput;
 };
 export type ChannelUncheckedCreateWithoutServerInput = {
     id?: string;
@@ -726,8 +726,8 @@ export type ChannelUncheckedCreateWithoutServerInput = {
     topic?: string | null;
     position?: number;
     permissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedCreateNestedManyWithoutChannelInput;
-    messages?: Prisma.MessageUncheckedCreateNestedManyWithoutChannelInput;
     readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutChannelInput;
+    messages?: Prisma.MessageUncheckedCreateNestedManyWithoutChannelInput;
 };
 export type ChannelCreateOrConnectWithoutServerInput = {
     where: Prisma.ChannelWhereUniqueInput;
@@ -764,10 +764,10 @@ export type ChannelUpdateWithoutCategoryInput = {
     type?: Prisma.EnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType;
     topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
-    server?: Prisma.ServerUpdateOneRequiredWithoutChannelsNestedInput;
     permissionOverrides?: Prisma.ChannelPermissionOverrideUpdateManyWithoutChannelNestedInput;
-    messages?: Prisma.MessageUpdateManyWithoutChannelNestedInput;
     readStates?: Prisma.ChannelReadStateUpdateManyWithoutChannelNestedInput;
+    server?: Prisma.ServerUpdateOneRequiredWithoutChannelsNestedInput;
+    messages?: Prisma.MessageUpdateManyWithoutChannelNestedInput;
 };
 export type ChannelUncheckedUpdateWithoutCategoryInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -777,8 +777,8 @@ export type ChannelUncheckedUpdateWithoutCategoryInput = {
     topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
     permissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedUpdateManyWithoutChannelNestedInput;
-    messages?: Prisma.MessageUncheckedUpdateManyWithoutChannelNestedInput;
     readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutChannelNestedInput;
+    messages?: Prisma.MessageUncheckedUpdateManyWithoutChannelNestedInput;
 };
 export type ChannelUncheckedUpdateManyWithoutCategoryInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -802,10 +802,10 @@ export type ChannelUpdateWithoutServerInput = {
     type?: Prisma.EnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType;
     topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
-    category?: Prisma.CategoryUpdateOneWithoutChannelsNestedInput;
     permissionOverrides?: Prisma.ChannelPermissionOverrideUpdateManyWithoutChannelNestedInput;
-    messages?: Prisma.MessageUpdateManyWithoutChannelNestedInput;
     readStates?: Prisma.ChannelReadStateUpdateManyWithoutChannelNestedInput;
+    category?: Prisma.CategoryUpdateOneWithoutChannelsNestedInput;
+    messages?: Prisma.MessageUpdateManyWithoutChannelNestedInput;
 };
 export type ChannelUncheckedUpdateWithoutServerInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -815,8 +815,8 @@ export type ChannelUncheckedUpdateWithoutServerInput = {
     topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     position?: Prisma.IntFieldUpdateOperationsInput | number;
     permissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedUpdateManyWithoutChannelNestedInput;
-    messages?: Prisma.MessageUncheckedUpdateManyWithoutChannelNestedInput;
     readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutChannelNestedInput;
+    messages?: Prisma.MessageUncheckedUpdateManyWithoutChannelNestedInput;
 };
 export type ChannelUncheckedUpdateManyWithoutServerInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -831,13 +831,13 @@ export type ChannelUncheckedUpdateManyWithoutServerInput = {
  */
 export type ChannelCountOutputType = {
     permissionOverrides: number;
-    messages: number;
     readStates: number;
+    messages: number;
 };
 export type ChannelCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     permissionOverrides?: boolean | ChannelCountOutputTypeCountPermissionOverridesArgs;
-    messages?: boolean | ChannelCountOutputTypeCountMessagesArgs;
     readStates?: boolean | ChannelCountOutputTypeCountReadStatesArgs;
+    messages?: boolean | ChannelCountOutputTypeCountMessagesArgs;
 };
 /**
  * ChannelCountOutputType without action
@@ -857,14 +857,14 @@ export type ChannelCountOutputTypeCountPermissionOverridesArgs<ExtArgs extends r
 /**
  * ChannelCountOutputType without action
  */
-export type ChannelCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    where?: Prisma.MessageWhereInput;
+export type ChannelCountOutputTypeCountReadStatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.ChannelReadStateWhereInput;
 };
 /**
  * ChannelCountOutputType without action
  */
-export type ChannelCountOutputTypeCountReadStatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    where?: Prisma.ChannelReadStateWhereInput;
+export type ChannelCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.MessageWhereInput;
 };
 export type ChannelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -874,11 +874,11 @@ export type ChannelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     type?: boolean;
     topic?: boolean;
     position?: boolean;
-    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
-    category?: boolean | Prisma.Channel$categoryArgs<ExtArgs>;
     permissionOverrides?: boolean | Prisma.Channel$permissionOverridesArgs<ExtArgs>;
-    messages?: boolean | Prisma.Channel$messagesArgs<ExtArgs>;
     readStates?: boolean | Prisma.Channel$readStatesArgs<ExtArgs>;
+    category?: boolean | Prisma.Channel$categoryArgs<ExtArgs>;
+    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
+    messages?: boolean | Prisma.Channel$messagesArgs<ExtArgs>;
     _count?: boolean | Prisma.ChannelCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["channel"]>;
 export type ChannelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -889,8 +889,8 @@ export type ChannelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
     type?: boolean;
     topic?: boolean;
     position?: boolean;
-    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
     category?: boolean | Prisma.Channel$categoryArgs<ExtArgs>;
+    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["channel"]>;
 export type ChannelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -900,8 +900,8 @@ export type ChannelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
     type?: boolean;
     topic?: boolean;
     position?: boolean;
-    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
     category?: boolean | Prisma.Channel$categoryArgs<ExtArgs>;
+    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["channel"]>;
 export type ChannelSelectScalar = {
     id?: boolean;
@@ -914,29 +914,29 @@ export type ChannelSelectScalar = {
 };
 export type ChannelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "serverId" | "categoryId" | "name" | "type" | "topic" | "position", ExtArgs["result"]["channel"]>;
 export type ChannelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
-    category?: boolean | Prisma.Channel$categoryArgs<ExtArgs>;
     permissionOverrides?: boolean | Prisma.Channel$permissionOverridesArgs<ExtArgs>;
-    messages?: boolean | Prisma.Channel$messagesArgs<ExtArgs>;
     readStates?: boolean | Prisma.Channel$readStatesArgs<ExtArgs>;
+    category?: boolean | Prisma.Channel$categoryArgs<ExtArgs>;
+    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
+    messages?: boolean | Prisma.Channel$messagesArgs<ExtArgs>;
     _count?: boolean | Prisma.ChannelCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type ChannelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
     category?: boolean | Prisma.Channel$categoryArgs<ExtArgs>;
+    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
 };
 export type ChannelIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
     category?: boolean | Prisma.Channel$categoryArgs<ExtArgs>;
+    server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>;
 };
 export type $ChannelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     name: "Channel";
     objects: {
-        server: Prisma.$ServerPayload<ExtArgs>;
-        category: Prisma.$CategoryPayload<ExtArgs> | null;
         permissionOverrides: Prisma.$ChannelPermissionOverridePayload<ExtArgs>[];
-        messages: Prisma.$MessagePayload<ExtArgs>[];
         readStates: Prisma.$ChannelReadStatePayload<ExtArgs>[];
+        category: Prisma.$CategoryPayload<ExtArgs> | null;
+        server: Prisma.$ServerPayload<ExtArgs>;
+        messages: Prisma.$MessagePayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
@@ -1275,11 +1275,11 @@ export interface ChannelDelegate<ExtArgs extends runtime.Types.Extensions.Intern
  */
 export interface Prisma__ChannelClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
-    server<T extends Prisma.ServerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServerDefaultArgs<ExtArgs>>): Prisma.Prisma__ServerClient<runtime.Types.Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-    category<T extends Prisma.Channel$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Channel$categoryArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
     permissionOverrides<T extends Prisma.Channel$permissionOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Channel$permissionOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChannelPermissionOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-    messages<T extends Prisma.Channel$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Channel$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     readStates<T extends Prisma.Channel$readStatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Channel$readStatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChannelReadStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    category<T extends Prisma.Channel$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Channel$categoryArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    server<T extends Prisma.ServerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServerDefaultArgs<ExtArgs>>): Prisma.Prisma__ServerClient<runtime.Types.Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+    messages<T extends Prisma.Channel$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Channel$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1696,24 +1696,6 @@ export type ChannelDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
     limit?: number;
 };
 /**
- * Channel.category
- */
-export type Channel$categoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Category
-     */
-    select?: Prisma.CategorySelect<ExtArgs> | null;
-    /**
-     * Omit specific fields from the Category
-     */
-    omit?: Prisma.CategoryOmit<ExtArgs> | null;
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: Prisma.CategoryInclude<ExtArgs> | null;
-    where?: Prisma.CategoryWhereInput;
-};
-/**
  * Channel.permissionOverrides
  */
 export type Channel$permissionOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1737,29 +1719,6 @@ export type Channel$permissionOverridesArgs<ExtArgs extends runtime.Types.Extens
     distinct?: Prisma.ChannelPermissionOverrideScalarFieldEnum | Prisma.ChannelPermissionOverrideScalarFieldEnum[];
 };
 /**
- * Channel.messages
- */
-export type Channel$messagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: Prisma.MessageSelect<ExtArgs> | null;
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: Prisma.MessageOmit<ExtArgs> | null;
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: Prisma.MessageInclude<ExtArgs> | null;
-    where?: Prisma.MessageWhereInput;
-    orderBy?: Prisma.MessageOrderByWithRelationInput | Prisma.MessageOrderByWithRelationInput[];
-    cursor?: Prisma.MessageWhereUniqueInput;
-    take?: number;
-    skip?: number;
-    distinct?: Prisma.MessageScalarFieldEnum | Prisma.MessageScalarFieldEnum[];
-};
-/**
  * Channel.readStates
  */
 export type Channel$readStatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1781,6 +1740,47 @@ export type Channel$readStatesArgs<ExtArgs extends runtime.Types.Extensions.Inte
     take?: number;
     skip?: number;
     distinct?: Prisma.ChannelReadStateScalarFieldEnum | Prisma.ChannelReadStateScalarFieldEnum[];
+};
+/**
+ * Channel.category
+ */
+export type Channel$categoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: Prisma.CategorySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: Prisma.CategoryOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.CategoryInclude<ExtArgs> | null;
+    where?: Prisma.CategoryWhereInput;
+};
+/**
+ * Channel.messages
+ */
+export type Channel$messagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: Prisma.MessageSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: Prisma.MessageOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.MessageInclude<ExtArgs> | null;
+    where?: Prisma.MessageWhereInput;
+    orderBy?: Prisma.MessageOrderByWithRelationInput | Prisma.MessageOrderByWithRelationInput[];
+    cursor?: Prisma.MessageWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.MessageScalarFieldEnum | Prisma.MessageScalarFieldEnum[];
 };
 /**
  * Channel without action

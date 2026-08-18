@@ -23,6 +23,11 @@ export * from './enums.js';
  */
 export type AuditLog = Prisma.AuditLogModel
 /**
+ * Model AuthToken
+ * 
+ */
+export type AuthToken = Prisma.AuthTokenModel
+/**
  * Model Category
  * 
  */
@@ -57,6 +62,11 @@ export type Message = Prisma.MessageModel
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model OAuthAccount
+ * 
+ */
+export type OAuthAccount = Prisma.OAuthAccountModel
 /**
  * Model Poll
  * 

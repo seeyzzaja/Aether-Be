@@ -13,6 +13,17 @@ export declare const config: {
     JWT_REFRESH_SECRET: string;
     JWT_ACCESS_EXPIRES_IN: string;
     JWT_REFRESH_EXPIRES_IN: string;
+    GOOGLE_CLIENT_ID: string;
+    GOOGLE_CLIENT_SECRET: string;
+    GOOGLE_CALLBACK_URL: string;
+    GITHUB_CLIENT_ID: string;
+    GITHUB_CLIENT_SECRET: string;
+    GITHUB_CALLBACK_URL: string;
+    FACEBOOK_CLIENT_ID: string;
+    FACEBOOK_CLIENT_SECRET: string;
+    FACEBOOK_CALLBACK_URL: string;
+    OAUTH_SUCCESS_REDIRECT_URL: string;
+    OAUTH_FAILURE_REDIRECT_URL: string;
     EMAIL_HOST: string;
     EMAIL_PORT: number;
     EMAIL_USER: string;

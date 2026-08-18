@@ -237,6 +237,285 @@ authRouter.post("/login", loginRateLimiter, authController.login);
 
 /**
  * @swagger
+ * /api/auth/google:
+ *   get:
+ *     summary: Redirect ke Google OAuth
+ *     tags: [Auth]
+ *     responses:
+ *       302:
+ *         description: Redirect ke Google
+ */
+
+authRouter.get("/google", (req, res, next) => authController.oauthLogin(req, res, next, "GOOGLE"));
+
+/**
+ * @swagger
+ * /api/auth/google/callback:
+ *   get:
+ *     summary: Callback Google OAuth
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: state
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: error
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: error_description
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Login OAuth berhasil
+ *       302:
+ *         description: Redirect ke frontend success URL jika ada
+ *       401:
+ *         description: State atau code tidak valid
+ */
+
+authRouter.get("/google/callback", (req, res, next) =>
+  authController.oauthCallback(req, res, next, "GOOGLE"),
+);
+
+/**
+ * @swagger
+ * /api/auth/github:
+ *   get:
+ *     summary: Redirect ke GitHub OAuth
+ *     tags: [Auth]
+ *     responses:
+ *       302:
+ *         description: Redirect ke GitHub
+ */
+
+authRouter.get("/github", (req, res, next) => authController.oauthLogin(req, res, next, "GITHUB"));
+
+/**
+ * @swagger
+ * /api/auth/github/callback:
+ *   get:
+ *     summary: Callback GitHub OAuth
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: state
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Login OAuth berhasil
+ *       401:
+ *         description: State atau code tidak valid
+ */
+
+authRouter.get("/github/callback", (req, res, next) =>
+  authController.oauthCallback(req, res, next, "GITHUB"),
+);
+
+/**
+ * @swagger
+ * /api/auth/facebook:
+ *   get:
+ *     summary: Redirect ke Facebook OAuth
+ *     tags: [Auth]
+ *     responses:
+ *       302:
+ *         description: Redirect ke Facebook
+ */
+
+authRouter.get("/facebook", (req, res, next) =>
+  authController.oauthLogin(req, res, next, "FACEBOOK"),
+);
+
+/**
+ * @swagger
+ * /api/auth/facebook/callback:
+ *   get:
+ *     summary: Callback Facebook OAuth
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: state
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Login OAuth berhasil
+ *       401:
+ *         description: State atau code tidak valid
+ */
+
+authRouter.get("/facebook/callback", (req, res, next) =>
+  authController.oauthCallback(req, res, next, "FACEBOOK"),
+);
+
+/**
+ * @swagger
+ * /api/auth/verify-email:
+ *   post:
+ *     summary: Verifikasi email pengguna
+ *     tags: [Auth]
+ *     description: |
+ *       Memverifikasi email menggunakan kode 6 digit yang dikirim
+ *       setelah registrasi. Kode berlaku selama 10 menit.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - code
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *               code:
+ *                 type: string
+ *                 pattern: '^[0-9]{6}$'
+ *                 example: "482913"
+ *     responses:
+ *       200:
+ *         description: Email berhasil diverifikasi
+ *       400:
+ *         description: Data request tidak valid
+ *       401:
+ *         description: Kode tidak valid atau sudah kedaluwarsa
+ *       500:
+ *         description: Internal server error
+ */
+authRouter.post("/verify-email", authController.verifyEmail);
+
+/**
+ * @swagger
+ * /api/auth/resend-verification:
+ *   post:
+ *     summary: Kirim ulang kode verifikasi email
+ *     tags: [Auth]
+ *     description: Mengirim kode verifikasi baru ke email pengguna.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *     responses:
+ *       200:
+ *         description: Kode verifikasi berhasil dikirim
+ *       400:
+ *         description: Format email tidak valid
+ *       401:
+ *         description: Email tidak ditemukan
+ *       409:
+ *         description: Email sudah diverifikasi
+ *       500:
+ *         description: Internal server error
+ */
+authRouter.post("/resend-verification", authController.resendVerification);
+
+/**
+ * @swagger
+ * /api/auth/forgot-password:
+ *   post:
+ *     summary: Meminta kode reset password
+ *     tags: [Auth]
+ *     description: |
+ *       Mengirim kode reset password ke email pengguna.
+ *       Endpoint tidak membocorkan apakah email terdaftar.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *     responses:
+ *       200:
+ *         description: Permintaan reset password diproses
+ *       400:
+ *         description: Format email tidak valid
+ *       500:
+ *         description: Internal server error
+ */
+authRouter.post("/forgot-password", authController.forgotPassword);
+
+/**
+ * @swagger
+ * /api/auth/reset-password:
+ *   post:
+ *     summary: Reset password menggunakan kode
+ *     tags: [Auth]
+ *     description: |
+ *       Mengubah password menggunakan kode reset yang dikirim
+ *       melalui email. Seluruh session aktif akan dicabut setelah
+ *       password berhasil diubah.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - code
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *               code:
+ *                 type: string
+ *                 pattern: '^[0-9]{6}$'
+ *                 example: "739251"
+ *               password:
+ *                 type: string
+ *                 minLength: 8
+ *                 example: newPassword123
+ *     responses:
+ *       200:
+ *         description: Password berhasil diubah
+ *       400:
+ *         description: Data request tidak valid
+ *       401:
+ *         description: Kode reset tidak valid atau sudah kedaluwarsa
+ *       500:
+ *         description: Internal server error
+ */
+authRouter.post("/reset-password", authController.resetPassword);
+
+/**
+ * @swagger
  * /api/auth/refresh:
  *   post:
  *     summary: Memperbarui access token
@@ -399,7 +678,7 @@ authRouter.post("/refresh", requireCsrf, authController.refresh);
  *                   example: false
  *                 message:
  *                   type: string
- *                  example: "CSRF protection: header X-Requested-With tidak valid"
+ *                   example: "CSRF protection: header X-Requested-With tidak valid"
  *       500:
  *         description: Terjadi kesalahan internal server
  */

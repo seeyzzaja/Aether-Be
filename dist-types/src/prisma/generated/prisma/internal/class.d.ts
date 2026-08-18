@@ -129,6 +129,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         omit: OmitOpts;
     }>;
     /**
+     * `prisma.authToken`: Exposes CRUD operations for the **AuthToken** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more AuthTokens
+      * const authTokens = await prisma.authToken.findMany()
+      * ```
+      */
+    get authToken(): Prisma.AuthTokenDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
      * `prisma.category`: Exposes CRUD operations for the **Category** model.
       * Example usage:
       * ```ts
@@ -203,6 +214,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
       * ```
       */
     get notification(): Prisma.NotificationDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.oAuthAccount`: Exposes CRUD operations for the **OAuthAccount** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more OAuthAccounts
+      * const oAuthAccounts = await prisma.oAuthAccount.findMany()
+      * ```
+      */
+    get oAuthAccount(): Prisma.OAuthAccountDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**

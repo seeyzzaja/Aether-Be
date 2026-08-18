@@ -1,3 +1,4 @@
+import type { AuthTokenType, OAuthProvider } from "#prisma/generated/prisma/client";
 import prisma from "#utils/prisma";
 
 export class AuthRepository {
@@ -25,6 +26,106 @@ export class AuthRepository {
     });
   }
 
+  async createUser(data: {
+    email: string;
+    username: string;
+    passwordHash: string | null;
+    emailVerifiedAt?: Date | null;
+  }) {
+    return prisma.user.create({
+      data: {
+        email: data.email,
+        username: data.username,
+        passwordHash: data.passwordHash,
+        emailVerifiedAt: data.emailVerifiedAt ?? null,
+      },
+    });
+  }
+
+  async createUserWithUniqueUsername(data: {
+    email: string;
+    username: string;
+    passwordHash: string | null;
+    emailVerifiedAt?: Date | null;
+  }) {
+    return this.createUser(data);
+  }
+
+  async updateUserPassword(userId: string, passwordHash: string) {
+    return prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        passwordHash,
+      },
+    });
+  }
+
+  async verifyUserEmail(userId: string) {
+    return prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        emailVerifiedAt: new Date(),
+      },
+    });
+  }
+
+  async createAuthToken(data: {
+    userId: string;
+    type: AuthTokenType;
+    tokenHash: string;
+    expiresAt: Date;
+  }) {
+    return prisma.authToken.create({
+      data: {
+        userId: data.userId,
+        type: data.type,
+        tokenHash: data.tokenHash,
+        expiresAt: data.expiresAt,
+      },
+    });
+  }
+
+  async findValidAuthToken(tokenHash: string, type: AuthTokenType) {
+    return prisma.authToken.findFirst({
+      where: {
+        tokenHash,
+        type,
+        usedAt: null,
+        expiresAt: {
+          gt: new Date(),
+        },
+      },
+    });
+  }
+
+  async markAuthTokenUsed(tokenId: string) {
+    return prisma.authToken.update({
+      where: {
+        id: tokenId,
+      },
+      data: {
+        usedAt: new Date(),
+      },
+    });
+  }
+
+  async invalidateAuthTokens(userId: string, type: AuthTokenType) {
+    return prisma.authToken.updateMany({
+      where: {
+        userId,
+        type,
+        usedAt: null,
+      },
+      data: {
+        usedAt: new Date(),
+      },
+    });
+  }
+
   async findSessionById(sessionId: string) {
     return prisma.session.findUnique({
       where: {
@@ -41,16 +142,6 @@ export class AuthRepository {
       },
       include: {
         user: true,
-      },
-    });
-  }
-
-  async createUser(data: { email: string; username: string; passwordHash: string }) {
-    return prisma.user.create({
-      data: {
-        email: data.email,
-        username: data.username,
-        passwordHash: data.passwordHash,
       },
     });
   }
@@ -117,6 +208,64 @@ export class AuthRepository {
       data: {
         revokedAt: new Date(),
       },
+    });
+  }
+
+  async findOAuthAccount(provider: OAuthProvider, providerAccountId: string) {
+    return prisma.oAuthAccount.findUnique({
+      where: {
+        provider_providerAccountId: {
+          provider,
+          providerAccountId,
+        },
+      },
+      include: {
+        user: true,
+      },
+    });
+  }
+
+  async findOAuthAccountWithUser(provider: OAuthProvider, providerAccountId: string) {
+    return this.findOAuthAccount(provider, providerAccountId);
+  }
+
+  async createOAuthAccount(userId: string, provider: OAuthProvider, providerAccountId: string) {
+    return prisma.oAuthAccount.create({
+      data: {
+        userId,
+        provider,
+        providerAccountId,
+      },
+    });
+  }
+
+  async findUserByOAuthProvider(provider: OAuthProvider) {
+    return prisma.user.findFirst({
+      where: {
+        oauthAccounts: {
+          some: {
+            provider,
+          },
+        },
+      },
+    });
+  }
+
+  async findUserByEmailWithOAuthAccounts(email: string) {
+    return prisma.user.findUnique({
+      where: {
+        email,
+      },
+      include: {
+        oauthAccounts: true,
+      },
+    });
+  }
+
+  async updateUserEmailVerifiedAt(userId: string, emailVerifiedAt: Date) {
+    return prisma.user.update({
+      where: { id: userId },
+      data: { emailVerifiedAt },
     });
   }
 }

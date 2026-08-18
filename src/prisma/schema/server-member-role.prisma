@@ -1,13 +1,10 @@
 model ServerMemberRole {
-  id String @id @default(uuid())
-
+  id             String       @id @default(uuid())
   serverMemberId String
   roleId         String
-
-  serverMember ServerMember @relation(fields: [serverMemberId], references: [id], onDelete: Cascade)
-  role         Role         @relation(fields: [roleId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
+  createdAt      DateTime     @default(now())
+  role           Role         @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  serverMember   ServerMember @relation(fields: [serverMemberId], references: [id], onDelete: Cascade)
 
   @@unique([serverMemberId, roleId])
   @@index([serverMemberId])
