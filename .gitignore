@@ -19,3 +19,6 @@ Thumbs.db
 /generated/prisma
 # application logs
 logs/
+
+# load test results
+test/load/results/

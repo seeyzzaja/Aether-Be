@@ -1,0 +1,29 @@
+config:
+  target: "http://localhost"
+
+  phases:
+    - duration: 10
+      arrivalRate: 1
+      name: "Warm up"
+
+    - duration: 20
+      arrivalRate: 5
+      name: "Load test"
+
+    - duration: 20
+      arrivalRate: 10
+      name: "Stress test"
+
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Send message"
+    flow:
+      - post:
+          url: "/api/message/8b13e148-21be-46ce-bbd7-e8456f85e9a0"
+          headers:
+            Authorization: "Bearer {{ $processEnvironment.LOADTEST_TOKEN }}"
+          json:
+            content: "Artillery load test {{ $randomString() }}"
