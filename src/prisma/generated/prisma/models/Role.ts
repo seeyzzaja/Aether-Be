@@ -236,9 +236,9 @@ export type RoleWhereInput = {
   permissionsBitmask?: Prisma.BigIntFilter<"Role"> | bigint | number
   position?: Prisma.IntFilter<"Role"> | number
   isDefault?: Prisma.BoolFilter<"Role"> | boolean
-  members?: Prisma.ServerMemberRoleListRelationFilter
-  server?: Prisma.XOR<Prisma.ServerScalarRelationFilter, Prisma.ServerWhereInput>
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideListRelationFilter
+  server?: Prisma.XOR<Prisma.ServerScalarRelationFilter, Prisma.ServerWhereInput>
+  members?: Prisma.ServerMemberRoleListRelationFilter
 }
 
 export type RoleOrderByWithRelationInput = {
@@ -249,9 +249,9 @@ export type RoleOrderByWithRelationInput = {
   permissionsBitmask?: Prisma.SortOrder
   position?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
-  members?: Prisma.ServerMemberRoleOrderByRelationAggregateInput
-  server?: Prisma.ServerOrderByWithRelationInput
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideOrderByRelationAggregateInput
+  server?: Prisma.ServerOrderByWithRelationInput
+  members?: Prisma.ServerMemberRoleOrderByRelationAggregateInput
 }
 
 export type RoleWhereUniqueInput = Prisma.AtLeast<{
@@ -265,9 +265,9 @@ export type RoleWhereUniqueInput = Prisma.AtLeast<{
   permissionsBitmask?: Prisma.BigIntFilter<"Role"> | bigint | number
   position?: Prisma.IntFilter<"Role"> | number
   isDefault?: Prisma.BoolFilter<"Role"> | boolean
-  members?: Prisma.ServerMemberRoleListRelationFilter
-  server?: Prisma.XOR<Prisma.ServerScalarRelationFilter, Prisma.ServerWhereInput>
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideListRelationFilter
+  server?: Prisma.XOR<Prisma.ServerScalarRelationFilter, Prisma.ServerWhereInput>
+  members?: Prisma.ServerMemberRoleListRelationFilter
 }, "id">
 
 export type RoleOrderByWithAggregationInput = {
@@ -305,9 +305,9 @@ export type RoleCreateInput = {
   permissionsBitmask?: bigint | number
   position?: number
   isDefault?: boolean
-  members?: Prisma.ServerMemberRoleCreateNestedManyWithoutRoleInput
-  server: Prisma.ServerCreateNestedOneWithoutRolesInput
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideCreateNestedManyWithoutRoleInput
+  server: Prisma.ServerCreateNestedOneWithoutRolesInput
+  members?: Prisma.ServerMemberRoleCreateNestedManyWithoutRoleInput
 }
 
 export type RoleUncheckedCreateInput = {
@@ -318,8 +318,8 @@ export type RoleUncheckedCreateInput = {
   permissionsBitmask?: bigint | number
   position?: number
   isDefault?: boolean
-  members?: Prisma.ServerMemberRoleUncheckedCreateNestedManyWithoutRoleInput
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedCreateNestedManyWithoutRoleInput
+  members?: Prisma.ServerMemberRoleUncheckedCreateNestedManyWithoutRoleInput
 }
 
 export type RoleUpdateInput = {
@@ -329,9 +329,9 @@ export type RoleUpdateInput = {
   permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   position?: Prisma.IntFieldUpdateOperationsInput | number
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  members?: Prisma.ServerMemberRoleUpdateManyWithoutRoleNestedInput
-  server?: Prisma.ServerUpdateOneRequiredWithoutRolesNestedInput
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUpdateManyWithoutRoleNestedInput
+  server?: Prisma.ServerUpdateOneRequiredWithoutRolesNestedInput
+  members?: Prisma.ServerMemberRoleUpdateManyWithoutRoleNestedInput
 }
 
 export type RoleUncheckedUpdateInput = {
@@ -342,8 +342,8 @@ export type RoleUncheckedUpdateInput = {
   permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   position?: Prisma.IntFieldUpdateOperationsInput | number
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  members?: Prisma.ServerMemberRoleUncheckedUpdateManyWithoutRoleNestedInput
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedUpdateManyWithoutRoleNestedInput
+  members?: Prisma.ServerMemberRoleUncheckedUpdateManyWithoutRoleNestedInput
 }
 
 export type RoleCreateManyInput = {
@@ -507,8 +507,8 @@ export type RoleCreateWithoutChannelPermissionOverridesInput = {
   permissionsBitmask?: bigint | number
   position?: number
   isDefault?: boolean
-  members?: Prisma.ServerMemberRoleCreateNestedManyWithoutRoleInput
   server: Prisma.ServerCreateNestedOneWithoutRolesInput
+  members?: Prisma.ServerMemberRoleCreateNestedManyWithoutRoleInput
 }
 
 export type RoleUncheckedCreateWithoutChannelPermissionOverridesInput = {
@@ -545,8 +545,8 @@ export type RoleUpdateWithoutChannelPermissionOverridesInput = {
   permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   position?: Prisma.IntFieldUpdateOperationsInput | number
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  members?: Prisma.ServerMemberRoleUpdateManyWithoutRoleNestedInput
   server?: Prisma.ServerUpdateOneRequiredWithoutRolesNestedInput
+  members?: Prisma.ServerMemberRoleUpdateManyWithoutRoleNestedInput
 }
 
 export type RoleUncheckedUpdateWithoutChannelPermissionOverridesInput = {
@@ -567,8 +567,8 @@ export type RoleCreateWithoutMembersInput = {
   permissionsBitmask?: bigint | number
   position?: number
   isDefault?: boolean
-  server: Prisma.ServerCreateNestedOneWithoutRolesInput
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideCreateNestedManyWithoutRoleInput
+  server: Prisma.ServerCreateNestedOneWithoutRolesInput
 }
 
 export type RoleUncheckedCreateWithoutMembersInput = {
@@ -605,8 +605,8 @@ export type RoleUpdateWithoutMembersInput = {
   permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   position?: Prisma.IntFieldUpdateOperationsInput | number
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  server?: Prisma.ServerUpdateOneRequiredWithoutRolesNestedInput
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUpdateManyWithoutRoleNestedInput
+  server?: Prisma.ServerUpdateOneRequiredWithoutRolesNestedInput
 }
 
 export type RoleUncheckedUpdateWithoutMembersInput = {
@@ -627,8 +627,8 @@ export type RoleCreateWithoutServerInput = {
   permissionsBitmask?: bigint | number
   position?: number
   isDefault?: boolean
-  members?: Prisma.ServerMemberRoleCreateNestedManyWithoutRoleInput
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideCreateNestedManyWithoutRoleInput
+  members?: Prisma.ServerMemberRoleCreateNestedManyWithoutRoleInput
 }
 
 export type RoleUncheckedCreateWithoutServerInput = {
@@ -638,8 +638,8 @@ export type RoleUncheckedCreateWithoutServerInput = {
   permissionsBitmask?: bigint | number
   position?: number
   isDefault?: boolean
-  members?: Prisma.ServerMemberRoleUncheckedCreateNestedManyWithoutRoleInput
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedCreateNestedManyWithoutRoleInput
+  members?: Prisma.ServerMemberRoleUncheckedCreateNestedManyWithoutRoleInput
 }
 
 export type RoleCreateOrConnectWithoutServerInput = {
@@ -697,8 +697,8 @@ export type RoleUpdateWithoutServerInput = {
   permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   position?: Prisma.IntFieldUpdateOperationsInput | number
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  members?: Prisma.ServerMemberRoleUpdateManyWithoutRoleNestedInput
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUpdateManyWithoutRoleNestedInput
+  members?: Prisma.ServerMemberRoleUpdateManyWithoutRoleNestedInput
 }
 
 export type RoleUncheckedUpdateWithoutServerInput = {
@@ -708,8 +708,8 @@ export type RoleUncheckedUpdateWithoutServerInput = {
   permissionsBitmask?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   position?: Prisma.IntFieldUpdateOperationsInput | number
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  members?: Prisma.ServerMemberRoleUncheckedUpdateManyWithoutRoleNestedInput
   channelPermissionOverrides?: Prisma.ChannelPermissionOverrideUncheckedUpdateManyWithoutRoleNestedInput
+  members?: Prisma.ServerMemberRoleUncheckedUpdateManyWithoutRoleNestedInput
 }
 
 export type RoleUncheckedUpdateManyWithoutServerInput = {
@@ -727,13 +727,13 @@ export type RoleUncheckedUpdateManyWithoutServerInput = {
  */
 
 export type RoleCountOutputType = {
-  members: number
   channelPermissionOverrides: number
+  members: number
 }
 
 export type RoleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  members?: boolean | RoleCountOutputTypeCountMembersArgs
   channelPermissionOverrides?: boolean | RoleCountOutputTypeCountChannelPermissionOverridesArgs
+  members?: boolean | RoleCountOutputTypeCountMembersArgs
 }
 
 /**
@@ -749,15 +749,15 @@ export type RoleCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * RoleCountOutputType without action
  */
-export type RoleCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ServerMemberRoleWhereInput
+export type RoleCountOutputTypeCountChannelPermissionOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChannelPermissionOverrideWhereInput
 }
 
 /**
  * RoleCountOutputType without action
  */
-export type RoleCountOutputTypeCountChannelPermissionOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ChannelPermissionOverrideWhereInput
+export type RoleCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ServerMemberRoleWhereInput
 }
 
 
@@ -769,9 +769,9 @@ export type RoleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   permissionsBitmask?: boolean
   position?: boolean
   isDefault?: boolean
-  members?: boolean | Prisma.Role$membersArgs<ExtArgs>
-  server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>
   channelPermissionOverrides?: boolean | Prisma.Role$channelPermissionOverridesArgs<ExtArgs>
+  server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>
+  members?: boolean | Prisma.Role$membersArgs<ExtArgs>
   _count?: boolean | Prisma.RoleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["role"]>
 
@@ -809,9 +809,9 @@ export type RoleSelectScalar = {
 
 export type RoleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "serverId" | "name" | "color" | "permissionsBitmask" | "position" | "isDefault", ExtArgs["result"]["role"]>
 export type RoleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  members?: boolean | Prisma.Role$membersArgs<ExtArgs>
-  server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>
   channelPermissionOverrides?: boolean | Prisma.Role$channelPermissionOverridesArgs<ExtArgs>
+  server?: boolean | Prisma.ServerDefaultArgs<ExtArgs>
+  members?: boolean | Prisma.Role$membersArgs<ExtArgs>
   _count?: boolean | Prisma.RoleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RoleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -824,9 +824,9 @@ export type RoleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $RolePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Role"
   objects: {
-    members: Prisma.$ServerMemberRolePayload<ExtArgs>[]
-    server: Prisma.$ServerPayload<ExtArgs>
     channelPermissionOverrides: Prisma.$ChannelPermissionOverridePayload<ExtArgs>[]
+    server: Prisma.$ServerPayload<ExtArgs>
+    members: Prisma.$ServerMemberRolePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1230,9 +1230,9 @@ readonly fields: RoleFieldRefs;
  */
 export interface Prisma__RoleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  members<T extends Prisma.Role$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Role$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServerMemberRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  server<T extends Prisma.ServerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServerDefaultArgs<ExtArgs>>): Prisma.Prisma__ServerClient<runtime.Types.Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   channelPermissionOverrides<T extends Prisma.Role$channelPermissionOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Role$channelPermissionOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChannelPermissionOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  server<T extends Prisma.ServerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServerDefaultArgs<ExtArgs>>): Prisma.Prisma__ServerClient<runtime.Types.Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  members<T extends Prisma.Role$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Role$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServerMemberRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1670,30 +1670,6 @@ export type RoleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * Role.members
- */
-export type Role$membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ServerMemberRole
-   */
-  select?: Prisma.ServerMemberRoleSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ServerMemberRole
-   */
-  omit?: Prisma.ServerMemberRoleOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ServerMemberRoleInclude<ExtArgs> | null
-  where?: Prisma.ServerMemberRoleWhereInput
-  orderBy?: Prisma.ServerMemberRoleOrderByWithRelationInput | Prisma.ServerMemberRoleOrderByWithRelationInput[]
-  cursor?: Prisma.ServerMemberRoleWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ServerMemberRoleScalarFieldEnum | Prisma.ServerMemberRoleScalarFieldEnum[]
-}
-
-/**
  * Role.channelPermissionOverrides
  */
 export type Role$channelPermissionOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1715,6 +1691,30 @@ export type Role$channelPermissionOverridesArgs<ExtArgs extends runtime.Types.Ex
   take?: number
   skip?: number
   distinct?: Prisma.ChannelPermissionOverrideScalarFieldEnum | Prisma.ChannelPermissionOverrideScalarFieldEnum[]
+}
+
+/**
+ * Role.members
+ */
+export type Role$membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ServerMemberRole
+   */
+  select?: Prisma.ServerMemberRoleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ServerMemberRole
+   */
+  omit?: Prisma.ServerMemberRoleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServerMemberRoleInclude<ExtArgs> | null
+  where?: Prisma.ServerMemberRoleWhereInput
+  orderBy?: Prisma.ServerMemberRoleOrderByWithRelationInput | Prisma.ServerMemberRoleOrderByWithRelationInput[]
+  cursor?: Prisma.ServerMemberRoleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ServerMemberRoleScalarFieldEnum | Prisma.ServerMemberRoleScalarFieldEnum[]
 }
 
 /**

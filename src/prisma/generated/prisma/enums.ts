@@ -9,6 +9,14 @@
 * 🟢 You can import this file directly.
 */
 
+export const AuthTokenType = {
+  EMAIL_VERIFICATION: 'EMAIL_VERIFICATION',
+  PASSWORD_RESET: 'PASSWORD_RESET'
+} as const
+
+export type AuthTokenType = (typeof AuthTokenType)[keyof typeof AuthTokenType]
+
+
 export const ChannelType = {
   TEXT: 'TEXT',
   VOICE: 'VOICE',
@@ -18,3 +26,12 @@ export const ChannelType = {
 } as const
 
 export type ChannelType = (typeof ChannelType)[keyof typeof ChannelType]
+
+
+export const OAuthProvider = {
+  GOOGLE: 'GOOGLE',
+  GITHUB: 'GITHUB',
+  FACEBOOK: 'FACEBOOK'
+} as const
+
+export type OAuthProvider = (typeof OAuthProvider)[keyof typeof OAuthProvider]

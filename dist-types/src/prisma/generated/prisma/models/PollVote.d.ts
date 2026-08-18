@@ -138,9 +138,9 @@ export type PollVoteWhereInput = {
     userId?: Prisma.StringFilter<"PollVote"> | string;
     createdAt?: Prisma.DateTimeFilter<"PollVote"> | Date | string;
     pollId?: Prisma.StringNullableFilter<"PollVote"> | string | null;
+    poll?: Prisma.XOR<Prisma.PollNullableScalarRelationFilter, Prisma.PollWhereInput> | null;
     pollOption?: Prisma.XOR<Prisma.PollOptionScalarRelationFilter, Prisma.PollOptionWhereInput>;
     user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
-    poll?: Prisma.XOR<Prisma.PollNullableScalarRelationFilter, Prisma.PollWhereInput> | null;
 };
 export type PollVoteOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -148,9 +148,9 @@ export type PollVoteOrderByWithRelationInput = {
     userId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     pollId?: Prisma.SortOrderInput | Prisma.SortOrder;
+    poll?: Prisma.PollOrderByWithRelationInput;
     pollOption?: Prisma.PollOptionOrderByWithRelationInput;
     user?: Prisma.UserOrderByWithRelationInput;
-    poll?: Prisma.PollOrderByWithRelationInput;
 };
 export type PollVoteWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -162,9 +162,9 @@ export type PollVoteWhereUniqueInput = Prisma.AtLeast<{
     userId?: Prisma.StringFilter<"PollVote"> | string;
     createdAt?: Prisma.DateTimeFilter<"PollVote"> | Date | string;
     pollId?: Prisma.StringNullableFilter<"PollVote"> | string | null;
+    poll?: Prisma.XOR<Prisma.PollNullableScalarRelationFilter, Prisma.PollWhereInput> | null;
     pollOption?: Prisma.XOR<Prisma.PollOptionScalarRelationFilter, Prisma.PollOptionWhereInput>;
     user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
-    poll?: Prisma.XOR<Prisma.PollNullableScalarRelationFilter, Prisma.PollWhereInput> | null;
 }, "id" | "pollOptionId_userId">;
 export type PollVoteOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -189,9 +189,9 @@ export type PollVoteScalarWhereWithAggregatesInput = {
 export type PollVoteCreateInput = {
     id?: string;
     createdAt?: Date | string;
+    poll?: Prisma.PollCreateNestedOneWithoutVotesInput;
     pollOption: Prisma.PollOptionCreateNestedOneWithoutVotesInput;
     user: Prisma.UserCreateNestedOneWithoutPollVotesInput;
-    poll?: Prisma.PollCreateNestedOneWithoutVotesInput;
 };
 export type PollVoteUncheckedCreateInput = {
     id?: string;
@@ -203,9 +203,9 @@ export type PollVoteUncheckedCreateInput = {
 export type PollVoteUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    poll?: Prisma.PollUpdateOneWithoutVotesNestedInput;
     pollOption?: Prisma.PollOptionUpdateOneRequiredWithoutVotesNestedInput;
     user?: Prisma.UserUpdateOneRequiredWithoutPollVotesNestedInput;
-    poll?: Prisma.PollUpdateOneWithoutVotesNestedInput;
 };
 export type PollVoteUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -425,8 +425,8 @@ export type PollVoteScalarWhereInput = {
 export type PollVoteCreateWithoutPollOptionInput = {
     id?: string;
     createdAt?: Date | string;
-    user: Prisma.UserCreateNestedOneWithoutPollVotesInput;
     poll?: Prisma.PollCreateNestedOneWithoutVotesInput;
+    user: Prisma.UserCreateNestedOneWithoutPollVotesInput;
 };
 export type PollVoteUncheckedCreateWithoutPollOptionInput = {
     id?: string;
@@ -458,8 +458,8 @@ export type PollVoteUpdateManyWithWhereWithoutPollOptionInput = {
 export type PollVoteCreateWithoutUserInput = {
     id?: string;
     createdAt?: Date | string;
-    pollOption: Prisma.PollOptionCreateNestedOneWithoutVotesInput;
     poll?: Prisma.PollCreateNestedOneWithoutVotesInput;
+    pollOption: Prisma.PollOptionCreateNestedOneWithoutVotesInput;
 };
 export type PollVoteUncheckedCreateWithoutUserInput = {
     id?: string;
@@ -521,8 +521,8 @@ export type PollVoteCreateManyPollOptionInput = {
 export type PollVoteUpdateWithoutPollOptionInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    user?: Prisma.UserUpdateOneRequiredWithoutPollVotesNestedInput;
     poll?: Prisma.PollUpdateOneWithoutVotesNestedInput;
+    user?: Prisma.UserUpdateOneRequiredWithoutPollVotesNestedInput;
 };
 export type PollVoteUncheckedUpdateWithoutPollOptionInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -545,8 +545,8 @@ export type PollVoteCreateManyUserInput = {
 export type PollVoteUpdateWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    pollOption?: Prisma.PollOptionUpdateOneRequiredWithoutVotesNestedInput;
     poll?: Prisma.PollUpdateOneWithoutVotesNestedInput;
+    pollOption?: Prisma.PollOptionUpdateOneRequiredWithoutVotesNestedInput;
 };
 export type PollVoteUncheckedUpdateWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -566,9 +566,9 @@ export type PollVoteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
     userId?: boolean;
     createdAt?: boolean;
     pollId?: boolean;
+    poll?: boolean | Prisma.PollVote$pollArgs<ExtArgs>;
     pollOption?: boolean | Prisma.PollOptionDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
-    poll?: boolean | Prisma.PollVote$pollArgs<ExtArgs>;
 }, ExtArgs["result"]["pollVote"]>;
 export type PollVoteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -576,9 +576,9 @@ export type PollVoteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
     userId?: boolean;
     createdAt?: boolean;
     pollId?: boolean;
+    poll?: boolean | Prisma.PollVote$pollArgs<ExtArgs>;
     pollOption?: boolean | Prisma.PollOptionDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
-    poll?: boolean | Prisma.PollVote$pollArgs<ExtArgs>;
 }, ExtArgs["result"]["pollVote"]>;
 export type PollVoteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -586,9 +586,9 @@ export type PollVoteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
     userId?: boolean;
     createdAt?: boolean;
     pollId?: boolean;
+    poll?: boolean | Prisma.PollVote$pollArgs<ExtArgs>;
     pollOption?: boolean | Prisma.PollOptionDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
-    poll?: boolean | Prisma.PollVote$pollArgs<ExtArgs>;
 }, ExtArgs["result"]["pollVote"]>;
 export type PollVoteSelectScalar = {
     id?: boolean;
@@ -599,26 +599,26 @@ export type PollVoteSelectScalar = {
 };
 export type PollVoteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pollOptionId" | "userId" | "createdAt" | "pollId", ExtArgs["result"]["pollVote"]>;
 export type PollVoteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    poll?: boolean | Prisma.PollVote$pollArgs<ExtArgs>;
     pollOption?: boolean | Prisma.PollOptionDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
-    poll?: boolean | Prisma.PollVote$pollArgs<ExtArgs>;
 };
 export type PollVoteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    poll?: boolean | Prisma.PollVote$pollArgs<ExtArgs>;
     pollOption?: boolean | Prisma.PollOptionDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
-    poll?: boolean | Prisma.PollVote$pollArgs<ExtArgs>;
 };
 export type PollVoteIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    poll?: boolean | Prisma.PollVote$pollArgs<ExtArgs>;
     pollOption?: boolean | Prisma.PollOptionDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
-    poll?: boolean | Prisma.PollVote$pollArgs<ExtArgs>;
 };
 export type $PollVotePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     name: "PollVote";
     objects: {
+        poll: Prisma.$PollPayload<ExtArgs> | null;
         pollOption: Prisma.$PollOptionPayload<ExtArgs>;
         user: Prisma.$UserPayload<ExtArgs>;
-        poll: Prisma.$PollPayload<ExtArgs> | null;
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
@@ -955,9 +955,9 @@ export interface PollVoteDelegate<ExtArgs extends runtime.Types.Extensions.Inter
  */
 export interface Prisma__PollVoteClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
+    poll<T extends Prisma.PollVote$pollArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PollVote$pollArgs<ExtArgs>>): Prisma.Prisma__PollClient<runtime.Types.Result.GetResult<Prisma.$PollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
     pollOption<T extends Prisma.PollOptionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PollOptionDefaultArgs<ExtArgs>>): Prisma.Prisma__PollOptionClient<runtime.Types.Result.GetResult<Prisma.$PollOptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
     user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-    poll<T extends Prisma.PollVote$pollArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PollVote$pollArgs<ExtArgs>>): Prisma.Prisma__PollClient<runtime.Types.Result.GetResult<Prisma.$PollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.

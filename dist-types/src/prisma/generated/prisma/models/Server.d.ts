@@ -146,8 +146,8 @@ export type ServerWhereInput = {
     iconUrl?: Prisma.StringNullableFilter<"Server"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"Server"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Server"> | Date | string;
-    owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
     roles?: Prisma.RoleListRelationFilter;
+    owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
     members?: Prisma.ServerMemberListRelationFilter;
     categories?: Prisma.CategoryListRelationFilter;
     channels?: Prisma.ChannelListRelationFilter;
@@ -159,8 +159,8 @@ export type ServerOrderByWithRelationInput = {
     iconUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
-    owner?: Prisma.UserOrderByWithRelationInput;
     roles?: Prisma.RoleOrderByRelationAggregateInput;
+    owner?: Prisma.UserOrderByWithRelationInput;
     members?: Prisma.ServerMemberOrderByRelationAggregateInput;
     categories?: Prisma.CategoryOrderByRelationAggregateInput;
     channels?: Prisma.ChannelOrderByRelationAggregateInput;
@@ -175,8 +175,8 @@ export type ServerWhereUniqueInput = Prisma.AtLeast<{
     iconUrl?: Prisma.StringNullableFilter<"Server"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"Server"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Server"> | Date | string;
-    owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
     roles?: Prisma.RoleListRelationFilter;
+    owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
     members?: Prisma.ServerMemberListRelationFilter;
     categories?: Prisma.CategoryListRelationFilter;
     channels?: Prisma.ChannelListRelationFilter;
@@ -209,8 +209,8 @@ export type ServerCreateInput = {
     iconUrl?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
-    owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
     roles?: Prisma.RoleCreateNestedManyWithoutServerInput;
+    owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
     members?: Prisma.ServerMemberCreateNestedManyWithoutServerInput;
     categories?: Prisma.CategoryCreateNestedManyWithoutServerInput;
     channels?: Prisma.ChannelCreateNestedManyWithoutServerInput;
@@ -233,8 +233,8 @@ export type ServerUpdateInput = {
     iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
     roles?: Prisma.RoleUpdateManyWithoutServerNestedInput;
+    owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
     members?: Prisma.ServerMemberUpdateManyWithoutServerNestedInput;
     categories?: Prisma.CategoryUpdateManyWithoutServerNestedInput;
     channels?: Prisma.ChannelUpdateManyWithoutServerNestedInput;
@@ -402,8 +402,8 @@ export type ServerCreateWithoutCategoriesInput = {
     iconUrl?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
-    owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
     roles?: Prisma.RoleCreateNestedManyWithoutServerInput;
+    owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
     members?: Prisma.ServerMemberCreateNestedManyWithoutServerInput;
     channels?: Prisma.ChannelCreateNestedManyWithoutServerInput;
 };
@@ -437,8 +437,8 @@ export type ServerUpdateWithoutCategoriesInput = {
     iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
     roles?: Prisma.RoleUpdateManyWithoutServerNestedInput;
+    owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
     members?: Prisma.ServerMemberUpdateManyWithoutServerNestedInput;
     channels?: Prisma.ChannelUpdateManyWithoutServerNestedInput;
 };
@@ -459,8 +459,8 @@ export type ServerCreateWithoutChannelsInput = {
     iconUrl?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
-    owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
     roles?: Prisma.RoleCreateNestedManyWithoutServerInput;
+    owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
     members?: Prisma.ServerMemberCreateNestedManyWithoutServerInput;
     categories?: Prisma.CategoryCreateNestedManyWithoutServerInput;
 };
@@ -494,8 +494,8 @@ export type ServerUpdateWithoutChannelsInput = {
     iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
     roles?: Prisma.RoleUpdateManyWithoutServerNestedInput;
+    owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
     members?: Prisma.ServerMemberUpdateManyWithoutServerNestedInput;
     categories?: Prisma.CategoryUpdateManyWithoutServerNestedInput;
 };
@@ -573,8 +573,8 @@ export type ServerCreateWithoutMembersInput = {
     iconUrl?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
-    owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
     roles?: Prisma.RoleCreateNestedManyWithoutServerInput;
+    owner: Prisma.UserCreateNestedOneWithoutOwnedServersInput;
     categories?: Prisma.CategoryCreateNestedManyWithoutServerInput;
     channels?: Prisma.ChannelCreateNestedManyWithoutServerInput;
 };
@@ -608,8 +608,8 @@ export type ServerUpdateWithoutMembersInput = {
     iconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
     roles?: Prisma.RoleUpdateManyWithoutServerNestedInput;
+    owner?: Prisma.UserUpdateOneRequiredWithoutOwnedServersNestedInput;
     categories?: Prisma.CategoryUpdateManyWithoutServerNestedInput;
     channels?: Prisma.ChannelUpdateManyWithoutServerNestedInput;
 };
@@ -769,8 +769,8 @@ export type ServerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     iconUrl?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
-    owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
     roles?: boolean | Prisma.Server$rolesArgs<ExtArgs>;
+    owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
     members?: boolean | Prisma.Server$membersArgs<ExtArgs>;
     categories?: boolean | Prisma.Server$categoriesArgs<ExtArgs>;
     channels?: boolean | Prisma.Server$channelsArgs<ExtArgs>;
@@ -804,8 +804,8 @@ export type ServerSelectScalar = {
 };
 export type ServerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "name" | "iconUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["server"]>;
 export type ServerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
     roles?: boolean | Prisma.Server$rolesArgs<ExtArgs>;
+    owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
     members?: boolean | Prisma.Server$membersArgs<ExtArgs>;
     categories?: boolean | Prisma.Server$categoriesArgs<ExtArgs>;
     channels?: boolean | Prisma.Server$channelsArgs<ExtArgs>;
@@ -820,8 +820,8 @@ export type ServerIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type $ServerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     name: "Server";
     objects: {
-        owner: Prisma.$UserPayload<ExtArgs>;
         roles: Prisma.$RolePayload<ExtArgs>[];
+        owner: Prisma.$UserPayload<ExtArgs>;
         members: Prisma.$ServerMemberPayload<ExtArgs>[];
         categories: Prisma.$CategoryPayload<ExtArgs>[];
         channels: Prisma.$ChannelPayload<ExtArgs>[];
@@ -1162,8 +1162,8 @@ export interface ServerDelegate<ExtArgs extends runtime.Types.Extensions.Interna
  */
 export interface Prisma__ServerClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
-    owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
     roles<T extends Prisma.Server$rolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Server$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
     members<T extends Prisma.Server$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Server$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServerMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     categories<T extends Prisma.Server$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Server$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     channels<T extends Prisma.Server$channelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Server$channelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChannelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
