@@ -40,6 +40,23 @@ export async function verifyAccessToken(token: string): Promise<AccessTokenPaylo
     throw new UnauthorizedError("Sesi tidak sesuai dengan pengguna");
   }
 
+  const user = await prisma.user.findUnique({
+    where: {
+      id: payload.userId,
+    },
+    select: {
+      deletedAt: true,
+    },
+  });
+
+  if (!user) {
+    throw new UnauthorizedError("Pengguna tidak ditemukan");
+  }
+
+  if (user.deletedAt !== null) {
+    throw new UnauthorizedError("Akun telah disuspend");
+  }
+
   if (session.revokedAt !== null) {
     throw new UnauthorizedError("Sesi telah dicabut");
   }

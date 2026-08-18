@@ -30,6 +30,12 @@ export class MembershipRepository {
             role: true,
           },
         },
+        server: {
+          select: {
+            id: true,
+            ownerId: true,
+          },
+        },
         user: {
           select: {
             id: true,

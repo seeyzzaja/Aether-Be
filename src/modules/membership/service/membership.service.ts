@@ -232,6 +232,99 @@ export class MembershipService {
       },
     });
   }
+
+  async kickMember(serverId: string, actorId: string, memberId: string) {
+    const actorPermissions = await this.getActorPermissions(serverId, actorId);
+
+    if (!hasPermission(actorPermissions, Permission.KICK_MEMBERS)) {
+      throw new ForbiddenError("Kamu tidak memiliki permission KICK_MEMBERS");
+    }
+
+    const targetMember = await prisma.serverMember.findUnique({
+      where: {
+        id: memberId,
+      },
+      include: {
+        server: {
+          select: {
+            id: true,
+            ownerId: true,
+          },
+        },
+        roles: {
+          include: {
+            role: true,
+          },
+        },
+      },
+    });
+
+    if (!targetMember) {
+      throw new NotFoundError("Member tidak ditemukan di server ini");
+    }
+
+    if (targetMember.serverId !== serverId) {
+      throw new ForbiddenError("Member bukan bagian dari server ini");
+    }
+
+    if (targetMember.server.ownerId === targetMember.userId) {
+      throw new ForbiddenError("Owner tidak dapat di-kick dari server");
+    }
+
+    const actorMember =
+      actorId === targetMember.server.ownerId
+        ? null
+        : await prisma.serverMember.findUnique({
+            where: {
+              serverId_userId: {
+                serverId,
+                userId: actorId,
+              },
+            },
+            include: {
+              roles: {
+                include: {
+                  role: true,
+                },
+              },
+            },
+          });
+
+    const actorHighestRolePosition =
+      actorId === targetMember.server.ownerId
+        ? Number.MAX_SAFE_INTEGER
+        : (actorMember?.roles.reduce((highest, memberRole) => {
+            return Math.max(highest, memberRole.role.position);
+          }, 0) ?? 0);
+
+    const targetHighestRolePosition = targetMember.roles.reduce((highest, memberRole) => {
+      return Math.max(highest, memberRole.role.position);
+    }, 0);
+
+    if (
+      actorHighestRolePosition <= targetHighestRolePosition &&
+      actorId !== targetMember.server.ownerId
+    ) {
+      throw new ForbiddenError("Tidak dapat meng-kick member dengan hierarchy yang lebih tinggi");
+    }
+
+    await prisma.serverMember.delete({
+      where: {
+        id: memberId,
+      },
+    });
+
+    await auditService.log({
+      actorId,
+      action: "MEMBER_KICK",
+      targetType: "member",
+      targetId: memberId,
+      metadata: {
+        serverId,
+        memberId,
+      },
+    });
+  }
 }
 
 export const membershipService = new MembershipService();

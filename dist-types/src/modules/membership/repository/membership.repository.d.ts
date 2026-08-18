@@ -32,6 +32,10 @@ export declare class MembershipRepository {
             roleId: string;
             createdAt: Date;
         })[];
+        server: {
+            id: string;
+            ownerId: string;
+        };
         user: {
             email: string;
             id: string;

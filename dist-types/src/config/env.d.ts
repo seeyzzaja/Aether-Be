@@ -35,6 +35,7 @@ export declare const config: {
     LIVEKIT_URL: string;
     LIVEKIT_API_KEY: string;
     LIVEKIT_API_SECRET: string;
+    ADMIN_USER_IDS: string;
 };
 export default config;
 //# sourceMappingURL=env.d.ts.map

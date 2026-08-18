@@ -426,12 +426,12 @@ Total 35 Task tercakup pada dokumen ini, mencakup seluruh fitur inti hingga fitu
 | **Estimasi Waktu** | **10 jam** |
 | **Definition of Done** | **Rate limiter & audit log aktif sesuai Security Design Bagian 3-4.** |
 **Subtask:**
-- [ ] Implementasi middleware rate limiter per kategori endpoint.
-- [ ] Implementasi middleware audit log generik untuk aksi sensitif.
-- [ ] Uji ambang batas untuk kategori login, kirim pesan, dan endpoint umum.
+- [x] Implementasi middleware rate limiter per kategori endpoint.
+- [x] Implementasi middleware audit log generik untuk aksi sensitif.
+- [x] Uji ambang batas untuk kategori login, kirim pesan, dan endpoint umum.
 **Checklist Verifikasi:**
-- [ ] Rate limit login/kirim pesan sesuai ambang Security Design
-- [ ] Aksi sensitif tercatat lengkap di audit_logs
+- [x] Rate limit login/kirim pesan sesuai ambang Security Design
+- [x] Aksi sensitif tercatat lengkap di audit_logs
 
 **T17.2 — CSP/CSRF & Anti-Spam**
 | **Deskripsi** | **Konfigurasi header CSP/CSRF/security headers dan heuristik anti-spam (duplikat, mass-mention, link mencurigakan).** |
@@ -444,11 +444,11 @@ Total 35 Task tercakup pada dokumen ini, mencakup seluruh fitur inti hingga fitu
 | **Definition of Done** | **Seluruh kontrol pada Security Design (Fase 6) aktif dan teruji.** |
 **Subtask:**
 - [x] Konfigurasi header CSP/CSRF/security headers pada middleware.
-- [ ] Implementasi deteksi duplikat pesan.
-- [ ] Implementasi deteksi mass-mention & link mencurigakan.
+- [x] Implementasi deteksi duplikat pesan.
+- [x] Implementasi deteksi mass-mention & link mencurigakan.
 **Checklist Verifikasi:**
 - [x] Header keamanan terverifikasi via response inspector
-- [ ] Pesan duplikat/mass-mention di-throttle sesuai desain
+- [x] Pesan duplikat/mass-mention di-throttle sesuai desain
 
 # EPIC 7 — Admin & Launch Polish (v0.7)
 ## Feature S18 — Admin Panel

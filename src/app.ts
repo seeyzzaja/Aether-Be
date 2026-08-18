@@ -8,6 +8,7 @@ import swaggerSpec from "#config/swagger";
 import swaggerUiOptions from "#config/swagger-ui-theme";
 import { errorHandlerMiddleware } from "#middlewares/error-handler";
 import { apiRateLimiter } from "#middlewares/rate-limiters";
+import adminRouter from "#modules/admin/route/admin.route";
 import authRouter from "#modules/auth/route/auth.route";
 import categoryRouter from "#modules/category/route/category.route";
 import channelRouter from "#modules/channel/route/channel.routes";
@@ -113,6 +114,7 @@ app.get("/health", (_req, res) => {
 });
 app.use("/api", apiRateLimiter);
 app.use("/api/auth", authRouter);
+app.use("/api/admin", adminRouter);
 app.use("/api/device", deviceRouter);
 app.use("/api/servers", serverRouter);
 app.use("/api/membership", membershipRouter);
@@ -127,6 +129,7 @@ app.use("/api/upload", uploadRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/channels", voiceRouter);
 app.use("/api", pollRouter);
+app.use("/api/admin", adminRouter);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });

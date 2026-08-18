@@ -46,6 +46,8 @@ export const config = {
   LIVEKIT_URL: process.env.LIVEKIT_URL || "ws://localhost:7880",
   LIVEKIT_API_KEY: process.env.LIVEKIT_API_KEY || "",
   LIVEKIT_API_SECRET: process.env.LIVEKIT_API_SECRET || "",
+
+  ADMIN_USER_IDS: process.env.ADMIN_USER_IDS || "",
 };
 
 export default config;

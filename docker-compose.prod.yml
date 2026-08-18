@@ -115,6 +115,7 @@ services:
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
       EMAIL_FROM: ${EMAIL_FROM}
 
+      ADMIN_USER_IDS: ${ADMIN_USER_IDS}
     depends_on:
       postgres:
         condition: service_healthy
