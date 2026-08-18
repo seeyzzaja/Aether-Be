@@ -3,6 +3,7 @@ node_modules/
 
 # build hasil compile
 dist/
+dist-types/
 build/
 
 # enviromemnt

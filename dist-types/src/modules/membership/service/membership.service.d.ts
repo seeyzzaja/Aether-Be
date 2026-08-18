@@ -42,6 +42,7 @@ export declare class MembershipService {
         };
     }>;
     removeRole(serverId: string, actorId: string, memberId: string, roleId: string): Promise<void>;
+    kickMember(serverId: string, actorId: string, memberId: string): Promise<void>;
 }
 export declare const membershipService: MembershipService;
 //# sourceMappingURL=membership.service.d.ts.map
