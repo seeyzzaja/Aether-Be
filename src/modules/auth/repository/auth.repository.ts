@@ -1,6 +1,14 @@
 import prisma from "#utils/prisma";
 
 export class AuthRepository {
+  async findUserByUsername(username: string) {
+    return prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
+  }
+
   async findUserByEmail(email: string) {
     return prisma.user.findUnique({
       where: {
@@ -21,6 +29,18 @@ export class AuthRepository {
     return prisma.session.findUnique({
       where: {
         id: sessionId,
+      },
+    });
+  }
+
+  async findSessionByRefreshTokenHash(refreshTokenHash: string) {
+    return prisma.session.findFirst({
+      where: {
+        refreshTokenHash,
+        revokedAt: null,
+      },
+      include: {
+        user: true,
       },
     });
   }

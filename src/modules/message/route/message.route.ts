@@ -1,6 +1,7 @@
 import { Router } from "express";
-
+import { auditLogMiddleware } from "#middlewares/audit-log.middleware";
 import { requireAuth } from "#middlewares/auth-middleware";
+import { messageRateLimiter } from "#middlewares/rate-limiters";
 import { messageController } from "#modules/message/controller/message.controller";
 
 const router = Router();
@@ -82,19 +83,20 @@ router.get("/search", (req, res, next) => messageController.search(req, res, nex
  * @swagger
  * /api/message/{channelId}:
  *   post:
- *     summary: Mengirim pesan
+ *     summary: Mengirim pesan ke channel
  *     tags: [Message]
- *     description: Mengirim pesan baru ke dalam channel.
+ *     description: Mengirim pesan baru ke channel. Rate limit maksimal 10 request per 10 detik untuk setiap user pada channel tertentu.
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - name: channelId
  *         in: path
  *         required: true
- *         description: UUID channel tempat pesan dikirim
+ *         description: UUID channel tujuan pesan
  *         schema:
  *           type: string
  *           format: uuid
+ *           example: 69fe24b7-84b5-4342-b08a-bd1426471724
  *     requestBody:
  *       required: true
  *       content:
@@ -107,33 +109,81 @@ router.get("/search", (req, res, next) => messageController.search(req, res, nex
  *               content:
  *                 type: string
  *                 minLength: 1
- *                 maxLength: 4000
  *                 example: Halo semuanya!
  *               replyToId:
  *                 type: string
  *                 format: uuid
  *                 nullable: true
- *                 description: UUID pesan yang ingin dibalas
- *               threadRootId:
- *                 type: string
- *                 format: uuid
- *                 nullable: true
- *                 description: UUID root message dari thread
+ *                 description: ID pesan yang ingin dibalas
+ *                 example: 8d7a2f7e-3a1c-4c9d-b8f4-5e1234567890
  *     responses:
  *       201:
  *         description: Pesan berhasil dikirim
  *       400:
- *         description: Data request atau Channel ID tidak valid
+ *         description: Data pesan tidak valid
  *       401:
  *         description: Pengguna belum login atau token tidak valid
  *       403:
- *         description: Pengguna tidak memiliki permission SEND_MESSAGES
+ *         description: Pengguna tidak memiliki permission untuk mengirim pesan di channel ini
  *       404:
- *         description: Channel atau pesan reply tidak ditemukan
+ *         description: Channel atau pesan yang direply tidak ditemukan
+ *       429:
+ *         description: Terlalu banyak pesan dikirim dalam waktu singkat
+ *         headers:
+ *           X-RateLimit-Limit:
+ *             description: Maksimal request dalam window
+ *             schema:
+ *               type: integer
+ *               example: 10
+ *           X-RateLimit-Remaining:
+ *             description: Sisa request yang tersedia
+ *             schema:
+ *               type: integer
+ *               example: 0
+ *           X-RateLimit-Reset:
+ *             description: Unix timestamp ketika rate limit di-reset
+ *             schema:
+ *               type: integer
+ *           Retry-After:
+ *             description: Waktu tunggu dalam detik sebelum mencoba kembali
+ *             schema:
+ *               type: integer
+ *               example: 10
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 code:
+ *                   type: string
+ *                   example: RATE_LIMITED
+ *                 message:
+ *                   type: string
+ *                   example: Terlalu banyak request. Silakan coba lagi nanti.
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.post("/:channelId", (req, res, next) => messageController.create(req, res, next));
+router.post(
+  "/:channelId",
+  messageRateLimiter,
+  auditLogMiddleware({
+    action: "MESSAGE_CREATE",
+    targetType: "MESSAGE",
+    getTargetId: (req) => {
+      const { channelId } = req.params;
+
+      if (typeof channelId !== "string") {
+        throw new Error("channelId tidak valid");
+      }
+
+      return channelId;
+    },
+  }),
+  (req, res, next) => messageController.create(req, res, next),
+);
 
 /**
  * @swagger
@@ -180,7 +230,23 @@ router.post("/:channelId", (req, res, next) => messageController.create(req, res
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.patch("/:messageId", (req, res, next) => messageController.update(req, res, next));
+router.patch(
+  "/:messageId",
+  auditLogMiddleware({
+    action: "MESSAGE_UPDATE",
+    targetType: "MESSAGE",
+    getTargetId: (req) => {
+      const { messageId } = req.params;
+
+      if (typeof messageId !== "string") {
+        throw new Error("messageId tidak valid");
+      }
+
+      return messageId;
+    },
+  }),
+  (req, res, next) => messageController.update(req, res, next),
+);
 
 /**
  * @swagger
@@ -213,7 +279,23 @@ router.patch("/:messageId", (req, res, next) => messageController.update(req, re
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.post("/:messageId/pin", (req, res, next) => messageController.pin(req, res, next));
+router.post(
+  "/:messageId/pin",
+  auditLogMiddleware({
+    action: "MESSAGE_PIN",
+    targetType: "MESSAGE",
+    getTargetId: (req) => {
+      const { messageId } = req.params;
+
+      if (typeof messageId !== "string") {
+        throw new Error("messageId tidak valid");
+      }
+
+      return messageId;
+    },
+  }),
+  (req, res, next) => messageController.pin(req, res, next),
+);
 
 /**
  * @swagger
@@ -246,7 +328,23 @@ router.post("/:messageId/pin", (req, res, next) => messageController.pin(req, re
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.delete("/:messageId/pin", (req, res, next) => messageController.unpin(req, res, next));
+router.delete(
+  "/:messageId/pin",
+  auditLogMiddleware({
+    action: "MESSAGE_UNPIN",
+    targetType: "MESSAGE",
+    getTargetId: (req) => {
+      const { messageId } = req.params;
+
+      if (typeof messageId !== "string") {
+        throw new Error("messageId tidak valid");
+      }
+
+      return messageId;
+    },
+  }),
+  (req, res, next) => messageController.unpin(req, res, next),
+);
 
 /**
  * @swagger
@@ -279,7 +377,23 @@ router.delete("/:messageId/pin", (req, res, next) => messageController.unpin(req
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.delete("/:messageId", (req, res, next) => messageController.delete(req, res, next));
+router.delete(
+  "/:messageId",
+  auditLogMiddleware({
+    action: "MESSAGE_DELETE",
+    targetType: "MESSAGE",
+    getTargetId: (req) => {
+      const { messageId } = req.params;
+
+      if (typeof messageId !== "string") {
+        throw new Error("messageId tidak valid");
+      }
+
+      return messageId;
+    },
+  }),
+  (req, res, next) => messageController.delete(req, res, next),
+);
 /**
  * @swagger
  * /api/message/{messageId}/thread:
@@ -357,7 +471,30 @@ router.get("/:messageId/thread", (req, res, next) => messageController.getThread
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.post("/:messageId/forward", (req, res, next) => messageController.forward(req, res, next));
+router.post(
+  "/:messageId/forward",
+  auditLogMiddleware({
+    action: "MESSAGE_FORWARD",
+    targetType: "MESSAGE",
+    getTargetId: (req) => {
+      const { messageId } = req.params;
+
+      if (typeof messageId !== "string") {
+        throw new Error("messageId tidak valid");
+      }
+
+      return messageId;
+    },
+    getMetadata: (req) => {
+      const { destinationChannelId } = req.body;
+
+      return {
+        destinationChannelId,
+      };
+    },
+  }),
+  (req, res, next) => messageController.forward(req, res, next),
+);
 
 /**
  * @swagger

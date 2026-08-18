@@ -6,6 +6,7 @@ export const config = {
   HOST: process.env.HOST || "localhost",
   BASE_URL:
     process.env.BASE_URL || `http://${process.env.HOST || "localhost"}:${process.env.PORT || 5000}`,
+  CORS_ORIGINS: process.env.CORS_ORIGINS || "",
 
   DATABASE_URL: process.env.DATABASE_URL || "",
   REDIS_URL: process.env.REDIS_URL || "redis://localhost:6379",

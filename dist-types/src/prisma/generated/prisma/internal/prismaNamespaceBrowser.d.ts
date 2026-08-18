@@ -26,6 +26,7 @@ export declare const JsonNull: import("@prisma/client-runtime-utils").JsonNullCl
  */
 export declare const AnyNull: import("@prisma/client-runtime-utils").AnyNullClass;
 export declare const ModelName: {
+    readonly AuditLog: 'AuditLog';
     readonly Category: 'Category';
     readonly ChannelPermissionOverride: 'ChannelPermissionOverride';
     readonly ChannelReadState: 'ChannelReadState';
@@ -33,6 +34,9 @@ export declare const ModelName: {
     readonly MessageAttachment: 'MessageAttachment';
     readonly Message: 'Message';
     readonly Notification: 'Notification';
+    readonly Poll: 'Poll';
+    readonly PollOption: 'PollOption';
+    readonly PollVote: 'PollVote';
     readonly Reaction: 'Reaction';
     readonly Role: 'Role';
     readonly ServerMemberRole: 'ServerMemberRole';
@@ -49,6 +53,16 @@ export declare const TransactionIsolationLevel: {
     readonly Serializable: 'Serializable';
 };
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
+export declare const AuditLogScalarFieldEnum: {
+    readonly id: 'id';
+    readonly actorId: 'actorId';
+    readonly action: 'action';
+    readonly targetType: 'targetType';
+    readonly targetId: 'targetId';
+    readonly metadata: 'metadata';
+    readonly createdAt: 'createdAt';
+};
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum];
 export declare const CategoryScalarFieldEnum: {
     readonly id: 'id';
     readonly serverId: 'serverId';
@@ -121,6 +135,32 @@ export declare const NotificationScalarFieldEnum: {
     readonly createdAt: 'createdAt';
 };
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum];
+export declare const PollScalarFieldEnum: {
+    readonly id: 'id';
+    readonly messageId: 'messageId';
+    readonly question: 'question';
+    readonly allowMultipleChoice: 'allowMultipleChoice';
+    readonly expiresAt: 'expiresAt';
+    readonly createdAt: 'createdAt';
+    readonly updatedAt: 'updatedAt';
+};
+export type PollScalarFieldEnum = (typeof PollScalarFieldEnum)[keyof typeof PollScalarFieldEnum];
+export declare const PollOptionScalarFieldEnum: {
+    readonly id: 'id';
+    readonly pollId: 'pollId';
+    readonly text: 'text';
+    readonly position: 'position';
+    readonly createdAt: 'createdAt';
+};
+export type PollOptionScalarFieldEnum = (typeof PollOptionScalarFieldEnum)[keyof typeof PollOptionScalarFieldEnum];
+export declare const PollVoteScalarFieldEnum: {
+    readonly id: 'id';
+    readonly pollOptionId: 'pollOptionId';
+    readonly userId: 'userId';
+    readonly createdAt: 'createdAt';
+    readonly pollId: 'pollId';
+};
+export type PollVoteScalarFieldEnum = (typeof PollVoteScalarFieldEnum)[keyof typeof PollVoteScalarFieldEnum];
 export declare const ReactionScalarFieldEnum: {
     readonly id: 'id';
     readonly messageId: 'messageId';
@@ -180,6 +220,7 @@ export declare const UserScalarFieldEnum: {
     readonly email: 'email';
     readonly username: 'username';
     readonly passwordHash: 'passwordHash';
+    readonly emailVerifiedAt: 'emailVerifiedAt';
     readonly emailNotificationEnabled: 'emailNotificationEnabled';
     readonly createdAt: 'createdAt';
     readonly updatedAt: 'updatedAt';
@@ -191,6 +232,11 @@ export declare const SortOrder: {
     readonly desc: 'desc';
 };
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
+export declare const NullableJsonNullValueInput: {
+    readonly DbNull: import("@prisma/client-runtime-utils").DbNullClass;
+    readonly JsonNull: import("@prisma/client-runtime-utils").JsonNullClass;
+};
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput];
 export declare const JsonNullValueInput: {
     readonly JsonNull: import("@prisma/client-runtime-utils").JsonNullClass;
 };
@@ -200,15 +246,15 @@ export declare const QueryMode: {
     readonly insensitive: 'insensitive';
 };
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode];
-export declare const NullsOrder: {
-    readonly first: 'first';
-    readonly last: 'last';
-};
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];
 export declare const JsonNullValueFilter: {
     readonly DbNull: import("@prisma/client-runtime-utils").DbNullClass;
     readonly JsonNull: import("@prisma/client-runtime-utils").JsonNullClass;
     readonly AnyNull: import("@prisma/client-runtime-utils").AnyNullClass;
 };
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter];
+export declare const NullsOrder: {
+    readonly first: 'first';
+    readonly last: 'last';
+};
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];
 //# sourceMappingURL=prismaNamespaceBrowser.d.ts.map

@@ -1,5 +1,6 @@
 import { config } from "#config/env";
 import { getPresenceConnections } from "#modules/presence/repository/presence.repository";
+import { logger } from "#shared/logger/logger";
 import { updatePresence } from "./presence.service.js";
 
 const timers = new Map<string, NodeJS.Timeout>();
@@ -16,15 +17,32 @@ export function schedulePresenceOffline(userId: string): void {
 
     const connections = await getPresenceConnections(userId);
 
-    console.log("[PRESENCE] Grace period finished");
-    console.log("[PRESENCE] Global connections:", connections);
+    logger.debug(
+      {
+        userId,
+        connections,
+      },
+      "Presence grace period finished",
+    );
 
     if (connections > 0) {
-      console.log("[PRESENCE] User reconnected, staying online");
+      logger.debug(
+        {
+          userId,
+          connections,
+        },
+        "User reconnected during presence grace period",
+      );
+
       return;
     }
 
-    console.log("[PRESENCE] No global connections, setting offline");
+    logger.debug(
+      {
+        userId,
+      },
+      "No global connections, setting user offline",
+    );
 
     await updatePresence(userId, "offline");
   }, config.PRESENCE_GRACE_PERIOD_MS);
@@ -42,5 +60,10 @@ export function cancelPresenceOffline(userId: string): void {
   clearTimeout(timer);
   timers.delete(userId);
 
-  console.log("[PRESENCE] Offline timer cancelled:", userId);
+  logger.debug(
+    {
+      userId,
+    },
+    "Presence offline timer cancelled",
+  );
 }

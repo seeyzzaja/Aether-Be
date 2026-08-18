@@ -1,0 +1,7 @@
+export declare const registerRateLimiter: (req: import("express").Request, res: import("express").Response, next: import("express").NextFunction) => Promise<import("express").Response<any, Record<string, any>> | undefined>;
+export declare const loginRateLimiter: (req: import("express").Request, res: import("express").Response, next: import("express").NextFunction) => Promise<import("express").Response<any, Record<string, any>> | undefined>;
+export declare const messageRateLimiter: (req: import("express").Request, res: import("express").Response, next: import("express").NextFunction) => Promise<import("express").Response<any, Record<string, any>> | undefined>;
+export declare const uploadRateLimiter: (req: import("express").Request, res: import("express").Response, next: import("express").NextFunction) => Promise<import("express").Response<any, Record<string, any>> | undefined>;
+export declare const searchRateLimiter: (req: import("express").Request, res: import("express").Response, next: import("express").NextFunction) => Promise<import("express").Response<any, Record<string, any>> | undefined>;
+export declare const apiRateLimiter: (req: import("express").Request, res: import("express").Response, next: import("express").NextFunction) => Promise<import("express").Response<any, Record<string, any>> | undefined>;
+//# sourceMappingURL=rate-limiters.d.ts.map

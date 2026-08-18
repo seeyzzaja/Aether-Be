@@ -10,6 +10,10 @@ export declare class AuthService {
         username: string;
         createdAt: Date;
     }>;
+    private getLoginKey;
+    private isLoginLocked;
+    private recordFailedLogin;
+    private generateRefreshToken;
     login(data: LoginInput, metadata: SessionMetadata): Promise<{
         user: {
             id: string;
@@ -18,8 +22,15 @@ export declare class AuthService {
         };
         accessToken: string;
         refreshToken: string;
+        csrfToken: string;
     }>;
-    logout(sessionId: string, userId: string): Promise<void>;
+    logout(refreshToken: string): Promise<void>;
+    refresh(refreshToken: string): Promise<{
+        accessToken: string;
+        refreshToken: string;
+        csrfToken: string;
+    }>;
+    private hashRefreshToken;
 }
 export declare const authService: AuthService;
 export {};

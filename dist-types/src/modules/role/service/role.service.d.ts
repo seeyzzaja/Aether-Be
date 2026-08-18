@@ -45,14 +45,7 @@ export declare class RoleService {
         isDefault: boolean;
         permissionsBitmask: string;
     }>;
-    deleteRole(roleId: string, serverId: string): Promise<{
-        id: string;
-        serverId: string;
-        name: string;
-        color: string | null;
-        permissionsBitmask: bigint;
-        position: number;
-        isDefault: boolean;
-    }>;
+    deleteRole(roleId: string, serverId: string, userId: string): Promise<void>;
 }
+export declare const roleService: RoleService;
 //# sourceMappingURL=role.service.d.ts.map

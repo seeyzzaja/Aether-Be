@@ -15,7 +15,7 @@ export declare class MessageRepository {
     }): Promise<{
         attachments: {
             id: string;
-            messageId: string;
+            messageId: string | null;
             fileUrl: string;
             thumbnailUrl: string | null;
             fileType: string;
@@ -54,7 +54,7 @@ export declare class MessageRepository {
             serverId: string;
             categoryId: string | null;
             name: string;
-            type: import("../../../prisma/generated/prisma/enums.js").ChannelType;
+            type: import("#prisma/generated/prisma/client").ChannelType;
             topic: string | null;
             position: number;
         };
@@ -110,7 +110,17 @@ export declare class MessageRepository {
     findByChannelId(channelId: string, options?: {
         limit?: number;
         cursor?: string;
-    }): Promise<{
+    }): Promise<({
+        attachments: {
+            id: string;
+            messageId: string | null;
+            fileUrl: string;
+            thumbnailUrl: string | null;
+            fileType: string;
+            fileSize: bigint;
+            fileName: string;
+        }[];
+    } & {
         id: string;
         channelId: string;
         authorId: string;
@@ -122,7 +132,7 @@ export declare class MessageRepository {
         createdAt: Date;
         updatedAt: Date;
         deletedAt: Date | null;
-    }[]>;
+    })[]>;
     findServerContext(messageId: string): Promise<{
         authorId: string;
         channel: {
@@ -142,15 +152,77 @@ export declare class MessageRepository {
             };
         }[];
     } | null>;
+    findChannelPermissions(channelId: string, serverId: string, userId: string): Promise<bigint | null>;
     findServerOwner(serverId: string): Promise<{
         ownerId: string;
     } | null>;
     findChannelById(channelId: string): Promise<{
         id: string;
         serverId: string;
+        type: import("#prisma/generated/prisma/client").ChannelType;
     } | null>;
+    search(serverId: string, query: string, options?: {
+        channelId?: string;
+        limit?: number;
+        offset?: number;
+    }): Promise<{
+        id: string;
+        channelId: string;
+        authorId: string;
+        content: string;
+        createdAt: Date;
+        updatedAt: Date;
+        rank: number;
+    }[]>;
+    countSearch(serverId: string, query: string, channelId?: string): Promise<number>;
     findServerMember(serverId: string, userId: string): Promise<{
         userId: string;
+    } | null>;
+    findThreadMessages(threadRootId: string): Promise<({
+        attachments: {
+            id: string;
+            messageId: string | null;
+            fileUrl: string;
+            thumbnailUrl: string | null;
+            fileType: string;
+            fileSize: bigint;
+            fileName: string;
+        }[];
+    } & {
+        id: string;
+        channelId: string;
+        authorId: string;
+        replyToId: string | null;
+        threadRootId: string | null;
+        content: string;
+        isPinned: boolean;
+        isDeleted: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        deletedAt: Date | null;
+    })[]>;
+    findForwardSource(messageId: string): Promise<{
+        attachments: {
+            fileName: string;
+            fileSize: bigint;
+            fileType: string;
+            fileUrl: string;
+            thumbnailUrl: string | null;
+        }[];
+        authorId: string;
+        channel: {
+            id: string;
+            serverId: string;
+        };
+        channelId: string;
+        content: string;
+        id: string;
+        isDeleted: boolean;
+    } | null>;
+    findUserTrustProfile(userId: string): Promise<{
+        createdAt: Date;
+        emailVerifiedAt: Date | null;
+        id: string;
     } | null>;
 }
 export declare const messageRepository: MessageRepository;

@@ -75,6 +75,17 @@ export declare class MembershipRepository {
         createdAt: Date;
         updatedAt: Date;
     }>;
+    findServersByUserId(userId: string): Promise<{
+        createdAt: Date;
+        id: string;
+        server: {
+            createdAt: Date;
+            id: string;
+            name: string;
+            ownerId: string;
+        };
+        serverId: string;
+    }[]>;
 }
 export declare const membershipRepository: MembershipRepository;
 //# sourceMappingURL=membership.repository.d.ts.map

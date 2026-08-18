@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+
 import { RoleService } from "#modules/role/service/role.service";
 import { BadRequestError, UnauthorizedError } from "#shared/errors/app-error";
 
@@ -95,22 +96,29 @@ export class RoleController {
     }
   }
 
-  async delete(req: Request, res: Response) {
-    const serverId = req.params.serverId;
-    const roleId = req.params.roleId;
+  async delete(req: Request, res: Response, next: (error?: unknown) => void) {
+    try {
+      const user = req.user;
 
-    if (!serverId || !roleId || Array.isArray(serverId) || Array.isArray(roleId)) {
-      return res.status(400).json({
-        success: false,
-        message: "Parameter tidak valid",
+      if (!user) {
+        throw new UnauthorizedError("User tidak ditemukan pada token");
+      }
+
+      const serverId = req.params.serverId;
+      const roleId = req.params.roleId;
+
+      if (!serverId || !roleId || Array.isArray(serverId) || Array.isArray(roleId)) {
+        throw new BadRequestError("Parameter tidak valid");
+      }
+
+      await roleService.deleteRole(roleId, serverId, user.userId);
+
+      return res.status(200).json({
+        success: true,
+        message: "Role berhasil dihapus",
       });
+    } catch (error) {
+      next(error);
     }
-
-    await roleService.deleteRole(roleId, serverId);
-
-    return res.status(200).json({
-      success: true,
-      message: "Role berhasil dihapus",
-    });
   }
 }

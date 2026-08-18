@@ -1,3 +1,4 @@
+import { auditService } from "#modules/audit/service/audit.service";
 import { RoleRepository } from "#modules/role/repository/role.repository";
 import { ForbiddenError, NotFoundError } from "#shared/errors/app-error";
 import { Permission } from "#shared/permissions/permissions";
@@ -73,11 +74,26 @@ export class RoleService {
       throw new ForbiddenError("Tidak dapat memberikan permission melebihi permission sendiri");
     }
 
-    return this.roleRepository.create(serverId, {
+    const role = await this.roleRepository.create(serverId, {
       name: input.name,
       permissionsBitmask: permissions,
     });
+
+    await auditService.log({
+      actorId: userId,
+      action: "ROLE_CREATE",
+      targetType: "ROLE",
+      targetId: role.id,
+      metadata: {
+        serverId,
+        name: input.name,
+        permissions: input.permissions,
+      },
+    });
+
+    return role;
   }
+
   async getRoles(serverId: string) {
     return this.roleRepository.findAll(serverId);
   }
@@ -130,10 +146,46 @@ export class RoleService {
       data.permissionsBitmask = permissions;
     }
 
-    return this.roleRepository.update(roleId, serverId, data);
+    const role = await this.roleRepository.update(roleId, serverId, data);
+
+    await auditService.log({
+      actorId: userId,
+      action: "ROLE_UPDATE",
+      targetType: "ROLE",
+      targetId: role.id,
+      metadata: {
+        serverId,
+        changes: {
+          name: input.name,
+          permissions: input.permissions,
+          color: input.color,
+        },
+      },
+    });
+
+    return role;
   }
 
-  async deleteRole(roleId: string, serverId: string) {
-    return this.roleRepository.delete(roleId, serverId);
+  async deleteRole(roleId: string, serverId: string, userId: string) {
+    const role = await this.roleRepository.findById(roleId, serverId);
+
+    if (!role) {
+      throw new NotFoundError("Role tidak ditemukan");
+    }
+
+    await this.roleRepository.delete(roleId, serverId);
+
+    await auditService.log({
+      actorId: userId,
+      action: "ROLE_DELETE",
+      targetType: "ROLE",
+      targetId: roleId,
+      metadata: {
+        serverId,
+        name: role.name,
+      },
+    });
   }
 }
+
+export const roleService = new RoleService();

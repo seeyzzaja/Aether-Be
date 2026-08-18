@@ -1,13 +1,19 @@
 import { createClient } from "redis";
 
 import { config } from "#config/env";
+import { logger } from "#shared/logger/logger";
 
 export const redisClient = createClient({
   url: config.REDIS_URL,
 });
 
 redisClient.on("error", (error) => {
-  console.error("Redis Client Error:", error);
+  logger.error(
+    {
+      err: error,
+    },
+    "Redis client error",
+  );
 });
 
 export async function connectRedis(): Promise<void> {

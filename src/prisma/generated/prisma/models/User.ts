@@ -29,6 +29,7 @@ export type UserMinAggregateOutputType = {
   email: string | null
   username: string | null
   passwordHash: string | null
+  emailVerifiedAt: Date | null
   emailNotificationEnabled: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -40,6 +41,7 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   username: string | null
   passwordHash: string | null
+  emailVerifiedAt: Date | null
   emailNotificationEnabled: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -51,6 +53,7 @@ export type UserCountAggregateOutputType = {
   email: number
   username: number
   passwordHash: number
+  emailVerifiedAt: number
   emailNotificationEnabled: number
   createdAt: number
   updatedAt: number
@@ -64,6 +67,7 @@ export type UserMinAggregateInputType = {
   email?: true
   username?: true
   passwordHash?: true
+  emailVerifiedAt?: true
   emailNotificationEnabled?: true
   createdAt?: true
   updatedAt?: true
@@ -75,6 +79,7 @@ export type UserMaxAggregateInputType = {
   email?: true
   username?: true
   passwordHash?: true
+  emailVerifiedAt?: true
   emailNotificationEnabled?: true
   createdAt?: true
   updatedAt?: true
@@ -86,6 +91,7 @@ export type UserCountAggregateInputType = {
   email?: true
   username?: true
   passwordHash?: true
+  emailVerifiedAt?: true
   emailNotificationEnabled?: true
   createdAt?: true
   updatedAt?: true
@@ -170,6 +176,7 @@ export type UserGroupByOutputType = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt: Date | null
   emailNotificationEnabled: boolean
   createdAt: Date
   updatedAt: Date
@@ -202,6 +209,7 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   username?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
+  emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -214,6 +222,7 @@ export type UserWhereInput = {
   readStates?: Prisma.ChannelReadStateListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   pollVotes?: Prisma.PollVoteListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -221,6 +230,7 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   username?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   emailNotificationEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -233,6 +243,7 @@ export type UserOrderByWithRelationInput = {
   readStates?: Prisma.ChannelReadStateOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   pollVotes?: Prisma.PollVoteOrderByRelationAggregateInput
+  auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -243,6 +254,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   passwordHash?: Prisma.StringFilter<"User"> | string
+  emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -255,6 +267,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   readStates?: Prisma.ChannelReadStateListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   pollVotes?: Prisma.PollVoteListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -262,6 +275,7 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   username?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   emailNotificationEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -279,6 +293,7 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
+  emailVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   emailNotificationEnabled?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -290,6 +305,7 @@ export type UserCreateInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -302,6 +318,7 @@ export type UserCreateInput = {
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -309,6 +326,7 @@ export type UserUncheckedCreateInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -321,6 +339,7 @@ export type UserUncheckedCreateInput = {
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserUpdateInput = {
@@ -328,6 +347,7 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -340,6 +360,7 @@ export type UserUpdateInput = {
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -347,6 +368,7 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -359,6 +381,7 @@ export type UserUncheckedUpdateInput = {
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -366,6 +389,7 @@ export type UserCreateManyInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -377,6 +401,7 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -388,10 +413,16 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
 }
 
 export type UserScalarRelationFilter = {
@@ -404,6 +435,7 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   username?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
   emailNotificationEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -415,6 +447,7 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   username?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
   emailNotificationEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -426,10 +459,27 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   username?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
   emailNotificationEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type UserCreateNestedOneWithoutAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
+  upsert?: Prisma.UserUpsertWithoutAuditLogsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
 }
 
 export type UserCreateNestedOneWithoutReadStatesInput = {
@@ -544,11 +594,108 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
 }
 
+export type UserCreateWithoutAuditLogsInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  emailVerifiedAt?: Date | string | null
+  emailNotificationEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  ownedServers?: Prisma.ServerCreateNestedManyWithoutOwnerInput
+  serverMemberships?: Prisma.ServerMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAuditLogsInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash: string
+  emailVerifiedAt?: Date | string | null
+  emailNotificationEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  ownedServers?: Prisma.ServerUncheckedCreateNestedManyWithoutOwnerInput
+  serverMemberships?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAuditLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+}
+
+export type UserUpsertWithoutAuditLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAuditLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type UserUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  ownedServers?: Prisma.ServerUpdateManyWithoutOwnerNestedInput
+  serverMemberships?: Prisma.ServerMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  ownedServers?: Prisma.ServerUncheckedUpdateManyWithoutOwnerNestedInput
+  serverMemberships?: Prisma.ServerMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutReadStatesInput = {
   id?: string
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -560,6 +707,7 @@ export type UserCreateWithoutReadStatesInput = {
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutReadStatesInput = {
@@ -567,6 +715,7 @@ export type UserUncheckedCreateWithoutReadStatesInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -578,6 +727,7 @@ export type UserUncheckedCreateWithoutReadStatesInput = {
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutReadStatesInput = {
@@ -601,6 +751,7 @@ export type UserUpdateWithoutReadStatesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -612,6 +763,7 @@ export type UserUpdateWithoutReadStatesInput = {
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReadStatesInput = {
@@ -619,6 +771,7 @@ export type UserUncheckedUpdateWithoutReadStatesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -630,6 +783,7 @@ export type UserUncheckedUpdateWithoutReadStatesInput = {
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutMessagesInput = {
@@ -637,6 +791,7 @@ export type UserCreateWithoutMessagesInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -648,6 +803,7 @@ export type UserCreateWithoutMessagesInput = {
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutMessagesInput = {
@@ -655,6 +811,7 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -666,6 +823,7 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutMessagesInput = {
@@ -689,6 +847,7 @@ export type UserUpdateWithoutMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -700,6 +859,7 @@ export type UserUpdateWithoutMessagesInput = {
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMessagesInput = {
@@ -707,6 +867,7 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -718,6 +879,7 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -725,6 +887,7 @@ export type UserCreateWithoutNotificationsInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -736,6 +899,7 @@ export type UserCreateWithoutNotificationsInput = {
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -743,6 +907,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -754,6 +919,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -777,6 +943,7 @@ export type UserUpdateWithoutNotificationsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -788,6 +955,7 @@ export type UserUpdateWithoutNotificationsInput = {
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -795,6 +963,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -806,6 +975,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutPollVotesInput = {
@@ -813,6 +983,7 @@ export type UserCreateWithoutPollVotesInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -824,6 +995,7 @@ export type UserCreateWithoutPollVotesInput = {
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutPollVotesInput = {
@@ -831,6 +1003,7 @@ export type UserUncheckedCreateWithoutPollVotesInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -842,6 +1015,7 @@ export type UserUncheckedCreateWithoutPollVotesInput = {
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutPollVotesInput = {
@@ -865,6 +1039,7 @@ export type UserUpdateWithoutPollVotesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -876,6 +1051,7 @@ export type UserUpdateWithoutPollVotesInput = {
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPollVotesInput = {
@@ -883,6 +1059,7 @@ export type UserUncheckedUpdateWithoutPollVotesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -894,6 +1071,7 @@ export type UserUncheckedUpdateWithoutPollVotesInput = {
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutReactionsInput = {
@@ -901,6 +1079,7 @@ export type UserCreateWithoutReactionsInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -912,6 +1091,7 @@ export type UserCreateWithoutReactionsInput = {
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutReactionsInput = {
@@ -919,6 +1099,7 @@ export type UserUncheckedCreateWithoutReactionsInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -930,6 +1111,7 @@ export type UserUncheckedCreateWithoutReactionsInput = {
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutReactionsInput = {
@@ -953,6 +1135,7 @@ export type UserUpdateWithoutReactionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -964,6 +1147,7 @@ export type UserUpdateWithoutReactionsInput = {
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReactionsInput = {
@@ -971,6 +1155,7 @@ export type UserUncheckedUpdateWithoutReactionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -982,6 +1167,7 @@ export type UserUncheckedUpdateWithoutReactionsInput = {
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutServerMembershipsInput = {
@@ -989,6 +1175,7 @@ export type UserCreateWithoutServerMembershipsInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1000,6 +1187,7 @@ export type UserCreateWithoutServerMembershipsInput = {
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutServerMembershipsInput = {
@@ -1007,6 +1195,7 @@ export type UserUncheckedCreateWithoutServerMembershipsInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1018,6 +1207,7 @@ export type UserUncheckedCreateWithoutServerMembershipsInput = {
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutServerMembershipsInput = {
@@ -1041,6 +1231,7 @@ export type UserUpdateWithoutServerMembershipsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1052,6 +1243,7 @@ export type UserUpdateWithoutServerMembershipsInput = {
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutServerMembershipsInput = {
@@ -1059,6 +1251,7 @@ export type UserUncheckedUpdateWithoutServerMembershipsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1070,6 +1263,7 @@ export type UserUncheckedUpdateWithoutServerMembershipsInput = {
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutOwnedServersInput = {
@@ -1077,6 +1271,7 @@ export type UserCreateWithoutOwnedServersInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1088,6 +1283,7 @@ export type UserCreateWithoutOwnedServersInput = {
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutOwnedServersInput = {
@@ -1095,6 +1291,7 @@ export type UserUncheckedCreateWithoutOwnedServersInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1106,6 +1303,7 @@ export type UserUncheckedCreateWithoutOwnedServersInput = {
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutOwnedServersInput = {
@@ -1129,6 +1327,7 @@ export type UserUpdateWithoutOwnedServersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1140,6 +1339,7 @@ export type UserUpdateWithoutOwnedServersInput = {
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOwnedServersInput = {
@@ -1147,6 +1347,7 @@ export type UserUncheckedUpdateWithoutOwnedServersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1158,6 +1359,7 @@ export type UserUncheckedUpdateWithoutOwnedServersInput = {
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -1165,6 +1367,7 @@ export type UserCreateWithoutSessionsInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1176,6 +1379,7 @@ export type UserCreateWithoutSessionsInput = {
   readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1183,6 +1387,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   email: string
   username: string
   passwordHash: string
+  emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1194,6 +1399,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1217,6 +1423,7 @@ export type UserUpdateWithoutSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1228,6 +1435,7 @@ export type UserUpdateWithoutSessionsInput = {
   readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1235,6 +1443,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1246,6 +1455,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 
@@ -1262,6 +1472,7 @@ export type UserCountOutputType = {
   readStates: number
   notifications: number
   pollVotes: number
+  auditLogs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1273,6 +1484,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   readStates?: boolean | UserCountOutputTypeCountReadStatesArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   pollVotes?: boolean | UserCountOutputTypeCountPollVotesArgs
+  auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
 }
 
 /**
@@ -1341,12 +1553,20 @@ export type UserCountOutputTypeCountPollVotesArgs<ExtArgs extends runtime.Types.
   where?: Prisma.PollVoteWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditLogWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
   username?: boolean
   passwordHash?: boolean
+  emailVerifiedAt?: boolean
   emailNotificationEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1359,6 +1579,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   readStates?: boolean | Prisma.User$readStatesArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   pollVotes?: boolean | Prisma.User$pollVotesArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1367,6 +1588,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   username?: boolean
   passwordHash?: boolean
+  emailVerifiedAt?: boolean
   emailNotificationEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1378,6 +1600,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   username?: boolean
   passwordHash?: boolean
+  emailVerifiedAt?: boolean
   emailNotificationEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1389,13 +1612,14 @@ export type UserSelectScalar = {
   email?: boolean
   username?: boolean
   passwordHash?: boolean
+  emailVerifiedAt?: boolean
   emailNotificationEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "emailNotificationEnabled" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "emailVerifiedAt" | "emailNotificationEnabled" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   ownedServers?: boolean | Prisma.User$ownedServersArgs<ExtArgs>
@@ -1405,6 +1629,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   readStates?: boolean | Prisma.User$readStatesArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   pollVotes?: boolean | Prisma.User$pollVotesArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1421,12 +1646,14 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     readStates: Prisma.$ChannelReadStatePayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     pollVotes: Prisma.$PollVotePayload<ExtArgs>[]
+    auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
     username: string
     passwordHash: string
+    emailVerifiedAt: Date | null
     emailNotificationEnabled: boolean
     createdAt: Date
     updatedAt: Date
@@ -1833,6 +2060,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readStates<T extends Prisma.User$readStatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$readStatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChannelReadStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pollVotes<T extends Prisma.User$pollVotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pollVotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PollVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1866,6 +2094,7 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
+  readonly emailVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly emailNotificationEnabled: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -2452,6 +2681,30 @@ export type User$pollVotesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.PollVoteScalarFieldEnum | Prisma.PollVoteScalarFieldEnum[]
+}
+
+/**
+ * User.auditLogs
+ */
+export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditLog
+   */
+  select?: Prisma.AuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditLog
+   */
+  omit?: Prisma.AuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditLogInclude<ExtArgs> | null
+  where?: Prisma.AuditLogWhereInput
+  orderBy?: Prisma.AuditLogOrderByWithRelationInput | Prisma.AuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.AuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
 }
 
 /**

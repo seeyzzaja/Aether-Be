@@ -1,4 +1,4 @@
-import type { UploadSignatureInput } from "#modules/upload/schema/upload.schema";
+import type { UploadConfirmInput, UploadSignatureInput } from "#modules/upload/schema/upload.schema";
 export declare class UploadService {
     private getActorPermissions;
     createSignature(userId: string, channelId: string, input: UploadSignatureInput): Promise<{
@@ -12,6 +12,17 @@ export declare class UploadService {
         fileName: string;
         fileType: string;
         fileSize: number;
+    }>;
+    confirmUpload(userId: string, input: UploadConfirmInput): Promise<{
+        channelId: string;
+        fileUrl: any;
+        thumbnailUrl: null;
+        fileType: string;
+        fileSize: any;
+        fileName: string;
+        publicId: any;
+        resourceType: any;
+        format: any;
     }>;
 }
 export declare const uploadService: UploadService;

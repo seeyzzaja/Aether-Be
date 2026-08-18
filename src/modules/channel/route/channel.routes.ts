@@ -1,5 +1,5 @@
 import { Router } from "express";
-
+import { auditLogMiddleware } from "#middlewares/audit-log.middleware";
 import { requireAuth } from "#middlewares/auth-middleware";
 import { channelController } from "#modules/channel/controller/channel.controller";
 
@@ -125,7 +125,23 @@ router.use(requireAuth);
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.post("/:serverId/channel", (req, res, next) => channelController.create(req, res, next));
+router.post(
+  "/:serverId/channel",
+  auditLogMiddleware({
+    action: "CHANNEL_CREATE",
+    targetType: "CHANNEL",
+    getTargetId: (req) => {
+      const { serverId } = req.params;
+
+      if (typeof serverId !== "string") {
+        throw new Error("serverId tidak valid");
+      }
+
+      return serverId;
+    },
+  }),
+  (req, res, next) => channelController.create(req, res, next),
+);
 
 /**
  * @swagger
@@ -401,8 +417,22 @@ router.get("/:serverId/channel/:channelId", (req, res, next) =>
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.patch("/:serverId/channel/:channelId", (req, res, next) =>
-  channelController.update(req, res, next),
+router.patch(
+  "/:serverId/channel/:channelId",
+  auditLogMiddleware({
+    action: "CHANNEL_UPDATE",
+    targetType: "CHANNEL",
+    getTargetId: (req) => {
+      const { channelId } = req.params;
+
+      if (typeof channelId !== "string") {
+        throw new Error("channelId tidak valid");
+      }
+
+      return channelId;
+    },
+  }),
+  (req, res, next) => channelController.update(req, res, next),
 );
 
 /**
@@ -454,10 +484,23 @@ router.patch("/:serverId/channel/:channelId", (req, res, next) =>
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.delete("/:serverId/channel/:channelId", (req, res, next) =>
-  channelController.delete(req, res, next),
-);
+router.delete(
+  "/:serverId/channel/:channelId",
+  auditLogMiddleware({
+    action: "CHANNEL_DELETE",
+    targetType: "CHANNEL",
+    getTargetId: (req) => {
+      const { channelId } = req.params;
 
+      if (typeof channelId !== "string") {
+        throw new Error("channelId tidak valid");
+      }
+
+      return channelId;
+    },
+  }),
+  (req, res, next) => channelController.delete(req, res, next),
+);
 /**
  * @swagger
  * /api/channel/{serverId}/channel/{channelId}/permission-overrides:
@@ -628,8 +671,31 @@ router.get("/:serverId/channel/:channelId/permission-overrides", (req, res, next
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.put("/:serverId/channel/:channelId/permission-overrides/:roleId", (req, res, next) =>
-  channelController.upsertPermissionOverride(req, res, next),
+router.put(
+  "/:serverId/channel/:channelId/permission-overrides/:roleId",
+  auditLogMiddleware({
+    action: "CHANNEL_PERMISSION_OVERRIDE_UPSERT",
+    targetType: "CHANNEL_PERMISSION_OVERRIDE",
+    getTargetId: (req) => {
+      const { channelId } = req.params;
+
+      if (typeof channelId !== "string") {
+        throw new Error("channelId tidak valid");
+      }
+
+      return channelId;
+    },
+    getMetadata: (req) => {
+      const { roleId } = req.params;
+
+      if (typeof roleId !== "string") {
+        throw new Error("roleId tidak valid");
+      }
+
+      return { roleId };
+    },
+  }),
+  (req, res, next) => channelController.upsertPermissionOverride(req, res, next),
 );
 
 /**
@@ -688,7 +754,30 @@ router.put("/:serverId/channel/:channelId/permission-overrides/:roleId", (req, r
  *       500:
  *         description: Terjadi kesalahan internal server
  */
-router.delete("/:serverId/channel/:channelId/permission-overrides/:roleId", (req, res, next) =>
-  channelController.deletePermissionOverride(req, res, next),
+router.delete(
+  "/:serverId/channel/:channelId/permission-overrides/:roleId",
+  auditLogMiddleware({
+    action: "CHANNEL_PERMISSION_OVERRIDE_DELETE",
+    targetType: "CHANNEL_PERMISSION_OVERRIDE",
+    getTargetId: (req) => {
+      const { channelId } = req.params;
+
+      if (typeof channelId !== "string") {
+        throw new Error("channelId tidak valid");
+      }
+
+      return channelId;
+    },
+    getMetadata: (req) => {
+      const { roleId } = req.params;
+
+      if (typeof roleId !== "string") {
+        throw new Error("roleId tidak valid");
+      }
+
+      return { roleId };
+    },
+  }),
+  (req, res, next) => channelController.deletePermissionOverride(req, res, next),
 );
 export default router;

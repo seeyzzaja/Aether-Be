@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/AuditLog.js'
 export type * from './models/Category.js'
 export type * from './models/ChannelPermissionOverride.js'
 export type * from './models/ChannelReadState.js'

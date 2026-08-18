@@ -1,0 +1,1 @@
+{"version":3,"file":"csrf.middleware.d.ts","sourceRoot":"","sources":["../../../src/middlewares/csrf.middleware.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,YAAY,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAS/D,eAAO,MAAM,WAAW,QAAS,OAAO,QAAQ,QAAQ,QAAQ,YAAY,SAuB3E,CAAC"}
