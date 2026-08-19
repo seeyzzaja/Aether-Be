@@ -184,6 +184,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         omit: OmitOpts;
     }>;
     /**
+     * `prisma.dmParticipant`: Exposes CRUD operations for the **DmParticipant** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more DmParticipants
+      * const dmParticipants = await prisma.dmParticipant.findMany()
+      * ```
+      */
+    get dmParticipant(): Prisma.DmParticipantDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
      * `prisma.messageAttachment`: Exposes CRUD operations for the **MessageAttachment** model.
       * Example usage:
       * ```ts

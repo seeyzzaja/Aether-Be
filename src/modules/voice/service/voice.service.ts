@@ -45,7 +45,9 @@ export class VoiceService {
     if (!channel) {
       throw new NotFoundError("Channel tidak ditemukan");
     }
-
+    if (!channel.serverId) {
+      throw new ForbiddenError("Voice channel harus berada di dalam server");
+    }
     const permissions = await this.getActorPermissions(channel.serverId, userId);
 
     if (!hasPermission(permissions, Permission.CONNECT)) {

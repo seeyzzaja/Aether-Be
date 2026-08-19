@@ -26,7 +26,7 @@ export declare class ChannelRepository {
     getNextPosition(serverId: string, categoryId?: string | null): Promise<number>;
     create(serverId: string, data: CreateChannelInput, position: number): Promise<{
         id: string;
-        serverId: string;
+        serverId: string | null;
         categoryId: string | null;
         name: string;
         type: import("../../../prisma/generated/prisma/enums.js").ChannelType;
@@ -35,7 +35,7 @@ export declare class ChannelRepository {
     }>;
     findAllByServerId(serverId: string): Promise<{
         id: string;
-        serverId: string;
+        serverId: string | null;
         categoryId: string | null;
         name: string;
         type: import("../../../prisma/generated/prisma/enums.js").ChannelType;
@@ -44,7 +44,7 @@ export declare class ChannelRepository {
     }[]>;
     findById(channelId: string): Promise<{
         id: string;
-        serverId: string;
+        serverId: string | null;
         categoryId: string | null;
         name: string;
         type: import("../../../prisma/generated/prisma/enums.js").ChannelType;
@@ -53,7 +53,7 @@ export declare class ChannelRepository {
     } | null>;
     update(channelId: string, data: UpdateChannelInput): Promise<{
         id: string;
-        serverId: string;
+        serverId: string | null;
         categoryId: string | null;
         name: string;
         type: import("../../../prisma/generated/prisma/enums.js").ChannelType;
@@ -62,7 +62,7 @@ export declare class ChannelRepository {
     }>;
     delete(channelId: string): Promise<{
         id: string;
-        serverId: string;
+        serverId: string | null;
         categoryId: string | null;
         name: string;
         type: import("../../../prisma/generated/prisma/enums.js").ChannelType;

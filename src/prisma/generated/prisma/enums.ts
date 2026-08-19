@@ -22,7 +22,9 @@ export const ChannelType = {
   VOICE: 'VOICE',
   VIDEO: 'VIDEO',
   FORUM: 'FORUM',
-  ANNOUNCEMENT: 'ANNOUNCEMENT'
+  ANNOUNCEMENT: 'ANNOUNCEMENT',
+  DM: 'DM',
+  GROUP_DM: 'GROUP_DM'
 } as const
 
 export type ChannelType = (typeof ChannelType)[keyof typeof ChannelType]

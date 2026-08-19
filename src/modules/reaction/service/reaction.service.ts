@@ -21,7 +21,15 @@ export class ReactionService {
   async add(messageId: string, userId: string, emoji: string) {
     const message = await this.getMessage(messageId);
 
-    await this.ensureServerMember(message.channel.serverId, userId);
+    if (!message.channel.serverId) {
+      const participant = await messageRepository.findDmParticipant(message.channel.id, userId);
+
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+    } else {
+      await this.ensureServerMember(message.channel.serverId, userId);
+    }
 
     try {
       const reaction = await reactionRepository.create({
@@ -51,7 +59,15 @@ export class ReactionService {
   async remove(messageId: string, userId: string, emoji: string) {
     const message = await this.getMessage(messageId);
 
-    await this.ensureServerMember(message.channel.serverId, userId);
+    if (!message.channel.serverId) {
+      const participant = await messageRepository.findDmParticipant(message.channel.id, userId);
+
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+    } else {
+      await this.ensureServerMember(message.channel.serverId, userId);
+    }
 
     const existingReaction = await reactionRepository.findByMessageUserEmoji(
       messageId,

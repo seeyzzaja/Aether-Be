@@ -39,6 +39,10 @@ export class UploadService {
       throw new NotFoundError("Channel tidak ditemukan");
     }
 
+    if (!channel.serverId || !channel.server) {
+      throw new ForbiddenError("Upload file hanya dapat dilakukan pada channel server");
+    }
+
     const permissions = await this.getActorPermissions(
       channel.serverId,
       userId,
@@ -85,6 +89,10 @@ export class UploadService {
 
     if (!channel) {
       throw new NotFoundError("Channel tidak ditemukan");
+    }
+
+    if (!channel.serverId || !channel.server) {
+      throw new ForbiddenError("Upload file hanya dapat dilakukan pada channel server");
     }
 
     const permissions = await this.getActorPermissions(

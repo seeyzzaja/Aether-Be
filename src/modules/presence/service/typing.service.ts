@@ -1,5 +1,7 @@
 import { channelRepository } from "#modules/channel/repository/channel.repository";
 import { membershipRepository } from "#modules/membership/repository/membership.repository";
+import { messageRepository } from "#modules/message/repository/message.repository";
+import { ForbiddenError, NotFoundError } from "#shared/errors/app-error";
 import { publishWebSocketEvent } from "#shared/redis/redis.publisher";
 import { WebSocketEvent } from "#websocket/constants/events";
 
@@ -16,13 +18,30 @@ export class TypingService {
     const channel = await channelRepository.findById(channelId);
 
     if (!channel) {
-      throw new Error("Channel tidak ditemukan");
+      throw new NotFoundError("Channel tidak ditemukan");
     }
 
-    const member = await membershipRepository.findMember(channel.serverId, userId);
+    /*
+     * DM / GROUP_DM:
+     * Channel conversation tidak memiliki serverId,
+     * sehingga akses harus dicek melalui participant.
+     */
+    if (!channel.serverId) {
+      const participant = await messageRepository.findDmParticipant(channelId, userId);
 
-    if (!member) {
-      throw new Error("Kamu bukan member dari server ini");
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+    } else {
+      /*
+       * Server channel:
+       * User harus merupakan member dari server.
+       */
+      const member = await membershipRepository.findMember(channel.serverId, userId);
+
+      if (!member) {
+        throw new ForbiddenError("Kamu bukan member dari server ini");
+      }
     }
 
     const key = `${userId}:${channelId}`;

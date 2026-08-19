@@ -18,6 +18,7 @@ model User {
   notifications     Notification[]
   pollVotes         PollVote[]
   auditLogs         AuditLog[]
+  dmParticipations  DmParticipant[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

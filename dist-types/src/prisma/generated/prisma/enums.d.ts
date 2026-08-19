@@ -9,6 +9,8 @@ export declare const ChannelType: {
     readonly VIDEO: 'VIDEO';
     readonly FORUM: 'FORUM';
     readonly ANNOUNCEMENT: 'ANNOUNCEMENT';
+    readonly DM: 'DM';
+    readonly GROUP_DM: 'GROUP_DM';
 };
 export type ChannelType = (typeof ChannelType)[keyof typeof ChannelType];
 export declare const OAuthProvider: {

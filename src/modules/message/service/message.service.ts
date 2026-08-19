@@ -262,10 +262,44 @@ export class MessageService {
     return message;
   }
 
-  async create(channelId: string, userId: string, input: CreateMessageInput) {
-    const channel = await this.getChannel(channelId);
+  private async ensureChannelAccess(channelId: string, userId: string) {
+    const channel = await messageRepository.findChannelById(channelId);
 
-    await this.ensureSendMessagesPermission(channel.serverId, channelId, userId);
+    if (!channel) {
+      throw new NotFoundError("Channel tidak ditemukan");
+    }
+
+    if (channel.type === "DM" || channel.type === "GROUP_DM") {
+      const participant = await messageRepository.findDmParticipant(channelId, userId);
+
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+
+      return channel;
+    }
+
+    if (!channel.serverId) {
+      throw new ForbiddenError("Channel tidak memiliki server");
+    }
+
+    await this.ensureViewChannelPermission(channel.serverId, channelId, userId);
+
+    return channel;
+  }
+
+  async create(channelId: string, userId: string, input: CreateMessageInput) {
+    const channel = await this.ensureChannelAccess(channelId, userId);
+
+    if (channel.type === "DM" || channel.type === "GROUP_DM") {
+      // DM dan GROUP_DM tidak menggunakan server permission.
+    } else {
+      if (!channel.serverId) {
+        throw new ForbiddenError("Channel tidak memiliki server");
+      }
+
+      await this.ensureSendMessagesPermission(channel.serverId, channelId, userId);
+    }
 
     if (input.replyToId) {
       await this.ensureValidReplyTarget(input.replyToId, channelId);
@@ -279,6 +313,10 @@ export class MessageService {
     const mentionedRoleIds = parseRoleMentions(input.content);
 
     if (mentionedUserIds.length + mentionedRoleIds.length > 20) {
+      if (!channel.serverId) {
+        throw new ForbiddenError("Mention terlalu banyak pada conversation ini");
+      }
+
       const permissions = await this.getActorPermissions(channel.serverId, userId);
 
       if (!hasPermission(permissions, Permission.MENTION_EVERYONE)) {
@@ -307,81 +345,60 @@ export class MessageService {
       }),
     });
 
-    for (const mentionedUserId of mentionedUserIds) {
-      if (mentionedUserId === userId) {
-        continue;
-      }
+    if (channel.serverId) {
+      for (const mentionedUserId of mentionedUserIds) {
+        if (mentionedUserId === userId) {
+          continue;
+        }
 
-      const mentionedMember = await messageRepository.findServerMember(
-        channel.serverId,
-        mentionedUserId,
-      );
+        const mentionedMember = await messageRepository.findServerMember(
+          channel.serverId,
+          mentionedUserId,
+        );
 
-      if (!mentionedMember) {
-        continue;
-      }
+        if (!mentionedMember) {
+          continue;
+        }
 
-      this.runInBackground(
-        (async () => {
-          const notification = await createUserNotification({
-            userId: mentionedUserId,
-            type: "mention",
-            payload: {
-              messageId: message.id,
-              channelId: message.channelId,
-              serverId: channel.serverId,
-              authorId: message.authorId,
-            },
-          });
-
-          await publishWebSocketEvent({
-            event: WebSocketEvent.NOTIFICATION_CREATED,
-            data: {
+        this.runInBackground(
+          (async () => {
+            const notification = await createUserNotification({
               userId: mentionedUserId,
-              notification,
-            },
-          });
-          const connections = await getPresenceConnections(mentionedUserId);
+              type: "mention",
+              payload: {
+                messageId: message.id,
+                channelId: message.channelId,
+                serverId: channel.serverId,
+                authorId: message.authorId,
+              },
+            });
 
-          if (connections === 0) {
-            await enqueueEmailNotification({
-              userId: mentionedUserId,
-              subject: "You were mentioned in Aether",
-              text: "You were mentioned in a message on Aether.",
-              html: `
+            const connections = await getPresenceConnections(mentionedUserId);
+
+            if (connections === 0) {
+              await enqueueEmailNotification({
+                userId: mentionedUserId,
+                subject: "You were mentioned in Aether",
+                text: "You were mentioned in a message on Aether.",
+                html: `
       <h2>You were mentioned in Aether</h2>
       <p>You have a new mention in Aether.</p>
       <p>Open Aether to see the message.</p>
     `,
-            });
-          }
-          await publishWebSocketEvent({
-            event: WebSocketEvent.MESSAGE_MENTION,
-            data: {
-              messageId: message.id,
-              channelId: message.channelId,
-              serverId: channel.serverId,
-              authorId: message.authorId,
-              mentionedUserId,
-            },
-          });
-        })(),
-        `process mention ${mentionedUserId}`,
-      );
+              });
+            }
+
+            return notification;
+          })(),
+          "create mention notification",
+        );
+      }
     }
 
     const messageWithModeration = {
       ...message,
       moderation: warnings,
     };
-
-    this.runInBackground(
-      publishWebSocketEvent({
-        event: WebSocketEvent.MESSAGE_CREATED,
-        data: messageWithModeration,
-      }),
-      "publish message.created",
-    );
 
     if (warnings.suspiciousLink) {
       this.runInBackground(
@@ -403,13 +420,8 @@ export class MessageService {
 
     const destinationChannel = await this.getChannel(destinationChannelId);
 
-    await this.ensureViewChannelPermission(sourceChannel.serverId, sourceChannel.id, userId);
-
-    await this.ensureSendMessagesPermission(
-      destinationChannel.serverId,
-      destinationChannel.id,
-      userId,
-    );
+    await this.ensureChannelAccess(sourceChannel.id, userId);
+    await this.ensureChannelAccess(destinationChannel.id, userId);
 
     const forwardedMessage = await messageRepository.create({
       channelId: destinationChannel.id,
@@ -444,13 +456,26 @@ export class MessageService {
       throw new NotFoundError("Pesan tidak ditemukan");
     }
 
-    const permissions = await this.getActorPermissions(message.channel.serverId, userId);
-
     const isAuthor = message.authorId === userId;
-    const canManageMessages = hasPermission(permissions, Permission.MANAGE_MESSAGES);
 
-    if (!isAuthor && !canManageMessages) {
-      throw new ForbiddenError("Kamu tidak dapat mengedit pesan ini");
+    if (!message.channel.serverId) {
+      const participant = await messageRepository.findDmParticipant(message.channel.id, userId);
+
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+
+      if (!isAuthor) {
+        throw new ForbiddenError("Kamu tidak dapat mengedit pesan ini");
+      }
+    } else {
+      const permissions = await this.getActorPermissions(message.channel.serverId, userId);
+
+      const canManageMessages = hasPermission(permissions, Permission.MANAGE_MESSAGES);
+
+      if (!isAuthor && !canManageMessages) {
+        throw new ForbiddenError("Kamu tidak dapat mengedit pesan ini");
+      }
     }
 
     const updatedMessage = await messageRepository.update(messageId, {
@@ -472,13 +497,26 @@ export class MessageService {
       throw new NotFoundError("Pesan tidak ditemukan");
     }
 
-    const permissions = await this.getActorPermissions(message.channel.serverId, userId);
-
     const isAuthor = message.authorId === userId;
-    const canManageMessages = hasPermission(permissions, Permission.MANAGE_MESSAGES);
 
-    if (!isAuthor && !canManageMessages) {
-      throw new ForbiddenError("Kamu tidak dapat menghapus pesan ini");
+    if (!message.channel.serverId) {
+      const participant = await messageRepository.findDmParticipant(message.channel.id, userId);
+
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+
+      if (!isAuthor) {
+        throw new ForbiddenError("Kamu tidak dapat menghapus pesan ini");
+      }
+    } else {
+      const permissions = await this.getActorPermissions(message.channel.serverId, userId);
+
+      const canManageMessages = hasPermission(permissions, Permission.MANAGE_MESSAGES);
+
+      if (!isAuthor && !canManageMessages) {
+        throw new ForbiddenError("Kamu tidak dapat menghapus pesan ini");
+      }
     }
 
     const deletedMessage = await messageRepository.softDelete(messageId);
@@ -539,6 +577,10 @@ export class MessageService {
       throw new NotFoundError("Pesan tidak ditemukan");
     }
 
+    if (!message.channel.serverId) {
+      throw new ForbiddenError("Pesan pada conversation tidak dapat disematkan");
+    }
+
     const permissions = await this.getActorPermissions(message.channel.serverId, userId);
 
     if (!hasPermission(permissions, Permission.MANAGE_MESSAGES)) {
@@ -566,6 +608,10 @@ export class MessageService {
 
     if (message.isDeleted) {
       throw new NotFoundError("Pesan tidak ditemukan");
+    }
+
+    if (!message.channel.serverId) {
+      throw new ForbiddenError("Pesan pada conversation tidak dapat dilepas sematannya");
     }
 
     const permissions = await this.getActorPermissions(message.channel.serverId, userId);
@@ -646,6 +692,10 @@ export class MessageService {
 
     if (rootMessage.isDeleted) {
       throw new NotFoundError("Thread root message tidak ditemukan");
+    }
+
+    if (!rootMessage.channel.serverId) {
+      throw new ForbiddenError("Thread hanya tersedia pada channel server");
     }
 
     await this.ensureSendMessagesPermission(

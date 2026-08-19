@@ -4,8 +4,8 @@ export declare class UploadRepository {
         server: {
             id: string;
             ownerId: string;
-        };
-        serverId: string;
+        } | null;
+        serverId: string | null;
     } | null>;
     findMemberPermissions(serverId: string, userId: string): Promise<{
         id: string;

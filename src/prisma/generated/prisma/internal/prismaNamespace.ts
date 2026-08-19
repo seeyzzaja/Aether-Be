@@ -403,6 +403,7 @@ export const ModelName = {
   ChannelPermissionOverride: 'ChannelPermissionOverride',
   ChannelReadState: 'ChannelReadState',
   Channel: 'Channel',
+  DmParticipant: 'DmParticipant',
   MessageAttachment: 'MessageAttachment',
   Message: 'Message',
   Notification: 'Notification',
@@ -432,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "auditLog" | "authToken" | "category" | "channelPermissionOverride" | "channelReadState" | "channel" | "messageAttachment" | "message" | "notification" | "oAuthAccount" | "poll" | "pollOption" | "pollVote" | "reaction" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user"
+    modelProps: "auditLog" | "authToken" | "category" | "channelPermissionOverride" | "channelReadState" | "channel" | "dmParticipant" | "messageAttachment" | "message" | "notification" | "oAuthAccount" | "poll" | "pollOption" | "pollVote" | "reaction" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -877,6 +878,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ChannelCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ChannelCountAggregateOutputType> | number
+        }
+      }
+    }
+    DmParticipant: {
+      payload: Prisma.$DmParticipantPayload<ExtArgs>
+      fields: Prisma.DmParticipantFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DmParticipantFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DmParticipantPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DmParticipantFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DmParticipantPayload>
+        }
+        findFirst: {
+          args: Prisma.DmParticipantFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DmParticipantPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DmParticipantFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DmParticipantPayload>
+        }
+        findMany: {
+          args: Prisma.DmParticipantFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DmParticipantPayload>[]
+        }
+        create: {
+          args: Prisma.DmParticipantCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DmParticipantPayload>
+        }
+        createMany: {
+          args: Prisma.DmParticipantCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DmParticipantCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DmParticipantPayload>[]
+        }
+        delete: {
+          args: Prisma.DmParticipantDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DmParticipantPayload>
+        }
+        update: {
+          args: Prisma.DmParticipantUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DmParticipantPayload>
+        }
+        deleteMany: {
+          args: Prisma.DmParticipantDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DmParticipantUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DmParticipantUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DmParticipantPayload>[]
+        }
+        upsert: {
+          args: Prisma.DmParticipantUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DmParticipantPayload>
+        }
+        aggregate: {
+          args: Prisma.DmParticipantAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDmParticipant>
+        }
+        groupBy: {
+          args: Prisma.DmParticipantGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DmParticipantGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DmParticipantCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DmParticipantCountAggregateOutputType> | number
         }
       }
     }
@@ -2033,6 +2108,15 @@ export const ChannelScalarFieldEnum = {
 export type ChannelScalarFieldEnum = (typeof ChannelScalarFieldEnum)[keyof typeof ChannelScalarFieldEnum]
 
 
+export const DmParticipantScalarFieldEnum = {
+  channelId: 'channelId',
+  userId: 'userId',
+  joinedAt: 'joinedAt'
+} as const
+
+export type DmParticipantScalarFieldEnum = (typeof DmParticipantScalarFieldEnum)[keyof typeof DmParticipantScalarFieldEnum]
+
+
 export const MessageAttachmentScalarFieldEnum = {
   id: 'id',
   messageId: 'messageId',
@@ -2552,6 +2636,7 @@ export type GlobalOmitConfig = {
   channelPermissionOverride?: Prisma.ChannelPermissionOverrideOmit
   channelReadState?: Prisma.ChannelReadStateOmit
   channel?: Prisma.ChannelOmit
+  dmParticipant?: Prisma.DmParticipantOmit
   messageAttachment?: Prisma.MessageAttachmentOmit
   message?: Prisma.MessageOmit
   notification?: Prisma.NotificationOmit

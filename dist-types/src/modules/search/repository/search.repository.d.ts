@@ -12,7 +12,7 @@ export declare class SearchRepository {
     } | null>;
     findChannel(channelId: string): Promise<{
         id: string;
-        serverId: string;
+        serverId: string | null;
     } | null>;
     searchMessages(serverId: string, query: string, options?: {
         channelId?: string;
