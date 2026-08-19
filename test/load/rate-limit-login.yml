@@ -1,0 +1,17 @@
+config:
+  target: "http://localhost"
+  phases:
+    - name: "Rate limit test"
+      duration: 15
+      arrivalRate: 10
+
+scenarios:
+  - name: "Login rate limit"
+    flow:
+      - post:
+          url: "/api/auth/login"
+          headers:
+            Content-Type: "application/json"
+          json:
+            email: "{{ $processEnvironment.LOADTEST_EMAIL }}"
+            password: "{{ $processEnvironment.LOADTEST_PASSWORD }}"

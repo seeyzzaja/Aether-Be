@@ -1,0 +1,34 @@
+config:
+  target: "http://localhost"
+
+  phases:
+    - duration: 30
+      arrivalRate: 20
+      name: "Baseline 20 req/s"
+
+    - duration: 30
+      arrivalRate: 50
+      name: "Load 50 req/s"
+
+    - duration: 30
+      arrivalRate: 100
+      name: "Load 100 req/s"
+
+    - duration: 30
+      arrivalRate: 200
+      name: "Stress 200 req/s"
+
+    - duration: 30
+      arrivalRate: 300
+      name: "Stress 300 req/s"
+
+scenarios:
+  - name: "Message capacity test"
+    flow:
+      - post:
+          url: "/api/message/{{ loadtest_channel_id }}"
+          headers:
+            Authorization: "Bearer {{ loadtest_token }}"
+            Content-Type: "application/json"
+          json:
+            content: "Capacity test {{ $randomString() }}"
