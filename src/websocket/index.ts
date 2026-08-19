@@ -1,3 +1,5 @@
+import { clearPresenceOfflineTimers } from "#modules/presence/service/presence.grace-period";
+import { disconnectQueueConnection } from "#shared/queue/redis.connection";
 import { subscribeWebSocketEvents } from "#shared/redis/redis.subscriber";
 import { broadcastRedisEvent } from "#websocket/broadcast";
 import { registerGateway } from "./gateway.js";
@@ -8,9 +10,22 @@ export async function startWebSocketServer(port: number) {
 
   registerGateway(wss);
 
-  await subscribeWebSocketEvents((message) => {
+  const subscriber = await subscribeWebSocketEvents((message) => {
     broadcastRedisEvent(message);
   });
 
-  return wss;
+  return {
+    wss,
+    close: async () => {
+      clearPresenceOfflineTimers();
+
+      await subscriber.quit();
+
+      await disconnectQueueConnection();
+
+      await new Promise<void>((resolve) => {
+        wss.close(() => resolve());
+      });
+    },
+  };
 }

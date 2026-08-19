@@ -80,7 +80,31 @@ export class MessageService {
     );
   }
 
-  private async ensureSendMessagesPermission(serverId: string, channelId: string, userId: string) {
+  private async ensureSendMessagesPermission(
+    serverId: string | null,
+    channelId: string,
+    userId: string,
+  ) {
+    const channel = await messageRepository.findChannelById(channelId);
+
+    if (!channel) {
+      throw new NotFoundError("Channel tidak ditemukan");
+    }
+
+    if (channel.type === "DM" || channel.type === "GROUP_DM") {
+      const participant = await messageRepository.findDmParticipant(channelId, userId);
+
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+
+      return 0n;
+    }
+
+    if (!serverId) {
+      throw new ForbiddenError("Channel tidak terhubung ke server");
+    }
+
     const serverPermissions = await this.getActorPermissions(serverId, userId);
 
     if (hasPermission(serverPermissions, Permission.ADMINISTRATOR)) {
@@ -105,7 +129,31 @@ export class MessageService {
 
     return channelPermissions;
   }
-  private async ensureViewChannelPermission(serverId: string, channelId: string, userId: string) {
+  private async ensureViewChannelPermission(
+    serverId: string | null,
+    channelId: string,
+    userId: string,
+  ) {
+    const channel = await messageRepository.findChannelById(channelId);
+
+    if (!channel) {
+      throw new NotFoundError("Channel tidak ditemukan");
+    }
+
+    if (channel.type === "DM" || channel.type === "GROUP_DM") {
+      const participant = await messageRepository.findDmParticipant(channelId, userId);
+
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+
+      return 0n;
+    }
+
+    if (!serverId) {
+      throw new ForbiddenError("Channel tidak terhubung ke server");
+    }
+
     const serverPermissions = await this.getActorPermissions(serverId, userId);
 
     if (hasPermission(serverPermissions, Permission.ADMINISTRATOR)) {
@@ -261,7 +309,9 @@ export class MessageService {
 
     return message;
   }
-
+  async authorizeChannelAccess(channelId: string, userId: string): Promise<void> {
+    await this.ensureChannelAccess(channelId, userId);
+  }
   private async ensureChannelAccess(channelId: string, userId: string) {
     const channel = await messageRepository.findChannelById(channelId);
 
@@ -578,13 +628,17 @@ export class MessageService {
     }
 
     if (!message.channel.serverId) {
-      throw new ForbiddenError("Pesan pada conversation tidak dapat disematkan");
-    }
+      const participant = await messageRepository.findDmParticipant(message.channel.id, userId);
 
-    const permissions = await this.getActorPermissions(message.channel.serverId, userId);
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+    } else {
+      const permissions = await this.getActorPermissions(message.channel.serverId, userId);
 
-    if (!hasPermission(permissions, Permission.MANAGE_MESSAGES)) {
-      throw new ForbiddenError("Kamu tidak memiliki permission untuk menyematkan pesan");
+      if (!hasPermission(permissions, Permission.MANAGE_MESSAGES)) {
+        throw new ForbiddenError("Kamu tidak memiliki permission untuk menyematkan pesan");
+      }
     }
 
     if (message.isPinned) {
@@ -611,13 +665,17 @@ export class MessageService {
     }
 
     if (!message.channel.serverId) {
-      throw new ForbiddenError("Pesan pada conversation tidak dapat dilepas sematannya");
-    }
+      const participant = await messageRepository.findDmParticipant(message.channel.id, userId);
 
-    const permissions = await this.getActorPermissions(message.channel.serverId, userId);
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+    } else {
+      const permissions = await this.getActorPermissions(message.channel.serverId, userId);
 
-    if (!hasPermission(permissions, Permission.MANAGE_MESSAGES)) {
-      throw new ForbiddenError("Kamu tidak memiliki permission untuk melepas sematan pesan");
+      if (!hasPermission(permissions, Permission.MANAGE_MESSAGES)) {
+        throw new ForbiddenError("Kamu tidak memiliki permission untuk melepas sematan pesan");
+      }
     }
 
     if (!message.isPinned) {
@@ -692,10 +750,6 @@ export class MessageService {
 
     if (rootMessage.isDeleted) {
       throw new NotFoundError("Thread root message tidak ditemukan");
-    }
-
-    if (!rootMessage.channel.serverId) {
-      throw new ForbiddenError("Thread hanya tersedia pada channel server");
     }
 
     await this.ensureSendMessagesPermission(

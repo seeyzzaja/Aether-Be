@@ -14,7 +14,7 @@ export declare class ReactionService {
         emoji: string;
         createdAt: Date;
     }>;
-    list(messageId: string): Promise<{
+    list(messageId: string, userId: string): Promise<{
         id: string;
         messageId: string;
         userId: string;

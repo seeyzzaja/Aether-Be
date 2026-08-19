@@ -8,7 +8,7 @@ build/
 
 # enviromemnt
 .env
-
+.env.test
 
 #os
 .DS_Store

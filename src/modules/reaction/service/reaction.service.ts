@@ -86,8 +86,18 @@ export class ReactionService {
     return reaction;
   }
 
-  async list(messageId: string) {
-    await this.getMessage(messageId);
+  async list(messageId: string, userId: string) {
+    const message = await this.getMessage(messageId);
+
+    if (!message.channel.serverId) {
+      const participant = await messageRepository.findDmParticipant(message.channel.id, userId);
+
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+    } else {
+      await this.ensureServerMember(message.channel.serverId, userId);
+    }
 
     return reactionRepository.findByMessageId(messageId);
   }

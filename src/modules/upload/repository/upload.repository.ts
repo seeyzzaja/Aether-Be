@@ -8,6 +8,7 @@ export class UploadRepository {
       },
       select: {
         id: true,
+        type: true,
         serverId: true,
         server: {
           select: {
@@ -15,6 +16,21 @@ export class UploadRepository {
             ownerId: true,
           },
         },
+      },
+    });
+  }
+
+  async findDmParticipant(channelId: string, userId: string) {
+    return prisma.dmParticipant.findUnique({
+      where: {
+        channelId_userId: {
+          channelId,
+          userId,
+        },
+      },
+      select: {
+        channelId: true,
+        userId: true,
       },
     });
   }

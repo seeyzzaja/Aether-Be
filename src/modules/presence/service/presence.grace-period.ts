@@ -67,3 +67,13 @@ export function cancelPresenceOffline(userId: string): void {
     "Presence offline timer cancelled",
   );
 }
+
+export function clearPresenceOfflineTimers(): void {
+  for (const timer of timers.values()) {
+    clearTimeout(timer);
+  }
+
+  timers.clear();
+
+  logger.debug("All presence offline timers cleared");
+}

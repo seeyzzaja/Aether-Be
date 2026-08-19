@@ -17,6 +17,7 @@ export declare class MessageService {
     private flagAntiSpamThrottle;
     private flagSuspiciousLinkWarning;
     private getMessage;
+    authorizeChannelAccess(channelId: string, userId: string): Promise<void>;
     private ensureChannelAccess;
     create(channelId: string, userId: string, input: CreateMessageInput): Promise<{
         id: string;
