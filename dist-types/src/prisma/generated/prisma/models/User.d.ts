@@ -181,6 +181,7 @@ export type UserWhereInput = {
     notifications?: Prisma.NotificationListRelationFilter;
     pollVotes?: Prisma.PollVoteListRelationFilter;
     auditLogs?: Prisma.AuditLogListRelationFilter;
+    dmParticipations?: Prisma.DmParticipantListRelationFilter;
 };
 export type UserOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -203,6 +204,7 @@ export type UserOrderByWithRelationInput = {
     notifications?: Prisma.NotificationOrderByRelationAggregateInput;
     pollVotes?: Prisma.PollVoteOrderByRelationAggregateInput;
     auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput;
+    dmParticipations?: Prisma.DmParticipantOrderByRelationAggregateInput;
 };
 export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -228,6 +230,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     notifications?: Prisma.NotificationListRelationFilter;
     pollVotes?: Prisma.PollVoteListRelationFilter;
     auditLogs?: Prisma.AuditLogListRelationFilter;
+    dmParticipations?: Prisma.DmParticipantListRelationFilter;
 }, "id" | "email" | "username">;
 export type UserOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -278,6 +281,7 @@ export type UserCreateInput = {
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateInput = {
     id?: string;
@@ -300,6 +304,7 @@ export type UserUncheckedCreateInput = {
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -322,6 +327,7 @@ export type UserUpdateInput = {
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -344,6 +350,7 @@ export type UserUncheckedUpdateInput = {
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateManyInput = {
     id?: string;
@@ -456,6 +463,18 @@ export type UserUpdateOneRequiredWithoutReadStatesNestedInput = {
     upsert?: Prisma.UserUpsertWithoutReadStatesInput;
     connect?: Prisma.UserWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReadStatesInput, Prisma.UserUpdateWithoutReadStatesInput>, Prisma.UserUncheckedUpdateWithoutReadStatesInput>;
+};
+export type UserCreateNestedOneWithoutDmParticipationsInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutDmParticipationsInput, Prisma.UserUncheckedCreateWithoutDmParticipationsInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutDmParticipationsInput;
+    connect?: Prisma.UserWhereUniqueInput;
+};
+export type UserUpdateOneRequiredWithoutDmParticipationsNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutDmParticipationsInput, Prisma.UserUncheckedCreateWithoutDmParticipationsInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutDmParticipationsInput;
+    upsert?: Prisma.UserUpsertWithoutDmParticipationsInput;
+    connect?: Prisma.UserWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDmParticipationsInput, Prisma.UserUpdateWithoutDmParticipationsInput>, Prisma.UserUncheckedUpdateWithoutDmParticipationsInput>;
 };
 export type UserCreateNestedOneWithoutMessagesInput = {
     create?: Prisma.XOR<Prisma.UserCreateWithoutMessagesInput, Prisma.UserUncheckedCreateWithoutMessagesInput>;
@@ -573,6 +592,7 @@ export type UserCreateWithoutAuditLogsInput = {
     readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput;
+    dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutAuditLogsInput = {
     id?: string;
@@ -594,6 +614,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
     readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutAuditLogsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -628,6 +649,7 @@ export type UserUpdateWithoutAuditLogsInput = {
     readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput;
+    dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -649,6 +671,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
     readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutAuthTokensInput = {
     id?: string;
@@ -670,6 +693,7 @@ export type UserCreateWithoutAuthTokensInput = {
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutAuthTokensInput = {
     id?: string;
@@ -691,6 +715,7 @@ export type UserUncheckedCreateWithoutAuthTokensInput = {
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutAuthTokensInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -725,6 +750,7 @@ export type UserUpdateWithoutAuthTokensInput = {
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutAuthTokensInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -746,6 +772,7 @@ export type UserUncheckedUpdateWithoutAuthTokensInput = {
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutReadStatesInput = {
     id?: string;
@@ -767,6 +794,7 @@ export type UserCreateWithoutReadStatesInput = {
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutReadStatesInput = {
     id?: string;
@@ -788,6 +816,7 @@ export type UserUncheckedCreateWithoutReadStatesInput = {
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutReadStatesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -822,6 +851,7 @@ export type UserUpdateWithoutReadStatesInput = {
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutReadStatesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -840,6 +870,108 @@ export type UserUncheckedUpdateWithoutReadStatesInput = {
     serverMemberships?: Prisma.ServerMemberUncheckedUpdateManyWithoutUserNestedInput;
     messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput;
     reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput;
+    auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput;
+};
+export type UserCreateWithoutDmParticipationsInput = {
+    id?: string;
+    email: string;
+    username: string;
+    passwordHash?: string | null;
+    emailVerifiedAt?: Date | string | null;
+    emailNotificationEnabled?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
+    oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput;
+    authTokens?: Prisma.AuthTokenCreateNestedManyWithoutUserInput;
+    ownedServers?: Prisma.ServerCreateNestedManyWithoutOwnerInput;
+    serverMemberships?: Prisma.ServerMemberCreateNestedManyWithoutUserInput;
+    messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput;
+    reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput;
+    readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput;
+    notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput;
+    auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput;
+};
+export type UserUncheckedCreateWithoutDmParticipationsInput = {
+    id?: string;
+    email: string;
+    username: string;
+    passwordHash?: string | null;
+    emailVerifiedAt?: Date | string | null;
+    emailNotificationEnabled?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    deletedAt?: Date | string | null;
+    sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
+    oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput;
+    authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutUserInput;
+    ownedServers?: Prisma.ServerUncheckedCreateNestedManyWithoutOwnerInput;
+    serverMemberships?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutUserInput;
+    messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput;
+    reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput;
+    readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput;
+    auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput;
+};
+export type UserCreateOrConnectWithoutDmParticipationsInput = {
+    where: Prisma.UserWhereUniqueInput;
+    create: Prisma.XOR<Prisma.UserCreateWithoutDmParticipationsInput, Prisma.UserUncheckedCreateWithoutDmParticipationsInput>;
+};
+export type UserUpsertWithoutDmParticipationsInput = {
+    update: Prisma.XOR<Prisma.UserUpdateWithoutDmParticipationsInput, Prisma.UserUncheckedUpdateWithoutDmParticipationsInput>;
+    create: Prisma.XOR<Prisma.UserCreateWithoutDmParticipationsInput, Prisma.UserUncheckedCreateWithoutDmParticipationsInput>;
+    where?: Prisma.UserWhereInput;
+};
+export type UserUpdateToOneWithWhereWithoutDmParticipationsInput = {
+    where?: Prisma.UserWhereInput;
+    data: Prisma.XOR<Prisma.UserUpdateWithoutDmParticipationsInput, Prisma.UserUncheckedUpdateWithoutDmParticipationsInput>;
+};
+export type UserUpdateWithoutDmParticipationsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    username?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput;
+    oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput;
+    authTokens?: Prisma.AuthTokenUpdateManyWithoutUserNestedInput;
+    ownedServers?: Prisma.ServerUpdateManyWithoutOwnerNestedInput;
+    serverMemberships?: Prisma.ServerMemberUpdateManyWithoutUserNestedInput;
+    messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput;
+    reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput;
+    readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput;
+    notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput;
+    auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput;
+};
+export type UserUncheckedUpdateWithoutDmParticipationsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    username?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput;
+    oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput;
+    authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutUserNestedInput;
+    ownedServers?: Prisma.ServerUncheckedUpdateManyWithoutOwnerNestedInput;
+    serverMemberships?: Prisma.ServerMemberUncheckedUpdateManyWithoutUserNestedInput;
+    messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput;
+    reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput;
+    readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput;
@@ -864,6 +996,7 @@ export type UserCreateWithoutMessagesInput = {
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutMessagesInput = {
     id?: string;
@@ -885,6 +1018,7 @@ export type UserUncheckedCreateWithoutMessagesInput = {
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutMessagesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -919,6 +1053,7 @@ export type UserUpdateWithoutMessagesInput = {
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutMessagesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -940,6 +1075,7 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutNotificationsInput = {
     id?: string;
@@ -961,6 +1097,7 @@ export type UserCreateWithoutNotificationsInput = {
     readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutNotificationsInput = {
     id?: string;
@@ -982,6 +1119,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
     readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutNotificationsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1016,6 +1154,7 @@ export type UserUpdateWithoutNotificationsInput = {
     readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutNotificationsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1037,6 +1176,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
     readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutOauthAccountsInput = {
     id?: string;
@@ -1058,6 +1198,7 @@ export type UserCreateWithoutOauthAccountsInput = {
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutOauthAccountsInput = {
     id?: string;
@@ -1079,6 +1220,7 @@ export type UserUncheckedCreateWithoutOauthAccountsInput = {
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutOauthAccountsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1113,6 +1255,7 @@ export type UserUpdateWithoutOauthAccountsInput = {
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutOauthAccountsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1134,6 +1277,7 @@ export type UserUncheckedUpdateWithoutOauthAccountsInput = {
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutPollVotesInput = {
     id?: string;
@@ -1155,6 +1299,7 @@ export type UserCreateWithoutPollVotesInput = {
     readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutPollVotesInput = {
     id?: string;
@@ -1176,6 +1321,7 @@ export type UserUncheckedCreateWithoutPollVotesInput = {
     readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutPollVotesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1210,6 +1356,7 @@ export type UserUpdateWithoutPollVotesInput = {
     readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutPollVotesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1231,6 +1378,7 @@ export type UserUncheckedUpdateWithoutPollVotesInput = {
     readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutReactionsInput = {
     id?: string;
@@ -1252,6 +1400,7 @@ export type UserCreateWithoutReactionsInput = {
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutReactionsInput = {
     id?: string;
@@ -1273,6 +1422,7 @@ export type UserUncheckedCreateWithoutReactionsInput = {
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutReactionsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1307,6 +1457,7 @@ export type UserUpdateWithoutReactionsInput = {
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutReactionsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1328,6 +1479,7 @@ export type UserUncheckedUpdateWithoutReactionsInput = {
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutServerMembershipsInput = {
     id?: string;
@@ -1349,6 +1501,7 @@ export type UserCreateWithoutServerMembershipsInput = {
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutServerMembershipsInput = {
     id?: string;
@@ -1370,6 +1523,7 @@ export type UserUncheckedCreateWithoutServerMembershipsInput = {
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutServerMembershipsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1404,6 +1558,7 @@ export type UserUpdateWithoutServerMembershipsInput = {
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutServerMembershipsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1425,6 +1580,7 @@ export type UserUncheckedUpdateWithoutServerMembershipsInput = {
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutOwnedServersInput = {
     id?: string;
@@ -1446,6 +1602,7 @@ export type UserCreateWithoutOwnedServersInput = {
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutOwnedServersInput = {
     id?: string;
@@ -1467,6 +1624,7 @@ export type UserUncheckedCreateWithoutOwnedServersInput = {
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutOwnedServersInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1501,6 +1659,7 @@ export type UserUpdateWithoutOwnedServersInput = {
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutOwnedServersInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1522,6 +1681,7 @@ export type UserUncheckedUpdateWithoutOwnedServersInput = {
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutSessionsInput = {
     id?: string;
@@ -1543,6 +1703,7 @@ export type UserCreateWithoutSessionsInput = {
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutSessionsInput = {
     id?: string;
@@ -1564,6 +1725,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput;
     auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutSessionsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1598,6 +1760,7 @@ export type UserUpdateWithoutSessionsInput = {
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutSessionsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1619,6 +1782,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput;
     auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput;
+    dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput;
 };
 /**
  * Count Type UserCountOutputType
@@ -1635,6 +1799,7 @@ export type UserCountOutputType = {
     notifications: number;
     pollVotes: number;
     auditLogs: number;
+    dmParticipations: number;
 };
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs;
@@ -1648,6 +1813,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs;
     pollVotes?: boolean | UserCountOutputTypeCountPollVotesArgs;
     auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs;
+    dmParticipations?: boolean | UserCountOutputTypeCountDmParticipationsArgs;
 };
 /**
  * UserCountOutputType without action
@@ -1724,6 +1890,12 @@ export type UserCountOutputTypeCountPollVotesArgs<ExtArgs extends runtime.Types.
 export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.AuditLogWhereInput;
 };
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDmParticipationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.DmParticipantWhereInput;
+};
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     email?: boolean;
@@ -1745,6 +1917,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>;
     pollVotes?: boolean | Prisma.User$pollVotesArgs<ExtArgs>;
     auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>;
+    dmParticipations?: boolean | Prisma.User$dmParticipationsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1793,6 +1966,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>;
     pollVotes?: boolean | Prisma.User$pollVotesArgs<ExtArgs>;
     auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>;
+    dmParticipations?: boolean | Prisma.User$dmParticipationsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {};
@@ -1811,6 +1985,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         notifications: Prisma.$NotificationPayload<ExtArgs>[];
         pollVotes: Prisma.$PollVotePayload<ExtArgs>[];
         auditLogs: Prisma.$AuditLogPayload<ExtArgs>[];
+        dmParticipations: Prisma.$DmParticipantPayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
@@ -2162,6 +2337,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
     notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     pollVotes<T extends Prisma.User$pollVotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pollVotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PollVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    dmParticipations<T extends Prisma.User$dmParticipationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$dmParticipationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DmParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2823,6 +2999,29 @@ export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.Internal
     take?: number;
     skip?: number;
     distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[];
+};
+/**
+ * User.dmParticipations
+ */
+export type User$dmParticipationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DmParticipant
+     */
+    select?: Prisma.DmParticipantSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the DmParticipant
+     */
+    omit?: Prisma.DmParticipantOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.DmParticipantInclude<ExtArgs> | null;
+    where?: Prisma.DmParticipantWhereInput;
+    orderBy?: Prisma.DmParticipantOrderByWithRelationInput | Prisma.DmParticipantOrderByWithRelationInput[];
+    cursor?: Prisma.DmParticipantWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.DmParticipantScalarFieldEnum | Prisma.DmParticipantScalarFieldEnum[];
 };
 /**
  * User without action

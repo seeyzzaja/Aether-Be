@@ -435,6 +435,20 @@ export class MessageRepository {
       },
     });
   }
+  async findDmParticipant(channelId: string, userId: string) {
+    return prisma.dmParticipant.findUnique({
+      where: {
+        channelId_userId: {
+          channelId,
+          userId,
+        },
+      },
+      select: {
+        channelId: true,
+        userId: true,
+      },
+    });
+  }
 }
 
 export const messageRepository = new MessageRepository();

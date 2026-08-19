@@ -278,6 +278,10 @@ export type ServerScalarRelationFilter = {
     is?: Prisma.ServerWhereInput;
     isNot?: Prisma.ServerWhereInput;
 };
+export type ServerNullableScalarRelationFilter = {
+    is?: Prisma.ServerWhereInput | null;
+    isNot?: Prisma.ServerWhereInput | null;
+};
 export type ServerCountOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     ownerId?: Prisma.SortOrder;
@@ -327,10 +331,12 @@ export type ServerCreateNestedOneWithoutChannelsInput = {
     connectOrCreate?: Prisma.ServerCreateOrConnectWithoutChannelsInput;
     connect?: Prisma.ServerWhereUniqueInput;
 };
-export type ServerUpdateOneRequiredWithoutChannelsNestedInput = {
+export type ServerUpdateOneWithoutChannelsNestedInput = {
     create?: Prisma.XOR<Prisma.ServerCreateWithoutChannelsInput, Prisma.ServerUncheckedCreateWithoutChannelsInput>;
     connectOrCreate?: Prisma.ServerCreateOrConnectWithoutChannelsInput;
     upsert?: Prisma.ServerUpsertWithoutChannelsInput;
+    disconnect?: Prisma.ServerWhereInput | boolean;
+    delete?: Prisma.ServerWhereInput | boolean;
     connect?: Prisma.ServerWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.ServerUpdateToOneWithWhereWithoutChannelsInput, Prisma.ServerUpdateWithoutChannelsInput>, Prisma.ServerUncheckedUpdateWithoutChannelsInput>;
 };

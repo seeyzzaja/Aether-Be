@@ -67,7 +67,9 @@ export class PollService {
     if (message.poll) {
       throw new ForbiddenError("Pesan ini sudah memiliki poll");
     }
-
+    if (!message.channel.serverId) {
+      throw new ForbiddenError("Poll hanya tersedia pada channel server");
+    }
     await this.ensurePermission(
       message.channel.serverId,
       message.channelId,
@@ -106,7 +108,9 @@ export class PollService {
     if (poll.message.isDeleted) {
       throw new NotFoundError("Poll tidak ditemukan");
     }
-
+    if (!poll.message.channel.serverId) {
+      throw new ForbiddenError("Poll hanya tersedia pada channel server");
+    }
     await this.ensurePermission(
       poll.message.channel.serverId,
       poll.message.channelId,

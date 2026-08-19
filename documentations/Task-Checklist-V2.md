@@ -497,12 +497,12 @@ Total 35 Task tercakup pada dokumen ini, mencakup seluruh fitur inti hingga fitu
 | **Estimasi Waktu** | **8 jam** |
 | **Definition of Done** | **Laporan load test & evaluasi scalability terdokumentasi, menandai selesainya seluruh sprint backend.** |
 **Subtask:**
-- [ ] Buat script load test (k6/Artillery) untuk flow auth & kirim pesan.
-- [ ] Eksekusi load test dan catat metrik performa.
-- [ ] Tulis dokumen evaluasi scalability berdasarkan data empiris.
+- [x] Buat script load test (k6/Artillery) untuk flow auth & kirim pesan.
+- [x] Eksekusi load test dan catat metrik performa.
+- [x] Tulis dokumen evaluasi scalability berdasarkan data empiris.
 **Checklist Verifikasi:**
-- [ ] Script load test tereksekusi sukses
-- [ ] Laporan performa & evaluasi scalability selesai disusun
+- [x] Script load test tereksekusi sukses
+- [x] Laporan performa & evaluasi scalability selesai disusun
 
 # EPIC 8 — Direct Message (v0.8)
 ## Feature S20 — Direct Message Core
@@ -516,13 +516,13 @@ Total 35 Task tercakup pada dokumen ini, mencakup seluruh fitur inti hingga fitu
 | **Estimasi Waktu** | **8 jam** |
 | **Definition of Done** | **Percakapan DM baru (1:1 maupun group) dapat dibuat dan diambil kembali tanpa duplikasi.** |
 **Subtask:**
-- [ ] Migration: ubah channels.server_id menjadi nullable & tambah value type 'dm'/'group_dm'.
-- [ ] Buat Prisma schema dm_participants (channel_id, user_id, joined_at).
-- [ ] Endpoint POST /dm untuk memulai/mengambil percakapan (dedupe untuk 1:1).
-- [ ] Endpoint GET /dm untuk daftar percakapan milik user (diurutkan aktivitas terbaru).
+- [x] Migration: ubah channels.server_id menjadi nullable & tambah value type 'dm'/'group_dm'.
+- [x] Buat Prisma schema dm_participants (channel_id, user_id, joined_at).
+- [x] Endpoint POST /dm untuk memulai/mengambil percakapan (dedupe untuk 1:1).
+- [x] Endpoint GET /dm untuk daftar percakapan milik user (diurutkan aktivitas terbaru).
 **Checklist Verifikasi:**
-- [ ] Memulai DM ke user yang sama dua kali tidak membuat channel duplikat
-- [ ] Group DM dapat menambahkan lebih dari 2 participant
+- [x] Memulai DM ke user yang sama dua kali tidak membuat channel duplikat
+- [x] Group DM dapat menambahkan lebih dari 2 participant
 
 **T20.2 — DM Messaging, Realtime, & Otorisasi**
 | **Deskripsi** | **Mengintegrasikan DM ke infrastruktur Messaging & WebSocket yang sudah ada, dengan model otorisasi baru: partisipan dm_participants, bukan role/permission bitmask.** |

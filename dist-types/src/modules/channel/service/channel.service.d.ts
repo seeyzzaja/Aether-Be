@@ -6,7 +6,7 @@ export declare class ChannelService {
     private ensureCategoryBelongsToServer;
     create(serverId: string, userId: string, data: CreateChannelInput): Promise<{
         id: string;
-        serverId: string;
+        serverId: string | null;
         categoryId: string | null;
         name: string;
         type: import("../../../prisma/generated/prisma/enums.js").ChannelType;
@@ -15,7 +15,7 @@ export declare class ChannelService {
     }>;
     getAll(serverId: string, userId: string): Promise<{
         id: string;
-        serverId: string;
+        serverId: string | null;
         categoryId: string | null;
         name: string;
         type: import("../../../prisma/generated/prisma/enums.js").ChannelType;
@@ -24,7 +24,7 @@ export declare class ChannelService {
     }[]>;
     getById(serverId: string, channelId: string, userId: string): Promise<{
         id: string;
-        serverId: string;
+        serverId: string | null;
         categoryId: string | null;
         name: string;
         type: import("../../../prisma/generated/prisma/enums.js").ChannelType;
@@ -33,7 +33,7 @@ export declare class ChannelService {
     }>;
     update(serverId: string, channelId: string, userId: string, data: UpdateChannelInput): Promise<{
         id: string;
-        serverId: string;
+        serverId: string | null;
         categoryId: string | null;
         name: string;
         type: import("../../../prisma/generated/prisma/enums.js").ChannelType;

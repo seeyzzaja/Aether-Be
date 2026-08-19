@@ -51,7 +51,7 @@ export declare class MessageRepository {
     findByIdWithChannel(messageId: string): Promise<({
         channel: {
             id: string;
-            serverId: string;
+            serverId: string | null;
             categoryId: string | null;
             name: string;
             type: import("#prisma/generated/prisma/client").ChannelType;
@@ -137,7 +137,7 @@ export declare class MessageRepository {
         authorId: string;
         channel: {
             id: string;
-            serverId: string;
+            serverId: string | null;
         };
         channelId: string;
         content: string;
@@ -158,7 +158,7 @@ export declare class MessageRepository {
     } | null>;
     findChannelById(channelId: string): Promise<{
         id: string;
-        serverId: string;
+        serverId: string | null;
         type: import("#prisma/generated/prisma/client").ChannelType;
     } | null>;
     search(serverId: string, query: string, options?: {
@@ -212,7 +212,7 @@ export declare class MessageRepository {
         authorId: string;
         channel: {
             id: string;
-            serverId: string;
+            serverId: string | null;
         };
         channelId: string;
         content: string;
@@ -223,6 +223,10 @@ export declare class MessageRepository {
         createdAt: Date;
         emailVerifiedAt: Date | null;
         id: string;
+    } | null>;
+    findDmParticipant(channelId: string, userId: string): Promise<{
+        channelId: string;
+        userId: string;
     } | null>;
 }
 export declare const messageRepository: MessageRepository;

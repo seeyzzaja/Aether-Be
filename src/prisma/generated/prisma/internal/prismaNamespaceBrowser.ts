@@ -57,6 +57,7 @@ export const ModelName = {
   ChannelPermissionOverride: 'ChannelPermissionOverride',
   ChannelReadState: 'ChannelReadState',
   Channel: 'Channel',
+  DmParticipant: 'DmParticipant',
   MessageAttachment: 'MessageAttachment',
   Message: 'Message',
   Notification: 'Notification',
@@ -165,6 +166,15 @@ export const ChannelScalarFieldEnum = {
 } as const
 
 export type ChannelScalarFieldEnum = (typeof ChannelScalarFieldEnum)[keyof typeof ChannelScalarFieldEnum]
+
+
+export const DmParticipantScalarFieldEnum = {
+  channelId: 'channelId',
+  userId: 'userId',
+  joinedAt: 'joinedAt'
+} as const
+
+export type DmParticipantScalarFieldEnum = (typeof DmParticipantScalarFieldEnum)[keyof typeof DmParticipantScalarFieldEnum]
 
 
 export const MessageAttachmentScalarFieldEnum = {

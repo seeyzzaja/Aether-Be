@@ -3,7 +3,7 @@ export declare class PollRepository {
         authorId: string;
         channel: {
             id: string;
-            serverId: string;
+            serverId: string | null;
         };
         channelId: string;
         id: string;
@@ -19,7 +19,7 @@ export declare class PollRepository {
         message: {
             channel: {
                 id: string;
-                serverId: string;
+                serverId: string | null;
             };
             channelId: string;
             id: string;

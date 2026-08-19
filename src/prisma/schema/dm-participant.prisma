@@ -1,0 +1,12 @@
+model DmParticipant {
+  channelId String
+  userId    String
+  joinedAt  DateTime @default(now())
+
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([channelId, userId])
+  @@index([userId, joinedAt(sort: Desc)])
+  @@map("dm_participants")
+}

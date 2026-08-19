@@ -17,6 +17,7 @@ export declare class MessageService {
     private flagAntiSpamThrottle;
     private flagSuspiciousLinkWarning;
     private getMessage;
+    private ensureChannelAccess;
     create(channelId: string, userId: string, input: CreateMessageInput): Promise<{
         id: string;
         channelId: string;
@@ -108,7 +109,7 @@ export declare class MessageService {
         authorId: string;
         channel: {
             id: string;
-            serverId: string;
+            serverId: string | null;
         };
         channelId: string;
         content: string;
@@ -132,7 +133,7 @@ export declare class MessageService {
         authorId: string;
         channel: {
             id: string;
-            serverId: string;
+            serverId: string | null;
         };
         channelId: string;
         content: string;
@@ -163,7 +164,7 @@ export declare class MessageService {
         rootMessage: {
             channel: {
                 id: string;
-                serverId: string;
+                serverId: string | null;
                 categoryId: string | null;
                 name: string;
                 type: import("../../../prisma/generated/prisma/enums.js").ChannelType;

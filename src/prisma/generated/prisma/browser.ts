@@ -48,6 +48,11 @@ export type ChannelReadState = Prisma.ChannelReadStateModel
  */
 export type Channel = Prisma.ChannelModel
 /**
+ * Model DmParticipant
+ * 
+ */
+export type DmParticipant = Prisma.DmParticipantModel
+/**
  * Model MessageAttachment
  * 
  */
