@@ -174,6 +174,19 @@ export declare class MessageRepository {
         updatedAt: Date;
         rank: number;
     }[]>;
+    searchByChannel(channelId: string, query: string, options?: {
+        limit?: number;
+        offset?: number;
+    }): Promise<{
+        id: string;
+        channelId: string;
+        authorId: string;
+        content: string;
+        createdAt: Date;
+        updatedAt: Date;
+        rank: number;
+    }[]>;
+    countSearchByChannel(channelId: string, query: string): Promise<number>;
     countSearch(serverId: string, query: string, channelId?: string): Promise<number>;
     findServerMember(serverId: string, userId: string): Promise<{
         userId: string;
@@ -228,6 +241,10 @@ export declare class MessageRepository {
         channelId: string;
         userId: string;
     } | null>;
+    findDmParticipants(channelId: string): Promise<{
+        channelId: string;
+        userId: string;
+    }[]>;
 }
 export declare const messageRepository: MessageRepository;
 //# sourceMappingURL=message.repository.d.ts.map

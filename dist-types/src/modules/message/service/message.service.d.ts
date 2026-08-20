@@ -142,8 +142,9 @@ export declare class MessageService {
         isDeleted: boolean;
         isPinned: boolean;
     }>;
-    search(serverId: string, userId: string, input: {
+    search(userId: string, input: {
         q: string;
+        serverId?: string;
         channelId?: string;
         limit: number;
         offset: number;
