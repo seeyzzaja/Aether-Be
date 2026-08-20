@@ -58,6 +58,7 @@ export const ModelName = {
   ChannelReadState: 'ChannelReadState',
   Channel: 'Channel',
   DmParticipant: 'DmParticipant',
+  Friendship: 'Friendship',
   MessageAttachment: 'MessageAttachment',
   Message: 'Message',
   Notification: 'Notification',
@@ -175,6 +176,19 @@ export const DmParticipantScalarFieldEnum = {
 } as const
 
 export type DmParticipantScalarFieldEnum = (typeof DmParticipantScalarFieldEnum)[keyof typeof DmParticipantScalarFieldEnum]
+
+
+export const FriendshipScalarFieldEnum = {
+  id: 'id',
+  userOneId: 'userOneId',
+  userTwoId: 'userTwoId',
+  status: 'status',
+  actionUserId: 'actionUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FriendshipScalarFieldEnum = (typeof FriendshipScalarFieldEnum)[keyof typeof FriendshipScalarFieldEnum]
 
 
 export const MessageAttachmentScalarFieldEnum = {

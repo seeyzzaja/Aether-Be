@@ -14,6 +14,7 @@ import categoryRouter from "#modules/category/route/category.route";
 import channelRouter from "#modules/channel/route/channel.routes";
 import conversationRouter from "#modules/conversation/route/conversation.route";
 import deviceRouter from "#modules/device/route/device.route";
+import friendRouter from "#modules/friend/route/friend.route";
 import membershipRouter from "#modules/membership/route/membership.route";
 import messageRouter from "#modules/message/route/message.route";
 import notificationRouter from "#modules/notification/route/notification.route";
@@ -131,6 +132,7 @@ app.use("/api/search", searchRouter);
 app.use("/api/channels", voiceRouter);
 app.use("/api", pollRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/friends", friendRouter);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });

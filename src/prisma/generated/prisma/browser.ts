@@ -53,6 +53,11 @@ export type Channel = Prisma.ChannelModel
  */
 export type DmParticipant = Prisma.DmParticipantModel
 /**
+ * Model Friendship
+ * 
+ */
+export type Friendship = Prisma.FriendshipModel
+/**
  * Model MessageAttachment
  * 
  */
