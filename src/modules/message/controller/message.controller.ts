@@ -124,16 +124,13 @@ export class MessageController {
     try {
       const userId = this.getUserId(req);
 
-      const serverId = req.query.serverId;
-
-      if (typeof serverId !== "string" || !serverId) {
-        throw new BadRequestError("Server ID tidak valid");
-      }
-
       const query = messageSearchQuerySchema.parse(req.query);
 
-      const result = await messageService.search(serverId, userId, {
+      const result = await messageService.search(userId, {
         q: query.q,
+        ...(query.serverId !== undefined && {
+          serverId: query.serverId,
+        }),
         ...(query.channelId !== undefined && {
           channelId: query.channelId,
         }),

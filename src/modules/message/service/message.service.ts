@@ -10,7 +10,12 @@ import {
   enqueueEmailNotification,
 } from "#modules/notification/service/notification.service";
 import { getPresenceConnections } from "#modules/presence/repository/presence.repository";
-import { ForbiddenError, NotFoundError, TooManyRequestsError } from "#shared/errors/app-error";
+import {
+  BadRequestError,
+  ForbiddenError,
+  NotFoundError,
+  TooManyRequestsError,
+} from "#shared/errors/app-error";
 import { logger } from "#shared/logger/logger";
 import { Permission } from "#shared/permissions/permissions";
 import { connectRedis, redisClient } from "#shared/redis/redis.client";
@@ -445,6 +450,48 @@ export class MessageService {
       }
     }
 
+    if (channel.type === "DM" || channel.type === "GROUP_DM") {
+      const participants = await messageRepository.findDmParticipants(channelId);
+
+      for (const participant of participants) {
+        if (participant.userId === userId) {
+          continue;
+        }
+
+        this.runInBackground(
+          (async () => {
+            const notification = await createUserNotification({
+              userId: participant.userId,
+              type: "dm_message",
+              payload: {
+                messageId: message.id,
+                channelId: message.channelId,
+                authorId: message.authorId,
+              },
+            });
+
+            const connections = await getPresenceConnections(participant.userId);
+
+            if (connections === 0) {
+              await enqueueEmailNotification({
+                userId: participant.userId,
+                subject: "New message on Aether",
+                text: "You have a new direct message on Aether.",
+                html: `
+      <h2>New message on Aether</h2>
+      <p>You have a new direct message on Aether.</p>
+      <p>Open Aether to see the message.</p>
+    `,
+              });
+            }
+
+            return notification;
+          })(),
+          "create DM notification",
+        );
+      }
+    }
+
     const messageWithModeration = {
       ...message,
       moderation: warnings,
@@ -694,19 +741,17 @@ export class MessageService {
     return unpinnedMessage;
   }
   async search(
-    serverId: string,
     userId: string,
     input: {
       q: string;
+      serverId?: string;
       channelId?: string;
       limit: number;
       offset: number;
     },
   ) {
-    const permissions = await this.getActorPermissions(serverId, userId);
-
-    if (!hasPermission(permissions, Permission.VIEW_CHANNEL)) {
-      throw new ForbiddenError("Kamu tidak memiliki permission VIEW_CHANNEL");
+    if (!input.serverId && !input.channelId) {
+      throw new BadRequestError("Server ID atau Channel ID wajib diisi");
     }
 
     if (input.channelId) {
@@ -716,22 +761,45 @@ export class MessageService {
         throw new NotFoundError("Channel tidak ditemukan");
       }
 
-      if (channel.serverId !== serverId) {
+      await this.ensureChannelAccess(input.channelId, userId);
+
+      if (input.serverId && channel.serverId !== input.serverId) {
         throw new ForbiddenError("Channel bukan bagian dari server ini");
       }
+
+      const searchOptions = {
+        channelId: input.channelId,
+        limit: input.limit,
+        offset: input.offset,
+      };
+
+      const [messages, total] = await Promise.all([
+        messageRepository.searchByChannel(input.channelId, input.q, searchOptions),
+        messageRepository.countSearchByChannel(input.channelId, input.q),
+      ]);
+
+      return {
+        messages,
+        total,
+        offset: input.offset,
+        limit: input.limit,
+      };
+    }
+    if (!input.serverId) {
+      throw new BadRequestError("Server ID wajib diisi");
+    }
+    const permissions = await this.getActorPermissions(input.serverId, userId);
+
+    if (!hasPermission(permissions, Permission.VIEW_CHANNEL)) {
+      throw new ForbiddenError("Kamu tidak memiliki permission VIEW_CHANNEL");
     }
 
-    const searchOptions = {
-      ...(input.channelId !== undefined && {
-        channelId: input.channelId,
-      }),
-      limit: input.limit,
-      offset: input.offset,
-    };
-
     const [messages, total] = await Promise.all([
-      messageRepository.search(serverId, input.q, searchOptions),
-      messageRepository.countSearch(serverId, input.q, input.channelId),
+      messageRepository.search(input.serverId, input.q, {
+        limit: input.limit,
+        offset: input.offset,
+      }),
+      messageRepository.countSearch(input.serverId, input.q),
     ]);
 
     return {

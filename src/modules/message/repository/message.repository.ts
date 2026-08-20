@@ -343,6 +343,70 @@ export class MessageRepository {
     OFFSET ${offset}
   `;
   }
+  async searchByChannel(
+    channelId: string,
+    query: string,
+    options?: {
+      limit?: number;
+      offset?: number;
+    },
+  ) {
+    const limit = options?.limit ?? 20;
+    const offset = options?.offset ?? 0;
+
+    return prisma.$queryRaw<
+      Array<{
+        id: string;
+        channelId: string;
+        authorId: string;
+        content: string;
+        createdAt: Date;
+        updatedAt: Date;
+        rank: number;
+      }>
+    >`
+    SELECT
+      m."id",
+      m."channelId",
+      m."authorId",
+      m."content",
+      m."createdAt",
+      m."updatedAt",
+      ts_rank(
+        m."search_vector",
+        websearch_to_tsquery('indonesian', ${query})
+      ) AS "rank"
+    FROM "messages" m
+    WHERE m."channelId" = ${channelId}
+      AND m."isDeleted" = false
+      AND m."search_vector" @@ websearch_to_tsquery(
+        'indonesian',
+        ${query}
+      )
+    ORDER BY "rank" DESC, m."createdAt" DESC
+    LIMIT ${limit}
+    OFFSET ${offset}
+  `;
+  }
+
+  async countSearchByChannel(channelId: string, query: string) {
+    const result = await prisma.$queryRaw<
+      Array<{
+        count: bigint;
+      }>
+    >`
+    SELECT COUNT(*) AS count
+    FROM "messages" m
+    WHERE m."channelId" = ${channelId}
+      AND m."isDeleted" = false
+      AND m."search_vector" @@ websearch_to_tsquery(
+        'indonesian',
+        ${query}
+      )
+  `;
+
+    return Number(result[0]?.count ?? 0n);
+  }
   async countSearch(serverId: string, query: string, channelId?: string) {
     const channelFilter = channelId ? Prisma.sql`AND m."channelId" = ${channelId}` : Prisma.empty;
 
@@ -442,6 +506,18 @@ export class MessageRepository {
           channelId,
           userId,
         },
+      },
+      select: {
+        channelId: true,
+        userId: true,
+      },
+    });
+  }
+
+  async findDmParticipants(channelId: string) {
+    return prisma.dmParticipant.findMany({
+      where: {
+        channelId,
       },
       select: {
         channelId: true,
