@@ -6,6 +6,11 @@ export declare class UploadRepository {
             ownerId: string;
         } | null;
         serverId: string | null;
+        type: import("../../../prisma/generated/prisma/enums.js").ChannelType;
+    } | null>;
+    findDmParticipant(channelId: string, userId: string): Promise<{
+        channelId: string;
+        userId: string;
     } | null>;
     findMemberPermissions(serverId: string, userId: string): Promise<{
         id: string;

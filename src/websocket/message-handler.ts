@@ -1,5 +1,6 @@
 import type WebSocket from "ws";
 import { ZodError } from "zod";
+import { AppError } from "#shared/errors/app-error";
 import { WebSocketEvent } from "#websocket/constants/events";
 import {
   handlePing,
@@ -10,14 +11,12 @@ import {
 } from "#websocket/handlers/index";
 import type { WebSocketMessage } from "#websocket/types/message";
 import type { AuthenticatedSocket } from "#websocket/types/socket";
-
 import {
   validateSubscribe,
   validateTyping,
   validateUnsubscribe,
 } from "#websocket/validators/index";
-
-export function handleMessage(socket: WebSocket, rawMessage: string): void {
+export async function handleMessage(socket: WebSocket, rawMessage: string): Promise<void> {
   let message: WebSocketMessage;
 
   try {
@@ -40,11 +39,10 @@ export function handleMessage(socket: WebSocket, rawMessage: string): void {
       case WebSocketEvent.PING:
         handlePing(socket, message);
         break;
-
       case WebSocketEvent.SUBSCRIBE: {
         const data = validateSubscribe(message.data);
 
-        handleSubscribe(socket as AuthenticatedSocket, {
+        await handleSubscribe(socket as AuthenticatedSocket, {
           event: message.event,
           data,
         });
@@ -93,6 +91,20 @@ export function handleMessage(socket: WebSocket, rawMessage: string): void {
           data: {
             message: "Invalid payload",
             errors: error.flatten(),
+          },
+        }),
+      );
+
+      return;
+    }
+
+    if (error instanceof AppError) {
+      socket.send(
+        JSON.stringify({
+          event: WebSocketEvent.ERROR,
+          data: {
+            message: error.message,
+            code: error.code,
           },
         }),
       );

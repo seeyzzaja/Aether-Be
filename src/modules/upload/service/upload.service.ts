@@ -39,23 +39,34 @@ export class UploadService {
       throw new NotFoundError("Channel tidak ditemukan");
     }
 
-    if (!channel.serverId || !channel.server) {
-      throw new ForbiddenError("Upload file hanya dapat dilakukan pada channel server");
-    }
+    if (channel.type === "DM" || channel.type === "GROUP_DM") {
+      const participant = await uploadRepository.findDmParticipant(channel.id, userId);
 
-    const permissions = await this.getActorPermissions(
-      channel.serverId,
-      userId,
-      channel.server.ownerId,
-    );
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+    } else {
+      if (!channel.serverId || !channel.server) {
+        throw new ForbiddenError("Upload file hanya dapat dilakukan pada channel server");
+      }
 
-    if (!hasPermission(permissions, Permission.ATTACH_FILES)) {
-      throw new ForbiddenError("Kamu tidak memiliki permission untuk mengunggah file");
+      const permissions = await this.getActorPermissions(
+        channel.serverId,
+        userId,
+        channel.server.ownerId,
+      );
+
+      if (!hasPermission(permissions, Permission.ATTACH_FILES)) {
+        throw new ForbiddenError("Kamu tidak memiliki permission untuk mengunggah file");
+      }
     }
 
     const timestamp = Math.floor(Date.now() / 1000);
 
-    const folder = `aether/${channel.serverId}/${channel.id}`;
+    const folder =
+      channel.type === "DM" || channel.type === "GROUP_DM"
+        ? `aether/dm/${channel.id}`
+        : `aether/${channel.serverId}/${channel.id}`;
 
     const signatureParams = {
       timestamp,
@@ -91,21 +102,32 @@ export class UploadService {
       throw new NotFoundError("Channel tidak ditemukan");
     }
 
-    if (!channel.serverId || !channel.server) {
-      throw new ForbiddenError("Upload file hanya dapat dilakukan pada channel server");
+    if (channel.type === "DM" || channel.type === "GROUP_DM") {
+      const participant = await uploadRepository.findDmParticipant(channel.id, userId);
+
+      if (!participant) {
+        throw new ForbiddenError("Kamu bukan participant pada conversation ini");
+      }
+    } else {
+      if (!channel.serverId || !channel.server) {
+        throw new ForbiddenError("Upload file hanya dapat dilakukan pada channel server");
+      }
+
+      const permissions = await this.getActorPermissions(
+        channel.serverId,
+        userId,
+        channel.server.ownerId,
+      );
+
+      if (!hasPermission(permissions, Permission.ATTACH_FILES)) {
+        throw new ForbiddenError("Kamu tidak memiliki permission untuk mengunggah file");
+      }
     }
 
-    const permissions = await this.getActorPermissions(
-      channel.serverId,
-      userId,
-      channel.server.ownerId,
-    );
-
-    if (!hasPermission(permissions, Permission.ATTACH_FILES)) {
-      throw new ForbiddenError("Kamu tidak memiliki permission untuk mengunggah file");
-    }
-
-    const expectedFolder = `aether/${channel.serverId}/${channel.id}`;
+    const expectedFolder =
+      channel.type === "DM" || channel.type === "GROUP_DM"
+        ? `aether/dm/${channel.id}`
+        : `aether/${channel.serverId}/${channel.id}`;
 
     if (!input.publicId.startsWith(`${expectedFolder}/`)) {
       throw new ForbiddenError("File tidak berasal dari folder upload yang valid");

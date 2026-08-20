@@ -1,3 +1,4 @@
+import type { RedisClientType } from "redis";
 import { createClient } from "redis";
 
 import { config } from "#config/env";
@@ -7,7 +8,7 @@ import type { RedisWebSocketEvent } from "#shared/redis/redis.types";
 
 export async function subscribeWebSocketEvents(
   onMessage: (message: RedisWebSocketEvent) => void,
-): Promise<void> {
+): Promise<RedisClientType> {
   const subscriber = createClient({
     url: config.REDIS_URL,
   });
@@ -61,4 +62,6 @@ export async function subscribeWebSocketEvents(
     },
     "Redis subscriber connected",
   );
+
+  return subscriber;
 }

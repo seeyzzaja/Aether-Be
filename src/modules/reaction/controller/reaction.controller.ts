@@ -58,8 +58,9 @@ export class ReactionController {
   async list(req: Request, res: Response, next: NextFunction) {
     try {
       const messageId = this.getMessageId(req);
+      const userId = this.getUserId(req);
 
-      const reactions = await reactionService.list(messageId);
+      const reactions = await reactionService.list(messageId, userId);
 
       return successResponse(res, "Reaksi berhasil diambil", reactions);
     } catch (error) {

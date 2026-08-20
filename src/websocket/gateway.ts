@@ -49,12 +49,28 @@ export function registerGateway(wss: WebSocketServer): void {
     );
 
     authSocket.on("message", (data) => {
-      handleMessage(authSocket, data.toString());
+      void handleMessage(authSocket, data.toString()).catch((error) => {
+        logger.error({ err: error }, "WebSocket message handling error");
+
+        authSocket.send(
+          JSON.stringify({
+            event: "error",
+            data: {
+              message:
+                error instanceof Error
+                  ? error.message
+                  : "Terjadi kesalahan saat memproses pesan WebSocket",
+            },
+          }),
+        );
+      });
     });
 
     let presenceConnectionReleased = false;
 
     authSocket.on("close", async () => {
+      console.log("[WS GATEWAY CLOSE] start", userId);
+
       if (presenceConnectionReleased) {
         logger.debug({ userId }, "Duplicate WebSocket close ignored");
         return;
@@ -68,6 +84,8 @@ export function registerGateway(wss: WebSocketServer): void {
 
       const connections = await decrementPresenceConnections(userId);
 
+      console.log("[WS GATEWAY CLOSE] presence decremented", userId, connections);
+
       logger.debug({ connections }, "Global presence connections");
 
       if (connections === 0) {
@@ -79,6 +97,8 @@ export function registerGateway(wss: WebSocketServer): void {
       connectionRegistry.dump();
 
       logger.info({ userId: authSocket.user.userId }, "WebSocket client disconnected");
+
+      console.log("[WS GATEWAY CLOSE] finished", userId);
     });
 
     authSocket.on("error", (error) => {
