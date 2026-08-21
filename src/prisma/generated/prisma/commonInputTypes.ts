@@ -372,6 +372,23 @@ export type EnumOAuthProviderWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumOAuthProviderFilter<$PrismaModel>
 }
 
+export type EnumDmPrivacyFilter<$PrismaModel = never> = {
+  equals?: $Enums.DmPrivacy | Prisma.EnumDmPrivacyFieldRefInput<$PrismaModel>
+  in?: $Enums.DmPrivacy[] | Prisma.ListEnumDmPrivacyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DmPrivacy[] | Prisma.ListEnumDmPrivacyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDmPrivacyFilter<$PrismaModel> | $Enums.DmPrivacy
+}
+
+export type EnumDmPrivacyWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DmPrivacy | Prisma.EnumDmPrivacyFieldRefInput<$PrismaModel>
+  in?: $Enums.DmPrivacy[] | Prisma.ListEnumDmPrivacyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DmPrivacy[] | Prisma.ListEnumDmPrivacyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDmPrivacyWithAggregatesFilter<$PrismaModel> | $Enums.DmPrivacy
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDmPrivacyFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDmPrivacyFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -687,6 +704,23 @@ export type NestedEnumOAuthProviderWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumOAuthProviderFilter<$PrismaModel>
   _max?: Prisma.NestedEnumOAuthProviderFilter<$PrismaModel>
+}
+
+export type NestedEnumDmPrivacyFilter<$PrismaModel = never> = {
+  equals?: $Enums.DmPrivacy | Prisma.EnumDmPrivacyFieldRefInput<$PrismaModel>
+  in?: $Enums.DmPrivacy[] | Prisma.ListEnumDmPrivacyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DmPrivacy[] | Prisma.ListEnumDmPrivacyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDmPrivacyFilter<$PrismaModel> | $Enums.DmPrivacy
+}
+
+export type NestedEnumDmPrivacyWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DmPrivacy | Prisma.EnumDmPrivacyFieldRefInput<$PrismaModel>
+  in?: $Enums.DmPrivacy[] | Prisma.ListEnumDmPrivacyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DmPrivacy[] | Prisma.ListEnumDmPrivacyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDmPrivacyWithAggregatesFilter<$PrismaModel> | $Enums.DmPrivacy
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDmPrivacyFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDmPrivacyFilter<$PrismaModel>
 }
 
 

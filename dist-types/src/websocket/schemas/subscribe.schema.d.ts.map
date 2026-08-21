@@ -1,1 +1,0 @@
-{"version":3,"file":"subscribe.schema.d.ts","sourceRoot":"","sources":["../../../../src/websocket/schemas/subscribe.schema.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AAExB,eAAO,MAAM,eAAe;;iBAE1B,CAAC;AAEH,MAAM,MAAM,eAAe,GAAG,CAAC,CAAC,KAAK,CAAC,OAAO,eAAe,CAAC,CAAC"}

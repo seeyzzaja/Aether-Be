@@ -1,0 +1,14 @@
+model BlockedUser {
+  id        String   @id @default(uuid())
+  blockerId String   @map("blocker_id")
+  blockedId String   @map("blocked_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  blocker User @relation("BlockedUsersByBlocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("BlockedUsersByBlocked", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId])
+  @@index([blockerId])
+  @@index([blockedId])
+  @@map("blocked_users")
+}

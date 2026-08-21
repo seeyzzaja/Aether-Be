@@ -31,6 +31,7 @@ export type UserMinAggregateOutputType = {
   passwordHash: string | null
   emailVerifiedAt: Date | null
   emailNotificationEnabled: boolean | null
+  dmPrivacy: $Enums.DmPrivacy | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -43,6 +44,7 @@ export type UserMaxAggregateOutputType = {
   passwordHash: string | null
   emailVerifiedAt: Date | null
   emailNotificationEnabled: boolean | null
+  dmPrivacy: $Enums.DmPrivacy | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -55,6 +57,7 @@ export type UserCountAggregateOutputType = {
   passwordHash: number
   emailVerifiedAt: number
   emailNotificationEnabled: number
+  dmPrivacy: number
   createdAt: number
   updatedAt: number
   deletedAt: number
@@ -69,6 +72,7 @@ export type UserMinAggregateInputType = {
   passwordHash?: true
   emailVerifiedAt?: true
   emailNotificationEnabled?: true
+  dmPrivacy?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -81,6 +85,7 @@ export type UserMaxAggregateInputType = {
   passwordHash?: true
   emailVerifiedAt?: true
   emailNotificationEnabled?: true
+  dmPrivacy?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -93,6 +98,7 @@ export type UserCountAggregateInputType = {
   passwordHash?: true
   emailVerifiedAt?: true
   emailNotificationEnabled?: true
+  dmPrivacy?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -178,6 +184,7 @@ export type UserGroupByOutputType = {
   passwordHash: string | null
   emailVerifiedAt: Date | null
   emailNotificationEnabled: boolean
+  dmPrivacy: $Enums.DmPrivacy
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
@@ -211,6 +218,7 @@ export type UserWhereInput = {
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFilter<"User"> | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFilter<"User"> | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -229,6 +237,8 @@ export type UserWhereInput = {
   friendshipsAsUserOne?: Prisma.FriendshipListRelationFilter
   friendshipsAsUserTwo?: Prisma.FriendshipListRelationFilter
   friendshipActions?: Prisma.FriendshipListRelationFilter
+  blockedUsers?: Prisma.BlockedUserListRelationFilter
+  blockedByUsers?: Prisma.BlockedUserListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -238,6 +248,7 @@ export type UserOrderByWithRelationInput = {
   passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   emailNotificationEnabled?: Prisma.SortOrder
+  dmPrivacy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -256,6 +267,8 @@ export type UserOrderByWithRelationInput = {
   friendshipsAsUserOne?: Prisma.FriendshipOrderByRelationAggregateInput
   friendshipsAsUserTwo?: Prisma.FriendshipOrderByRelationAggregateInput
   friendshipActions?: Prisma.FriendshipOrderByRelationAggregateInput
+  blockedUsers?: Prisma.BlockedUserOrderByRelationAggregateInput
+  blockedByUsers?: Prisma.BlockedUserOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -268,6 +281,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFilter<"User"> | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFilter<"User"> | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -286,6 +300,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   friendshipsAsUserOne?: Prisma.FriendshipListRelationFilter
   friendshipsAsUserTwo?: Prisma.FriendshipListRelationFilter
   friendshipActions?: Prisma.FriendshipListRelationFilter
+  blockedUsers?: Prisma.BlockedUserListRelationFilter
+  blockedByUsers?: Prisma.BlockedUserListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -295,6 +311,7 @@ export type UserOrderByWithAggregationInput = {
   passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   emailNotificationEnabled?: Prisma.SortOrder
+  dmPrivacy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -313,6 +330,7 @@ export type UserScalarWhereWithAggregatesInput = {
   passwordHash?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   emailVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   emailNotificationEnabled?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyWithAggregatesFilter<"User"> | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -325,6 +343,7 @@ export type UserCreateInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -343,6 +362,8 @@ export type UserCreateInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -352,6 +373,7 @@ export type UserUncheckedCreateInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -370,6 +392,8 @@ export type UserUncheckedCreateInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUpdateInput = {
@@ -379,6 +403,7 @@ export type UserUpdateInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -397,6 +422,8 @@ export type UserUpdateInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -406,6 +433,7 @@ export type UserUncheckedUpdateInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -424,6 +452,8 @@ export type UserUncheckedUpdateInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -433,6 +463,7 @@ export type UserCreateManyInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -445,6 +476,7 @@ export type UserUpdateManyMutationInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -457,6 +489,7 @@ export type UserUncheckedUpdateManyInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -479,6 +512,7 @@ export type UserCountOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrder
   emailNotificationEnabled?: Prisma.SortOrder
+  dmPrivacy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -491,6 +525,7 @@ export type UserMaxOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrder
   emailNotificationEnabled?: Prisma.SortOrder
+  dmPrivacy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -503,6 +538,7 @@ export type UserMinOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrder
   emailNotificationEnabled?: Prisma.SortOrder
+  dmPrivacy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -536,6 +572,34 @@ export type UserUpdateOneRequiredWithoutAuthTokensNestedInput = {
   upsert?: Prisma.UserUpsertWithoutAuthTokensInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthTokensInput, Prisma.UserUpdateWithoutAuthTokensInput>, Prisma.UserUncheckedUpdateWithoutAuthTokensInput>
+}
+
+export type UserCreateNestedOneWithoutBlockedUsersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBlockedUsersInput, Prisma.UserUncheckedCreateWithoutBlockedUsersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBlockedUsersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutBlockedByUsersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBlockedByUsersInput, Prisma.UserUncheckedCreateWithoutBlockedByUsersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBlockedByUsersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBlockedUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBlockedUsersInput, Prisma.UserUncheckedCreateWithoutBlockedUsersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBlockedUsersInput
+  upsert?: Prisma.UserUpsertWithoutBlockedUsersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBlockedUsersInput, Prisma.UserUpdateWithoutBlockedUsersInput>, Prisma.UserUncheckedUpdateWithoutBlockedUsersInput>
+}
+
+export type UserUpdateOneRequiredWithoutBlockedByUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBlockedByUsersInput, Prisma.UserUncheckedCreateWithoutBlockedByUsersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBlockedByUsersInput
+  upsert?: Prisma.UserUpsertWithoutBlockedByUsersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBlockedByUsersInput, Prisma.UserUpdateWithoutBlockedByUsersInput>, Prisma.UserUncheckedUpdateWithoutBlockedByUsersInput>
 }
 
 export type UserCreateNestedOneWithoutReadStatesInput = {
@@ -720,6 +784,10 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
 }
 
+export type EnumDmPrivacyFieldUpdateOperationsInput = {
+  set?: $Enums.DmPrivacy
+}
+
 export type UserCreateWithoutAuditLogsInput = {
   id?: string
   email: string
@@ -727,6 +795,7 @@ export type UserCreateWithoutAuditLogsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -744,6 +813,8 @@ export type UserCreateWithoutAuditLogsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -753,6 +824,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -770,6 +842,8 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -795,6 +869,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -812,6 +887,8 @@ export type UserUpdateWithoutAuditLogsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -821,6 +898,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -838,6 +916,8 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutAuthTokensInput = {
@@ -847,6 +927,7 @@ export type UserCreateWithoutAuthTokensInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -864,6 +945,8 @@ export type UserCreateWithoutAuthTokensInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutAuthTokensInput = {
@@ -873,6 +956,7 @@ export type UserUncheckedCreateWithoutAuthTokensInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -890,6 +974,8 @@ export type UserUncheckedCreateWithoutAuthTokensInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutAuthTokensInput = {
@@ -915,6 +1001,7 @@ export type UserUpdateWithoutAuthTokensInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -932,6 +1019,8 @@ export type UserUpdateWithoutAuthTokensInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthTokensInput = {
@@ -941,6 +1030,7 @@ export type UserUncheckedUpdateWithoutAuthTokensInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -958,6 +1048,272 @@ export type UserUncheckedUpdateWithoutAuthTokensInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+}
+
+export type UserCreateWithoutBlockedUsersInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash?: string | null
+  emailVerifiedAt?: Date | string | null
+  emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutUserInput
+  ownedServers?: Prisma.ServerCreateNestedManyWithoutOwnerInput
+  serverMemberships?: Prisma.ServerMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput
+  friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
+  friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
+  friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+}
+
+export type UserUncheckedCreateWithoutBlockedUsersInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash?: string | null
+  emailVerifiedAt?: Date | string | null
+  emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutUserInput
+  ownedServers?: Prisma.ServerUncheckedCreateNestedManyWithoutOwnerInput
+  serverMemberships?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput
+  friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
+  friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
+  friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+}
+
+export type UserCreateOrConnectWithoutBlockedUsersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBlockedUsersInput, Prisma.UserUncheckedCreateWithoutBlockedUsersInput>
+}
+
+export type UserCreateWithoutBlockedByUsersInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash?: string | null
+  emailVerifiedAt?: Date | string | null
+  emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
+  authTokens?: Prisma.AuthTokenCreateNestedManyWithoutUserInput
+  ownedServers?: Prisma.ServerCreateNestedManyWithoutOwnerInput
+  serverMemberships?: Prisma.ServerMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pollVotes?: Prisma.PollVoteCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput
+  friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
+  friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
+  friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+}
+
+export type UserUncheckedCreateWithoutBlockedByUsersInput = {
+  id?: string
+  email: string
+  username: string
+  passwordHash?: string | null
+  emailVerifiedAt?: Date | string | null
+  emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
+  authTokens?: Prisma.AuthTokenUncheckedCreateNestedManyWithoutUserInput
+  ownedServers?: Prisma.ServerUncheckedCreateNestedManyWithoutOwnerInput
+  serverMemberships?: Prisma.ServerMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
+  readStates?: Prisma.ChannelReadStateUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pollVotes?: Prisma.PollVoteUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput
+  friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
+  friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
+  friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+}
+
+export type UserCreateOrConnectWithoutBlockedByUsersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBlockedByUsersInput, Prisma.UserUncheckedCreateWithoutBlockedByUsersInput>
+}
+
+export type UserUpsertWithoutBlockedUsersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBlockedUsersInput, Prisma.UserUncheckedUpdateWithoutBlockedUsersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBlockedUsersInput, Prisma.UserUncheckedCreateWithoutBlockedUsersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBlockedUsersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBlockedUsersInput, Prisma.UserUncheckedUpdateWithoutBlockedUsersInput>
+}
+
+export type UserUpdateWithoutBlockedUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutUserNestedInput
+  ownedServers?: Prisma.ServerUpdateManyWithoutOwnerNestedInput
+  serverMemberships?: Prisma.ServerMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput
+  friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
+  friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
+  friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBlockedUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutUserNestedInput
+  ownedServers?: Prisma.ServerUncheckedUpdateManyWithoutOwnerNestedInput
+  serverMemberships?: Prisma.ServerMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
+  friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
+  friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+}
+
+export type UserUpsertWithoutBlockedByUsersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBlockedByUsersInput, Prisma.UserUncheckedUpdateWithoutBlockedByUsersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBlockedByUsersInput, Prisma.UserUncheckedCreateWithoutBlockedByUsersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBlockedByUsersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBlockedByUsersInput, Prisma.UserUncheckedUpdateWithoutBlockedByUsersInput>
+}
+
+export type UserUpdateWithoutBlockedByUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
+  authTokens?: Prisma.AuthTokenUpdateManyWithoutUserNestedInput
+  ownedServers?: Prisma.ServerUpdateManyWithoutOwnerNestedInput
+  serverMemberships?: Prisma.ServerMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pollVotes?: Prisma.PollVoteUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput
+  friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
+  friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
+  friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
+  authTokens?: Prisma.AuthTokenUncheckedUpdateManyWithoutUserNestedInput
+  ownedServers?: Prisma.ServerUncheckedUpdateManyWithoutOwnerNestedInput
+  serverMemberships?: Prisma.ServerMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
+  readStates?: Prisma.ChannelReadStateUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pollVotes?: Prisma.PollVoteUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
+  friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
+  friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
 }
 
 export type UserCreateWithoutReadStatesInput = {
@@ -967,6 +1323,7 @@ export type UserCreateWithoutReadStatesInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -984,6 +1341,8 @@ export type UserCreateWithoutReadStatesInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutReadStatesInput = {
@@ -993,6 +1352,7 @@ export type UserUncheckedCreateWithoutReadStatesInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1010,6 +1370,8 @@ export type UserUncheckedCreateWithoutReadStatesInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutReadStatesInput = {
@@ -1035,6 +1397,7 @@ export type UserUpdateWithoutReadStatesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1052,6 +1415,8 @@ export type UserUpdateWithoutReadStatesInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReadStatesInput = {
@@ -1061,6 +1426,7 @@ export type UserUncheckedUpdateWithoutReadStatesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1078,6 +1444,8 @@ export type UserUncheckedUpdateWithoutReadStatesInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutDmParticipationsInput = {
@@ -1087,6 +1455,7 @@ export type UserCreateWithoutDmParticipationsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1104,6 +1473,8 @@ export type UserCreateWithoutDmParticipationsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutDmParticipationsInput = {
@@ -1113,6 +1484,7 @@ export type UserUncheckedCreateWithoutDmParticipationsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1130,6 +1502,8 @@ export type UserUncheckedCreateWithoutDmParticipationsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutDmParticipationsInput = {
@@ -1155,6 +1529,7 @@ export type UserUpdateWithoutDmParticipationsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1172,6 +1547,8 @@ export type UserUpdateWithoutDmParticipationsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDmParticipationsInput = {
@@ -1181,6 +1558,7 @@ export type UserUncheckedUpdateWithoutDmParticipationsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1198,6 +1576,8 @@ export type UserUncheckedUpdateWithoutDmParticipationsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutFriendshipsAsUserOneInput = {
@@ -1207,6 +1587,7 @@ export type UserCreateWithoutFriendshipsAsUserOneInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1224,6 +1605,8 @@ export type UserCreateWithoutFriendshipsAsUserOneInput = {
   dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutFriendshipsAsUserOneInput = {
@@ -1233,6 +1616,7 @@ export type UserUncheckedCreateWithoutFriendshipsAsUserOneInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1250,6 +1634,8 @@ export type UserUncheckedCreateWithoutFriendshipsAsUserOneInput = {
   dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutFriendshipsAsUserOneInput = {
@@ -1264,6 +1650,7 @@ export type UserCreateWithoutFriendshipsAsUserTwoInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1281,6 +1668,8 @@ export type UserCreateWithoutFriendshipsAsUserTwoInput = {
   dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutFriendshipsAsUserTwoInput = {
@@ -1290,6 +1679,7 @@ export type UserUncheckedCreateWithoutFriendshipsAsUserTwoInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1307,6 +1697,8 @@ export type UserUncheckedCreateWithoutFriendshipsAsUserTwoInput = {
   dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutFriendshipsAsUserTwoInput = {
@@ -1321,6 +1713,7 @@ export type UserCreateWithoutFriendshipActionsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1338,6 +1731,8 @@ export type UserCreateWithoutFriendshipActionsInput = {
   dmParticipations?: Prisma.DmParticipantCreateNestedManyWithoutUserInput
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutFriendshipActionsInput = {
@@ -1347,6 +1742,7 @@ export type UserUncheckedCreateWithoutFriendshipActionsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1364,6 +1760,8 @@ export type UserUncheckedCreateWithoutFriendshipActionsInput = {
   dmParticipations?: Prisma.DmParticipantUncheckedCreateNestedManyWithoutUserInput
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutFriendshipActionsInput = {
@@ -1389,6 +1787,7 @@ export type UserUpdateWithoutFriendshipsAsUserOneInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1406,6 +1805,8 @@ export type UserUpdateWithoutFriendshipsAsUserOneInput = {
   dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFriendshipsAsUserOneInput = {
@@ -1415,6 +1816,7 @@ export type UserUncheckedUpdateWithoutFriendshipsAsUserOneInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1432,6 +1834,8 @@ export type UserUncheckedUpdateWithoutFriendshipsAsUserOneInput = {
   dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUpsertWithoutFriendshipsAsUserTwoInput = {
@@ -1452,6 +1856,7 @@ export type UserUpdateWithoutFriendshipsAsUserTwoInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1469,6 +1874,8 @@ export type UserUpdateWithoutFriendshipsAsUserTwoInput = {
   dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFriendshipsAsUserTwoInput = {
@@ -1478,6 +1885,7 @@ export type UserUncheckedUpdateWithoutFriendshipsAsUserTwoInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1495,6 +1903,8 @@ export type UserUncheckedUpdateWithoutFriendshipsAsUserTwoInput = {
   dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUpsertWithoutFriendshipActionsInput = {
@@ -1515,6 +1925,7 @@ export type UserUpdateWithoutFriendshipActionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1532,6 +1943,8 @@ export type UserUpdateWithoutFriendshipActionsInput = {
   dmParticipations?: Prisma.DmParticipantUpdateManyWithoutUserNestedInput
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFriendshipActionsInput = {
@@ -1541,6 +1954,7 @@ export type UserUncheckedUpdateWithoutFriendshipActionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1558,6 +1972,8 @@ export type UserUncheckedUpdateWithoutFriendshipActionsInput = {
   dmParticipations?: Prisma.DmParticipantUncheckedUpdateManyWithoutUserNestedInput
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutMessagesInput = {
@@ -1567,6 +1983,7 @@ export type UserCreateWithoutMessagesInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1584,6 +2001,8 @@ export type UserCreateWithoutMessagesInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutMessagesInput = {
@@ -1593,6 +2012,7 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1610,6 +2030,8 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutMessagesInput = {
@@ -1635,6 +2057,7 @@ export type UserUpdateWithoutMessagesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1652,6 +2075,8 @@ export type UserUpdateWithoutMessagesInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMessagesInput = {
@@ -1661,6 +2086,7 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1678,6 +2104,8 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1687,6 +2115,7 @@ export type UserCreateWithoutNotificationsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1704,6 +2133,8 @@ export type UserCreateWithoutNotificationsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1713,6 +2144,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1730,6 +2162,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1755,6 +2189,7 @@ export type UserUpdateWithoutNotificationsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1772,6 +2207,8 @@ export type UserUpdateWithoutNotificationsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1781,6 +2218,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1798,6 +2236,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutOauthAccountsInput = {
@@ -1807,6 +2247,7 @@ export type UserCreateWithoutOauthAccountsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1824,6 +2265,8 @@ export type UserCreateWithoutOauthAccountsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutOauthAccountsInput = {
@@ -1833,6 +2276,7 @@ export type UserUncheckedCreateWithoutOauthAccountsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1850,6 +2294,8 @@ export type UserUncheckedCreateWithoutOauthAccountsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutOauthAccountsInput = {
@@ -1875,6 +2321,7 @@ export type UserUpdateWithoutOauthAccountsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1892,6 +2339,8 @@ export type UserUpdateWithoutOauthAccountsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOauthAccountsInput = {
@@ -1901,6 +2350,7 @@ export type UserUncheckedUpdateWithoutOauthAccountsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1918,6 +2368,8 @@ export type UserUncheckedUpdateWithoutOauthAccountsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutPollVotesInput = {
@@ -1927,6 +2379,7 @@ export type UserCreateWithoutPollVotesInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1944,6 +2397,8 @@ export type UserCreateWithoutPollVotesInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutPollVotesInput = {
@@ -1953,6 +2408,7 @@ export type UserUncheckedCreateWithoutPollVotesInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1970,6 +2426,8 @@ export type UserUncheckedCreateWithoutPollVotesInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutPollVotesInput = {
@@ -1995,6 +2453,7 @@ export type UserUpdateWithoutPollVotesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2012,6 +2471,8 @@ export type UserUpdateWithoutPollVotesInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPollVotesInput = {
@@ -2021,6 +2482,7 @@ export type UserUncheckedUpdateWithoutPollVotesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2038,6 +2500,8 @@ export type UserUncheckedUpdateWithoutPollVotesInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutReactionsInput = {
@@ -2047,6 +2511,7 @@ export type UserCreateWithoutReactionsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -2064,6 +2529,8 @@ export type UserCreateWithoutReactionsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutReactionsInput = {
@@ -2073,6 +2540,7 @@ export type UserUncheckedCreateWithoutReactionsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -2090,6 +2558,8 @@ export type UserUncheckedCreateWithoutReactionsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutReactionsInput = {
@@ -2115,6 +2585,7 @@ export type UserUpdateWithoutReactionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2132,6 +2603,8 @@ export type UserUpdateWithoutReactionsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReactionsInput = {
@@ -2141,6 +2614,7 @@ export type UserUncheckedUpdateWithoutReactionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2158,6 +2632,8 @@ export type UserUncheckedUpdateWithoutReactionsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutServerMembershipsInput = {
@@ -2167,6 +2643,7 @@ export type UserCreateWithoutServerMembershipsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -2184,6 +2661,8 @@ export type UserCreateWithoutServerMembershipsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutServerMembershipsInput = {
@@ -2193,6 +2672,7 @@ export type UserUncheckedCreateWithoutServerMembershipsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -2210,6 +2690,8 @@ export type UserUncheckedCreateWithoutServerMembershipsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutServerMembershipsInput = {
@@ -2235,6 +2717,7 @@ export type UserUpdateWithoutServerMembershipsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2252,6 +2735,8 @@ export type UserUpdateWithoutServerMembershipsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutServerMembershipsInput = {
@@ -2261,6 +2746,7 @@ export type UserUncheckedUpdateWithoutServerMembershipsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2278,6 +2764,8 @@ export type UserUncheckedUpdateWithoutServerMembershipsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutOwnedServersInput = {
@@ -2287,6 +2775,7 @@ export type UserCreateWithoutOwnedServersInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -2304,6 +2793,8 @@ export type UserCreateWithoutOwnedServersInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutOwnedServersInput = {
@@ -2313,6 +2804,7 @@ export type UserUncheckedCreateWithoutOwnedServersInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -2330,6 +2822,8 @@ export type UserUncheckedCreateWithoutOwnedServersInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutOwnedServersInput = {
@@ -2355,6 +2849,7 @@ export type UserUpdateWithoutOwnedServersInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2372,6 +2867,8 @@ export type UserUpdateWithoutOwnedServersInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOwnedServersInput = {
@@ -2381,6 +2878,7 @@ export type UserUncheckedUpdateWithoutOwnedServersInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2398,6 +2896,8 @@ export type UserUncheckedUpdateWithoutOwnedServersInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -2407,6 +2907,7 @@ export type UserCreateWithoutSessionsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -2424,6 +2925,8 @@ export type UserCreateWithoutSessionsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -2433,6 +2936,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   passwordHash?: string | null
   emailVerifiedAt?: Date | string | null
   emailNotificationEnabled?: boolean
+  dmPrivacy?: $Enums.DmPrivacy
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -2450,6 +2954,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserOneInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserTwoInput
   friendshipActions?: Prisma.FriendshipUncheckedCreateNestedManyWithoutActionUserInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -2475,6 +2981,7 @@ export type UserUpdateWithoutSessionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2492,6 +2999,8 @@ export type UserUpdateWithoutSessionsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -2501,6 +3010,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailNotificationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dmPrivacy?: Prisma.EnumDmPrivacyFieldUpdateOperationsInput | $Enums.DmPrivacy
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2518,6 +3028,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   friendshipsAsUserOne?: Prisma.FriendshipUncheckedUpdateManyWithoutUserOneNestedInput
   friendshipsAsUserTwo?: Prisma.FriendshipUncheckedUpdateManyWithoutUserTwoNestedInput
   friendshipActions?: Prisma.FriendshipUncheckedUpdateManyWithoutActionUserNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 
@@ -2541,6 +3053,8 @@ export type UserCountOutputType = {
   friendshipsAsUserOne: number
   friendshipsAsUserTwo: number
   friendshipActions: number
+  blockedUsers: number
+  blockedByUsers: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2559,6 +3073,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   friendshipsAsUserOne?: boolean | UserCountOutputTypeCountFriendshipsAsUserOneArgs
   friendshipsAsUserTwo?: boolean | UserCountOutputTypeCountFriendshipsAsUserTwoArgs
   friendshipActions?: boolean | UserCountOutputTypeCountFriendshipActionsArgs
+  blockedUsers?: boolean | UserCountOutputTypeCountBlockedUsersArgs
+  blockedByUsers?: boolean | UserCountOutputTypeCountBlockedByUsersArgs
 }
 
 /**
@@ -2676,6 +3192,20 @@ export type UserCountOutputTypeCountFriendshipActionsArgs<ExtArgs extends runtim
   where?: Prisma.FriendshipWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBlockedUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BlockedUserWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBlockedByUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BlockedUserWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2684,6 +3214,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   passwordHash?: boolean
   emailVerifiedAt?: boolean
   emailNotificationEnabled?: boolean
+  dmPrivacy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -2702,6 +3233,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   friendshipsAsUserOne?: boolean | Prisma.User$friendshipsAsUserOneArgs<ExtArgs>
   friendshipsAsUserTwo?: boolean | Prisma.User$friendshipsAsUserTwoArgs<ExtArgs>
   friendshipActions?: boolean | Prisma.User$friendshipActionsArgs<ExtArgs>
+  blockedUsers?: boolean | Prisma.User$blockedUsersArgs<ExtArgs>
+  blockedByUsers?: boolean | Prisma.User$blockedByUsersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2712,6 +3245,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   passwordHash?: boolean
   emailVerifiedAt?: boolean
   emailNotificationEnabled?: boolean
+  dmPrivacy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -2724,6 +3258,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   passwordHash?: boolean
   emailVerifiedAt?: boolean
   emailNotificationEnabled?: boolean
+  dmPrivacy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -2736,12 +3271,13 @@ export type UserSelectScalar = {
   passwordHash?: boolean
   emailVerifiedAt?: boolean
   emailNotificationEnabled?: boolean
+  dmPrivacy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "emailVerifiedAt" | "emailNotificationEnabled" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "passwordHash" | "emailVerifiedAt" | "emailNotificationEnabled" | "dmPrivacy" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   oauthAccounts?: boolean | Prisma.User$oauthAccountsArgs<ExtArgs>
@@ -2758,6 +3294,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   friendshipsAsUserOne?: boolean | Prisma.User$friendshipsAsUserOneArgs<ExtArgs>
   friendshipsAsUserTwo?: boolean | Prisma.User$friendshipsAsUserTwoArgs<ExtArgs>
   friendshipActions?: boolean | Prisma.User$friendshipActionsArgs<ExtArgs>
+  blockedUsers?: boolean | Prisma.User$blockedUsersArgs<ExtArgs>
+  blockedByUsers?: boolean | Prisma.User$blockedByUsersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2781,6 +3319,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     friendshipsAsUserOne: Prisma.$FriendshipPayload<ExtArgs>[]
     friendshipsAsUserTwo: Prisma.$FriendshipPayload<ExtArgs>[]
     friendshipActions: Prisma.$FriendshipPayload<ExtArgs>[]
+    blockedUsers: Prisma.$BlockedUserPayload<ExtArgs>[]
+    blockedByUsers: Prisma.$BlockedUserPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2789,6 +3329,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     passwordHash: string | null
     emailVerifiedAt: Date | null
     emailNotificationEnabled: boolean
+    dmPrivacy: $Enums.DmPrivacy
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -3201,6 +3742,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   friendshipsAsUserOne<T extends Prisma.User$friendshipsAsUserOneArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$friendshipsAsUserOneArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FriendshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   friendshipsAsUserTwo<T extends Prisma.User$friendshipsAsUserTwoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$friendshipsAsUserTwoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FriendshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   friendshipActions<T extends Prisma.User$friendshipActionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$friendshipActionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FriendshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  blockedUsers<T extends Prisma.User$blockedUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blockedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  blockedByUsers<T extends Prisma.User$blockedByUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blockedByUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3236,6 +3779,7 @@ export interface UserFieldRefs {
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly emailVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly emailNotificationEnabled: Prisma.FieldRef<"User", 'Boolean'>
+  readonly dmPrivacy: Prisma.FieldRef<"User", 'DmPrivacy'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -3989,6 +4533,54 @@ export type User$friendshipActionsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.FriendshipScalarFieldEnum | Prisma.FriendshipScalarFieldEnum[]
+}
+
+/**
+ * User.blockedUsers
+ */
+export type User$blockedUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BlockedUser
+   */
+  select?: Prisma.BlockedUserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BlockedUser
+   */
+  omit?: Prisma.BlockedUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockedUserInclude<ExtArgs> | null
+  where?: Prisma.BlockedUserWhereInput
+  orderBy?: Prisma.BlockedUserOrderByWithRelationInput | Prisma.BlockedUserOrderByWithRelationInput[]
+  cursor?: Prisma.BlockedUserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BlockedUserScalarFieldEnum | Prisma.BlockedUserScalarFieldEnum[]
+}
+
+/**
+ * User.blockedByUsers
+ */
+export type User$blockedByUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BlockedUser
+   */
+  select?: Prisma.BlockedUserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BlockedUser
+   */
+  omit?: Prisma.BlockedUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockedUserInclude<ExtArgs> | null
+  where?: Prisma.BlockedUserWhereInput
+  orderBy?: Prisma.BlockedUserOrderByWithRelationInput | Prisma.BlockedUserOrderByWithRelationInput[]
+  cursor?: Prisma.BlockedUserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BlockedUserScalarFieldEnum | Prisma.BlockedUserScalarFieldEnum[]
 }
 
 /**

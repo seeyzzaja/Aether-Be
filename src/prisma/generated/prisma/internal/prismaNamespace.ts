@@ -399,6 +399,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   AuditLog: 'AuditLog',
   AuthToken: 'AuthToken',
+  BlockedUser: 'BlockedUser',
   Category: 'Category',
   ChannelPermissionOverride: 'ChannelPermissionOverride',
   ChannelReadState: 'ChannelReadState',
@@ -434,7 +435,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "auditLog" | "authToken" | "category" | "channelPermissionOverride" | "channelReadState" | "channel" | "dmParticipant" | "friendship" | "messageAttachment" | "message" | "notification" | "oAuthAccount" | "poll" | "pollOption" | "pollVote" | "reaction" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user"
+    modelProps: "auditLog" | "authToken" | "blockedUser" | "category" | "channelPermissionOverride" | "channelReadState" | "channel" | "dmParticipant" | "friendship" | "messageAttachment" | "message" | "notification" | "oAuthAccount" | "poll" | "pollOption" | "pollVote" | "reaction" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -583,6 +584,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AuthTokenCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AuthTokenCountAggregateOutputType> | number
+        }
+      }
+    }
+    BlockedUser: {
+      payload: Prisma.$BlockedUserPayload<ExtArgs>
+      fields: Prisma.BlockedUserFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BlockedUserFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BlockedUserFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+        }
+        findFirst: {
+          args: Prisma.BlockedUserFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BlockedUserFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+        }
+        findMany: {
+          args: Prisma.BlockedUserFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>[]
+        }
+        create: {
+          args: Prisma.BlockedUserCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+        }
+        createMany: {
+          args: Prisma.BlockedUserCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BlockedUserCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>[]
+        }
+        delete: {
+          args: Prisma.BlockedUserDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+        }
+        update: {
+          args: Prisma.BlockedUserUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+        }
+        deleteMany: {
+          args: Prisma.BlockedUserDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BlockedUserUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BlockedUserUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>[]
+        }
+        upsert: {
+          args: Prisma.BlockedUserUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+        }
+        aggregate: {
+          args: Prisma.BlockedUserAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBlockedUser>
+        }
+        groupBy: {
+          args: Prisma.BlockedUserGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlockedUserGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BlockedUserCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlockedUserCountAggregateOutputType> | number
         }
       }
     }
@@ -2132,6 +2207,16 @@ export const AuthTokenScalarFieldEnum = {
 export type AuthTokenScalarFieldEnum = (typeof AuthTokenScalarFieldEnum)[keyof typeof AuthTokenScalarFieldEnum]
 
 
+export const BlockedUserScalarFieldEnum = {
+  id: 'id',
+  blockerId: 'blockerId',
+  blockedId: 'blockedId',
+  createdAt: 'createdAt'
+} as const
+
+export type BlockedUserScalarFieldEnum = (typeof BlockedUserScalarFieldEnum)[keyof typeof BlockedUserScalarFieldEnum]
+
+
 export const CategoryScalarFieldEnum = {
   id: 'id',
   serverId: 'serverId',
@@ -2373,6 +2458,7 @@ export const UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   emailVerifiedAt: 'emailVerifiedAt',
   emailNotificationEnabled: 'emailNotificationEnabled',
+  dmPrivacy: 'dmPrivacy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -2569,6 +2655,20 @@ export type ListEnumOAuthProviderFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'DmPrivacy'
+ */
+export type EnumDmPrivacyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DmPrivacy'>
+    
+
+
+/**
+ * Reference to a field of type 'DmPrivacy[]'
+ */
+export type ListEnumDmPrivacyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DmPrivacy[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -2734,6 +2834,7 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   auditLog?: Prisma.AuditLogOmit
   authToken?: Prisma.AuthTokenOmit
+  blockedUser?: Prisma.BlockedUserOmit
   category?: Prisma.CategoryOmit
   channelPermissionOverride?: Prisma.ChannelPermissionOverrideOmit
   channelReadState?: Prisma.ChannelReadStateOmit

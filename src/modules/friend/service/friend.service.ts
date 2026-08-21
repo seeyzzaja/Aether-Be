@@ -9,6 +9,7 @@ import {
   isPrismaUniqueConstraintError,
 } from "#modules/friend/repository/friend.repository";
 import { getUserPresence } from "#modules/presence/service/presence.service";
+import { ensureUsersAreNotBlocked } from "#modules/user/service/user.service";
 import { ConflictError, ForbiddenError, NotFoundError } from "#shared/errors/app-error";
 
 function canonicalizeUserPair(userIdA: string, userIdB: string) {
@@ -33,6 +34,8 @@ export async function sendFriendRequest(actorId: string, targetUserId: string) {
   if (!targetUser) {
     throw new NotFoundError("User tidak ditemukan");
   }
+
+  await ensureUsersAreNotBlocked(actorId, targetUserId);
 
   const { userOneId, userTwoId } = canonicalizeUserPair(actorId, targetUserId);
 
@@ -107,6 +110,11 @@ export async function acceptFriendRequest(actorId: string, friendshipId: string)
   if (friendship.userOneId !== actorId && friendship.userTwoId !== actorId) {
     throw new ForbiddenError("Anda bukan bagian dari permintaan pertemanan ini");
   }
+
+  const targetUserId =
+    friendship.userOneId === actorId ? friendship.userTwoId : friendship.userOneId;
+
+  await ensureUsersAreNotBlocked(actorId, targetUserId);
 
   return acceptFriendship(friendship.id, actorId);
 }
@@ -218,4 +226,45 @@ export async function getFriends(actorId: string, tab: "online" | "all" | "pendi
   }
 
   return friends;
+}
+export async function ensureFriendRequest(actorId: string, targetUserId: string) {
+  if (actorId === targetUserId) {
+    throw new ConflictError("Tidak dapat mengirim permintaan pertemanan kepada diri sendiri");
+  }
+
+  const targetUser = await findUserById(targetUserId);
+
+  if (!targetUser) {
+    throw new NotFoundError("User tidak ditemukan");
+  }
+
+  await ensureUsersAreNotBlocked(actorId, targetUserId);
+
+  const { userOneId, userTwoId } = canonicalizeUserPair(actorId, targetUserId);
+
+  const existingFriendship = await findFriendship(userOneId, userTwoId);
+
+  if (existingFriendship) {
+    if (existingFriendship.status === "ACCEPTED") {
+      return existingFriendship;
+    }
+
+    if (existingFriendship.status === "BLOCKED") {
+      throw new ForbiddenError("Tidak dapat melakukan tindakan ini");
+    }
+
+    if (existingFriendship.status === "PENDING") {
+      if (existingFriendship.actionUserId === actorId) {
+        return existingFriendship;
+      }
+
+      return acceptFriendship(existingFriendship.id, actorId);
+    }
+  }
+
+  return createFriendship({
+    userOneId,
+    userTwoId,
+    actionUserId: actorId,
+  });
 }

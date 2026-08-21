@@ -22,6 +22,7 @@ export class ConversationRepository {
         username: true,
         createdAt: true,
         updatedAt: true,
+        dmPrivacy: true,
       },
     });
   }

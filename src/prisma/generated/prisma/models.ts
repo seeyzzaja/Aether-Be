@@ -10,6 +10,7 @@
  */
 export type * from './models/AuditLog.js'
 export type * from './models/AuthToken.js'
+export type * from './models/BlockedUser.js'
 export type * from './models/Category.js'
 export type * from './models/ChannelPermissionOverride.js'
 export type * from './models/ChannelReadState.js'

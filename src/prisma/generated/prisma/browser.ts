@@ -28,6 +28,11 @@ export type AuditLog = Prisma.AuditLogModel
  */
 export type AuthToken = Prisma.AuthTokenModel
 /**
+ * Model BlockedUser
+ * 
+ */
+export type BlockedUser = Prisma.BlockedUserModel
+/**
  * Model Category
  * 
  */
