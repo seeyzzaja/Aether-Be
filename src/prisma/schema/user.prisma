@@ -32,6 +32,9 @@ model User {
   blockedByUsers BlockedUser[] @relation("BlockedUsersByBlocked")
   dmPrivacy      DmPrivacy     @default(EVERYONE)
 
+  messageRequestsSent     MessageRequest[] @relation("MessageRequestSender")
+  messageRequestsReceived MessageRequest[] @relation("MessageRequestReceiver")
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?

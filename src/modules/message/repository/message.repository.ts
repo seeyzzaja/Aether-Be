@@ -510,6 +510,7 @@ export class MessageRepository {
       select: {
         channelId: true,
         userId: true,
+        status: true,
       },
     });
   }

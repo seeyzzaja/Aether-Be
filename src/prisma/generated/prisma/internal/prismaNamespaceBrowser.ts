@@ -61,6 +61,7 @@ export const ModelName = {
   DmParticipant: 'DmParticipant',
   Friendship: 'Friendship',
   MessageAttachment: 'MessageAttachment',
+  MessageRequest: 'MessageRequest',
   Message: 'Message',
   Notification: 'Notification',
   OAuthAccount: 'OAuthAccount',
@@ -183,6 +184,7 @@ export type ChannelScalarFieldEnum = (typeof ChannelScalarFieldEnum)[keyof typeo
 export const DmParticipantScalarFieldEnum = {
   channelId: 'channelId',
   userId: 'userId',
+  status: 'status',
   joinedAt: 'joinedAt'
 } as const
 
@@ -213,6 +215,19 @@ export const MessageAttachmentScalarFieldEnum = {
 } as const
 
 export type MessageAttachmentScalarFieldEnum = (typeof MessageAttachmentScalarFieldEnum)[keyof typeof MessageAttachmentScalarFieldEnum]
+
+
+export const MessageRequestScalarFieldEnum = {
+  id: 'id',
+  senderId: 'senderId',
+  receiverId: 'receiverId',
+  conversationId: 'conversationId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MessageRequestScalarFieldEnum = (typeof MessageRequestScalarFieldEnum)[keyof typeof MessageRequestScalarFieldEnum]
 
 
 export const MessageScalarFieldEnum = {

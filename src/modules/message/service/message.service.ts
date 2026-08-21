@@ -98,8 +98,7 @@ export class MessageService {
 
     if (channel.type === "DM" || channel.type === "GROUP_DM") {
       const participant = await messageRepository.findDmParticipant(channelId, userId);
-
-      if (!participant) {
+      if (participant?.status !== "accepted") {
         throw new ForbiddenError("Kamu bukan participant pada conversation ini");
       }
 
@@ -148,7 +147,7 @@ export class MessageService {
     if (channel.type === "DM" || channel.type === "GROUP_DM") {
       const participant = await messageRepository.findDmParticipant(channelId, userId);
 
-      if (!participant) {
+      if (participant?.status !== "accepted") {
         throw new ForbiddenError("Kamu bukan participant pada conversation ini");
       }
 
@@ -327,7 +326,7 @@ export class MessageService {
     if (channel.type === "DM" || channel.type === "GROUP_DM") {
       const participant = await messageRepository.findDmParticipant(channelId, userId);
 
-      if (!participant) {
+      if (participant?.status !== "accepted") {
         throw new ForbiddenError("Kamu bukan participant pada conversation ini");
       }
 
@@ -558,7 +557,7 @@ export class MessageService {
     if (!message.channel.serverId) {
       const participant = await messageRepository.findDmParticipant(message.channel.id, userId);
 
-      if (!participant) {
+      if (participant?.status !== "accepted") {
         throw new ForbiddenError("Kamu bukan participant pada conversation ini");
       }
 
@@ -599,7 +598,7 @@ export class MessageService {
     if (!message.channel.serverId) {
       const participant = await messageRepository.findDmParticipant(message.channel.id, userId);
 
-      if (!participant) {
+      if (participant?.status !== "accepted") {
         throw new ForbiddenError("Kamu bukan participant pada conversation ini");
       }
 
@@ -677,7 +676,7 @@ export class MessageService {
     if (!message.channel.serverId) {
       const participant = await messageRepository.findDmParticipant(message.channel.id, userId);
 
-      if (!participant) {
+      if (participant?.status !== "accepted") {
         throw new ForbiddenError("Kamu bukan participant pada conversation ini");
       }
     } else {
@@ -714,7 +713,7 @@ export class MessageService {
     if (!message.channel.serverId) {
       const participant = await messageRepository.findDmParticipant(message.channel.id, userId);
 
-      if (!participant) {
+      if (participant?.status !== "accepted") {
         throw new ForbiddenError("Kamu bukan participant pada conversation ini");
       }
     } else {

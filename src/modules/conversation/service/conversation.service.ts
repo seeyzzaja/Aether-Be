@@ -3,11 +3,9 @@ import type {
   CreateDirectMessageInput,
   CreateGroupConversationInput,
 } from "#modules/conversation/schema/conversation.schema";
-import { ensureFriendRequest } from "#modules/friend/service/friend.service";
-import {
-  ensureCanSendDirectMessage,
-  ensureUsersAreNotBlocked,
-} from "#modules/user/service/user.service";
+import { areUsersFriends } from "#modules/friend/repository/friend.repository";
+import { messageRequestRepository } from "#modules/message-request/repository/message-request.repository";
+import { ensureUsersAreNotBlocked } from "#modules/user/service/user.service";
 import { Prisma } from "#prisma/generated/prisma/client";
 import { BadRequestError, ForbiddenError, NotFoundError } from "#shared/errors/app-error";
 import prisma from "#utils/prisma";
@@ -71,21 +69,89 @@ export class ConversationService {
     ]);
 
     await ensureUsersAreNotBlocked(actorId, input.userId);
+    if (targetUser.dmPrivacy === "FRIENDS_ONLY") {
+      const friends = await areUsersFriends(actorId, input.userId);
 
-    const canSendDirectMessage = await ensureCanSendDirectMessage(
-      actorId,
-      input.userId,
-      targetUser.dmPrivacy,
-    );
+      if (!friends) {
+        const existingRequest = await messageRequestRepository.findBySenderAndReceiver(
+          actorId,
+          input.userId,
+        );
 
-    if (!canSendDirectMessage) {
-      const friendship = await ensureFriendRequest(actorId, input.userId);
+        if (existingRequest?.status === "PENDING") {
+          return {
+            status: "pending_request",
+            request: existingRequest,
+          };
+        }
 
-      if (friendship.status === "PENDING") {
-        return {
-          status: "pending_request",
-          friendship,
-        };
+        if (existingRequest?.status === "ACCEPTED") {
+          throw new BadRequestError("Message request tersebut sudah diterima");
+        }
+
+        const sortedIds = [actorId, input.userId].sort();
+        const lockKey = sortedIds.join(":");
+
+        return prisma.$transaction(
+          async (tx) => {
+            await tx.$executeRaw`
+          SELECT pg_advisory_xact_lock(hashtext(${lockKey}))
+        `;
+
+            const existing = await conversationRepository.findDirectMessagePairWithTx(
+              tx,
+              actorId,
+              input.userId,
+            );
+
+            if (existing) {
+              return existing;
+            }
+            const conversation = await conversationRepository.createDirectMessageWithTx(tx, {
+              name: getDirectMessageName(actorUser, targetUser),
+              senderId: actorId,
+              receiverId: input.userId,
+              receiverStatus: "pending_request",
+            });
+            const request = await tx.messageRequest.create({
+              data: {
+                senderId: actorId,
+                receiverId: input.userId,
+                conversationId: conversation.id,
+                status: "PENDING",
+              },
+              include: {
+                sender: {
+                  select: {
+                    id: true,
+                    email: true,
+                    username: true,
+                    createdAt: true,
+                    updatedAt: true,
+                  },
+                },
+                receiver: {
+                  select: {
+                    id: true,
+                    email: true,
+                    username: true,
+                    createdAt: true,
+                    updatedAt: true,
+                  },
+                },
+              },
+            });
+
+            return {
+              status: "pending_request",
+              request,
+              conversation,
+            };
+          },
+          {
+            isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+          },
+        );
       }
     }
 
@@ -95,8 +161,8 @@ export class ConversationService {
     return prisma.$transaction(
       async (tx) => {
         await tx.$executeRaw`
-        SELECT pg_advisory_xact_lock(hashtext(${lockKey}))
-      `;
+          SELECT pg_advisory_xact_lock(hashtext(${lockKey}))
+        `;
 
         const existing = await conversationRepository.findDirectMessagePair(actorId, input.userId);
 
@@ -187,6 +253,7 @@ export class ConversationService {
     ]);
 
     const participantIds = [actorId, ...targetUserIds];
+
     const groupName =
       input.name?.trim() || [actorUser, ...targetUsers].map((user) => user.username).join(", ");
 
@@ -198,7 +265,9 @@ export class ConversationService {
           categoryId: null,
           name: groupName,
           dmParticipants: {
-            create: participantIds.map((userId) => ({ userId })),
+            create: participantIds.map((userId) => ({
+              userId,
+            })),
           },
         },
         include: {

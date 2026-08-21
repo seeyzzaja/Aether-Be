@@ -274,6 +274,23 @@ export type EnumChannelTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumChannelTypeFilter<$PrismaModel>
 }
 
+export type EnumDmParticipantStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DmParticipantStatus | Prisma.EnumDmParticipantStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DmParticipantStatus[] | Prisma.ListEnumDmParticipantStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DmParticipantStatus[] | Prisma.ListEnumDmParticipantStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDmParticipantStatusFilter<$PrismaModel> | $Enums.DmParticipantStatus
+}
+
+export type EnumDmParticipantStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DmParticipantStatus | Prisma.EnumDmParticipantStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DmParticipantStatus[] | Prisma.ListEnumDmParticipantStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DmParticipantStatus[] | Prisma.ListEnumDmParticipantStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDmParticipantStatusWithAggregatesFilter<$PrismaModel> | $Enums.DmParticipantStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDmParticipantStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDmParticipantStatusFilter<$PrismaModel>
+}
+
 export type EnumFriendshipStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.FriendshipStatus | Prisma.EnumFriendshipStatusFieldRefInput<$PrismaModel>
   in?: $Enums.FriendshipStatus[] | Prisma.ListEnumFriendshipStatusFieldRefInput<$PrismaModel>
@@ -289,6 +306,23 @@ export type EnumFriendshipStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFriendshipStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFriendshipStatusFilter<$PrismaModel>
+}
+
+export type EnumMessageRequestStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MessageRequestStatus | Prisma.EnumMessageRequestStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MessageRequestStatus[] | Prisma.ListEnumMessageRequestStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MessageRequestStatus[] | Prisma.ListEnumMessageRequestStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMessageRequestStatusFilter<$PrismaModel> | $Enums.MessageRequestStatus
+}
+
+export type EnumMessageRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MessageRequestStatus | Prisma.EnumMessageRequestStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MessageRequestStatus[] | Prisma.ListEnumMessageRequestStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MessageRequestStatus[] | Prisma.ListEnumMessageRequestStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMessageRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.MessageRequestStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMessageRequestStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMessageRequestStatusFilter<$PrismaModel>
 }
 
 export type BoolFilter<$PrismaModel = never> = {
@@ -635,6 +669,23 @@ export type NestedEnumChannelTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumChannelTypeFilter<$PrismaModel>
 }
 
+export type NestedEnumDmParticipantStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DmParticipantStatus | Prisma.EnumDmParticipantStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DmParticipantStatus[] | Prisma.ListEnumDmParticipantStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DmParticipantStatus[] | Prisma.ListEnumDmParticipantStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDmParticipantStatusFilter<$PrismaModel> | $Enums.DmParticipantStatus
+}
+
+export type NestedEnumDmParticipantStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DmParticipantStatus | Prisma.EnumDmParticipantStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DmParticipantStatus[] | Prisma.ListEnumDmParticipantStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DmParticipantStatus[] | Prisma.ListEnumDmParticipantStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDmParticipantStatusWithAggregatesFilter<$PrismaModel> | $Enums.DmParticipantStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDmParticipantStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDmParticipantStatusFilter<$PrismaModel>
+}
+
 export type NestedEnumFriendshipStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.FriendshipStatus | Prisma.EnumFriendshipStatusFieldRefInput<$PrismaModel>
   in?: $Enums.FriendshipStatus[] | Prisma.ListEnumFriendshipStatusFieldRefInput<$PrismaModel>
@@ -650,6 +701,23 @@ export type NestedEnumFriendshipStatusWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFriendshipStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFriendshipStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumMessageRequestStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MessageRequestStatus | Prisma.EnumMessageRequestStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MessageRequestStatus[] | Prisma.ListEnumMessageRequestStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MessageRequestStatus[] | Prisma.ListEnumMessageRequestStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMessageRequestStatusFilter<$PrismaModel> | $Enums.MessageRequestStatus
+}
+
+export type NestedEnumMessageRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MessageRequestStatus | Prisma.EnumMessageRequestStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MessageRequestStatus[] | Prisma.ListEnumMessageRequestStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MessageRequestStatus[] | Prisma.ListEnumMessageRequestStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMessageRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.MessageRequestStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMessageRequestStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMessageRequestStatusFilter<$PrismaModel>
 }
 
 export type NestedBoolFilter<$PrismaModel = never> = {

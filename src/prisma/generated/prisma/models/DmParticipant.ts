@@ -27,18 +27,21 @@ export type AggregateDmParticipant = {
 export type DmParticipantMinAggregateOutputType = {
   channelId: string | null
   userId: string | null
+  status: $Enums.DmParticipantStatus | null
   joinedAt: Date | null
 }
 
 export type DmParticipantMaxAggregateOutputType = {
   channelId: string | null
   userId: string | null
+  status: $Enums.DmParticipantStatus | null
   joinedAt: Date | null
 }
 
 export type DmParticipantCountAggregateOutputType = {
   channelId: number
   userId: number
+  status: number
   joinedAt: number
   _all: number
 }
@@ -47,18 +50,21 @@ export type DmParticipantCountAggregateOutputType = {
 export type DmParticipantMinAggregateInputType = {
   channelId?: true
   userId?: true
+  status?: true
   joinedAt?: true
 }
 
 export type DmParticipantMaxAggregateInputType = {
   channelId?: true
   userId?: true
+  status?: true
   joinedAt?: true
 }
 
 export type DmParticipantCountAggregateInputType = {
   channelId?: true
   userId?: true
+  status?: true
   joinedAt?: true
   _all?: true
 }
@@ -138,6 +144,7 @@ export type DmParticipantGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 export type DmParticipantGroupByOutputType = {
   channelId: string
   userId: string
+  status: $Enums.DmParticipantStatus
   joinedAt: Date
   _count: DmParticipantCountAggregateOutputType | null
   _min: DmParticipantMinAggregateOutputType | null
@@ -165,6 +172,7 @@ export type DmParticipantWhereInput = {
   NOT?: Prisma.DmParticipantWhereInput | Prisma.DmParticipantWhereInput[]
   channelId?: Prisma.StringFilter<"DmParticipant"> | string
   userId?: Prisma.StringFilter<"DmParticipant"> | string
+  status?: Prisma.EnumDmParticipantStatusFilter<"DmParticipant"> | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFilter<"DmParticipant"> | Date | string
   channel?: Prisma.XOR<Prisma.ChannelScalarRelationFilter, Prisma.ChannelWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -173,6 +181,7 @@ export type DmParticipantWhereInput = {
 export type DmParticipantOrderByWithRelationInput = {
   channelId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   channel?: Prisma.ChannelOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -185,6 +194,7 @@ export type DmParticipantWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.DmParticipantWhereInput | Prisma.DmParticipantWhereInput[]
   channelId?: Prisma.StringFilter<"DmParticipant"> | string
   userId?: Prisma.StringFilter<"DmParticipant"> | string
+  status?: Prisma.EnumDmParticipantStatusFilter<"DmParticipant"> | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFilter<"DmParticipant"> | Date | string
   channel?: Prisma.XOR<Prisma.ChannelScalarRelationFilter, Prisma.ChannelWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -193,6 +203,7 @@ export type DmParticipantWhereUniqueInput = Prisma.AtLeast<{
 export type DmParticipantOrderByWithAggregationInput = {
   channelId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   _count?: Prisma.DmParticipantCountOrderByAggregateInput
   _max?: Prisma.DmParticipantMaxOrderByAggregateInput
@@ -205,10 +216,12 @@ export type DmParticipantScalarWhereWithAggregatesInput = {
   NOT?: Prisma.DmParticipantScalarWhereWithAggregatesInput | Prisma.DmParticipantScalarWhereWithAggregatesInput[]
   channelId?: Prisma.StringWithAggregatesFilter<"DmParticipant"> | string
   userId?: Prisma.StringWithAggregatesFilter<"DmParticipant"> | string
+  status?: Prisma.EnumDmParticipantStatusWithAggregatesFilter<"DmParticipant"> | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeWithAggregatesFilter<"DmParticipant"> | Date | string
 }
 
 export type DmParticipantCreateInput = {
+  status?: $Enums.DmParticipantStatus
   joinedAt?: Date | string
   channel: Prisma.ChannelCreateNestedOneWithoutDmParticipantsInput
   user: Prisma.UserCreateNestedOneWithoutDmParticipationsInput
@@ -217,10 +230,12 @@ export type DmParticipantCreateInput = {
 export type DmParticipantUncheckedCreateInput = {
   channelId: string
   userId: string
+  status?: $Enums.DmParticipantStatus
   joinedAt?: Date | string
 }
 
 export type DmParticipantUpdateInput = {
+  status?: Prisma.EnumDmParticipantStatusFieldUpdateOperationsInput | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channel?: Prisma.ChannelUpdateOneRequiredWithoutDmParticipantsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutDmParticipationsNestedInput
@@ -229,22 +244,26 @@ export type DmParticipantUpdateInput = {
 export type DmParticipantUncheckedUpdateInput = {
   channelId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDmParticipantStatusFieldUpdateOperationsInput | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type DmParticipantCreateManyInput = {
   channelId: string
   userId: string
+  status?: $Enums.DmParticipantStatus
   joinedAt?: Date | string
 }
 
 export type DmParticipantUpdateManyMutationInput = {
+  status?: Prisma.EnumDmParticipantStatusFieldUpdateOperationsInput | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type DmParticipantUncheckedUpdateManyInput = {
   channelId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDmParticipantStatusFieldUpdateOperationsInput | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -266,18 +285,21 @@ export type DmParticipantChannelIdUserIdCompoundUniqueInput = {
 export type DmParticipantCountOrderByAggregateInput = {
   channelId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
 }
 
 export type DmParticipantMaxOrderByAggregateInput = {
   channelId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
 }
 
 export type DmParticipantMinOrderByAggregateInput = {
   channelId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
 }
 
@@ -323,6 +345,10 @@ export type DmParticipantUncheckedUpdateManyWithoutChannelNestedInput = {
   deleteMany?: Prisma.DmParticipantScalarWhereInput | Prisma.DmParticipantScalarWhereInput[]
 }
 
+export type EnumDmParticipantStatusFieldUpdateOperationsInput = {
+  set?: $Enums.DmParticipantStatus
+}
+
 export type DmParticipantCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.DmParticipantCreateWithoutUserInput, Prisma.DmParticipantUncheckedCreateWithoutUserInput> | Prisma.DmParticipantCreateWithoutUserInput[] | Prisma.DmParticipantUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.DmParticipantCreateOrConnectWithoutUserInput | Prisma.DmParticipantCreateOrConnectWithoutUserInput[]
@@ -366,12 +392,14 @@ export type DmParticipantUncheckedUpdateManyWithoutUserNestedInput = {
 }
 
 export type DmParticipantCreateWithoutChannelInput = {
+  status?: $Enums.DmParticipantStatus
   joinedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutDmParticipationsInput
 }
 
 export type DmParticipantUncheckedCreateWithoutChannelInput = {
   userId: string
+  status?: $Enums.DmParticipantStatus
   joinedAt?: Date | string
 }
 
@@ -407,16 +435,19 @@ export type DmParticipantScalarWhereInput = {
   NOT?: Prisma.DmParticipantScalarWhereInput | Prisma.DmParticipantScalarWhereInput[]
   channelId?: Prisma.StringFilter<"DmParticipant"> | string
   userId?: Prisma.StringFilter<"DmParticipant"> | string
+  status?: Prisma.EnumDmParticipantStatusFilter<"DmParticipant"> | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFilter<"DmParticipant"> | Date | string
 }
 
 export type DmParticipantCreateWithoutUserInput = {
+  status?: $Enums.DmParticipantStatus
   joinedAt?: Date | string
   channel: Prisma.ChannelCreateNestedOneWithoutDmParticipantsInput
 }
 
 export type DmParticipantUncheckedCreateWithoutUserInput = {
   channelId: string
+  status?: $Enums.DmParticipantStatus
   joinedAt?: Date | string
 }
 
@@ -448,41 +479,49 @@ export type DmParticipantUpdateManyWithWhereWithoutUserInput = {
 
 export type DmParticipantCreateManyChannelInput = {
   userId: string
+  status?: $Enums.DmParticipantStatus
   joinedAt?: Date | string
 }
 
 export type DmParticipantUpdateWithoutChannelInput = {
+  status?: Prisma.EnumDmParticipantStatusFieldUpdateOperationsInput | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutDmParticipationsNestedInput
 }
 
 export type DmParticipantUncheckedUpdateWithoutChannelInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDmParticipantStatusFieldUpdateOperationsInput | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type DmParticipantUncheckedUpdateManyWithoutChannelInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDmParticipantStatusFieldUpdateOperationsInput | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type DmParticipantCreateManyUserInput = {
   channelId: string
+  status?: $Enums.DmParticipantStatus
   joinedAt?: Date | string
 }
 
 export type DmParticipantUpdateWithoutUserInput = {
+  status?: Prisma.EnumDmParticipantStatusFieldUpdateOperationsInput | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   channel?: Prisma.ChannelUpdateOneRequiredWithoutDmParticipantsNestedInput
 }
 
 export type DmParticipantUncheckedUpdateWithoutUserInput = {
   channelId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDmParticipantStatusFieldUpdateOperationsInput | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type DmParticipantUncheckedUpdateManyWithoutUserInput = {
   channelId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDmParticipantStatusFieldUpdateOperationsInput | $Enums.DmParticipantStatus
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -491,6 +530,7 @@ export type DmParticipantUncheckedUpdateManyWithoutUserInput = {
 export type DmParticipantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   channelId?: boolean
   userId?: boolean
+  status?: boolean
   joinedAt?: boolean
   channel?: boolean | Prisma.ChannelDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -499,6 +539,7 @@ export type DmParticipantSelect<ExtArgs extends runtime.Types.Extensions.Interna
 export type DmParticipantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   channelId?: boolean
   userId?: boolean
+  status?: boolean
   joinedAt?: boolean
   channel?: boolean | Prisma.ChannelDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -507,6 +548,7 @@ export type DmParticipantSelectCreateManyAndReturn<ExtArgs extends runtime.Types
 export type DmParticipantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   channelId?: boolean
   userId?: boolean
+  status?: boolean
   joinedAt?: boolean
   channel?: boolean | Prisma.ChannelDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -515,10 +557,11 @@ export type DmParticipantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
 export type DmParticipantSelectScalar = {
   channelId?: boolean
   userId?: boolean
+  status?: boolean
   joinedAt?: boolean
 }
 
-export type DmParticipantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"channelId" | "userId" | "joinedAt", ExtArgs["result"]["dmParticipant"]>
+export type DmParticipantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"channelId" | "userId" | "status" | "joinedAt", ExtArgs["result"]["dmParticipant"]>
 export type DmParticipantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   channel?: boolean | Prisma.ChannelDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -541,6 +584,7 @@ export type $DmParticipantPayload<ExtArgs extends runtime.Types.Extensions.Inter
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     channelId: string
     userId: string
+    status: $Enums.DmParticipantStatus
     joinedAt: Date
   }, ExtArgs["result"]["dmParticipant"]>
   composites: {}
@@ -969,6 +1013,7 @@ export interface Prisma__DmParticipantClient<T, Null = never, ExtArgs extends ru
 export interface DmParticipantFieldRefs {
   readonly channelId: Prisma.FieldRef<"DmParticipant", 'String'>
   readonly userId: Prisma.FieldRef<"DmParticipant", 'String'>
+  readonly status: Prisma.FieldRef<"DmParticipant", 'DmParticipantStatus'>
   readonly joinedAt: Prisma.FieldRef<"DmParticipant", 'DateTime'>
 }
     

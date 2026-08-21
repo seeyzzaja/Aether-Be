@@ -1,3 +1,4 @@
+import type { Prisma } from "#prisma/generated/prisma/client";
 import prisma from "#utils/prisma";
 
 const participantSelect = {
@@ -11,7 +12,7 @@ const participantSelect = {
     },
   },
 } as const;
-
+type PrismaTransactionClient = Prisma.TransactionClient;
 export class ConversationRepository {
   async findUserById(userId: string) {
     return prisma.user.findUnique({
@@ -47,6 +48,53 @@ export class ConversationRepository {
       include: participantSelect,
       orderBy: {
         joinedAt: "asc",
+      },
+    });
+  }
+  async updateDmParticipantStatus(
+    channelId: string,
+    userId: string,
+    status: "accepted" | "pending_request",
+  ) {
+    return prisma.dmParticipant.update({
+      where: {
+        channelId_userId: {
+          channelId,
+          userId,
+        },
+      },
+      data: {
+        status,
+      },
+    });
+  }
+
+  async updateDmParticipantStatusWithTx(
+    tx: PrismaTransactionClient,
+    channelId: string,
+    userId: string,
+    status: "accepted" | "pending_request",
+  ) {
+    return tx.dmParticipant.update({
+      where: {
+        channelId_userId: {
+          channelId,
+          userId,
+        },
+      },
+      data: {
+        status,
+      },
+    });
+  }
+
+  async deleteDmParticipant(tx: PrismaTransactionClient, channelId: string, userId: string) {
+    return tx.dmParticipant.delete({
+      where: {
+        channelId_userId: {
+          channelId,
+          userId,
+        },
       },
     });
   }
@@ -100,6 +148,7 @@ export class ConversationRepository {
         dmParticipants: {
           some: {
             userId,
+            status: "accepted",
           },
         },
       },
@@ -124,6 +173,7 @@ export class ConversationRepository {
         dmParticipants: {
           some: {
             userId,
+            status: "accepted",
           },
         },
       },
@@ -173,6 +223,96 @@ export class ConversationRepository {
         },
       },
     });
+  }
+  async createDirectMessageWithTx(
+    tx: PrismaTransactionClient,
+    data: {
+      name: string;
+      senderId: string;
+      receiverId: string;
+      receiverStatus: "accepted" | "pending_request";
+    },
+  ) {
+    return tx.channel.create({
+      data: {
+        type: "DM",
+        serverId: null,
+        categoryId: null,
+        name: data.name,
+        dmParticipants: {
+          create: [
+            {
+              userId: data.senderId,
+              status: "accepted",
+            },
+            {
+              userId: data.receiverId,
+              status: data.receiverStatus,
+            },
+          ],
+        },
+      },
+      include: {
+        dmParticipants: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                email: true,
+                username: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+            },
+          },
+          orderBy: {
+            joinedAt: "asc",
+          },
+        },
+      },
+    });
+  }
+
+  async findDirectMessagePairWithTx(
+    tx: PrismaTransactionClient,
+    userId: string,
+    targetUserId: string,
+  ) {
+    const conversations = await tx.channel.findMany({
+      where: {
+        type: "DM",
+        serverId: null,
+        dmParticipants: {
+          some: {
+            userId: {
+              in: [userId, targetUserId],
+            },
+          },
+        },
+      },
+      include: {
+        dmParticipants: {
+          include: participantSelect,
+          orderBy: {
+            joinedAt: "asc",
+          },
+        },
+      },
+    });
+
+    return (
+      conversations.find((conversation) => {
+        const participantIds = conversation.dmParticipants.map(
+          (participant) => participant.user.id,
+        );
+
+        return (
+          participantIds.length === 2 &&
+          participantIds.includes(userId) &&
+          participantIds.includes(targetUserId)
+        );
+      }) ?? null
+    );
   }
 }
 
