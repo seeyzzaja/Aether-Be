@@ -17,6 +17,7 @@ import deviceRouter from "#modules/device/route/device.route";
 import friendRouter from "#modules/friend/route/friend.route";
 import membershipRouter from "#modules/membership/route/membership.route";
 import messageRouter from "#modules/message/route/message.route";
+import messageRequestRouter from "#modules/message-request/route/message-request.route";
 import notificationRouter from "#modules/notification/route/notification.route";
 import pollRouter from "#modules/pool/route/poll.route";
 import reactionRouter from "#modules/reaction/route/reaction.route";
@@ -135,6 +136,7 @@ app.use("/api", pollRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/friends", friendRouter);
 app.use("/api/users", userRouter);
+app.use("/api/message-requests", messageRequestRouter);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });

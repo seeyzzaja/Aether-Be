@@ -68,6 +68,11 @@ export type Friendship = Prisma.FriendshipModel
  */
 export type MessageAttachment = Prisma.MessageAttachmentModel
 /**
+ * Model MessageRequest
+ * 
+ */
+export type MessageRequest = Prisma.MessageRequestModel
+/**
  * Model Message
  * 
  */

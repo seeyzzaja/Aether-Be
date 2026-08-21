@@ -407,6 +407,7 @@ export const ModelName = {
   DmParticipant: 'DmParticipant',
   Friendship: 'Friendship',
   MessageAttachment: 'MessageAttachment',
+  MessageRequest: 'MessageRequest',
   Message: 'Message',
   Notification: 'Notification',
   OAuthAccount: 'OAuthAccount',
@@ -435,7 +436,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "auditLog" | "authToken" | "blockedUser" | "category" | "channelPermissionOverride" | "channelReadState" | "channel" | "dmParticipant" | "friendship" | "messageAttachment" | "message" | "notification" | "oAuthAccount" | "poll" | "pollOption" | "pollVote" | "reaction" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user"
+    modelProps: "auditLog" | "authToken" | "blockedUser" | "category" | "channelPermissionOverride" | "channelReadState" | "channel" | "dmParticipant" | "friendship" | "messageAttachment" | "messageRequest" | "message" | "notification" | "oAuthAccount" | "poll" | "pollOption" | "pollVote" | "reaction" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1176,6 +1177,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MessageAttachmentCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MessageAttachmentCountAggregateOutputType> | number
+        }
+      }
+    }
+    MessageRequest: {
+      payload: Prisma.$MessageRequestPayload<ExtArgs>
+      fields: Prisma.MessageRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MessageRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MessageRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.MessageRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MessageRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageRequestPayload>
+        }
+        findMany: {
+          args: Prisma.MessageRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageRequestPayload>[]
+        }
+        create: {
+          args: Prisma.MessageRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageRequestPayload>
+        }
+        createMany: {
+          args: Prisma.MessageRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MessageRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.MessageRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageRequestPayload>
+        }
+        update: {
+          args: Prisma.MessageRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.MessageRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MessageRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MessageRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.MessageRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.MessageRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMessageRequest>
+        }
+        groupBy: {
+          args: Prisma.MessageRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MessageRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MessageRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MessageRequestCountAggregateOutputType> | number
         }
       }
     }
@@ -2271,6 +2346,7 @@ export type ChannelScalarFieldEnum = (typeof ChannelScalarFieldEnum)[keyof typeo
 export const DmParticipantScalarFieldEnum = {
   channelId: 'channelId',
   userId: 'userId',
+  status: 'status',
   joinedAt: 'joinedAt'
 } as const
 
@@ -2301,6 +2377,19 @@ export const MessageAttachmentScalarFieldEnum = {
 } as const
 
 export type MessageAttachmentScalarFieldEnum = (typeof MessageAttachmentScalarFieldEnum)[keyof typeof MessageAttachmentScalarFieldEnum]
+
+
+export const MessageRequestScalarFieldEnum = {
+  id: 'id',
+  senderId: 'senderId',
+  receiverId: 'receiverId',
+  conversationId: 'conversationId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MessageRequestScalarFieldEnum = (typeof MessageRequestScalarFieldEnum)[keyof typeof MessageRequestScalarFieldEnum]
 
 
 export const MessageScalarFieldEnum = {
@@ -2620,6 +2709,20 @@ export type ListEnumChannelTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'DmParticipantStatus'
+ */
+export type EnumDmParticipantStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DmParticipantStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DmParticipantStatus[]'
+ */
+export type ListEnumDmParticipantStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DmParticipantStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'FriendshipStatus'
  */
 export type EnumFriendshipStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FriendshipStatus'>
@@ -2630,6 +2733,20 @@ export type EnumFriendshipStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
  * Reference to a field of type 'FriendshipStatus[]'
  */
 export type ListEnumFriendshipStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FriendshipStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MessageRequestStatus'
+ */
+export type EnumMessageRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageRequestStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'MessageRequestStatus[]'
+ */
+export type ListEnumMessageRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageRequestStatus[]'>
     
 
 
@@ -2842,6 +2959,7 @@ export type GlobalOmitConfig = {
   dmParticipant?: Prisma.DmParticipantOmit
   friendship?: Prisma.FriendshipOmit
   messageAttachment?: Prisma.MessageAttachmentOmit
+  messageRequest?: Prisma.MessageRequestOmit
   message?: Prisma.MessageOmit
   notification?: Prisma.NotificationOmit
   oAuthAccount?: Prisma.OAuthAccountOmit

@@ -1,12 +1,18 @@
+enum DmParticipantStatus {
+  accepted
+  pending_request
+}
+
 model DmParticipant {
   channelId String
   userId    String
+  status    DmParticipantStatus @default(accepted)
   joinedAt  DateTime @default(now())
 
   channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([channelId, userId])
-  @@index([userId, joinedAt(sort: Desc)])
+  @@index([userId, status, joinedAt(sort: Desc)])
   @@map("dm_participants")
 }

@@ -1,0 +1,26 @@
+enum MessageRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model MessageRequest {
+  id             String               @id @default(uuid())
+  senderId       String               @map("sender_id")
+  receiverId     String               @map("receiver_id")
+  conversationId String               @map("conversation_id")
+  status         MessageRequestStatus @default(PENDING)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  sender       User    @relation("MessageRequestSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver     User    @relation("MessageRequestReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  conversation Channel @relation("MessageRequestConversation", fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@unique([conversationId])
+  @@index([receiverId, status])
+  @@index([senderId, status])
+  @@map("message_requests")
+}

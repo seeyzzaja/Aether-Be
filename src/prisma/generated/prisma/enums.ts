@@ -30,6 +30,14 @@ export const ChannelType = {
 export type ChannelType = (typeof ChannelType)[keyof typeof ChannelType]
 
 
+export const DmParticipantStatus = {
+  accepted: 'accepted',
+  pending_request: 'pending_request'
+} as const
+
+export type DmParticipantStatus = (typeof DmParticipantStatus)[keyof typeof DmParticipantStatus]
+
+
 export const FriendshipStatus = {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',
@@ -37,6 +45,15 @@ export const FriendshipStatus = {
 } as const
 
 export type FriendshipStatus = (typeof FriendshipStatus)[keyof typeof FriendshipStatus]
+
+
+export const MessageRequestStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type MessageRequestStatus = (typeof MessageRequestStatus)[keyof typeof MessageRequestStatus]
 
 
 export const OAuthProvider = {
