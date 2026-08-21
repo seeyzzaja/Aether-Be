@@ -30,6 +30,15 @@ export const ChannelType = {
 export type ChannelType = (typeof ChannelType)[keyof typeof ChannelType]
 
 
+export const FriendshipStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type FriendshipStatus = (typeof FriendshipStatus)[keyof typeof FriendshipStatus]
+
+
 export const OAuthProvider = {
   GOOGLE: 'GOOGLE',
   GITHUB: 'GITHUB',

@@ -7,18 +7,21 @@ model User {
 
   emailNotificationEnabled Boolean @default(true)
 
-  sessions          Session[]
-  oauthAccounts     OAuthAccount[]
-  authTokens        AuthToken[]
-  ownedServers      Server[]           @relation("ServerOwner")
-  serverMemberships ServerMember[]
-  messages          Message[]
-  reactions         Reaction[]
-  readStates        ChannelReadState[]
-  notifications     Notification[]
-  pollVotes         PollVote[]
-  auditLogs         AuditLog[]
-  dmParticipations  DmParticipant[]
+  sessions             Session[]
+  oauthAccounts        OAuthAccount[]
+  authTokens           AuthToken[]
+  ownedServers         Server[]           @relation("ServerOwner")
+  serverMemberships    ServerMember[]
+  messages             Message[]
+  reactions            Reaction[]
+  readStates           ChannelReadState[]
+  notifications        Notification[]
+  pollVotes            PollVote[]
+  auditLogs            AuditLog[]
+  dmParticipations     DmParticipant[]
+  friendshipsAsUserOne Friendship[]       @relation("FriendshipUserOne")
+  friendshipsAsUserTwo Friendship[]       @relation("FriendshipUserTwo")
+  friendshipActions    Friendship[]       @relation("FriendshipActionUser")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

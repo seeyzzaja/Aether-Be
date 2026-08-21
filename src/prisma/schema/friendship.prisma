@@ -1,0 +1,25 @@
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  BLOCKED
+}
+
+model Friendship {
+  id           String           @id @default(uuid())
+  userOneId    String           @map("user_one_id")
+  userTwoId    String           @map("user_two_id")
+  status       FriendshipStatus @default(PENDING)
+  actionUserId String           @map("action_user_id")
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+
+  userOne    User @relation("FriendshipUserOne", fields: [userOneId], references: [id], onDelete: Cascade)
+  userTwo    User @relation("FriendshipUserTwo", fields: [userTwoId], references: [id], onDelete: Cascade)
+  actionUser User @relation("FriendshipActionUser", fields: [actionUserId], references: [id], onDelete: Cascade)
+
+  @@unique([userOneId, userTwoId])
+  @@index([userOneId, status])
+  @@index([userTwoId, status])
+  @@index([actionUserId])
+  @@map("friendships")
+}

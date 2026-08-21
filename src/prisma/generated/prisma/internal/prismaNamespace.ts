@@ -404,6 +404,7 @@ export const ModelName = {
   ChannelReadState: 'ChannelReadState',
   Channel: 'Channel',
   DmParticipant: 'DmParticipant',
+  Friendship: 'Friendship',
   MessageAttachment: 'MessageAttachment',
   Message: 'Message',
   Notification: 'Notification',
@@ -433,7 +434,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "auditLog" | "authToken" | "category" | "channelPermissionOverride" | "channelReadState" | "channel" | "dmParticipant" | "messageAttachment" | "message" | "notification" | "oAuthAccount" | "poll" | "pollOption" | "pollVote" | "reaction" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user"
+    modelProps: "auditLog" | "authToken" | "category" | "channelPermissionOverride" | "channelReadState" | "channel" | "dmParticipant" | "friendship" | "messageAttachment" | "message" | "notification" | "oAuthAccount" | "poll" | "pollOption" | "pollVote" | "reaction" | "role" | "serverMemberRole" | "serverMember" | "server" | "session" | "user"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -952,6 +953,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.DmParticipantCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DmParticipantCountAggregateOutputType> | number
+        }
+      }
+    }
+    Friendship: {
+      payload: Prisma.$FriendshipPayload<ExtArgs>
+      fields: Prisma.FriendshipFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FriendshipFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendshipPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FriendshipFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendshipPayload>
+        }
+        findFirst: {
+          args: Prisma.FriendshipFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendshipPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FriendshipFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendshipPayload>
+        }
+        findMany: {
+          args: Prisma.FriendshipFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendshipPayload>[]
+        }
+        create: {
+          args: Prisma.FriendshipCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendshipPayload>
+        }
+        createMany: {
+          args: Prisma.FriendshipCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FriendshipCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendshipPayload>[]
+        }
+        delete: {
+          args: Prisma.FriendshipDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendshipPayload>
+        }
+        update: {
+          args: Prisma.FriendshipUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendshipPayload>
+        }
+        deleteMany: {
+          args: Prisma.FriendshipDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FriendshipUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FriendshipUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendshipPayload>[]
+        }
+        upsert: {
+          args: Prisma.FriendshipUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendshipPayload>
+        }
+        aggregate: {
+          args: Prisma.FriendshipAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFriendship>
+        }
+        groupBy: {
+          args: Prisma.FriendshipGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FriendshipGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FriendshipCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FriendshipCountAggregateOutputType> | number
         }
       }
     }
@@ -2117,6 +2192,19 @@ export const DmParticipantScalarFieldEnum = {
 export type DmParticipantScalarFieldEnum = (typeof DmParticipantScalarFieldEnum)[keyof typeof DmParticipantScalarFieldEnum]
 
 
+export const FriendshipScalarFieldEnum = {
+  id: 'id',
+  userOneId: 'userOneId',
+  userTwoId: 'userTwoId',
+  status: 'status',
+  actionUserId: 'actionUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FriendshipScalarFieldEnum = (typeof FriendshipScalarFieldEnum)[keyof typeof FriendshipScalarFieldEnum]
+
+
 export const MessageAttachmentScalarFieldEnum = {
   id: 'id',
   messageId: 'messageId',
@@ -2446,6 +2534,20 @@ export type ListEnumChannelTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'FriendshipStatus'
+ */
+export type EnumFriendshipStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FriendshipStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'FriendshipStatus[]'
+ */
+export type ListEnumFriendshipStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FriendshipStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -2637,6 +2739,7 @@ export type GlobalOmitConfig = {
   channelReadState?: Prisma.ChannelReadStateOmit
   channel?: Prisma.ChannelOmit
   dmParticipant?: Prisma.DmParticipantOmit
+  friendship?: Prisma.FriendshipOmit
   messageAttachment?: Prisma.MessageAttachmentOmit
   message?: Prisma.MessageOmit
   notification?: Prisma.NotificationOmit
