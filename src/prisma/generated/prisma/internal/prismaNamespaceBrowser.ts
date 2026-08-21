@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   AuditLog: 'AuditLog',
   AuthToken: 'AuthToken',
+  BlockedUser: 'BlockedUser',
   Category: 'Category',
   ChannelPermissionOverride: 'ChannelPermissionOverride',
   ChannelReadState: 'ChannelReadState',
@@ -116,6 +117,16 @@ export const AuthTokenScalarFieldEnum = {
 } as const
 
 export type AuthTokenScalarFieldEnum = (typeof AuthTokenScalarFieldEnum)[keyof typeof AuthTokenScalarFieldEnum]
+
+
+export const BlockedUserScalarFieldEnum = {
+  id: 'id',
+  blockerId: 'blockerId',
+  blockedId: 'blockedId',
+  createdAt: 'createdAt'
+} as const
+
+export type BlockedUserScalarFieldEnum = (typeof BlockedUserScalarFieldEnum)[keyof typeof BlockedUserScalarFieldEnum]
 
 
 export const CategoryScalarFieldEnum = {
@@ -359,6 +370,7 @@ export const UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   emailVerifiedAt: 'emailVerifiedAt',
   emailNotificationEnabled: 'emailNotificationEnabled',
+  dmPrivacy: 'dmPrivacy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'

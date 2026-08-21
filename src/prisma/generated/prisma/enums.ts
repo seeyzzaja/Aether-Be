@@ -46,3 +46,11 @@ export const OAuthProvider = {
 } as const
 
 export type OAuthProvider = (typeof OAuthProvider)[keyof typeof OAuthProvider]
+
+
+export const DmPrivacy = {
+  EVERYONE: 'EVERYONE',
+  FRIENDS_ONLY: 'FRIENDS_ONLY'
+} as const
+
+export type DmPrivacy = (typeof DmPrivacy)[keyof typeof DmPrivacy]

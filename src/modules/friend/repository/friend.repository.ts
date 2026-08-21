@@ -98,3 +98,21 @@ export async function findFriendshipsByUserId(userId: string) {
 export function isPrismaUniqueConstraintError(error: unknown): boolean {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
 }
+export async function areUsersFriends(userIdA: string, userIdB: string) {
+  const userOneId = userIdA < userIdB ? userIdA : userIdB;
+  const userTwoId = userIdA < userIdB ? userIdB : userIdA;
+
+  const friendship = await prisma.friendship.findUnique({
+    where: {
+      userOneId_userTwoId: {
+        userOneId,
+        userTwoId,
+      },
+    },
+    select: {
+      status: true,
+    },
+  });
+
+  return friendship?.status === "ACCEPTED";
+}

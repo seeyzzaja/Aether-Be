@@ -1,11 +1,16 @@
-import { Prisma } from "#prisma/generated/prisma/client";
-import { BadRequestError, ForbiddenError, NotFoundError } from "#shared/errors/app-error";
-import prisma from "#utils/prisma";
-import { conversationRepository } from "../repository/conversation.repository.js";
+import { conversationRepository } from "#modules/conversation/repository/conversation.repository";
 import type {
   CreateDirectMessageInput,
   CreateGroupConversationInput,
-} from "../schema/conversation.schema.js";
+} from "#modules/conversation/schema/conversation.schema";
+import { ensureFriendRequest } from "#modules/friend/service/friend.service";
+import {
+  ensureCanSendDirectMessage,
+  ensureUsersAreNotBlocked,
+} from "#modules/user/service/user.service";
+import { Prisma } from "#prisma/generated/prisma/client";
+import { BadRequestError, ForbiddenError, NotFoundError } from "#shared/errors/app-error";
+import prisma from "#utils/prisma";
 
 type ConversationWithParticipants = {
   dmParticipants: Array<{
@@ -65,14 +70,33 @@ export class ConversationService {
       this.ensureTargetUserExists(input.userId),
     ]);
 
+    await ensureUsersAreNotBlocked(actorId, input.userId);
+
+    const canSendDirectMessage = await ensureCanSendDirectMessage(
+      actorId,
+      input.userId,
+      targetUser.dmPrivacy,
+    );
+
+    if (!canSendDirectMessage) {
+      const friendship = await ensureFriendRequest(actorId, input.userId);
+
+      if (friendship.status === "PENDING") {
+        return {
+          status: "pending_request",
+          friendship,
+        };
+      }
+    }
+
     const sortedIds = [actorId, input.userId].sort();
     const lockKey = sortedIds.join(":");
 
     return prisma.$transaction(
       async (tx) => {
         await tx.$executeRaw`
-          SELECT pg_advisory_xact_lock(hashtext(${lockKey}))
-        `;
+        SELECT pg_advisory_xact_lock(hashtext(${lockKey}))
+      `;
 
         const existing = await conversationRepository.findDirectMessagePair(actorId, input.userId);
 
@@ -87,7 +111,14 @@ export class ConversationService {
             categoryId: null,
             name: getDirectMessageName(actorUser, targetUser),
             dmParticipants: {
-              create: [{ userId: actorId }, { userId: input.userId }],
+              create: [
+                {
+                  userId: actorId,
+                },
+                {
+                  userId: input.userId,
+                },
+              ],
             },
           },
           include: {

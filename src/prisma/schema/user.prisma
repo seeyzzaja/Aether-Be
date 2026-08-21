@@ -1,3 +1,8 @@
+enum DmPrivacy {
+  EVERYONE
+  FRIENDS_ONLY
+}
+
 model User {
   id              String    @id @default(uuid())
   email           String    @unique
@@ -22,6 +27,10 @@ model User {
   friendshipsAsUserOne Friendship[]       @relation("FriendshipUserOne")
   friendshipsAsUserTwo Friendship[]       @relation("FriendshipUserTwo")
   friendshipActions    Friendship[]       @relation("FriendshipActionUser")
+
+  blockedUsers   BlockedUser[] @relation("BlockedUsersByBlocker")
+  blockedByUsers BlockedUser[] @relation("BlockedUsersByBlocked")
+  dmPrivacy      DmPrivacy     @default(EVERYONE)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
