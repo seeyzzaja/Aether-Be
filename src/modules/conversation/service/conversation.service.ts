@@ -2,13 +2,17 @@ import { conversationRepository } from "#modules/conversation/repository/convers
 import type {
   CreateDirectMessageInput,
   CreateGroupConversationInput,
+  GroupParticipantInput,
+  UpdateGroupConversationInput,
 } from "#modules/conversation/schema/conversation.schema";
 import { areUsersFriends } from "#modules/friend/repository/friend.repository";
 import { messageRequestRepository } from "#modules/message-request/repository/message-request.repository";
 import { ensureUsersAreNotBlocked } from "#modules/user/service/user.service";
 import { Prisma } from "#prisma/generated/prisma/client";
 import { BadRequestError, ForbiddenError, NotFoundError } from "#shared/errors/app-error";
+import { publishWebSocketEvent } from "#shared/redis/redis.publisher";
 import prisma from "#utils/prisma";
+import { WebSocketEvent } from "#websocket/constants/events";
 
 type ConversationWithParticipants = {
   dmParticipants: Array<{
@@ -290,6 +294,157 @@ export class ConversationService {
         },
       });
     });
+  }
+  private async ensureGroupConversationParticipant(conversationId: string, userId: string) {
+    const conversation = await conversationRepository.findConversationByParticipant(
+      conversationId,
+      userId,
+    );
+
+    if (!conversation) {
+      const existingConversation =
+        await conversationRepository.findConversationById(conversationId);
+
+      if (!existingConversation) {
+        throw new NotFoundError("Conversation tidak ditemukan");
+      }
+
+      if (existingConversation.type === "DM") {
+        throw new BadRequestError(
+          "Manajemen participant hanya tersedia untuk Group DM, bukan DM 1:1",
+        );
+      }
+
+      throw new ForbiddenError("Kamu bukan participant pada Group DM ini");
+    }
+
+    if (conversation.type !== "GROUP_DM") {
+      throw new BadRequestError(
+        "Manajemen participant hanya tersedia untuk Group DM, bukan DM 1:1",
+      );
+    }
+
+    return conversation;
+  }
+
+  async updateGroupConversation(
+    conversationId: string,
+    actorId: string,
+    input: UpdateGroupConversationInput,
+  ) {
+    await this.ensureGroupConversationParticipant(conversationId, actorId);
+
+    const updateData: {
+      name?: string;
+      iconUrl?: string | null;
+    } = {};
+
+    if (input.name !== undefined) {
+      updateData.name = input.name;
+    }
+
+    if (input.iconUrl !== undefined) {
+      updateData.iconUrl = input.iconUrl;
+    }
+
+    const conversation = await conversationRepository.updateGroupConversation(
+      conversationId,
+      updateData,
+    );
+
+    const result = this.formatConversation(conversation);
+
+    await publishWebSocketEvent({
+      event: WebSocketEvent.GROUP_DM_UPDATED,
+      data: {
+        channelId: conversationId,
+        conversation: result,
+      },
+    });
+
+    return result;
+  }
+
+  async addGroupParticipant(conversationId: string, actorId: string, input: GroupParticipantInput) {
+    await this.ensureGroupConversationParticipant(conversationId, actorId);
+
+    if (actorId === input.userId) {
+      throw new BadRequestError("Kamu sudah menjadi participant Group DM ini");
+    }
+
+    await this.ensureTargetUserExists(input.userId);
+
+    const existingParticipant = await conversationRepository.findParticipant(
+      conversationId,
+      input.userId,
+    );
+
+    if (existingParticipant) {
+      throw new BadRequestError("User tersebut sudah menjadi participant Group DM");
+    }
+
+    await conversationRepository.addParticipant(conversationId, input.userId);
+
+    const conversation = await conversationRepository.findConversationById(conversationId);
+
+    if (!conversation) {
+      throw new NotFoundError("Conversation tidak ditemukan");
+    }
+
+    const result = this.formatConversation(conversation);
+
+    await publishWebSocketEvent({
+      event: WebSocketEvent.GROUP_DM_PARTICIPANT_ADDED,
+      data: {
+        channelId: conversationId,
+        participant: input.userId,
+        conversation: result,
+      },
+    });
+
+    return result;
+  }
+
+  async removeGroupParticipant(
+    conversationId: string,
+    actorId: string,
+    input: GroupParticipantInput,
+  ) {
+    await this.ensureGroupConversationParticipant(conversationId, actorId);
+
+    const participant = await conversationRepository.findParticipant(conversationId, input.userId);
+
+    if (!participant) {
+      throw new NotFoundError("User tersebut bukan participant Group DM");
+    }
+
+    await conversationRepository.removeParticipant(conversationId, input.userId);
+
+    const conversation = await conversationRepository.findConversationById(conversationId);
+
+    const remainingParticipants = conversation?.dmParticipants ?? [];
+
+    await publishWebSocketEvent({
+      event: WebSocketEvent.GROUP_DM_PARTICIPANT_REMOVED,
+      data: {
+        channelId: conversationId,
+        participant: input.userId,
+        actorId,
+        left: input.userId === actorId,
+        remainingParticipantIds: remainingParticipants.map(
+          (remainingParticipant) => remainingParticipant.user.id,
+        ),
+      },
+    });
+
+    return {
+      channelId: conversationId,
+      removedUserId: input.userId,
+      left: input.userId === actorId,
+      remainingParticipants: remainingParticipants.map(
+        (remainingParticipant) => remainingParticipant.user,
+      ),
+    };
   }
 }
 

@@ -7,7 +7,7 @@
     "dev": "tsx watch --conditions=development src/index.ts",
     "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && tsc",
     "start": "node dist/src/index.js",
-    "test": "tsx --test --conditions=development test/websocket.integration.test.ts",
+    "test": "node --env-file=.env.test --import=tsx --test --conditions=development test/conversation.integration.test.ts",
     "prisma.generate": "prisma generate",
     "prisma.migrate": "prisma migrate dev",
     "prisma.migrate.prod": "prisma migrate deploy",

@@ -330,6 +330,75 @@ export class ConversationRepository {
       }) ?? null
     );
   }
+  async updateGroupConversation(
+    conversationId: string,
+    data: {
+      name?: string;
+      iconUrl?: string | null;
+    },
+  ) {
+    const updateData: {
+      name?: string;
+      iconUrl?: string | null;
+    } = {};
+
+    if (data.name !== undefined) {
+      updateData.name = data.name;
+    }
+
+    if (data.iconUrl !== undefined) {
+      updateData.iconUrl = data.iconUrl;
+    }
+
+    return prisma.channel.update({
+      where: {
+        id: conversationId,
+      },
+      data: updateData,
+      include: {
+        dmParticipants: {
+          include: participantSelect,
+          orderBy: {
+            joinedAt: "asc",
+          },
+        },
+      },
+    });
+  }
+
+  async findParticipant(conversationId: string, userId: string) {
+    return prisma.dmParticipant.findUnique({
+      where: {
+        channelId_userId: {
+          channelId: conversationId,
+          userId,
+        },
+      },
+      include: participantSelect,
+    });
+  }
+
+  async addParticipant(conversationId: string, userId: string) {
+    return prisma.dmParticipant.create({
+      data: {
+        channelId: conversationId,
+        userId,
+        status: "accepted",
+      },
+      include: participantSelect,
+    });
+  }
+
+  async removeParticipant(conversationId: string, userId: string) {
+    return prisma.dmParticipant.delete({
+      where: {
+        channelId_userId: {
+          channelId: conversationId,
+          userId,
+        },
+      },
+    });
+  }
 }
 
 export const conversationRepository = new ConversationRepository();

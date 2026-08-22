@@ -173,6 +173,7 @@ export const ChannelScalarFieldEnum = {
   serverId: 'serverId',
   categoryId: 'categoryId',
   name: 'name',
+  iconUrl: 'iconUrl',
   type: 'type',
   topic: 'topic',
   position: 'position'

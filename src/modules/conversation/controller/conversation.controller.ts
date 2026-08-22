@@ -3,6 +3,8 @@ import {
   createDirectMessageSchema,
   createGroupConversationSchema,
   getConversationSchema,
+  groupParticipantSchema,
+  updateGroupConversationSchema,
 } from "#modules/conversation/schema/conversation.schema";
 import { conversationService } from "#modules/conversation/service/conversation.service";
 import { UnauthorizedError } from "#shared/errors/app-error";
@@ -70,6 +72,77 @@ export class ConversationController {
       const conversation = await conversationService.createGroupConversation(userId, validated);
 
       return successResponse(res, "Group conversation berhasil dibuat", conversation, null, 201);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async updateGroup(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = this.getUserId(req);
+
+      const conversationId = getConversationSchema.parse({
+        conversationId: req.params.channelId,
+      }).conversationId;
+
+      const validated = updateGroupConversationSchema.parse(req.body);
+
+      const conversation = await conversationService.updateGroupConversation(
+        conversationId,
+        userId,
+        validated,
+      );
+
+      return successResponse(res, "Group DM berhasil diperbarui", conversation);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async addParticipant(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = this.getUserId(req);
+
+      const conversationId = getConversationSchema.parse({
+        conversationId: req.params.channelId,
+      }).conversationId;
+
+      const validated = groupParticipantSchema.parse(req.body);
+
+      const conversation = await conversationService.addGroupParticipant(
+        conversationId,
+        userId,
+        validated,
+      );
+
+      return successResponse(res, "Participant berhasil ditambahkan ke Group DM", conversation);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async removeParticipant(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = this.getUserId(req);
+
+      const conversationId = getConversationSchema.parse({
+        conversationId: req.params.channelId,
+      }).conversationId;
+
+      const validated = groupParticipantSchema.parse(req.body);
+
+      const result = await conversationService.removeGroupParticipant(
+        conversationId,
+        userId,
+        validated,
+      );
+
+      return successResponse(
+        res,
+        validated.userId === userId
+          ? "Berhasil keluar dari Group DM"
+          : "Participant berhasil dihapus dari Group DM",
+        result,
+      );
     } catch (error) {
       next(error);
     }

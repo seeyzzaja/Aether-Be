@@ -13,6 +13,7 @@ import authRouter from "#modules/auth/route/auth.route";
 import categoryRouter from "#modules/category/route/category.route";
 import channelRouter from "#modules/channel/route/channel.routes";
 import conversationRouter from "#modules/conversation/route/conversation.route";
+import dmManagementRouter from "#modules/conversation/route/dm-management.route";
 import deviceRouter from "#modules/device/route/device.route";
 import friendRouter from "#modules/friend/route/friend.route";
 import membershipRouter from "#modules/membership/route/membership.route";
@@ -139,6 +140,7 @@ app.use("/api/friends", friendRouter);
 app.use("/api/users", userRouter);
 app.use("/api/message-requests", messageRequestRouter);
 app.use("/api/dm", dmVoiceRouter);
+app.use("/api/conversations", dmManagementRouter);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(new NotFoundError(`Route ${req.originalUrl} tidak ditemukan`));
 });
