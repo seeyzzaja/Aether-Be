@@ -202,10 +202,13 @@ export async function acceptMessageRequest(actorId: string, requestId: string) {
 
       await ensureUsersAreNotBlocked(request.senderId, request.receiverId);
 
-      const conversation = await conversationRepository.findDirectMessagePairWithTx(
+      if (!request.conversationId) {
+        throw new NotFoundError("Conversation untuk message request tidak ditemukan");
+      }
+
+      const conversation = await conversationRepository.findConversationByIdWithTx(
         tx,
-        request.senderId,
-        request.receiverId,
+        request.conversationId,
       );
 
       if (!conversation) {
@@ -260,10 +263,13 @@ export async function rejectMessageRequest(actorId: string, requestId: string) {
         throw new ConflictError("Message request sudah tidak berstatus pending");
       }
 
-      const conversation = await conversationRepository.findDirectMessagePairWithTx(
+      if (!request.conversationId) {
+        throw new NotFoundError("Conversation untuk message request tidak ditemukan");
+      }
+
+      const conversation = await conversationRepository.findConversationByIdWithTx(
         tx,
-        request.senderId,
-        request.receiverId,
+        request.conversationId,
       );
 
       if (!conversation) {

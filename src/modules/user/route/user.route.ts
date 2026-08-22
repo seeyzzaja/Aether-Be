@@ -110,5 +110,98 @@ router.delete("/:userId/block", (req, res, next) => userController.unblock(req, 
  *         description: Pengguna belum login
  */
 router.patch("/me/privacy", (req, res, next) => userController.updatePrivacy(req, res, next));
-
+/**
+ * @swagger
+ * /api/users/{userId}/profile:
+ *   get:
+ *     summary: Mendapatkan profil pengguna
+ *     description: >
+ *       Mengambil data profil pengguna yang mencakup bio, server bersama,
+ *       teman bersama, dan status hubungan pengguna terhadap aktor yang sedang login.
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         required: true
+ *         description: ID pengguna yang ingin dilihat profilnya
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Profil pengguna berhasil diambil
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Profil pengguna berhasil diambil
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       format: uuid
+ *                       example: 59b54776-5a4d-4535-b2ea-b27d0607de34
+ *                     username:
+ *                       type: string
+ *                       example: seeyzz
+ *                     bio:
+ *                       type: string
+ *                       nullable: true
+ *                       example: Backend developer
+ *                     relationshipStatus:
+ *                       type: string
+ *                       enum:
+ *                         - none
+ *                         - pending
+ *                         - friends
+ *                         - blocked
+ *                       example: friends
+ *                     mutualServers:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                             format: uuid
+ *                           name:
+ *                             type: string
+ *                           iconUrl:
+ *                             type: string
+ *                             nullable: true
+ *                             format: uri
+ *                       example:
+ *                         - id: 11111111-1111-1111-1111-111111111111
+ *                           name: Aether Community
+ *                           iconUrl: https://example.com/icon.png
+ *                     mutualFriends:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                             format: uuid
+ *                           username:
+ *                             type: string
+ *                       example:
+ *                         - id: 22222222-2222-2222-2222-222222222222
+ *                           username: seeyzz2
+ *       400:
+ *         description: User ID tidak valid
+ *       401:
+ *         description: Pengguna belum login
+ *       404:
+ *         description: User tidak ditemukan
+ */
+router.get("/:userId/profile", (req, res, next) => userController.profile(req, res, next));
 export default router;

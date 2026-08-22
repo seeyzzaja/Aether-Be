@@ -273,6 +273,22 @@ export class ConversationRepository {
     });
   }
 
+  async findConversationByIdWithTx(tx: PrismaTransactionClient, conversationId: string) {
+    return tx.channel.findUnique({
+      where: {
+        id: conversationId,
+      },
+      include: {
+        dmParticipants: {
+          include: participantSelect,
+          orderBy: {
+            joinedAt: "asc",
+          },
+        },
+      },
+    });
+  }
+
   async findDirectMessagePairWithTx(
     tx: PrismaTransactionClient,
     userId: string,
