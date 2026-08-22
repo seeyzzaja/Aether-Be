@@ -39,23 +39,7 @@ export class VoiceService {
     );
   }
 
-  async createVoiceToken(channelId: string, userId: string, withVideo: boolean) {
-    const channel = await channelRepository.findById(channelId);
-
-    if (!channel) {
-      throw new NotFoundError("Channel tidak ditemukan");
-    }
-    if (!channel.serverId) {
-      throw new ForbiddenError("Voice channel harus berada di dalam server");
-    }
-    const permissions = await this.getActorPermissions(channel.serverId, userId);
-
-    if (!hasPermission(permissions, Permission.CONNECT)) {
-      throw new ForbiddenError("Kamu tidak memiliki permission CONNECT");
-    }
-
-    const roomName = `channel_${channelId}`;
-
+  private async createLiveKitToken(roomName: string, userId: string, withVideo: boolean) {
     const accessToken = new AccessToken(config.LIVEKIT_API_KEY, config.LIVEKIT_API_SECRET, {
       identity: userId,
     });
@@ -77,6 +61,73 @@ export class VoiceService {
       token,
       roomName,
     };
+  }
+
+  async createVoiceToken(channelId: string, userId: string, withVideo: boolean) {
+    const channel = await channelRepository.findById(channelId);
+
+    if (!channel) {
+      throw new NotFoundError("Channel tidak ditemukan");
+    }
+
+    if (!channel.serverId) {
+      throw new ForbiddenError("Voice channel harus berada di dalam server");
+    }
+
+    const permissions = await this.getActorPermissions(channel.serverId, userId);
+
+    if (!hasPermission(permissions, Permission.CONNECT)) {
+      throw new ForbiddenError("Kamu tidak memiliki permission CONNECT");
+    }
+
+    const roomName = `channel_${channelId}`;
+
+    return this.createLiveKitToken(roomName, userId, withVideo);
+  }
+
+  async createDmVoiceToken(channelId: string, userId: string, withVideo: boolean) {
+    const channel = await prisma.channel.findUnique({
+      where: {
+        id: channelId,
+      },
+      select: {
+        id: true,
+        type: true,
+        serverId: true,
+      },
+    });
+
+    if (!channel) {
+      throw new NotFoundError("Conversation DM tidak ditemukan");
+    }
+
+    if (channel.type !== "DM" && channel.type !== "GROUP_DM") {
+      throw new ForbiddenError("Channel bukan DM atau Group DM");
+    }
+
+    if (channel.serverId !== null) {
+      throw new ForbiddenError("DM tidak boleh berada di dalam server");
+    }
+
+    const participant = await prisma.dmParticipant.findUnique({
+      where: {
+        channelId_userId: {
+          channelId,
+          userId,
+        },
+      },
+      select: {
+        status: true,
+      },
+    });
+
+    if (!participant || participant.status !== "accepted") {
+      throw new ForbiddenError("Kamu bukan participant aktif pada DM ini");
+    }
+
+    const roomName = `dm_${channelId}`;
+
+    return this.createLiveKitToken(roomName, userId, withVideo);
   }
 }
 

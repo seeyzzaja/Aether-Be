@@ -43,6 +43,25 @@ export class VoiceController {
       next(error);
     }
   }
+
+  async createDmToken(req: Request, res: Response, next: NextFunction) {
+    try {
+      const channelId = this.getChannelId(req);
+      const userId = this.getUserId(req);
+
+      const validatedData = voiceTokenSchema.parse(req.body);
+
+      const result = await voiceService.createDmVoiceToken(
+        channelId,
+        userId,
+        validatedData.withVideo,
+      );
+
+      return successResponse(res, "Token LiveKit DM berhasil diterbitkan", result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const voiceController = new VoiceController();
