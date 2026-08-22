@@ -1,0 +1,261 @@
+**SOFTWARE REQUIREMENT SPECIFICATION (SRS)**
+**Discord-Like Web Application — Project-Based Learning**
+*Fase 2 — Dokumen tunggal fase ini*
+# 1. Pendahuluan
+## 1.1 Tujuan Dokumen
+Dokumen ini menerjemahkan kebutuhan produk pada PRD (Fase 1) menjadi spesifikasi kebutuhan perangkat lunak yang rinci dan dapat diverifikasi, mencakup kebutuhan fungsional rinci per modul (input/proses/output/precondition/postcondition/exception), kebutuhan antarmuka eksternal, dan kebutuhan non-fungsional lengkap (performance, scalability, reliability, availability, security).
+## 1.2 Lingkup
+SRS ini mencakup seluruh 10 area fitur yang telah didefinisikan pada PRD. Detail implementasi teknis (folder structure, event flow, deployment) dibahas pada Architecture Document (Fase 3); skema tabel rinci dibahas pada Database Design (Fase 4); kontrak API rinci dibahas pada API Specification (Fase 5).
+## 1.3 Definisi & Akronim
+| **Istilah** | **Definisi** |
+| --- | --- |
+| **SFU** | **Selective Forwarding Unit — server media yang meneruskan stream audio/video antar peserta tanpa transcoding penuh.** |
+| **FTS** | **Full Text Search — mekanisme pencarian teks pada PostgreSQL berbasis tsvector/tsquery.** |
+| **RBAC** | **Role-Based Access Control — model otorisasi berbasis peran.** |
+| **SLA/SLO** | **Service Level Agreement/Objective — target tingkat layanan yang ingin dicapai sistem.** |
+| **p95/p99** | **Persentil ke-95/ke-99 dari distribusi waktu respons; mis. p95 400ms berarti 95% permintaan selesai dalam 400ms.** |
+## 1.4 Referensi
+Vision Document, ADR, dan Learning Roadmap (Fase 0).
+Product Requirement Document — PRD (Fase 1).
+
+# 2. Deskripsi Umum Sistem
+## 2.1 Perspektif Produk
+Sistem dibangun sebagai Modular Monolith (ADR-001) yang diakses melalui Website Responsif dan PWA, dengan komunikasi REST API untuk operasi CRUD dan Native WebSocket (ADR-002) untuk event realtime, serta LiveKit (ADR-003) untuk voice/video.
+## 2.2 Karakteristik Pengguna
+Mengikuti 4 persona yang telah didefinisikan pada PRD: Server Owner, Moderator/Custom Role, Member Biasa, dan Platform Admin, dengan tingkat kemampuan teknis pengguna umum (tidak memerlukan pengetahuan teknis untuk mengoperasikan aplikasi).
+## 2.3 Batasan Umum
+Seluruh keputusan stack teknologi mengikuti ADR Fase 0 dan bersifat given, bukan hasil evaluasi ulang pada SRS ini.
+Arsitektur Modular Monolith bersifat permanen — kebutuhan non-fungsional pada dokumen ini dirancang agar tetap tercapai dalam batasan tersebut (scaling horizontal di level proses, bukan per modul).
+## 2.4 Asumsi & Dependensi
+Target skala (10.000 concurrent user, 100.000 member/server) adalah target desain teoritis, tidak divalidasi via load-test produksi sungguhan (dikonfirmasi sejak Vision Document).
+Ketersediaan layanan pihak ketiga (LiveKit, Cloudinary, penyedia SMTP email) menjadi dependensi eksternal yang di luar kendali langsung tim proyek.
+
+# 3. Spesifikasi Kebutuhan Fungsional Rinci
+Setiap SRS-ID di bawah menelusuri (traceable) ke satu atau lebih FR-ID pada PRD. Format rinci mengikuti pola Input – Proses – Output – Precondition – Postcondition – Exception agar dapat langsung diverifikasi pada tahap pengujian (QA).
+## 3.1 Modul Autentikasi (mengacu FR-AUTH-01..03)
+**SRS-AUTH-01 — Registrasi Akun**
+Sistem menerima pendaftaran akun baru menggunakan email, username, dan password.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **Email, username, password, konfirmasi password.** |
+| **Proses** | **Validasi format email & keunikan username/email; hashing password (mis. bcrypt/argon2); simpan record User baru; kirim email verifikasi (opsional, via BullMQ job).** |
+| **Output** | **Akun User baru berstatus belum/sudah terverifikasi beserta pesan sukses.** |
+| **Precondition** | **Tidak ada sesi aktif yang menggunakan email/username tersebut.** |
+| **Postcondition** | **Akun User tersimpan di database dengan password ter-hash.** |
+| **Exception** | **Jika email/username sudah terdaftar, sistem mengembalikan error validasi tanpa membocorkan informasi akun mana yang sudah terpakai (mitigasi user enumeration).** |
+
+**SRS-AUTH-02 — Login**
+Sistem mengautentikasi pengguna menggunakan email atau username beserta password, lalu menerbitkan sesi/token akses.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **Email atau username, password.** |
+| **Proses** | **Verifikasi kredensial; jika valid, buat sesi/token (access & refresh) dan catat device/session baru.** |
+| **Output** | **Access token, refresh token, dan informasi profil dasar pengguna.** |
+| **Precondition** | **Akun harus sudah terdaftar.** |
+| **Postcondition** | **Sesi baru tercatat pada tabel session/device management.** |
+| **Exception** | **Kredensial salah menghasilkan error generik ("email/username atau password salah") tanpa membedakan penyebab spesifik; percobaan berulang tunduk pada rate limiter (lihat Kebutuhan Keamanan).** |
+
+## 3.2 Modul Workspace: Server, Category, Channel (mengacu FR-WS-01..04)
+**SRS-WS-01 — Pembuatan Server**
+Pengguna terautentikasi dapat membuat server baru yang menjadikannya Server Owner secara otomatis.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **Nama server, (opsional) ikon server.** |
+| **Proses** | **Validasi input; buat record Server baru; buat role default (Owner, @everyone); tambahkan pembuat sebagai member dengan role Owner.** |
+| **Output** | **Server baru beserta channel/category default.** |
+| **Precondition** | **Pengguna sudah login.** |
+| **Postcondition** | **Server baru tampil pada daftar server pengguna.** |
+| **Exception** | **Kuota jumlah server per pengguna (jika diberlakukan pada tahap desain lanjutan) divalidasi sebelum pembuatan.** |
+
+**SRS-WS-02 — Manajemen Category & Channel**
+Server Owner/role berizin dapat membuat, mengubah urutan, dan menghapus category serta channel (Text, Voice, Video, Forum, Announcement) di dalam server.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **Nama category/channel, tipe channel, urutan tampilan, (opsional) override permission channel.** |
+| **Proses** | **Validasi izin pembuat aksi; simpan/ubah struktur category-channel; broadcast event perubahan struktur ke member yang sedang online via WebSocket.** |
+| **Output** | **Struktur category/channel ter-update dan tersinkron realtime ke client yang terhubung.** |
+| **Precondition** | **Aktor memiliki permission MANAGE_CHANNELS pada server terkait.** |
+| **Postcondition** | **Perubahan struktur tercermin pada seluruh sesi client yang sedang membuka server tersebut.** |
+| **Exception** | **Penghapusan channel yang masih memiliki riwayat pesan memerlukan konfirmasi eksplisit; pesan tidak dihapus permanen (soft delete pada level channel dapat dipertimbangkan lebih lanjut di Architecture Document).** |
+
+## 3.3 Modul Role & Permission (mengacu FR-PERM-01..02)
+**SRS-PERM-01 — Pembuatan & Assignment Role Kustom**
+Server Owner dapat membuat role dengan kombinasi permission granular dan menetapkannya ke member.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **Nama role, daftar permission (bitmask/flag), warna role, daftar member penerima role.** |
+| **Proses** | **Validasi permission yang diminta tidak melebihi permission aktor sendiri (mitigasi privilege escalation); simpan role; assign ke member.** |
+| **Output** | **Role baru aktif dan diterapkan pada member terkait.** |
+| **Precondition** | **Aktor memiliki permission MANAGE_ROLES.** |
+| **Postcondition** | **Perubahan permission langsung memengaruhi otorisasi aksi berikutnya dari member terkait (tanpa perlu re-login).** |
+| **Exception** | **Percobaan membuat role dengan permission melebihi permission aktor sendiri ditolak dengan error otorisasi eksplisit.** |
+
+## 3.4 Modul Messaging (mengacu FR-MSG-01..08)
+**SRS-MSG-01 — Kirim, Edit, Hapus Pesan**
+Member dapat mengirim pesan teks ke channel, mengedit pesan miliknya, dan menghapus (soft delete) pesan sesuai izin.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **Isi pesan (mendukung markdown), (opsional) reply_to_id, attachment reference.** |
+| **Proses** | **Validasi permission SEND_MESSAGES; simpan pesan; broadcast event pesan baru/edit/hapus ke seluruh peserta channel via WebSocket; update index full text search secara asinkron.** |
+| **Output** | **Pesan tersimpan/ter-update/ber-status soft deleted, tersinkron realtime ke seluruh peserta channel.** |
+| **Precondition** | **Aktor adalah member channel dengan permission SEND_MESSAGES (untuk kirim) atau adalah pengirim asli/punya MANAGE_MESSAGES (untuk edit/hapus).** |
+| **Postcondition** | **Riwayat pesan channel ter-update; pesan yang di-soft-delete tidak lagi tampil namun tetap ada di database untuk keperluan audit.** |
+| **Exception** | **Edit/hapus oleh pihak yang tidak berwenang ditolak dengan error otorisasi; edit pesan setelah rentang waktu tertentu (jika dibatasi) ditolak dengan pesan kedaluwarsa edit.** |
+
+**SRS-MSG-02 — Reaksi, Pin, dan Forward Pesan**
+Member dapat memberi reaksi emoji, menyematkan (pin) pesan penting, dan meneruskan (forward) pesan ke channel/server lain.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **message_id, emoji (untuk reaksi); message_id (untuk pin); message_id & target_channel_id (untuk forward).** |
+| **Proses** | **Validasi permission terkait per aksi; untuk forward, validasi aktor memiliki akses baca pada channel asal DAN akses tulis pada channel tujuan sebelum menyalin konten pesan.** |
+| **Output** | **Reaksi/pin/forward tersimpan dan tersinkron realtime ke peserta channel terkait.** |
+| **Precondition** | **Aktor adalah member channel asal (dan channel tujuan untuk forward).** |
+| **Postcondition** | **Metadata reaksi/pin/forward tercatat, termasuk relasi ke pesan asal untuk forward (agar dapat ditelusuri sumbernya).** |
+| **Exception** | **Forward ke channel tujuan yang aktor tidak memiliki akses tulis ditolak dengan error otorisasi eksplisit.** |
+
+## 3.5 Modul Presence & Realtime (mengacu FR-PRES-01..03)
+**SRS-PRES-01 — Update & Broadcast Status Presence**
+Sistem melacak dan menyiarkan status presence (online/offline/idle/DND/invisible) pengguna ke kontak/member server yang relevan.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **Event perubahan status dari client (eksplisit) atau dari koneksi/diskoneksi WebSocket (implisit).** |
+| **Proses** | **Update state presence di memory/Redis; broadcast event presence via Redis Pub/Sub ke seluruh instance aplikasi yang memiliki koneksi relevan.** |
+| **Output** | **Status presence terbaru tampil pada client member lain yang berbagi server dengan pengguna.** |
+| **Precondition** | **Pengguna memiliki koneksi WebSocket aktif.** |
+| **Postcondition** | **State presence konsisten lintas instance aplikasi dalam rentang waktu propagasi Pub/Sub yang telah ditentukan (lihat Kebutuhan Performance).** |
+| **Exception** | **Saat status invisible, sistem tetap mencatat status asli secara internal namun menyiarkan status offline ke pengguna lain.** |
+
+## 3.6 Modul Notifikasi (mengacu FR-NOTIF-01..02)
+**SRS-NOTIF-01 — Notifikasi Realtime & Email**
+Sistem mengirim notifikasi realtime untuk mention/reply, dan notifikasi email untuk aktivitas penting saat pengguna offline.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **Event pemicu (mention, reply, dsb.), status online/offline penerima.** |
+| **Proses** | **Jika penerima online: kirim event notifikasi via WebSocket. Jika offline & preferensi email aktif: enqueue job BullMQ pengiriman email.** |
+| **Output** | **Notifikasi realtime diterima instan, atau email terkirim dalam rentang waktu wajar melalui job queue.** |
+| **Precondition** | **Penerima adalah member channel/server yang relevan dengan event pemicu.** |
+| **Postcondition** | **Riwayat notifikasi tercatat agar dapat ditampilkan ulang saat pengguna membuka aplikasi.** |
+| **Exception** | **Kegagalan pengiriman email di-retry oleh BullMQ sesuai kebijakan backoff; setelah batas maksimum percobaan, job dipindah ke dead-letter queue untuk investigasi.** |
+
+## 3.7 Modul Upload & Media (mengacu FR-UP-01..02)
+**SRS-UP-01 — Upload File**
+Member dapat mengunggah file (image, video, audio, PDF, ZIP) hingga 1GB untuk dilampirkan pada pesan.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **File binary, tipe MIME, ukuran file, channel_id tujuan.** |
+| **Proses** | **Validasi tipe & ukuran file; upload ke Cloudinary (idealnya via direct upload/presigned URL agar tidak membebani server aplikasi); simpan metadata file di database; kaitkan dengan pesan setelah upload sukses.** |
+| **Output** | **URL file (beserta thumbnail bila berlaku) tersedia untuk dilampirkan ke pesan.** |
+| **Precondition** | **Aktor memiliki permission ATTACH_FILES pada channel tujuan.** |
+| **Postcondition** | **Metadata file tersimpan dan dapat ditelusuri melalui fitur pencarian file.** |
+| **Exception** | **File melebihi 1GB atau tipe tidak didukung ditolak sebelum proses upload ke Cloudinary dimulai, untuk menghindari pemakaian bandwidth sia-sia.** |
+
+## 3.8 Modul Pencarian (mengacu FR-SRC-01)
+**SRS-SRC-01 — Pencarian Lintas Entitas**
+Sistem menyediakan pencarian terhadap user, server, channel, message, dan file yang dapat diakses oleh aktor yang melakukan pencarian.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **Query teks, (opsional) filter tipe entitas, filter channel/server.** |
+| **Proses** | **Jalankan query PostgreSQL FTS (tsquery) pada index tsvector relevan, dibatasi hanya pada entitas yang aktor memiliki akses baca; terapkan pagination.** |
+| **Output** | **Daftar hasil pencarian terurut relevansi, dengan metadata pendukung (mis. cuplikan konteks pesan).** |
+| **Precondition** | **Aktor terautentikasi.** |
+| **Postcondition** | **Tidak ada perubahan state — operasi bersifat read-only.** |
+| **Exception** | **Query kosong atau terlalu pendek (di bawah panjang minimum) ditolak dengan pesan validasi untuk mencegah query yang terlalu mahal secara komputasi.** |
+
+## 3.9 Modul Voice & Video (mengacu FR-VV-01..03)
+**SRS-VV-01 — Join/Leave Voice atau Video Channel**
+Member dapat bergabung/keluar dari voice/video channel, serta mengontrol mute/unmute dan kamera on/off.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **channel_id tujuan, tipe aksi (join/leave/mute/unmute/camera_on/camera_off).** |
+| **Proses** | **Validasi permission CONNECT pada channel; request token akses LiveKit room yang sesuai; publikasikan status join/leave ke peserta lain via WebSocket & sinkronkan dengan modul presence.** |
+| **Output** | **Token akses LiveKit (untuk join) atau konfirmasi keluar/perubahan status media.** |
+| **Precondition** | **Aktor memiliki permission CONNECT (dan SPEAK/VIDEO bila relevan) pada channel.** |
+| **Postcondition** | **Status kehadiran di voice/video channel tersinkron dengan presence pengguna di seluruh server.** |
+| **Exception** | **Kegagalan koneksi ke server LiveKit (mis. sedang down) dikembalikan sebagai error eksplisit ke client, bukan silent failure, agar UI dapat menampilkan status yang jelas.** |
+
+## 3.10 Modul Admin Panel (mengacu FR-ADM-01..02)
+**SRS-ADM-01 — Manajemen User & Audit Log Platform**
+Platform Admin dapat melihat/menangguhkan user secara platform-wide dan menelusuri audit log lintas server untuk keperluan moderasi.
+| **Elemen** | **Detail** |
+| --- | --- |
+| **Input** | **user_id target, aksi (suspend/unsuspend/ban), (untuk audit log) filter rentang waktu/aktor/jenis aksi.** |
+| **Proses** | **Validasi aktor adalah Platform Admin; terapkan aksi ke user target; catat aksi Platform Admin itu sendiri ke audit log platform (audit atas admin, bukan hanya oleh admin).** |
+| **Output** | **Status user ter-update; entri audit log baru tercatat, termasuk untuk aksi administratif itu sendiri.** |
+| **Precondition** | **Aktor terverifikasi sebagai Platform Admin (bukan sekadar Server Owner).** |
+| **Postcondition** | **Status user tersinkron ke seluruh sesi aktif user tersebut (mis. dipaksa logout bila di-suspend).** |
+| **Exception** | **Aksi Platform Admin terhadap sesama Platform Admin (jika berlaku) memerlukan kontrol tambahan yang akan dirinci lebih lanjut pada Security Design.** |
+
+# 4. Kebutuhan Antarmuka Eksternal
+| **Antarmuka** | **Deskripsi Kebutuhan** |
+| --- | --- |
+| **REST API (klien ↔ server)** | **Format JSON, autentikasi via access token (Bearer), mendukung pagination cursor/offset, dan kode error terstandarisasi. Rincian kontrak endpoint pada API Specification (Fase 5).** |
+| **WebSocket (klien ↔ server)** | **Koneksi persisten dengan message envelope terstruktur (tipe event eksplisit), mendukung reconnection dari sisi klien. Rincian event flow pada Architecture Document (Fase 3).** |
+| **LiveKit Server API** | **Server memanggil LiveKit Server SDK untuk membuat room & menerbitkan access token; klien terhubung langsung ke LiveKit media server menggunakan token tersebut.** |
+| **Cloudinary API** | **Server berinteraksi dengan Cloudinary API untuk upload (idealnya signed/direct upload) dan transformasi media (thumbnail, resize).** |
+| **Penyedia Email (SMTP/API)** | **Worker BullMQ memanggil layanan pengiriman email untuk notifikasi email, dengan mekanisme retry pada kegagalan sementara.** |
+
+# 5. Kebutuhan Non-Fungsional
+## 5.1 Performance (Target Response Time)
+| **Jenis Operasi** | **Target** |
+| --- | --- |
+| **REST API standar (CRUD, non-search, non-upload)** | **p50 < 100 ms, p95 < 300 ms, p99 < 600 ms (diukur di sisi server, tidak termasuk latensi jaringan klien).** |
+| **Pengiriman & broadcast pesan realtime (WebSocket)** | **Latensi end-to-end (server menerima → seluruh peserta relevan menerima) < 150 ms pada kondisi jaringan/region yang sama.** |
+| **Pencarian (Full Text Search)** | **p95 < 500 ms untuk query pada dataset skala desain proyek.** |
+| **Join voice/video channel (hingga media siap)** | **< 2 detik dari permintaan join hingga koneksi media LiveKit aktif, pada kondisi jaringan normal.** |
+| **Upload file** | **Tidak dibatasi waktu absolut (bergantung ukuran & bandwidth pengguna), namun proses tidak boleh memblokir thread utama API (ditangani asinkron/direct upload).** |
+## 5.2 Scalability (Strategi Scaling)
+Layer aplikasi (Modular Monolith) bersifat stateless untuk request REST dan di-scale secara horizontal dengan menjalankan banyak replika kontainer di belakang Traefik sebagai reverse proxy/load balancer.
+State realtime yang bersifat lintas-instance (presence, broadcast WebSocket) dikoordinasikan melalui Redis Pub/Sub sesuai ADR-002, agar penambahan replika aplikasi tidak memecah visibilitas event antar pengguna yang terhubung ke instance berbeda.
+Voice/video di-scale melalui kemampuan multi-node LiveKit (ADR-003), independen dari scaling layer aplikasi utama.
+Beban database dikelola melalui connection pooling (mis. PgBouncer), index yang tepat (termasuk composite index & FTS index, dirinci pada Database Design), serta pagination konsisten pada seluruh endpoint yang berpotensi mengembalikan data besar (mis. riwayat pesan).
+Karena Modular Monolith bersifat permanen (dikonfirmasi pada ADR), tidak ada strategi scaling per-modul; seluruh modul di-scale bersamaan sebagai satu unit replika.
+## 5.3 Reliability (Strategi Fault Tolerance)
+Pekerjaan asinkron (email, pemrosesan lanjutan file) menggunakan BullMQ dengan retry otomatis berbasis exponential backoff; job yang gagal melebihi batas maksimum percobaan dipindahkan ke dead-letter queue untuk investigasi manual, bukan hilang begitu saja.
+Panggilan ke layanan pihak ketiga (LiveKit, Cloudinary, penyedia email) diberi timeout eksplisit dan pola circuit breaker sederhana agar kegagalan satu layanan eksternal tidak membuat seluruh request API ikut lambat/gagal (graceful degradation).
+Reconnection WebSocket di sisi klien menerapkan strategi retry dengan backoff, dan pada saat reconnect klien melakukan sinkronisasi ulang state (presence, pesan terbaru) untuk menutup celah event yang mungkin terlewat (sejalan dengan risiko yang sudah dicatat pada ADR-002 dan Learning Roadmap M3-M4).
+Health check container (Docker) digunakan agar instance yang tidak sehat dapat di-restart otomatis dan dikeluarkan sementara dari rotasi Traefik.
+## 5.4 Availability
+Target desain: 99.5% uptime bulanan (≈ kurang dari ~3.6 jam downtime per bulan), di luar jendela maintenance terjadwal. Sesuai keputusan Vision Document/ADR, target ini bersifat target desain teoritis dan tidak divalidasi melalui pemantauan produksi dengan trafik pengguna nyata.
+## 5.5 Security
+| **Kontrol Keamanan** | **Kebutuhan** |
+| --- | --- |
+| **Rate Limiter** | **Diberlakukan per-IP dan per-akun pada endpoint sensitif (login, registrasi, pengiriman pesan, upload) untuk mencegah brute-force dan abuse; ambang batas rinci ditentukan pada Security Design (Fase 6).** |
+| **Audit Log** | **Mencatat aksi sensitif (login, perubahan role/permission, penghapusan data, aksi Platform Admin) dengan aktor, waktu, dan target aksi; retensi log ditentukan pada Security Design.** |
+| **Device & Session Management** | **Pengguna dapat melihat daftar sesi/perangkat aktif dan mencabut sesi tertentu; sesi memiliki masa berlaku (expiry) dan mekanisme refresh token.** |
+| **CSP (Content Security Policy)** | **Header CSP diterapkan untuk membatasi sumber skrip/media yang boleh dimuat, mengurangi risiko XSS terutama pada konten pesan yang mendukung markdown/embed.** |
+| **CSRF Protection** | **Token CSRF atau mekanisme SameSite cookie diterapkan pada operasi yang mengubah state melalui form/cookie-based session.** |
+| **Enkripsi** | **Data sensitif dienkripsi saat transit (TLS) dan password di-hash dengan algoritma yang sesuai (bcrypt/argon2); enkripsi at-rest untuk data sangat sensitif dipertimbangkan lebih lanjut di Security Design.** |
+| **Anti-Spam** | **Deteksi pola spam dasar (rate pengiriman pesan berlebihan, pesan berulang identik) pada layer messaging, dengan aksi mitigasi (throttle/flag) yang dirinci di Security Design.** |
+
+# 6. Kebutuhan Data (Ringkasan)
+SRS ini hanya mencantumkan entitas data tingkat tinggi yang muncul dari kebutuhan fungsional di atas: User, Session/Device, Server, Membership, Role, Permission, Category, Channel, ChannelPermissionOverride, Message, MessageAttachment, Reaction, Pin, Poll, Notification, AuditLog. Skema rinci (kolom, tipe data, index, migrasi) dibahas pada Database Design (Fase 4).
+# 7. Traceability Matrix (PRD → SRS → Milestone)
+| **FR-ID (PRD)** | **SRS-ID** | **Milestone (Learning Roadmap)** |
+| --- | --- | --- |
+| **FR-AUTH-01..03** | **SRS-AUTH-01, SRS-AUTH-02** | **M1** |
+| **FR-WS-01..04** | **SRS-WS-01, SRS-WS-02** | **M2** |
+| **FR-PERM-01..02** | **SRS-PERM-01** | **M2** |
+| **FR-MSG-01..08** | **SRS-MSG-01, SRS-MSG-02** | **M3, M9** |
+| **FR-PRES-01..03** | **SRS-PRES-01** | **M4** |
+| **FR-NOTIF-01..02** | **SRS-NOTIF-01** | **M5** |
+| **FR-UP-01..02** | **SRS-UP-01** | **M6** |
+| **FR-SRC-01** | **SRS-SRC-01** | **M7** |
+| **FR-VV-01..03** | **SRS-VV-01** | **M8** |
+| **FR-ADM-01..02** | **SRS-ADM-01** | **M11** |
+
+# Keputusan yang Telah Diambil
+Seluruh kebutuhan fungsional PRD diterjemahkan menjadi 12 SRS-ID rinci dengan format Input-Proses-Output-Precondition-Postcondition-Exception.
+Target performance ditetapkan secara eksplisit: REST API p95 < 300ms, broadcast realtime < 150ms, search p95 < 500ms, join voice/video < 2 detik.
+Strategi scaling mengasumsikan Modular Monolith permanen: scaling horizontal seluruh proses aplikasi, koordinasi state realtime via Redis Pub/Sub, dan scaling voice/video independen via LiveKit multi-node.
+Target availability desain ditetapkan 99.5% per bulan, bersifat teoritis dan tidak divalidasi via pemantauan produksi nyata, konsisten dengan keputusan Vision Document.
+# Keputusan yang Masih Perlu Dikonfirmasi
+Apakah angka target performance (mis. p95 300ms untuk REST API) sudah sesuai ekspektasi, atau perlu disesuaikan setelah Architecture Document merinci strategi caching/indexing lebih lanjut.
+Apakah dibutuhkan kuota pembuatan server per pengguna (disebutkan sebagai catatan pada SRS-WS-01) — akan memengaruhi Database Design bila diperlukan.
+# Risiko Desain
+Target latensi broadcast realtime < 150 ms bergantung pada implementasi Redis Pub/Sub yang efisien; belum tervalidasi karena tidak ada load-test nyata sesuai keputusan proyek.
+Ketergantungan pada tiga layanan eksternal (LiveKit, Cloudinary, penyedia email) menambah titik kegagalan (failure point) di luar kendali penuh tim proyek.
+# Technical Debt yang Sengaja Diterima
+Detail ambang batas rate limiter dan kebijakan retensi audit log sengaja ditunda ke Security Design (Fase 6) agar SRS ini tetap fokus pada kebutuhan tingkat sistem, bukan konfigurasi teknis rinci.
+Circuit breaker dan health check disebutkan sebagai strategi pada level kebutuhan, namun implementasi rinci (library, threshold) ditunda ke Architecture Document.
+# Pertanyaan untuk Stakeholder Sebelum Melanjutkan ke Fase Berikutnya
+Apakah seluruh target non-fungsional (performance, scalability, reliability, availability, security) pada dokumen ini sudah dapat diterima sebelum lanjut ke Architecture Document (Fase 3)?
