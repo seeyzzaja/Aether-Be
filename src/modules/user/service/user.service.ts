@@ -4,6 +4,7 @@ import {
   deleteBlock,
   findBlockedUser,
   findUserById,
+  findUserProfile,
   isUserBlocked,
   updateDmPrivacy,
 } from "#modules/user/repository/user.repository";
@@ -28,6 +29,16 @@ export async function blockUser(actorId: string, targetUserId: string) {
   }
 
   return createBlock(actorId, targetUserId);
+}
+
+export async function getUserProfile(actorId: string, targetUserId: string) {
+  const profile = await findUserProfile(targetUserId, actorId);
+
+  if (!profile) {
+    throw new NotFoundError("User tidak ditemukan");
+  }
+
+  return profile;
 }
 
 export async function unblockUser(actorId: string, targetUserId: string) {

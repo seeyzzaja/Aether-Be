@@ -1,10 +1,13 @@
 import type { NextFunction, Request, Response } from "express";
-
-import { blockUser, setDmPrivacy, unblockUser } from "#modules/user/service/user.service";
+import { updateDmPrivacySchema, userIdParamSchema } from "#modules/user/schema/user.schema";
+import {
+  blockUser,
+  getUserProfile,
+  setDmPrivacy,
+  unblockUser,
+} from "#modules/user/service/user.service";
 import { BadRequestError, UnauthorizedError } from "#shared/errors/app-error";
 import { successResponse } from "#utils/response";
-
-import { updateDmPrivacySchema, userIdParamSchema } from "../schema/user.schema.js";
 
 export class UserController {
   private getUserId(req: Request): string {
@@ -26,7 +29,18 @@ export class UserController {
 
     return parsed.data.userId;
   }
+  async profile(req: Request, res: Response, next: NextFunction) {
+    try {
+      const actorId = this.getUserId(req);
+      const targetUserId = this.getTargetUserId(req);
 
+      const profile = await getUserProfile(actorId, targetUserId);
+
+      return successResponse(res, "Profil user berhasil diambil", profile);
+    } catch (error) {
+      next(error);
+    }
+  }
   async block(req: Request, res: Response, next: NextFunction) {
     try {
       const actorId = this.getUserId(req);
