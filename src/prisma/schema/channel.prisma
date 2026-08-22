@@ -13,6 +13,7 @@ model Channel {
   serverId   String?
   categoryId String?
   name       String      @db.VarChar(100)
+  iconUrl    String?
   type       ChannelType
   topic      String?     @db.VarChar(500)
   position   Int         @default(0)

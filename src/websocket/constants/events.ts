@@ -30,6 +30,10 @@ export const WebSocketEvent = {
   POLL_VOTE_UPDATED: "poll.vote.updated",
 
   ERROR: "error",
+
+  GROUP_DM_UPDATED: "group_dm.updated",
+  GROUP_DM_PARTICIPANT_ADDED: "group_dm.participant_added",
+  GROUP_DM_PARTICIPANT_REMOVED: "group_dm.participant_removed",
 } as const;
 
 export type WebSocketEventType = (typeof WebSocketEvent)[keyof typeof WebSocketEvent];

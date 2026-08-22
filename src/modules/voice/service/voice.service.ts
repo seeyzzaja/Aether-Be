@@ -121,7 +121,7 @@ export class VoiceService {
       },
     });
 
-    if (!participant || participant.status !== "accepted") {
+    if (participant?.status !== "accepted") {
       throw new ForbiddenError("Kamu bukan participant aktif pada DM ini");
     }
 
